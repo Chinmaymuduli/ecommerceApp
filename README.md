@@ -1,0 +1,5 @@
+### Project Start
+
+```
+adb -s b85e914e reverse tcp:8081 tcp:8081
+```
