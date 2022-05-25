@@ -28,14 +28,8 @@ const PrivateRoutes = () => {
       screenOptions={{
         headerShown: false,
         headerTitleStyle: {fontFamily: 'Nunito-Bold'},
-      }}
-      initialRouteName={'Home'}>
-      {/* <Stack.Screen name="Home" component={BottomTab} /> */}
-      <Stack.Screen
-        name="Bottomtab"
-        // component={BottomTab}
-        component={CustomDrawer}
-      />
+      }}>
+      <Stack.Screen name="Bottomtab" component={BottomTab} />
       <Stack.Screen
         name="Cart"
         component={Cart}

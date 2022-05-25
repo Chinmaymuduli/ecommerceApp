@@ -29,12 +29,6 @@ const App = () => {
         }}>
         <Routes />
       </NativeBaseProvider>
-      {/* <Stack.Navigator
-        screenOptions={{
-          headerShown: false,
-        }}>
-        <Stack.Screen name="Home" component={CustomDrawer} />
-      </Stack.Navigator> */}
     </NavigationContainer>
   );
 };

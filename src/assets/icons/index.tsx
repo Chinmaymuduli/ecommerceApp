@@ -618,39 +618,14 @@ const ICONS = {
   Category: (props: IconType) => (
     <Svg
       stroke="currentColor"
-      fill="none"
+      fill="currentColor"
       stroke-width="0"
       viewBox="0 0 24 24"
       {...props}
       width={props.size || 20}
       height={props.size || 20}>
       <Path
-        fill-rule="evenodd"
-        stroke={props.color || '#000'}
-        clip-rule="evenodd"
-        d="M3 3V9H21V3H3ZM19 5H5V7H19V5Z"
-        fill="currentColor"
-      />
-      <Path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
-        d="M3 11V21H11V11H3ZM9 13H5V19H9V13Z"
-        fill="currentColor"
-        stroke={props.color || '#000'}
-      />
-      <Path
-        d="M21 11H13V13H21V11Z"
-        fill="currentColor"
-        stroke={props.color || '#000'}
-      />
-      <Path
-        d="M13 15H21V17H13V15Z"
-        fill="currentColor"
-        stroke={props.color || '#000'}
-      />
-      <Path
-        d="M21 19H13V21H21V19Z"
-        fill="currentColor"
+        d="M9,21h2h2h2h2h2h2v-2v-2v-2v-2v-2V9V7V5V3h-2h-2h-2h-2h-2H9H7H5H3v2v2v2v2v2v2v2v2v2h2h2H9z M19,17v2h-2h-2h-2v-6h6v2V17z M15,5h2h2v2v2v2h-6V5H15z M5,7V5h2h2h2v6H5V9V7z M5,19v-2v-2v-2h6v6H9H7H5z"
         stroke={props.color || '#000'}
       />
     </Svg>
@@ -666,6 +641,97 @@ const ICONS = {
       height={props.size || 20}>
       <Path
         d="M922.9 701.9H327.4l29.9-60.9 496.8-.9c16.8 0 31.2-12 34.2-28.6l68.8-385.1c1.8-10.1-.9-20.5-7.5-28.4a34.99 34.99 0 0 0-26.6-12.5l-632-2.1-5.4-25.4c-3.4-16.2-18-28-34.6-28H96.5a35.3 35.3 0 1 0 0 70.6h125.9L246 312.8l58.1 281.3-74.8 122.1a34.96 34.96 0 0 0-3 36.8c6 11.9 18.1 19.4 31.5 19.4h62.8a102.43 102.43 0 0 0-20.6 61.7c0 56.6 46 102.6 102.6 102.6s102.6-46 102.6-102.6c0-22.3-7.4-44-20.6-61.7h161.1a102.43 102.43 0 0 0-20.6 61.7c0 56.6 46 102.6 102.6 102.6s102.6-46 102.6-102.6c0-22.3-7.4-44-20.6-61.7H923c19.4 0 35.3-15.8 35.3-35.3a35.42 35.42 0 0 0-35.4-35.2zM305.7 253l575.8 1.9-56.4 315.8-452.3.8L305.7 253zm96.9 612.7c-17.4 0-31.6-14.2-31.6-31.6 0-17.4 14.2-31.6 31.6-31.6s31.6 14.2 31.6 31.6a31.6 31.6 0 0 1-31.6 31.6zm325.1 0c-17.4 0-31.6-14.2-31.6-31.6 0-17.4 14.2-31.6 31.6-31.6s31.6 14.2 31.6 31.6a31.6 31.6 0 0 1-31.6 31.6z"
+        stroke={props.color || '#000'}
+      />
+    </Svg>
+  ),
+  Order: (props: IconType) => (
+    <Svg
+      stroke="currentColor"
+      fill="currentColor"
+      stroke-width="0"
+      viewBox="0 0 16 16"
+      {...props}
+      width={props.size || 20}
+      height={props.size || 20}>
+      <Path
+        fill-rule="evenodd"
+        d="M4 1h8a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V3a2 2 0 012-2zm0 1a1 1 0 00-1 1v10a1 1 0 001 1h8a1 1 0 001-1V3a1 1 0 00-1-1H4z"
+        clip-rule="evenodd"
+        stroke={props.color || '#000'}
+      />
+      <Path
+        fill-rule="evenodd"
+        d="M4.5 10.5A.5.5 0 015 10h3a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 8h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 6h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5zm0-2A.5.5 0 015 4h6a.5.5 0 010 1H5a.5.5 0 01-.5-.5z"
+        clip-rule="evenodd"
+        stroke={props.color || '#000'}
+      />
+    </Svg>
+  ),
+  Favorite: (props: IconType) => (
+    <Svg
+      stroke="currentColor"
+      fill="currentColor"
+      stroke-width="0"
+      viewBox="0 0 1024 1024"
+      {...props}
+      width={props.size || 20}
+      height={props.size || 20}>
+      <Path
+        d="M923 283.6a260.04 260.04 0 0 0-56.9-82.8 264.4 264.4 0 0 0-84-55.5A265.34 265.34 0 0 0 679.7 125c-49.3 0-97.4 13.5-139.2 39-10 6.1-19.5 12.8-28.5 20.1-9-7.3-18.5-14-28.5-20.1-41.8-25.5-89.9-39-139.2-39-35.5 0-69.9 6.8-102.4 20.3-31.4 13-59.7 31.7-84 55.5a258.44 258.44 0 0 0-56.9 82.8c-13.9 32.3-21 66.6-21 101.9 0 33.3 6.8 68 20.3 103.3 11.3 29.5 27.5 60.1 48.2 91 32.8 48.9 77.9 99.9 133.9 151.6 92.8 85.7 184.7 144.9 188.6 147.3l23.7 15.2c10.5 6.7 24 6.7 34.5 0l23.7-15.2c3.9-2.5 95.7-61.6 188.6-147.3 56-51.7 101.1-102.7 133.9-151.6 20.7-30.9 37-61.5 48.2-91 13.5-35.3 20.3-70 20.3-103.3.1-35.3-7-69.6-20.9-101.9zM512 814.8S156 586.7 156 385.5C156 283.6 240.3 201 344.3 201c73.1 0 136.5 40.8 167.7 100.4C543.2 241.8 606.6 201 679.7 201c104 0 188.3 82.6 188.3 184.5 0 201.2-356 429.3-356 429.3z"
+        stroke={props.color || '#000'}
+      />
+    </Svg>
+  ),
+  Support: (props: IconType) => (
+    <Svg
+      stroke="currentColor"
+      fill="currentColor"
+      stroke-width="0"
+      viewBox="0 0 24 24"
+      {...props}
+      width={props.size || 20}
+      height={props.size || 20}>
+      <Path
+        d="M12,2C6.486,2,2,6.486,2,12v0.714V16v0.143C2,17.167,2.897,18,4,18h1c0.553,0,1-0.448,1-1v-5.143c0-0.552-0.447-1-1-1 H4.092C4.648,6.987,7.978,4,12,4s7.352,2.987,7.908,6.857H19c-0.553,0-1,0.448-1,1V16v1v1c0,1.103-0.897,2-2,2h-2v-1h-4v3h2h2h2 c2.206,0,4-1.794,4-4c1.103,0,2-0.833,2-1.857V16v-3.286V12C22,6.486,17.514,2,12,2z"
+        stroke={props.color || '#000'}
+      />
+    </Svg>
+  ),
+  TermAndCondition: (props: IconType) => (
+    <Svg
+      stroke="currentColor"
+      fill="currentColor"
+      stroke-width="0"
+      viewBox="0 0 1024 1024"
+      {...props}
+      width={props.size || 20}
+      height={props.size || 20}>
+      <Path
+        d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
+        stroke={props.color || '#000'}
+      />
+      <Path
+        d="M464 336a48 48 0 1 0 96 0 48 48 0 1 0-96 0zm72 112h-48c-4.4 0-8 3.6-8 8v272c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V456c0-4.4-3.6-8-8-8z"
+        stroke={props.color || '#000'}
+      />
+    </Svg>
+  ),
+  ExitApp: (props: IconType) => (
+    <Svg
+      stroke="currentColor"
+      fill="currentColor"
+      stroke-width="0"
+      viewBox="0 0 1024 1024"
+      {...props}
+      width={props.size || 20}
+      height={props.size || 20}>
+      <Path
+        d="M685.4 354.8c0-4.4-3.6-8-8-8l-66 .3L512 465.6l-99.3-118.4-66.1-.3c-4.4 0-8 3.5-8 8 0 1.9.7 3.7 1.9 5.2l130.1 155L340.5 670a8.32 8.32 0 0 0-1.9 5.2c0 4.4 3.6 8 8 8l66.1-.3L512 564.4l99.3 118.4 66 .3c4.4 0 8-3.5 8-8 0-1.9-.7-3.7-1.9-5.2L553.5 515l130.1-155c1.2-1.4 1.8-3.3 1.8-5.2z"
+        stroke={props.color || '#000'}
+      />
+      <Path
+        d="M512 65C264.6 65 64 265.6 64 513s200.6 448 448 448 448-200.6 448-448S759.4 65 512 65zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"
         stroke={props.color || '#000'}
       />
     </Svg>

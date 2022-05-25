@@ -1,182 +1,195 @@
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
-import {
-  createDrawerNavigator,
-  DrawerContentScrollView,
-} from '@react-navigation/drawer';
 import {
   Box,
   Divider,
+  Heading,
   HStack,
   Image,
   Pressable,
   Text,
   VStack,
 } from 'native-base';
-import {COLORS} from 'configs';
 import {ICONS} from 'assets';
-import {DrawerActions, useNavigation} from '@react-navigation/native';
-import {Home} from 'screens';
-import Animated from 'react-native-reanimated';
+import {COLORS} from 'configs';
+import {useNavigation} from '@react-navigation/native';
+import Materialicons from 'react-native-vector-icons/MaterialIcons';
 
-const DrawerArray = [
+const drawerArray = [
   {
     id: 1,
-    name: 'Home',
+    label: 'Home',
+    icon: ({color}: {color: string}) => (
+      <ICONS.Home size={22} color={color || '#000'} />
+    ),
     route: 'Home',
-    icon: <ICONS.Home size={25} color={COLORS.textWhite} />,
   },
   {
     id: 2,
-    name: 'Cart',
-    route: 'Cart',
-    icon: <ICONS.Bag size={25} color={COLORS.textWhite} />,
+    label: 'Category',
+    icon: ({color}: {color: string}) => (
+      <ICONS.Category size={22} color={color || '#000'} />
+    ),
+    route: 'Category',
   },
   {
     id: 3,
-    name: 'Cart',
-    route: 'Cart',
-    icon: <ICONS.Bag size={25} color={COLORS.textWhite} />,
+    label: 'Order',
+    icon: ({color}: {color: string}) => (
+      <ICONS.Order size={22} color={color || '#000'} />
+    ),
+    route: 'Order',
   },
   {
     id: 4,
-    name: 'Cart',
-    route: 'Cart',
-    icon: <ICONS.Bag size={25} color={COLORS.textWhite} />,
+    label: 'Your Wishlist',
+    icon: ({color}: {color: string}) => (
+      <ICONS.Favorite size={22} color={color || '#000'} />
+    ),
+    route: 'Favorite',
   },
   {
     id: 5,
-    name: 'Cart',
-    route: 'Cart',
-    icon: <ICONS.Bag size={25} color={COLORS.textWhite} />,
+    label: 'Notification',
+    icon: ({color}: {color: string}) => (
+      <ICONS.Notification size={22} color={color || '#000'} />
+    ),
+    route: 'Notification',
   },
   {
     id: 6,
-    name: 'Cart',
-    route: 'Cart',
-    icon: <ICONS.Bag size={25} color={COLORS.textWhite} />,
+    label: 'Your Account',
+    icon: ({color}: {color: string}) => (
+      <ICONS.User size={22} color={color || '#000'} />
+    ),
+    route: 'Profile',
+  },
+  {
+    id: 7,
+    label: 'Support Us',
+    icon: ({color}: {color: string}) => (
+      <ICONS.Support size={22} color={color || '#000'} />
+    ),
+    route: 'Profile',
+  },
+  {
+    id: 8,
+    label: 'Terms & Conditions',
+    icon: ({color}: {color: string}) => (
+      <ICONS.TermAndCondition size={22} color={color || '#000'} />
+    ),
+    route: 'Profile',
+  },
+  {
+    id: 9,
+    label: 'Exit App',
+    icon: ({color}: {color: string}) => (
+      <ICONS.ExitApp size={22} color={color || '#000'} />
+    ),
+    route: 'Profile',
   },
 ];
 
-const Drawer = createDrawerNavigator();
-
-const CustomDrawerContent = ({navigation}: any) => {
-  return (
-    <DrawerContentScrollView
-      scrollEnabled={true}
-      contentContainerStyle={{flex: 1}}>
-      <Box flex={1} px={2}>
-        {/* Close Icon */}
-        <Box alignItems={'flex-start'} justifyContent={'center'} mt={3}>
-          <TouchableOpacity
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-            onPress={() => navigation.dispatch(DrawerActions.closeDrawer())}>
-            <ICONS.Close size={25} color={COLORS.textWhite} />
-          </TouchableOpacity>
-        </Box>
-        {/* Profile */}
-
-        <Pressable
-          flexDirection={'row'}
-          mt={8}
-          alignItems={'center'}
-          onPress={() => console.log('Profile')}>
-          <Image
-            alt="drawerImg"
-            source={{
-              uri: 'https://t3.ftcdn.net/jpg/01/17/72/36/240_F_117723612_z7zQmUrrpG4IRGQLvgX5nwtwC18ke3qU.jpg',
-            }}
-            // resizeMode={'cover'}
-            style={{
-              width: 50,
-              height: 50,
-              borderRadius: 10,
-            }}
-          />
-          <VStack ml={3}>
-            <Text color={COLORS.textWhite} bold>
-              Chinmay Muduli
-            </Text>
-            <Text color={COLORS.textWhite}>View your profile</Text>
-          </VStack>
-        </Pressable>
-        {/* Drawer Item */}
-        <Box flex={1} mt={5}>
-          {DrawerArray.map((item: any) => (
-            <Pressable
-              key={item.id}
-              flexDirection={'row'}
-              alignItems={'center'}
-              height={10}
-              mb={5}
-              pl={3}
-              borderRadius={10}
-              // bg={}
-              onPress={() => {}}>
-              {item?.icon}
-              <Text pl={4} color={COLORS.textWhite}>
-                {item?.name}
-              </Text>
-            </Pressable>
-          ))}
-          {/* Line Divider */}
-          <Divider />
-        </Box>
-      </Box>
-    </DrawerContentScrollView>
-  );
-};
 const CustomDrawer = () => {
-  const [progress, setProgress] = React.useState(new Animated.Value(0));
-  const scale = Animated.interpolateNode(progress, {
-    inputRange: [0, 1],
-    outputRange: [1, 0.8],
-  });
-
-  const borderRadius = Animated.interpolateNode(progress, {
-    inputRange: [0, 1],
-    outputRange: [0, 26],
-  });
-  // console.log('object', borderRadius);
-  const animatedStyle = {borderRadius, transform: [{scale}]};
-  // console.log('CustomDrawer', animatedStyle);
+  const navigation = useNavigation();
+  const [selectedButton, setSelectedButton] = React.useState(1);
+  // console.log('object', selectedButton);
+  const DrawerNaviagte = (item: any) => {
+    setSelectedButton(item?.id);
+    navigation.navigate(item?.route);
+  };
   return (
-    <Box flex={1} bg={'#065934'}>
-      <Drawer.Navigator
-        screenOptions={{
-          headerShown: false,
-          drawerType: 'slide',
-          overlayColor: 'transparent',
-          drawerStyle: {
-            flex: 1,
-            width: '65%',
-            paddingRight: 20,
-            backgroundColor: 'transparent',
-          },
-          sceneContainerStyle: {
-            backgroundColor: 'transparent',
-          },
-        }}
-        initialRouteName="Home"
-        drawerContent={(props: any) => {
-          setTimeout(() => {
-            setProgress(props.progress);
-          }, 0);
-          return <CustomDrawerContent navigation={props.navigation} />;
-        }}>
-        <Drawer.Screen name="Home">
-          {(props: any) => (
-            <Home {...props} drawerAnimationStyle={animatedStyle} />
-          )}
-        </Drawer.Screen>
-      </Drawer.Navigator>
+    <Box flex={1}>
+      <HStack
+        space={3}
+        alignItems={'center'}
+        justifyContent={'center'}
+        pt={7}
+        px={4}>
+        <Image
+          alt="drawerImage"
+          source={{
+            uri: 'https://t3.ftcdn.net/jpg/01/17/72/36/240_F_117723612_z7zQmUrrpG4IRGQLvgX5nwtwC18ke3qU.jpg',
+          }}
+          style={styles.drawerImage}
+        />
+        <VStack>
+          <Heading size={'xs'}>Chinmay muduli</Heading>
+          <Text numberOfLines={1}>demouser@gmail.com</Text>
+        </VStack>
+      </HStack>
+      <Box alignItems={'center'} py={5}>
+        <Divider w={250} />
+      </Box>
+      <Box>
+        {drawerArray.map(item => (
+          <Pressable
+            onPress={() => DrawerNaviagte(item)}
+            py={3}
+            px={3}
+            bg={selectedButton === item.id ? '#4F7942' : '#fff'}
+            mt={2}
+            borderRadius={10}
+            mx={2}>
+            <HStack justifyContent={'space-between'}>
+              <HStack key={item?.id} space={4} alignItems={'center'}>
+                <Box>
+                  {item.icon({
+                    color: selectedButton === item.id ? '#fff' : '#000',
+                  })}
+                </Box>
+                <Box>
+                  <Text
+                    color={
+                      selectedButton === item.id ? COLORS.textWhite : '#000'
+                    }>
+                    {item.label}
+                  </Text>
+                </Box>
+              </HStack>
+              <Box
+                bg={selectedButton === item?.id ? COLORS.textWhite : '#C1E1C1'}
+                borderRadius={20}>
+                <ICONS.ChevronRight
+                  size={22}
+                  color={'#000'}
+                  style={{padding: 10}}
+                />
+              </Box>
+            </HStack>
+          </Pressable>
+        ))}
+      </Box>
+      <Box py={5}>
+        <Divider />
+      </Box>
+      <Box px={5}>
+        <Pressable>
+          <HStack justifyContent={'space-between'}>
+            <HStack space={3}>
+              <Materialicons name="power-settings-new" size={22} color="#000" />
+              <Text>Sign Out</Text>
+            </HStack>
+            <Box bg={'#C1E1C1'} borderRadius={20}>
+              <ICONS.ChevronRight
+                size={22}
+                color={'#000'}
+                style={{padding: 10}}
+              />
+            </Box>
+          </HStack>
+        </Pressable>
+      </Box>
     </Box>
   );
 };
 
 export default CustomDrawer;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  drawerImage: {
+    height: 50,
+    width: 50,
+    borderRadius: 50,
+  },
+});
