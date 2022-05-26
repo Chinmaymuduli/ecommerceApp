@@ -125,6 +125,7 @@ const CustomDrawer = () => {
         {drawerArray.map(item => (
           <Pressable
             onPress={() => DrawerNaviagte(item)}
+            key={item.id}
             py={3}
             px={3}
             bg={selectedButton === item.id ? '#4F7942' : '#fff'}

@@ -1,4 +1,10 @@
-import {Dimensions, SafeAreaView, StyleSheet} from 'react-native';
+import {
+  Dimensions,
+  ImageBackground,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 import {
   Badge,
@@ -13,30 +19,57 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import {GOOGLE, LOGO, MENU2} from 'assets';
+import {GOOGLE, GOURMEET5, LOGO, MENU2, WOMENEMP} from 'assets';
 import {COLORS} from 'configs';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {CATEGORYARR, SLIDERDATA} from '../../constants';
+import {
+  AYUSHPRODUCT,
+  CATEGORYARR,
+  GOURMETPRODUCT,
+  HOMEPRODUCT,
+  PERSONALPRODUCT,
+  SLIDERDATA,
+  SPECIALPRODUCT,
+  SWEETPRODUCT,
+} from '../../constants';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {CategoryProduct, SpecialProduct} from 'components/core';
 
 const Home = () => {
   const navigation = useNavigation<NavigationProps>();
   const renderSliderItem = ({item}: {item: any}) => {
     return (
-      <Box mt={5}>
-        <Image
-          alt="img"
+      <Pressable mt={5}>
+        <ImageBackground
+          borderRadius={10}
           source={item.img}
           style={{
             height: 150,
             width: 300,
-            borderRadius: 20,
             marginHorizontal: 10,
-          }}
-        />
-      </Box>
+          }}>
+          <Box ml={150} mt={5}>
+            <Text color={COLORS.textWhite} fontSize={12} bold>
+              {item?.label}
+            </Text>
+            <Text bold color={COLORS.textWhite} flexWrap={'wrap'} mt={1}>
+              {item?.offer}
+            </Text>
+            <Box
+              mt={2}
+              bg={COLORS.textWhite}
+              borderRadius={5}
+              alignItems={'center'}
+              w={'2/3'}>
+              <Text color={COLORS.cgcolor} bold py={1}>
+                Shop Now
+              </Text>
+            </Box>
+          </Box>
+        </ImageBackground>
+      </Pressable>
     );
   };
 
@@ -54,7 +87,6 @@ const Home = () => {
               style={styles.imagestyle}
               alt="categoryimg"
               resizeMode="contain"
-              bg={'red.100'}
             />
           </Box>
           <Text fontSize={13}>{item?.label}</Text>
@@ -105,9 +137,22 @@ const Home = () => {
             </Pressable>
 
             <Pressable onPress={() => console.log('Profile')}>
+              <Badge
+                colorScheme="green"
+                rounded="full"
+                mb={-4}
+                mr={-2}
+                zIndex={1}
+                variant="solid"
+                alignSelf="flex-end"
+                _text={{
+                  fontSize: 9,
+                }}>
+                2
+              </Badge>
               <Ionicons
-                name="person-circle"
-                size={32}
+                name="notifications-outline"
+                size={27}
                 color={COLORS.fadeBlack}
               />
             </Pressable>
@@ -115,7 +160,7 @@ const Home = () => {
         </HStack>
       </Box>
       {/* Body Section */}
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Box px={3} mt={3}>
           <Box borderWidth={1} borderRadius={10} borderColor={COLORS.lightGrey}>
             <Input
@@ -132,6 +177,7 @@ const Home = () => {
             />
           </Box>
         </Box>
+        {/* Category Section */}
         <Box mt={5} pl={3}>
           <HStack alignItems={'center'} justifyContent={'space-between'}>
             <Heading size={'md'}>Categories</Heading>
@@ -149,6 +195,7 @@ const Home = () => {
             showsHorizontalScrollIndicator={false}
           />
         </Box>
+        {/* Slider Section */}
         <Box>
           <FlatList
             data={SLIDERDATA}
@@ -157,6 +204,90 @@ const Home = () => {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
           />
+        </Box>
+        {/* Product Section */}
+        <Box mt={2}>
+          <CategoryProduct title="Ayush Product" data={AYUSHPRODUCT} />
+        </Box>
+        <Box bg={'#ECFFDC60'}>
+          <CategoryProduct title="Gourmet Foods" data={GOURMETPRODUCT} />
+        </Box>
+        <Box>
+          <CategoryProduct title="Personal Products" data={PERSONALPRODUCT} />
+        </Box>
+        <Box bg={'#ECFFDC60'}>
+          <CategoryProduct title="Home Care" data={HOMEPRODUCT} />
+        </Box>
+        <Box>
+          <CategoryProduct title="Sweets" data={SWEETPRODUCT} />
+        </Box>
+
+        {/* Women Empower */}
+        <Pressable alignItems={'center'} my={3}>
+          <ImageBackground
+            source={WOMENEMP}
+            style={styles.womenempower}
+            borderRadius={5}
+            resizeMode={'cover'}>
+            <Box>
+              <Text color={COLORS.textWhite} textAlign={'center'} bold>
+                From the heart of Chhattisgarh
+              </Text>
+              <Heading
+                mt={2}
+                color={'#98FB98'}
+                textAlign={'center'}
+                size={'md'}>
+                EMPOWERING TRIBAL WOMEN
+              </Heading>
+              <Box
+                mt={2}
+                shadow={1}
+                bg={COLORS.textWhite}
+                alignSelf={'center'}
+                borderWidth={1}
+                borderColor={'#4F7942'}
+                borderRadius={10}>
+                <Text px={3} py={1} color={'#4F7942'}>
+                  Know More
+                </Text>
+              </Box>
+            </Box>
+          </ImageBackground>
+        </Pressable>
+
+        {/* Special Product Section */}
+        <Box>
+          <SpecialProduct data={SPECIALPRODUCT} />
+        </Box>
+        {/* last section */}
+        <Box
+          mb={100}
+          bg={'#ECFFDC60'}
+          // bg={'red.100'}
+          mx={2}
+          justifyContent={'center'}
+          borderRadius={5}>
+          <HStack>
+            <Image
+              source={GOURMEET5}
+              style={styles.honeyImg}
+              alt={'honeyimg'}
+              resizeMode={'contain'}
+            />
+            <Box justifyContent={'center'} alignItems={'center'}>
+              <Text>HEALTHY FOOD</Text>
+              <Heading size={'xs'} mt={1}>
+                OUR BEST SELLING PRODUCT
+              </Heading>
+              <Text mt={1}>Super Offer Up TO 50% OFF</Text>
+              <Box bg={COLORS.cgcolor} borderRadius={10} mt={1}>
+                <Text px={3} py={1} color={COLORS.textWhite}>
+                  Shop Now
+                </Text>
+              </Box>
+            </Box>
+          </HStack>
         </Box>
       </ScrollView>
     </SafeAreaView>
@@ -179,5 +310,16 @@ const styles = StyleSheet.create({
     height: 70,
     // borderColor: COLORS.textWhite,
     borderRadius: 40,
+  },
+  womenempower: {
+    width: 350,
+    height: 160,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  honeyImg: {
+    width: 130,
+    height: 140,
+    // backgroundColor: 'red',
   },
 });
