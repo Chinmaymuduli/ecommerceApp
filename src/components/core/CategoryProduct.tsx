@@ -12,6 +12,8 @@ import {
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationProps} from 'src/routes/PrivateRoutes';
 
 type CategoryProductType = {
   title?: string;
@@ -23,10 +25,11 @@ type CategoryProductType = {
 };
 
 const CategoryProduct = ({title, data}: CategoryProductType) => {
+  const navigation = useNavigation<NavigationProps>();
   const renderItem = ({item}: any) => {
     return (
       <Box mt={3} overflow={'hidden'} mb={5}>
-        <Pressable onPress={() => console.log('item')}>
+        <Pressable onPress={() => navigation.navigate('ProductDetails')}>
           <Box
             h={120}
             w={120}
@@ -89,7 +92,7 @@ const CategoryProduct = ({title, data}: CategoryProductType) => {
                 paddingHorizontal: 3,
                 paddingVertical: 3,
               }}
-              onPress={() => console.log('Add Cart')}
+              onPress={() => console.log('Add Cart', item)}
             />
           </Box>
           <Box w={120}>

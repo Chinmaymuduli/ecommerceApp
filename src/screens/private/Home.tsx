@@ -120,23 +120,15 @@ const Home = () => {
           </HStack>
           <HStack alignItems={'center'} space={7}>
             <Pressable onPress={() => console.log('bag')}>
-              <Badge
-                colorScheme="green"
-                rounded="full"
-                mb={-4}
-                mr={-3}
-                zIndex={1}
-                variant="solid"
-                alignSelf="flex-end"
-                _text={{
-                  fontSize: 9,
-                }}>
-                2
-              </Badge>
-              <Feather name="shopping-bag" size={25} color={COLORS.fadeBlack} />
+              <Ionicons
+                onPress={() => console.log('hello wishlist')}
+                name="heart-outline"
+                size={25}
+                color={'#4F7942'}
+              />
             </Pressable>
 
-            <Pressable onPress={() => console.log('Profile')}>
+            <Pressable onPress={() => console.log('notification')}>
               <Badge
                 colorScheme="green"
                 rounded="full"
@@ -257,7 +249,7 @@ const Home = () => {
         </Pressable>
 
         {/* Special Product Section */}
-        <Box>
+        <Box mt={4}>
           <SpecialProduct data={SPECIALPRODUCT} />
         </Box>
         {/* last section */}

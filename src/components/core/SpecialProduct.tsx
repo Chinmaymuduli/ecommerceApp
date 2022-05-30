@@ -2,11 +2,15 @@ import {Dimensions, StyleSheet} from 'react-native';
 import React from 'react';
 import {Box, FlatList, HStack, Image, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const SpecialProduct = ({data}: any) => {
-  //   console.log('first', data);
+  const [cartItems, setCartItems] = React.useState<any>([]);
+  const AddSpecialCart = (item: any) => {
+    setCartItems((prev: any) => [...prev, item]);
+  };
+  // console.log('second', cartItems);
   const renderItem = ({item}: any) => {
     return (
       <Box mb={5} justifyContent={'center'}>
@@ -16,7 +20,7 @@ const SpecialProduct = ({data}: any) => {
           borderRadius={6}
           borderColor={COLORS.lightGrey}>
           <Box
-            h={120}
+            h={110}
             w={Dimensions.get('window').width / 2.4}
             alignItems={'center'}
             justifyContent={'center'}>
@@ -27,6 +31,7 @@ const SpecialProduct = ({data}: any) => {
               resizeMode={'contain'}
             />
           </Box>
+
           <Box pl={2}>
             <Text>{item?.label}</Text>
             <HStack space={3}>
@@ -42,19 +47,38 @@ const SpecialProduct = ({data}: any) => {
             position={'absolute'}
             bg={'#4F7942'}
             borderTopLeftRadius={5}
+            alignItems={'center'}
             borderBottomRightRadius={5}>
-            <HStack alignItems={'center'}>
-              <Text
-                fontSize={13}
-                flexWrap={'wrap'}
-                px={1}
-                color={COLORS.textWhite}>
-                {item?.star}
-              </Text>
-              <FontAwesome name="star" size={12} color={'#fff'} />
-            </HStack>
+            <Text fontSize={10} flexWrap={'wrap'} color={COLORS.textWhite}>
+              {item?.offer}
+            </Text>
           </Box>
         </Pressable>
+        <Box
+          alignSelf={'flex-end'}
+          right={5}
+          bg={COLORS.textWhite}
+          mt={-5}
+          shadow={1}
+          // borderWidth={1}
+          borderRadius={5}
+          borderColor={COLORS.lightGrey}>
+          <Entypo
+            name={
+              cartItems?.some((data: any) => data.id === item?.id)
+                ? 'minus'
+                : 'plus'
+            }
+            // name="plus"
+            size={19}
+            color={COLORS.fadeBlack}
+            style={{
+              paddingHorizontal: 3,
+              paddingVertical: 3,
+            }}
+            onPress={() => AddSpecialCart(item)}
+          />
+        </Box>
       </Box>
     );
   };

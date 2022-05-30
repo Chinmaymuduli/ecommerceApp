@@ -5,7 +5,15 @@ import {
 } from '@react-navigation/native-stack';
 
 // import BottomTab from './BottomTab';
-import {Cart, Category, Home, Offers, Order, Search} from 'screens';
+import {
+  Cart,
+  Category,
+  Home,
+  Offers,
+  Order,
+  ProductDetails,
+  Search,
+} from 'screens';
 import BottomTab from './BottomTab';
 import {CustomDrawer} from 'components/core';
 // import {Stall, EventType, User} from 'types';
@@ -18,6 +26,7 @@ export type PrivateRoutesType = {
   Search: undefined;
   Order: undefined;
   Bottomtab: undefined;
+  ProductDetails: undefined;
 };
 export type NavigationProps = NativeStackNavigationProp<PrivateRoutesType>;
 const Stack = createNativeStackNavigator<PrivateRoutesType>();
@@ -80,6 +89,7 @@ const PrivateRoutes = () => {
           headerTintColor: '#000',
         }}
       />
+      <Stack.Screen name="ProductDetails" component={ProductDetails} />
     </Stack.Navigator>
   );
 };
