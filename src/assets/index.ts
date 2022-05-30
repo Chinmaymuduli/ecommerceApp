@@ -3,6 +3,7 @@ export { default as ICONS } from './icons';
 export { default as Delivery } from './animation/delivery.json'
 export { default as addproduct } from './animation/addproduct.json'
 export { default as deliveryman } from './animation/deliveryman.json'
+export { default as SUCCESS } from './animation/success.json'
 
 export const LOGO = require('./images/logo.png');
 export const GOOGLE = require('./images/google.webp');
@@ -13,7 +14,7 @@ export const MENU2 = require('./images/c2.png');
 export const AYUSH = require('./images/ayush.png');
 export const GFOOD = require('./images/Gfood.png');
 export const PCARE = require('./images/pcare.png');
-export const HOMECARE = require('./images/homecare.jpg');
+export const HOMECARE = require('./images/homecare1.png');
 export const SWEETS = require('./images/Sweets.png');
 export const Banner1 = require('./images/Banner1.png');
 export const Banner2 = require('./images/Banner2.png');
@@ -54,3 +55,7 @@ export const SWEET1 = require('./images/sweet_1.png');
 export const SWEET2 = require('./images/sweet_2.png');
 
 export const WOMENEMP = require('./images/women_empower.png');
+
+export const forgotPassword = require('./images/forgotpassword.png')
+export const resetImg = require('./images/resetimg.png')
+export const Banner = require('./images/banner.png')

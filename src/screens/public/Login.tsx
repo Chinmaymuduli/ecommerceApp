@@ -162,7 +162,7 @@ const Login = () => {
                   {errors.password?.message}
                 </FormControl.ErrorMessage>
               </FormControl>
-              <Pressable>
+              <Pressable onPress={() => navigation.navigate('ForgotPassword')}>
                 <Box alignItems={'flex-end'} mt={2}>
                   <Text color={COLORS.grey}>Forgot Password ?</Text>
                 </Box>
@@ -206,46 +206,6 @@ const Login = () => {
                 </Text>
               </Row>
             </Pressable>
-            {/* <HStack alignItems={'center'} mt={4}>
-              <Box
-                w={'33%'}
-                borderWidth={1}
-                bg={COLORS.lightGrey}
-                borderStyle={'dashed'}></Box>
-              <Text bold color={COLORS.cgcolor} mx={2}>
-                Or login with
-              </Text>
-              <Box
-                w={'34%'}
-                borderWidth={1}
-                bg={COLORS.lightGrey}
-                borderStyle={'dashed'}></Box>
-            </HStack>
-
-            <Box mt={4}>
-              <Pressable bg={'#EEEEEE'}>
-                <HStack
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  space={3}
-                  py={2}>
-                  <Image alt="image" w={4} h={4} source={GOOGLE} />
-                  <Text bold>Continue With Google</Text>
-                </HStack>
-              </Pressable>
-
-              <Pressable bg={'#EEEEEE'} mt={3}>
-                <HStack
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  space={2}
-                  mr={2}
-                  py={2}>
-                  <Image alt="image" w={6} h={6} source={PHONE} />
-                  <Text bold>Continue With Phone</Text>
-                </HStack>
-              </Pressable>
-            </Box> */}
           </Box>
         </Box>
       </ScrollView>

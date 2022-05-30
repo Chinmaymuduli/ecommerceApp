@@ -22,6 +22,8 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Accordion, ManageReview, ProductComponent} from 'components/core';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationProps} from 'src/routes/PrivateRoutes';
 const quantityArr = [
   {label: '500 gm', value: 500},
   {label: '700 gm', value: 700},
@@ -40,6 +42,7 @@ const productData = [
 ];
 
 const ProductDetails = () => {
+  const navigation = useNavigation<NavigationProps>();
   const [index, setIndex] = useState(0);
   const [service, setService] = useState('');
   const isCarousel = useRef<any>(null);
@@ -87,9 +90,13 @@ const ProductDetails = () => {
   return (
     <SafeAreaView style={{flex: 1}}>
       <HStack justifyContent={'space-between'} px={3} py={3}>
-        <Box borderWidth={1} borderRadius={9} justifyContent={'center'}>
+        <Pressable
+          borderWidth={1}
+          borderRadius={9}
+          justifyContent={'center'}
+          onPress={() => navigation.goBack()}>
           <Ionicons name="arrow-back" size={24} color="black" />
-        </Box>
+        </Pressable>
         <Box>
           <Ionicons name="heart-outline" size={30} color="black" />
         </Box>

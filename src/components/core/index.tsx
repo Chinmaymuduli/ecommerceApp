@@ -6,3 +6,5 @@ export {default as CategoryButtom} from './CategoryButtom';
 export {default as ManageReview} from './ManageReview';
 export {default as ProductComponent} from './ProductComponent';
 export {default as Accordion} from './Accordion';
+export {default as AyushProduct} from './AyushProduct';
+export {default as FilterSheet} from './FilterSheet';

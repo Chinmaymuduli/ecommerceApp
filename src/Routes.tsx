@@ -8,7 +8,7 @@ import CustomDrawer from './components/core/CustomDrawer';
 
 const Drawer = createDrawerNavigator();
 const Routes = () => {
-  return <PublicRoutes />;
+  // return <PublicRoutes />;
   return (
     <>
       {/* <PrivateRoutes /> */}

@@ -3,13 +3,24 @@ import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
-import {Login, OnBoarding, Register, SplashScreen} from 'screens';
+import {
+  ForgotPassword,
+  Login,
+  OnBoarding,
+  OtpScreen,
+  Register,
+  ResetPassword,
+  SplashScreen,
+} from 'screens';
 
 export type PublicRoutesType = {
   Login: undefined;
   Register: undefined;
   OnBoarding: undefined;
   SplashScreen: undefined;
+  ForgotPassword: undefined;
+  OtpScreen: undefined;
+  ResetPassword: undefined;
 };
 
 export type PublicNavigation = NativeStackNavigationProp<PublicRoutesType>;
@@ -22,6 +33,9 @@ const PublicRoutes = () => {
       <Stack.Screen name="OnBoarding" component={OnBoarding} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
+      <Stack.Screen name="OtpScreen" component={OtpScreen} />
+      <Stack.Screen name="ResetPassword" component={ResetPassword} />
     </Stack.Navigator>
   );
 };
