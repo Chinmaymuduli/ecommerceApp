@@ -58,4 +58,6 @@ export const WOMENEMP = require('./images/women_empower.png');
 
 export const forgotPassword = require('./images/forgotpassword.png')
 export const resetImg = require('./images/resetimg.png')
-export const Banner = require('./images/banner.png')
+export const Banner = require('./images/categoryBanner.jpg')
+
+export const NOORDER = require('./images/noorder.webp')

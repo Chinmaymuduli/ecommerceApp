@@ -22,156 +22,36 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FilterSheet from './FilterSheet';
 import {Banner} from 'assets';
 import Animatable from 'react-native-animatable';
+import AllProduct from './AllProduct';
 
 const AyushProduct = ({data}: any) => {
-  const viewRef = useRef(null);
   const navigation = useNavigation<NavigationProps>();
   const [filterSheetOpen, setFilterSheetOpen] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
-  const [count, setCount] = React.useState(0);
-  const [categoryAddtocart, setCategoryAddtocart] = React.useState<any>([]);
-  console.log('object', categoryAddtocart);
-  const increment = () => {
-    setCount(count + 1);
-  };
-  const decrement = () => {
-    if (count > 0) {
-      setCount(count - 1);
-    } else {
-      setCount(0);
-    }
-  };
-  const AddToCartCategory = (item: any) => {
-    increment();
-    setCategoryAddtocart((prev: any) => [...prev, item]);
-  };
+  const [sortPrice, setSortPrice] = React.useState<any>();
+  const [sortData, setSortData] = React.useState<any>([]);
+  // console.log('object', data);
+  // console.log('object', sortData);
+  // const SortData = () => {
+  //   onClose();
+  //   if (sortPrice === 'lowtohigh') {
+  //     return setSortData(
+  //       data?.sort((a: any, b: any) => (a.price > b.price ? 1 : -1)),
+  //     );
+  //   }
+  //   if (sortPrice === 'hightolow') {
+  //     return setSortData(
+  //       data?.sort((a: any, b: any) => (a.price > b.price ? -1 : 1)),
+  //     );
+  //   }
+  // };
+
   const renderItem = ({item, index}: any) => {
-    return (
-      //   <Animatable.View animation="fadeInUp" duration={1000} delay={index * 300}>
-      <Box mt={2} overflow={'hidden'} mb={4} px={1}>
-        <Pressable onPress={() => navigation.navigate('ProductDetails')}>
-          <Box
-            h={120}
-            w={120}
-            borderWidth={1}
-            mr={2}
-            alignItems={'center'}
-            borderColor={COLORS.lightGrey}
-            borderRadius={5}>
-            <Image
-              alt="image"
-              source={item?.img}
-              style={styles.image}
-              resizeMode={'contain'}
-            />
-          </Box>
-          <Box
-            width={8}
-            position={'absolute'}
-            bg={'#4F7942'}
-            borderTopLeftRadius={5}
-            borderBottomRightRadius={5}>
-            <Text
-              fontSize={10}
-              flexWrap={'wrap'}
-              px={1}
-              color={COLORS.textWhite}>
-              {item?.offer}
-            </Text>
-          </Box>
-          <Box
-            // mt={1}
-            position={'absolute'}
-            right={4}
-            borderRadius={10}>
-            <Ionicons
-              onPress={() => console.log('hello')}
-              name="heart-outline"
-              size={22}
-              color={COLORS.cgcolor}
-              style={{
-                paddingHorizontal: 2,
-                paddingVertical: 2,
-              }}
-            />
-          </Box>
-          <Box
-            alignSelf={'flex-end'}
-            right={2}
-            bg={COLORS.textWhite}
-            mt={-5}
-            shadow={1}
-            // borderWidth={1}
-            borderRadius={5}
-            borderColor={COLORS.lightGrey}>
-            {categoryAddtocart?.some((data: any) => data?.id === item?.id) &&
-            count > 0 ? (
-              <HStack
-                bg={'#FFFF0060'}
-                w={'120'}
-                justifyContent="space-between"
-                alignItems={'center'}>
-                <Box>
-                  <Entypo
-                    name="minus"
-                    size={20}
-                    color={COLORS.fadeBlack}
-                    onPress={() => decrement()}
-                  />
-                </Box>
-                <Box>
-                  <Text>{count}</Text>
-                </Box>
-                <Box>
-                  <Entypo
-                    name="plus"
-                    size={18}
-                    color={COLORS.fadeBlack}
-                    style={{
-                      paddingHorizontal: 3,
-                      paddingVertical: 3,
-                    }}
-                    onPress={() => setCount(count + 1)}
-                  />
-                </Box>
-              </HStack>
-            ) : (
-              <Entypo
-                name="plus"
-                size={18}
-                color={COLORS.fadeBlack}
-                style={{
-                  paddingHorizontal: 3,
-                  paddingVertical: 3,
-                }}
-                onPress={() => AddToCartCategory(item)}
-              />
-            )}
-          </Box>
-          <Box w={120}>
-            <Text bold fontSize={12} numberOfLines={1}>
-              {item?.label}
-            </Text>
-            <HStack space={2}>
-              <Text fontSize={13}>&#8377;{item?.price}</Text>
-              <Text fontSize={13} textDecorationLine={'line-through'}>
-                &#8377;{item?.discount}
-              </Text>
-            </HStack>
-          </Box>
-        </Pressable>
-      </Box>
-      //   </Animatable.View>
-    );
+    return <AllProduct item={item} />;
   };
+
   return (
     <>
-      {/* <Animatable.View
-        ref={viewRef}
-        easing={'ease-in-out'}
-        duration={500}
-        // style={Styles.container}
-      > */}
       <FlatList
         data={data}
         renderItem={renderItem}
@@ -187,7 +67,7 @@ const AyushProduct = ({data}: any) => {
             </Box>
             <Box h={150} mt={2}>
               <Image
-                resizeMode="cover"
+                resizeMode="contain"
                 source={Banner}
                 alt={'banner'}
                 style={{
@@ -247,6 +127,10 @@ const AyushProduct = ({data}: any) => {
                     <Radio.Group
                       defaultValue="lowtohigh"
                       name="myRadioGroup"
+                      // value={sortPrice}
+                      // onChange={value => {
+                      //   setSortPrice(value);
+                      // }}
                       accessibilityLabel="Pick your sorting">
                       <Radio value="lowtohigh" my={3} colorScheme={'green'}>
                         Price (Low to high)
@@ -277,6 +161,7 @@ const AyushProduct = ({data}: any) => {
                         </Text>
                       </Pressable>
                       <Pressable
+                        // onPress={() => SortData()}
                         bg={COLORS.cgcolor}
                         borderRadius={5}
                         alignItems={'center'}>
@@ -297,7 +182,6 @@ const AyushProduct = ({data}: any) => {
           </Box>
         )}
       />
-      {/* </Animatable.View> */}
     </>
   );
 };

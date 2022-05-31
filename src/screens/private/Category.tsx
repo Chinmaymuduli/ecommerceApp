@@ -35,14 +35,6 @@ const Category = () => {
             />
             <Heading size={'sm'}>{categoryName || 'All Categories'}</Heading>
           </HStack>
-          {/* <Box>
-            <Ionicons
-              name="search"
-              size={24}
-              color="#000"
-              onPress={() => navigation.navigate('Search')}
-            />
-          </Box> */}
         </HStack>
       </Box>
       {/* <ScrollView> */}

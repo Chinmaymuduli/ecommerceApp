@@ -8,3 +8,5 @@ export {default as ProductComponent} from './ProductComponent';
 export {default as Accordion} from './Accordion';
 export {default as AyushProduct} from './AyushProduct';
 export {default as FilterSheet} from './FilterSheet';
+export {default as CartItem} from './CartItem';
+export {default as AllProduct} from './AllProduct';

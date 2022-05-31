@@ -8,6 +8,7 @@ import {
 import {
   Cart,
   Category,
+  Coupon,
   Home,
   Offers,
   Order,
@@ -27,6 +28,7 @@ export type PrivateRoutesType = {
   Order: undefined;
   Bottomtab: undefined;
   ProductDetails: undefined;
+  Coupon: undefined;
 };
 export type NavigationProps = NativeStackNavigationProp<PrivateRoutesType>;
 const Stack = createNativeStackNavigator<PrivateRoutesType>();
@@ -90,6 +92,16 @@ const PrivateRoutes = () => {
         }}
       />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
+      <Stack.Screen
+        name="Coupon"
+        component={Coupon}
+        options={{
+          title: 'Coupons',
+          headerShown: true,
+          headerBackTitleVisible: false,
+          headerTintColor: '#000',
+        }}
+      />
     </Stack.Navigator>
   );
 };
