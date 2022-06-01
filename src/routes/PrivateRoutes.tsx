@@ -6,12 +6,15 @@ import {
 
 // import BottomTab from './BottomTab';
 import {
+  Address,
   Cart,
   Category,
+  ConfirmOrder,
   Coupon,
   Home,
   Offers,
   Order,
+  PaymentScreen,
   ProductDetails,
   Search,
 } from 'screens';
@@ -29,6 +32,9 @@ export type PrivateRoutesType = {
   Bottomtab: undefined;
   ProductDetails: undefined;
   Coupon: undefined;
+  Address: undefined;
+  PaymentScreen: undefined;
+  ConfirmOrder: undefined;
 };
 export type NavigationProps = NativeStackNavigationProp<PrivateRoutesType>;
 const Stack = createNativeStackNavigator<PrivateRoutesType>();
@@ -97,6 +103,39 @@ const PrivateRoutes = () => {
         component={Coupon}
         options={{
           title: 'Coupons',
+          headerShown: true,
+          headerBackTitleVisible: false,
+          headerTintColor: '#000',
+        }}
+      />
+
+      <Stack.Screen
+        name="Address"
+        component={Address}
+        options={{
+          title: 'Add address',
+          headerShown: true,
+          headerBackTitleVisible: false,
+          headerTintColor: '#000',
+        }}
+      />
+
+      <Stack.Screen
+        name="PaymentScreen"
+        component={PaymentScreen}
+        options={{
+          title: 'Payments',
+          headerShown: true,
+          headerBackTitleVisible: false,
+          headerTintColor: '#000',
+        }}
+      />
+
+      <Stack.Screen
+        name="ConfirmOrder"
+        component={ConfirmOrder}
+        options={{
+          title: 'ConfirmOrder',
           headerShown: true,
           headerBackTitleVisible: false,
           headerTintColor: '#000',

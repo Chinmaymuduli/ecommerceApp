@@ -6,3 +6,4 @@ export { default as PERSONALPRODUCT } from './PersonalProducts';
 export { default as HOMEPRODUCT } from './homeProduct';
 export { default as SWEETPRODUCT } from './sweetProduct';
 export { default as SPECIALPRODUCT } from './specialProduct';
+export { default as INDIANSTATE } from './State';
