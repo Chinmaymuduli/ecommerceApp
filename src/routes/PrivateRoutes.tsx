@@ -14,27 +14,63 @@ import {
   Home,
   Offers,
   Order,
+  OrderSummary,
   PaymentScreen,
   ProductDetails,
   Search,
+  SelectAddress,
 } from 'screens';
 import BottomTab from './BottomTab';
 import {CustomDrawer} from 'components/core';
+import {quantity} from 'types';
 // import {Stall, EventType, User} from 'types';
 
 export type PrivateRoutesType = {
   Home: undefined;
-  Cart: undefined;
+  Cart: {
+    isBack?: boolean;
+  };
   Category: undefined;
   Offers: undefined;
   Search: undefined;
   Order: undefined;
   Bottomtab: undefined;
-  ProductDetails: undefined;
+  ProductDetails: {
+    label?: string;
+    discount?: number;
+    price?: number;
+    offer?: string;
+    id?: number;
+    img?: any;
+  };
   Coupon: undefined;
   Address: undefined;
-  PaymentScreen: undefined;
-  ConfirmOrder: undefined;
+  PaymentScreen: {
+    label?: string;
+    discount?: number;
+    price?: number;
+    offer?: string;
+    id?: number;
+    img?: any;
+  };
+  ConfirmOrder: {
+    label?: string;
+    discount?: number;
+    price?: number;
+    offer?: string;
+    id?: number;
+    img?: any;
+    orderId?: number;
+  };
+  OrderSummary: {
+    label?: string;
+    discount?: number;
+    price?: number;
+    offer?: string;
+    id?: number;
+    img?: any;
+  };
+  SelectAddress: undefined;
 };
 export type NavigationProps = NativeStackNavigationProp<PrivateRoutesType>;
 const Stack = createNativeStackNavigator<PrivateRoutesType>();
@@ -50,12 +86,12 @@ const PrivateRoutes = () => {
       <Stack.Screen
         name="Cart"
         component={Cart}
-        options={{
-          title: 'Cart',
-          headerShown: true,
-          headerBackTitleVisible: false,
-          headerTintColor: '#000',
-        }}
+        // options={{
+        //   title: 'Cart',
+        //   headerShown: true,
+        //   headerBackTitleVisible: false,
+        //   headerTintColor: '#000',
+        // }}
       />
       <Stack.Screen
         name="Category"
@@ -135,7 +171,27 @@ const PrivateRoutes = () => {
         name="ConfirmOrder"
         component={ConfirmOrder}
         options={{
-          title: 'ConfirmOrder',
+          title: 'Confirm Order',
+          headerShown: true,
+          headerBackTitleVisible: false,
+          headerTintColor: '#000',
+        }}
+      />
+      <Stack.Screen
+        name="OrderSummary"
+        component={OrderSummary}
+        options={{
+          title: 'Order Summary',
+          headerShown: true,
+          headerBackTitleVisible: false,
+          headerTintColor: '#000',
+        }}
+      />
+      <Stack.Screen
+        name="SelectAddress"
+        component={SelectAddress}
+        options={{
+          title: 'Select Address',
           headerShown: true,
           headerBackTitleVisible: false,
           headerTintColor: '#000',

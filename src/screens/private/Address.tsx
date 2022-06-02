@@ -282,8 +282,13 @@ const Address = () => {
             </HStack>
             <Pressable mt={7} onPress={handleSubmit(onSubmit)}>
               <Box bg={COLORS.cgcolor} borderRadius={5}>
-                <Text color={COLORS.textWhite} bold textAlign={'center'} py={2}>
-                  Save Address
+                <Text
+                  color={COLORS.textWhite}
+                  bold
+                  textAlign={'center'}
+                  py={2}
+                  letterSpacing={1}>
+                  Save And Deliver
                 </Text>
               </Box>
             </Pressable>

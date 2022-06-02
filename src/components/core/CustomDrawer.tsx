@@ -34,6 +34,14 @@ const drawerArray = [
   },
   {
     id: 3,
+    label: 'Business',
+    icon: ({color}: {color: string}) => (
+      <ICONS.Business size={22} color={color || '#000'} />
+    ),
+    route: 'Business',
+  },
+  {
+    id: 4,
     label: 'Order',
     icon: ({color}: {color: string}) => (
       <ICONS.Order size={22} color={color || '#000'} />
@@ -41,7 +49,7 @@ const drawerArray = [
     route: 'Order',
   },
   {
-    id: 4,
+    id: 5,
     label: 'Your Wishlist',
     icon: ({color}: {color: string}) => (
       <ICONS.Favorite size={22} color={color || '#000'} />
@@ -49,7 +57,7 @@ const drawerArray = [
     route: 'Favorite',
   },
   {
-    id: 5,
+    id: 6,
     label: 'Notification',
     icon: ({color}: {color: string}) => (
       <ICONS.Notification size={22} color={color || '#000'} />
@@ -57,7 +65,7 @@ const drawerArray = [
     route: 'Notification',
   },
   {
-    id: 6,
+    id: 7,
     label: 'Your Account',
     icon: ({color}: {color: string}) => (
       <ICONS.User size={22} color={color || '#000'} />
@@ -65,7 +73,7 @@ const drawerArray = [
     route: 'Profile',
   },
   {
-    id: 7,
+    id: 8,
     label: 'Support Us',
     icon: ({color}: {color: string}) => (
       <ICONS.Support size={22} color={color || '#000'} />
@@ -73,7 +81,7 @@ const drawerArray = [
     route: 'Profile',
   },
   {
-    id: 8,
+    id: 9,
     label: 'Terms & Conditions',
     icon: ({color}: {color: string}) => (
       <ICONS.TermAndCondition size={22} color={color || '#000'} />
@@ -81,7 +89,7 @@ const drawerArray = [
     route: 'Profile',
   },
   {
-    id: 9,
+    id: 10,
     label: 'Exit App',
     icon: ({color}: {color: string}) => (
       <ICONS.ExitApp size={22} color={color || '#000'} />

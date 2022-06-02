@@ -11,14 +11,13 @@ import {
   SWEETPRODUCT,
 } from '../../constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useNavigation} from '@react-navigation/native';
+import {DrawerActions, useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {COLORS} from 'configs';
 const Category = () => {
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
   const [tabValue, setTabValue] = useState(1);
-  // console.log('object', categoryName);
   const onSelectSwitch = useCallback((value: React.SetStateAction<number>) => {
     setTabValue(value);
   }, []);
@@ -26,14 +25,14 @@ const Category = () => {
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <Box borderBottomWidth={1.5} borderColor={COLORS.lightGrey}>
         <HStack justifyContent={'space-between'} px={4} py={3}>
-          <HStack alignItems={'center'} space={3}>
+          <HStack alignItems={'center'} space={4}>
             <Ionicons
-              name="arrow-back"
+              name="menu"
               size={24}
               color="#000"
-              onPress={() => navigation.goBack()}
+              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
             />
-            <Heading size={'sm'}>{categoryName || 'All Categories'}</Heading>
+            <Heading size={'md'}>{categoryName || 'All Categories'}</Heading>
           </HStack>
         </HStack>
       </Box>

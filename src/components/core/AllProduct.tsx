@@ -1,33 +1,44 @@
 import {StyleSheet, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Box, HStack, Image, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {useAppContext} from 'contexts';
 
 const AllProduct = ({item}: any) => {
   const navigation = useNavigation<NavigationProps>();
   const [count, setCount] = React.useState(0);
-  const [categoryAddtocart, setCategoryAddtocart] = React.useState<any>([]);
+  const {cartItems, setCartItems} = useAppContext();
+  console.log('first', count);
   const increment = () => {
     setCount(count + 1);
   };
-  const decrement = () => {
+  const decrement = (id: any) => {
     if (count > 0) {
       setCount(count - 1);
+      return;
     } else {
       setCount(0);
     }
   };
+  useEffect(() => {
+    if (count === 0) {
+      const newCartItems = cartItems.filter((data: any) => data.id !== item.id);
+      setCartItems(newCartItems);
+    }
+    return () => {};
+  }, [count]);
+
   const AddToCartCategory = (item: any) => {
     increment();
-    setCategoryAddtocart((prev: any) => [...prev, item]);
+    setCartItems((prev: any) => [...prev, item]);
   };
   return (
     <Box mt={2} overflow={'hidden'} mb={4} px={1}>
-      <Pressable onPress={() => navigation.navigate('ProductDetails')}>
+      <Pressable onPress={() => navigation.navigate('ProductDetails', item)}>
         <Box
           h={120}
           w={120}
@@ -78,7 +89,7 @@ const AllProduct = ({item}: any) => {
           // borderWidth={1}
           borderRadius={5}
           borderColor={COLORS.lightGrey}>
-          {categoryAddtocart?.some((data: any) => data?.id === item?.id) &&
+          {cartItems?.some((data: any) => data?.id === item?.id) &&
           count > 0 ? (
             <HStack
               bg={'#FFFF0060'}
@@ -90,7 +101,7 @@ const AllProduct = ({item}: any) => {
                   name="minus"
                   size={20}
                   color={COLORS.fadeBlack}
-                  onPress={() => decrement()}
+                  onPress={() => decrement(item.id)}
                 />
               </Box>
               <Box>

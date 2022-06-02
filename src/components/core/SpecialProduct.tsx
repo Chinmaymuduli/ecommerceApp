@@ -4,8 +4,11 @@ import {Box, FlatList, HStack, Image, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationProps} from 'src/routes/PrivateRoutes';
 
 const SpecialProduct = ({data}: any) => {
+  const navigation = useNavigation<NavigationProps>();
   const [cartItems, setCartItems] = React.useState<any>([]);
   const AddSpecialCart = (item: any) => {
     setCartItems((prev: any) => [...prev, item]);
@@ -15,6 +18,7 @@ const SpecialProduct = ({data}: any) => {
     return (
       <Box mb={5} justifyContent={'center'}>
         <Pressable
+          onPress={() => navigation.navigate('ProductDetails', {})}
           borderWidth={1}
           mr={5}
           borderRadius={6}
@@ -102,7 +106,7 @@ const SpecialProduct = ({data}: any) => {
         <Box w={'25%'} h={0.5} bg={COLORS.lightGrey}></Box>
       </HStack>
       <Box alignSelf={'flex-end'} py={1}>
-        <Pressable>
+        <Pressable onPress={() => navigation.navigate('Category')}>
           <HStack alignItems={'center'} pr={2} space={1}>
             <Text fontSize={13} bold>
               See All

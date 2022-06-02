@@ -15,6 +15,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import CustomTheme from 'styles';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {CustomDrawer} from 'components/core';
+import AppContextProvider from './src/contexts/AppContextProvider';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
@@ -27,7 +28,9 @@ const App = () => {
             'linear-gradient': require('react-native-linear-gradient').default,
           },
         }}>
-        <Routes />
+        <AppContextProvider>
+          <Routes />
+        </AppContextProvider>
       </NativeBaseProvider>
     </NavigationContainer>
   );

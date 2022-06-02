@@ -30,21 +30,6 @@ const AyushProduct = ({data}: any) => {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [sortPrice, setSortPrice] = React.useState<any>();
   const [sortData, setSortData] = React.useState<any>([]);
-  // console.log('object', data);
-  // console.log('object', sortData);
-  // const SortData = () => {
-  //   onClose();
-  //   if (sortPrice === 'lowtohigh') {
-  //     return setSortData(
-  //       data?.sort((a: any, b: any) => (a.price > b.price ? 1 : -1)),
-  //     );
-  //   }
-  //   if (sortPrice === 'hightolow') {
-  //     return setSortData(
-  //       data?.sort((a: any, b: any) => (a.price > b.price ? -1 : 1)),
-  //     );
-  //   }
-  // };
 
   const renderItem = ({item, index}: any) => {
     return <AllProduct item={item} />;
@@ -162,6 +147,7 @@ const AyushProduct = ({data}: any) => {
                       </Pressable>
                       <Pressable
                         // onPress={() => SortData()}
+                        onPress={onClose}
                         bg={COLORS.cgcolor}
                         borderRadius={5}
                         alignItems={'center'}>

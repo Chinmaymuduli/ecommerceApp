@@ -21,9 +21,10 @@ import {COLORS} from 'configs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {Accordion, ManageReview, ProductComponent} from 'components/core';
-import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 const quantityArr = [
   {label: '500 gm', value: 500},
   {label: '700 gm', value: 700},
@@ -41,10 +42,11 @@ const productData = [
   },
 ];
 
-const ProductDetails = () => {
-  const navigation = useNavigation<NavigationProps>();
+type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
+
+const ProductDetails = ({route, navigation}: Props) => {
+  // console.log('object', route.params);
   const [index, setIndex] = useState(0);
-  const [service, setService] = useState('');
   const isCarousel = useRef<any>(null);
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const [count, setCount] = useState(0);
@@ -131,7 +133,7 @@ const ProductDetails = () => {
         <Box bg={COLORS.textWhite} px={3} flex={1}>
           <HStack alignItems={'center'} mt={3} justifyContent={'space-between'}>
             <Box>
-              <Heading size={'sm'}>Mahua Laddu</Heading>
+              <Heading size={'sm'}>{route.params?.label}</Heading>
             </Box>
             <Box mr={5}>
               <Ionicons
@@ -156,18 +158,23 @@ const ProductDetails = () => {
               borderColor={COLORS.cgcolor}></Box>
             <HStack alignItems={'center'}>
               <Text bold>ID :</Text>
-              <Text> 123456</Text>
+              <Text>
+                {' '}
+                {route.params?.id
+                  ? route.params?.id
+                  : Math.floor(Math.random() * 1000000)}
+              </Text>
             </HStack>
           </HStack>
 
           <HStack alignItems={'center'} mt={1}>
             <HStack space={3} alignItems={'center'}>
-              <Text bold>&#8377; 25.00</Text>
+              <Text bold>&#8377;{route.params?.price}</Text>
               <Text textDecorationLine={'line-through'} fontSize={14}>
-                &#8377; 50.00
+                &#8377; {route.params?.discount}
               </Text>
               <Text color={COLORS.cgcolor} bold>
-                50% off
+                {route.params?.offer}
               </Text>
             </HStack>
           </HStack>
@@ -249,7 +256,8 @@ const ProductDetails = () => {
                 </Heading>
                 <Text fontSize={13}>Pay less, Get More</Text>
               </VStack>
-              <Pressable onPress={() => console.log('first similar product')}>
+              <Pressable
+                onPress={() => navigation.navigate('ProductDetails', {})}>
                 <Text color={COLORS.cgcolor} bold>
                   See All
                 </Text>
@@ -272,6 +280,7 @@ const ProductDetails = () => {
         <Row>
           <Pressable
             // bg={'gray.100'}
+            onPress={() => navigation.navigate('Cart', {isBack: true})}
             bg={'#C1E1C1'}
             w={160}
             alignItems={'center'}
@@ -282,6 +291,7 @@ const ProductDetails = () => {
             </Text>
           </Pressable>
           <Pressable
+            onPress={() => navigation.navigate('OrderSummary', route.params)}
             bg={COLORS.cgcolor}
             w={175}
             borderTopRightRadius={5}

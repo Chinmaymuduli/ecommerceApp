@@ -15,9 +15,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AYUSH_1, AYUSH_2, CART} from 'assets';
-import {useNavigation} from '@react-navigation/native';
+import {DrawerActions, useNavigation, useRoute} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {CartItem, Empty} from 'components/core';
+import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 const CartArr = [
   {
     id: 1,
@@ -38,22 +40,34 @@ const CartArr = [
     quantity: 1,
   },
 ];
-
-const Cart = () => {
-  const navigation = useNavigation<NavigationProps>();
-  const [count, setCount] = React.useState(1);
+type Props = NativeStackScreenProps<PrivateRoutesType, 'Cart'>;
+const Cart = ({route, navigation}: Props) => {
   const [quantity, setQuantity] = React.useState(CartArr);
-  // console.log('first', quantity);
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <HStack alignItems={'center'} space={4} px={3} py={2}>
-        <Ionicons name="arrow-back" size={30} color={COLORS.fadeBlack} />
+        {route.params?.isBack ? (
+          <Ionicons
+            name="arrow-back"
+            size={30}
+            color={COLORS.fadeBlack}
+            onPress={() => navigation.goBack()}
+          />
+        ) : (
+          <Ionicons
+            name="menu"
+            size={28}
+            color={COLORS.fadeBlack}
+            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          />
+        )}
         <Heading size={'sm'} color={'#000'}>
           My Cart
         </Heading>
       </HStack>
+
       {CartArr.length > 0 ? (
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Box>
             <HStack
               justifyContent={'space-between'}
@@ -150,7 +164,7 @@ const Cart = () => {
                 bg={'#008000'}
                 borderRadius={4}
                 mt={2}
-                onPress={() => navigation.navigate('Address')}>
+                onPress={() => navigation.navigate('OrderSummary')}>
                 <HStack justifyContent={'space-between'} py={2}>
                   <HStack alignItems={'center'} space={2} pl={2}>
                     <Box>

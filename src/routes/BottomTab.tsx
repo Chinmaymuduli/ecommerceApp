@@ -2,7 +2,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {ICONS} from 'assets';
 import {CustomDrawer} from 'components/core';
 import {COLORS} from 'configs';
-import {Box, Text} from 'native-base';
+import {useAppContext} from 'contexts';
+import {Badge, Box, Text} from 'native-base';
 
 import React, {useEffect, useRef} from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
@@ -33,6 +34,7 @@ const CustomTabbarButton = ({children, onPress}: any) => (
 );
 
 export default function BottomTab() {
+  const {cartItems} = useAppContext();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -118,19 +120,34 @@ export default function BottomTab() {
         component={Cart}
         options={{
           tabBarIcon: ({focused}) => (
-            <Box alignItems={'center'} justifyContent={'center'}>
-              <Icon
-                type={Icons.Ionicons}
-                name="cart"
-                color={focused ? COLORS.cgcolor : '#748C94'}
-              />
-              <Text
-                color={focused ? COLORS.cgcolor : '#748C94'}
-                fontSize={12}
-                bold>
-                Cart
-              </Text>
-            </Box>
+            <>
+              <Box alignItems={'center'} justifyContent={'center'} mb={3}>
+                <Badge
+                  colorScheme="danger"
+                  rounded="full"
+                  mb={-3}
+                  mr={-3}
+                  zIndex={1}
+                  variant="solid"
+                  alignSelf="flex-end"
+                  _text={{
+                    fontSize: 10,
+                  }}>
+                  {cartItems?.length ? cartItems?.length : 0}
+                </Badge>
+                <Icon
+                  type={Icons.Ionicons}
+                  name="cart"
+                  color={focused ? COLORS.cgcolor : '#748C94'}
+                />
+                <Text
+                  color={focused ? COLORS.cgcolor : '#748C94'}
+                  fontSize={12}
+                  bold>
+                  Cart
+                </Text>
+              </Box>
+            </>
           ),
         }}
       />

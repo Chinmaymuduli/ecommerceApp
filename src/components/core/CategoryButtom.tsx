@@ -60,6 +60,7 @@ const CategoryButtom = ({
                   />
                 </Box>
                 <Text
+                  textAlign={'center'}
                   color={
                     getSelectionMode == item?.id ? '#000' : COLORS.fadeBlack
                   }

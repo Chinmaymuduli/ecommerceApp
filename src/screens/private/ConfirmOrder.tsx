@@ -14,8 +14,14 @@ import {
 import {COLORS} from 'configs';
 import {CONFIRM} from 'assets';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
+import moment from 'moment';
 
-const ConfirmOrder = () => {
+type Props = NativeStackScreenProps<PrivateRoutesType, 'ConfirmOrder'>;
+const ConfirmOrder = ({route, navigation}: Props) => {
+  const saving = route.params?.discount - route.params?.price;
+  const DiscountPrice = route?.params?.discount;
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <ScrollView>
@@ -29,7 +35,8 @@ const ConfirmOrder = () => {
           />
           <Heading size={'md'}>Thank you for your order !</Heading>
           <Text mt={2} textAlign={'center'}>
-            Your order has been placed successfully. your ID is #51236445
+            Your order has been placed successfully. your ID is #
+            {route.params?.orderId}
           </Text>
         </Center>
         <Box px={4}>
@@ -48,7 +55,7 @@ const ConfirmOrder = () => {
                   <Text bold fontSize={12}>
                     Order Date
                   </Text>
-                  <Text fontSize={11}>Sun, 14 Apr, 19:12</Text>
+                  <Text fontSize={11}>{moment(new Date()).format('llll')}</Text>
                 </VStack>
               </HStack>
               <HStack space={2}>
@@ -64,7 +71,7 @@ const ConfirmOrder = () => {
                   <Text bold fontSize={12}>
                     Order ID
                   </Text>
-                  <Text fontSize={11}>#253445512</Text>
+                  <Text fontSize={11}>#{route.params?.orderId}</Text>
                 </VStack>
               </HStack>
             </HStack>
@@ -80,8 +87,8 @@ const ConfirmOrder = () => {
                   pt={2}
                   justifyContent={'space-between'}
                   alignItems={'center'}>
-                  <Text>Price(2 items)</Text>
-                  <Text>&#8377;344</Text>
+                  <Text>Price(1 items)</Text>
+                  <Text>&#8377;{route.params?.discount}</Text>
                 </HStack>
 
                 <HStack
@@ -89,7 +96,7 @@ const ConfirmOrder = () => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Saving</Text>
-                  <Text color={'green.500'}>- &#8377;100</Text>
+                  <Text color={'green.500'}>- &#8377;{saving}</Text>
                 </HStack>
                 <HStack
                   pt={2}
@@ -112,7 +119,7 @@ const ConfirmOrder = () => {
                 alignItems={'center'}
                 mt={2}>
                 <Text>Amount Payable</Text>
-                <Text bold>&#8377;244</Text>
+                <Text bold>&#8377;{DiscountPrice - saving}</Text>
               </HStack>
             </Box>
           </Box>

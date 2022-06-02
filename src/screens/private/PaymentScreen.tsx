@@ -16,10 +16,25 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {useNavigation} from '@react-navigation/native';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 
-const PaymentScreen = () => {
+type Props = NativeStackScreenProps<PrivateRoutesType, 'PaymentScreen'>;
+const PaymentScreen = ({navigation, route}: Props) => {
+  // console.log('object', route.params);
+  const saving = route.params?.discount - route.params?.price;
+  const DiscountPrice = route?.params?.discount;
   const [payment, setPayment] = useState<any>();
-  const navigation = useNavigation<NavigationProps>();
+  const data = {
+    label: route?.params?.label,
+    discount: route?.params?.discount,
+    price: route?.params?.price,
+    offer: route?.params?.offer,
+    img: route?.params?.img,
+    orderId: Math.floor(Math.random() * 10000000000),
+    orderDate: new Date().toLocaleDateString(),
+    orderTime: new Date().toLocaleTimeString(),
+  };
   return (
     <Box flex={1} bg={COLORS.lightGrey}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -37,8 +52,8 @@ const PaymentScreen = () => {
                   pt={2}
                   justifyContent={'space-between'}
                   alignItems={'center'}>
-                  <Text>Price(2 items)</Text>
-                  <Text>&#8377;344</Text>
+                  <Text>Price(1 items)</Text>
+                  <Text>&#8377;{DiscountPrice}</Text>
                 </HStack>
 
                 <HStack
@@ -46,7 +61,7 @@ const PaymentScreen = () => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Saving</Text>
-                  <Text color={'green.500'}>- &#8377;100</Text>
+                  <Text color={'green.500'}>- &#8377;{saving}</Text>
                 </HStack>
                 <HStack
                   pt={2}
@@ -68,7 +83,7 @@ const PaymentScreen = () => {
             <Box px={4} mt={2} mb={2}>
               <HStack justifyContent={'space-between'} alignItems={'center'}>
                 <Text>Amount Payable</Text>
-                <Text bold>&#8377;244</Text>
+                <Text bold>&#8377;{DiscountPrice - saving}</Text>
               </HStack>
             </Box>
           </Box>
@@ -99,7 +114,7 @@ const PaymentScreen = () => {
             </HStack>
           </Pressable>
         </Box>
-        <Box bg={COLORS.textWhite} px={4} h={360}>
+        <Box bg={COLORS.textWhite} px={4} h={380}>
           <Box py={3}>
             <Heading size={'sm'}>Payment Method</Heading>
           </Box>
@@ -122,41 +137,39 @@ const PaymentScreen = () => {
           </Box>
         </Box>
       </ScrollView>
-      <Box
-        position={'absolute'}
-        bottom={0}
-        bg={COLORS.textWhite}
-        w={'full'}
-        borderTopWidth={1}
-        shadow={5}
-        borderColor={COLORS.lightGrey}>
-        <Box px={4}>
-          <HStack
-            justifyContent={'space-evenly'}
-            alignItems={'center'}
-            space={7}>
-            <Box my={1}>
-              <Text bold py={3}>
-                &#8377;244
+      <Box w={'full'} position={'absolute'} bottom={1}>
+        <Pressable
+          mx={4}
+          bg={'#008000'}
+          borderRadius={4}
+          onPress={() => navigation.navigate('ConfirmOrder', data)}>
+          <HStack justifyContent={'space-between'} py={2} alignItems={'center'}>
+            <HStack alignItems={'center'} space={2} pl={2}>
+              <Box>
+                <Text bold color={'#fff'}>
+                  1 items
+                </Text>
+              </Box>
+              <HStack space={2}>
+                <Text bold color={'#fff'}>
+                  |
+                </Text>
+                <Text bold color={'#fff'}>
+                  &#8377;{DiscountPrice - saving}
+                </Text>
+                <Text textDecorationLine={'line-through'} color={'#fff'}>
+                  &#8377; {DiscountPrice}
+                </Text>
+              </HStack>
+            </HStack>
+            <HStack space={2} alignItems={'center'}>
+              <Text bold color={'#fff'}>
+                Confirm Order
               </Text>
-            </Box>
-            <Pressable
-              my={1}
-              bg={COLORS.cgcolor}
-              borderRadius={3}
-              ml={4}
-              onPress={() => navigation.navigate('ConfirmOrder')}>
-              <Text
-                bold
-                px={57}
-                py={3}
-                color={COLORS.textWhite}
-                letterSpacing={1}>
-                Continue
-              </Text>
-            </Pressable>
+              <Ionicons name="chevron-forward" size={25} color={'#fff'} />
+            </HStack>
           </HStack>
-        </Box>
+        </Pressable>
       </Box>
     </Box>
   );
