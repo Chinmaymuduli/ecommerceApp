@@ -124,14 +124,11 @@ const ConfirmOrder = ({route, navigation}: Props) => {
             </Box>
           </Box>
           {/* Order Details */}
-          {/* <Box bg={COLORS.cgcolor} mt={4} mb={2}>
-            <Pressable alignItems={'center'}>
-              <Text color={COLORS.textWhite} py={2}>
-                Order Details
-              </Text>
-            </Pressable>
-          </Box> */}
-          <Pressable alignItems={'center'} mt={3}>
+
+          <Pressable
+            alignItems={'center'}
+            mt={3}
+            onPress={() => navigation.navigate('Order')}>
             <Text bold color={COLORS.cgcolor}>
               See Order Details
             </Text>

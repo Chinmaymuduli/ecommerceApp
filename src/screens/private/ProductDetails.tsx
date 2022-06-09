@@ -2,7 +2,9 @@ import {Dimensions, SafeAreaView, StyleSheet} from 'react-native';
 import React, {useRef, useState} from 'react';
 import {
   Actionsheet,
+  Alert,
   Box,
+  Center,
   FlatList,
   Heading,
   HStack,
@@ -25,13 +27,12 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
+import {useAppContext} from 'contexts';
 const quantityArr = [
-  {label: '500 gm', value: 500},
-  {label: '700 gm', value: 700},
-  {label: '100 gm', value: 100},
-  {label: '1.5 Kg', value: 1500},
-  {label: '2 Kg', value: 2000},
-  {label: '5 Kg', value: 5000},
+  {label: '250 gm', value: 250, price: 159, discount: 200, offer: '5% off'},
+  {label: '500 gm', value: 500, price: 259, discount: 300, offer: '10% off'},
+  {label: '700 gm', value: 700, price: 359, discount: 450, offer: '15% off'},
+  {label: '1 kg', value: 1000, price: 459, discount: 500, offer: '20% off'},
 ];
 
 const productData = [
@@ -50,10 +51,33 @@ const ProductDetails = ({route, navigation}: Props) => {
   const isCarousel = useRef<any>(null);
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const [count, setCount] = useState(0);
-  const [cardBorder, setCardBorder] = useState<any>();
+  const [cardBorder, setCardBorder] = useState<any>({
+    label: '1 kg',
+    value: 1000,
+    price: 459,
+    discount: 500,
+    offer: '20% off',
+  });
+  const [wishlist, setWishlist] = useState<any>(false);
+  const [showAlert, setShowAlert] = useState(false);
 
   const {isOpen, onOpen, onClose} = useDisclose();
 
+  const {setCartItems, cartItems} = useAppContext();
+  // console.log('object', cartItems);
+  // console.log('first', route.params);
+
+  const handleCart = (data: any) => {
+    setCartItems((prev: any) => [...prev, data]);
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 4000);
+  };
+  const cartDatametch = cartItems.some(
+    (item: {id: number | undefined}) => item.id === route.params.id,
+  );
+  // console.log('faa', cartDatametch);
   const increaseItem = () => {
     setCount(count + 1);
   };
@@ -89,6 +113,15 @@ const ProductDetails = ({route, navigation}: Props) => {
     // border color
     setCardBorder(item);
   };
+
+  const handleWishlist = () => {
+    setWishlist(!wishlist);
+    // set timeout
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+    }, 2000);
+  };
   return (
     <SafeAreaView style={{flex: 1}}>
       <HStack justifyContent={'space-between'} px={3} py={3}>
@@ -100,7 +133,12 @@ const ProductDetails = ({route, navigation}: Props) => {
           <Ionicons name="arrow-back" size={24} color="black" />
         </Pressable>
         <Box>
-          <Ionicons name="heart-outline" size={30} color="black" />
+          <Ionicons
+            name={wishlist ? 'heart' : 'heart-outline'}
+            size={30}
+            color="green"
+            onPress={handleWishlist}
+          />
         </Box>
       </HStack>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -169,12 +207,21 @@ const ProductDetails = ({route, navigation}: Props) => {
 
           <HStack alignItems={'center'} mt={1}>
             <HStack space={3} alignItems={'center'}>
-              <Text bold>&#8377;{route.params?.price}</Text>
+              <Text bold>
+                {/* &#8377;{route.params?.price} */}
+                &#8377;
+                {cardBorder?.price ? cardBorder?.price : route.params?.price}
+              </Text>
               <Text textDecorationLine={'line-through'} fontSize={14}>
-                &#8377; {route.params?.discount}
+                {/* &#8377; {route.params?.discount} */}
+                &#8377;{' '}
+                {cardBorder?.discount
+                  ? cardBorder?.discount
+                  : route.params?.discount}
               </Text>
               <Text color={COLORS.cgcolor} bold>
-                {route.params?.offer}
+                {/* {route.params?.offer} */}
+                {cardBorder?.offer ? cardBorder?.offer : route.params?.offer}
               </Text>
             </HStack>
           </HStack>
@@ -196,7 +243,9 @@ const ProductDetails = ({route, navigation}: Props) => {
                 justifyContent={'space-between'}
                 alignItems={'center'}
                 px={2}>
-                <Text>Select Quantity</Text>
+                <Text>
+                  {cardBorder?.label ? cardBorder?.label : 'Select Quantity'}
+                </Text>
                 <Ionicons
                   name="chevron-down"
                   size={20}
@@ -278,18 +327,33 @@ const ProductDetails = ({route, navigation}: Props) => {
       {/* Buttom section */}
       <Box position={'absolute'} px={3} bottom={0} mb={3}>
         <Row>
-          <Pressable
-            // bg={'gray.100'}
-            onPress={() => navigation.navigate('Cart', {isBack: true})}
-            bg={'#C1E1C1'}
-            w={160}
-            alignItems={'center'}
-            borderTopLeftRadius={5}
-            borderBottomLeftRadius={5}>
-            <Text py={4} color={COLORS.cgcolor} bold>
-              Add To Cart
-            </Text>
-          </Pressable>
+          {!cartDatametch ? (
+            <Pressable
+              // onPress={() => navigation.navigate('Cart', {isBack: true})}
+              onPress={() => handleCart(route.params)}
+              bg={'#C1E1C1'}
+              w={160}
+              alignItems={'center'}
+              borderTopLeftRadius={5}
+              borderBottomLeftRadius={5}>
+              <Text py={4} color={COLORS.cgcolor} bold>
+                Add To Cart
+              </Text>
+            </Pressable>
+          ) : (
+            <Pressable
+              // onPress={() => navigation.navigate('Cart', {isBack: true})}
+              onPress={() => navigation.navigate('Cart', {isBack: true})}
+              bg={'#C1E1C1'}
+              w={160}
+              alignItems={'center'}
+              borderTopLeftRadius={5}
+              borderBottomLeftRadius={5}>
+              <Text py={4} color={COLORS.cgcolor} bold>
+                Go To Cart
+              </Text>
+            </Pressable>
+          )}
           <Pressable
             onPress={() => navigation.navigate('OrderSummary', route.params)}
             bg={COLORS.cgcolor}
@@ -360,6 +424,29 @@ const ProductDetails = ({route, navigation}: Props) => {
           </Box>
         </Actionsheet.Content>
       </Actionsheet>
+      {/* Alert Component */}
+      {showAlert ? (
+        <Center mx={3}>
+          <Alert
+            w="100%"
+            variant={'subtle'}
+            colorScheme="success"
+            status="success">
+            <VStack space={2} flexShrink={1} w="100%">
+              <HStack
+                flexShrink={1}
+                space={2}
+                alignItems="center"
+                justifyContent="space-between">
+                <HStack space={2} flexShrink={1} alignItems="center">
+                  <Alert.Icon />
+                  <Text color={'coolGray.800'}>Successfully added!</Text>
+                </HStack>
+              </HStack>
+            </VStack>
+          </Alert>
+        </Center>
+      ) : null}
     </SafeAreaView>
   );
 };

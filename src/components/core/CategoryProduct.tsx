@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Box,
   FlatList,
@@ -27,6 +27,19 @@ type CategoryProductType = {
 
 const CategoryProduct = ({title, data}: CategoryProductType) => {
   const navigation = useNavigation<NavigationProps>();
+  const [wishlist, setWishlist] = useState<any>([]);
+  const [count, setCount] = React.useState(0);
+  const {cartItems, setCartItems} = useAppContext();
+
+  //wishhlist
+  const handleWishlist = (id: any) => {
+    const index = wishlist.indexOf(id);
+    if (index > -1) {
+      setWishlist(wishlist.filter((item: any) => item !== id));
+    } else {
+      setWishlist([...wishlist, id]);
+    }
+  };
   const renderItem = ({item}: any) => {
     return (
       <Box mt={3} overflow={'hidden'} mb={5}>
@@ -66,8 +79,8 @@ const CategoryProduct = ({title, data}: CategoryProductType) => {
             right={4}
             borderRadius={10}>
             <Ionicons
-              onPress={() => console.log('hello')}
-              name="heart-outline"
+              onPress={() => handleWishlist(item?.id)}
+              name={wishlist.includes(item?.id) ? 'heart' : 'heart-outline'}
               size={22}
               color={COLORS.cgcolor}
               style={{
@@ -96,6 +109,7 @@ const CategoryProduct = ({title, data}: CategoryProductType) => {
               onPress={() => console.log('Add Cart', item)}
             />
           </Box>
+
           <Box w={120}>
             <Text bold fontSize={12} numberOfLines={1}>
               {item?.label}

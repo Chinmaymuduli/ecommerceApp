@@ -169,11 +169,11 @@ const CustomDrawer = () => {
           </Pressable>
         ))}
       </Box>
-      <Box py={5}>
+      <Box py={2}>
         <Divider />
       </Box>
       <Box px={5}>
-        <Pressable>
+        <Pressable onPress={() => console.log('pressed')}>
           <HStack justifyContent={'space-between'}>
             <HStack space={3}>
               <Materialicons name="power-settings-new" size={22} color="#000" />

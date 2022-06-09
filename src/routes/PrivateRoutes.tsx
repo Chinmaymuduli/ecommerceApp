@@ -19,6 +19,7 @@ import {
   ProductDetails,
   Search,
   SelectAddress,
+  WishList,
 } from 'screens';
 import BottomTab from './BottomTab';
 import {CustomDrawer} from 'components/core';
@@ -30,7 +31,9 @@ export type PrivateRoutesType = {
   Cart: {
     isBack?: boolean;
   };
-  Category: undefined;
+  Category: {
+    id?: number | any;
+  };
   Offers: undefined;
   Search: undefined;
   Order: undefined;
@@ -71,6 +74,7 @@ export type PrivateRoutesType = {
     img?: any;
   };
   SelectAddress: undefined;
+  WishList: undefined;
 };
 export type NavigationProps = NativeStackNavigationProp<PrivateRoutesType>;
 const Stack = createNativeStackNavigator<PrivateRoutesType>();
@@ -126,12 +130,12 @@ const PrivateRoutes = () => {
       <Stack.Screen
         name="Order"
         component={Order}
-        options={{
-          title: 'Order',
-          headerShown: true,
-          headerBackTitleVisible: false,
-          headerTintColor: '#000',
-        }}
+        // options={{
+        //   title: 'Order',
+        //   headerShown: true,
+        //   headerBackTitleVisible: false,
+        //   headerTintColor: '#000',
+        // }}
       />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
       <Stack.Screen
@@ -197,6 +201,7 @@ const PrivateRoutes = () => {
           headerTintColor: '#000',
         }}
       />
+      <Stack.Screen name="WishList" component={WishList} />
     </Stack.Navigator>
   );
 };

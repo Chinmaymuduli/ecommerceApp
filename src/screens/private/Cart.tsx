@@ -20,6 +20,7 @@ import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {CartItem, Empty} from 'components/core';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useAppContext} from 'contexts';
 const CartArr = [
   {
     id: 1,
@@ -43,6 +44,8 @@ const CartArr = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Cart'>;
 const Cart = ({route, navigation}: Props) => {
   const [quantity, setQuantity] = React.useState(CartArr);
+  // const {cartItems, setCartItems} = useAppContext();
+
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <HStack alignItems={'center'} space={4} px={3} py={2}>
@@ -79,34 +82,10 @@ const Cart = ({route, navigation}: Props) => {
             </HStack>
 
             <Box>
-              {quantity?.map((item, index) => (
+              {CartArr?.map((item: any, index: any) => (
                 <CartItem item={item} key={index} setQuantity={setQuantity} />
               ))}
             </Box>
-            {/* <Pressable
-              bg={'#e4e4e460'}
-              onPress={() => navigation.navigate('Coupon')}>
-              <HStack
-                my={2}
-                bg={'#fff'}
-                px={4}
-                alignItems={'center'}
-                justifyContent={'space-between'}>
-                <HStack alignItems={'center'} py={3} space={4}>
-                  <MaterialCommunityIcons
-                    name="ticket-percent"
-                    size={30}
-                    color={COLORS.fadeBlack}
-                  />
-                  <Text fontSize={15}>Use Coupons</Text>
-                </HStack>
-                <Ionicons
-                  name="chevron-forward"
-                  size={25}
-                  color={COLORS.fadeBlack}
-                />
-              </HStack>
-            </Pressable> */}
             <Box px={4} py={4} borderBottomWidth={6} borderColor={'#e4e4e460'}>
               <Heading size={'sm'}>Bill details</Heading>
               <VStack space={1} py={3}>
@@ -164,7 +143,15 @@ const Cart = ({route, navigation}: Props) => {
                 bg={'#008000'}
                 borderRadius={4}
                 mt={2}
-                onPress={() => navigation.navigate('OrderSummary')}>
+                onPress={() =>
+                  navigation.navigate('OrderSummary', {
+                    label: 'Mahua Laddu',
+                    price: 250,
+                    discount: 300,
+                    offer: '20% OFF',
+                    img: AYUSH_1,
+                  })
+                }>
                 <HStack justifyContent={'space-between'} py={2}>
                   <HStack alignItems={'center'} space={2} pl={2}>
                     <Box>

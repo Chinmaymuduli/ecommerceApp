@@ -12,7 +12,7 @@ const AllProduct = ({item}: any) => {
   const navigation = useNavigation<NavigationProps>();
   const [count, setCount] = React.useState(0);
   const {cartItems, setCartItems} = useAppContext();
-  console.log('first', count);
+  // console.log('first', count);
   const increment = () => {
     setCount(count + 1);
   };

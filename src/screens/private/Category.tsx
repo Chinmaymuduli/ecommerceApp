@@ -14,13 +14,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {COLORS} from 'configs';
-const Category = () => {
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
+
+type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
+const Category = ({route}: Props) => {
+  // console.log('object', route.params.id);
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
   const [tabValue, setTabValue] = useState(1);
   const onSelectSwitch = useCallback((value: React.SetStateAction<number>) => {
     setTabValue(value);
   }, []);
+  // console.log('object', tabValue);
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <Box borderBottomWidth={1.5} borderColor={COLORS.lightGrey}>
@@ -40,6 +46,7 @@ const Category = () => {
       <Row>
         <Box w={'1/4'}>
           <CategoryButtom
+            seletedId={route.params?.id || 1}
             selectionMode={1}
             onSelectSwitch={onSelectSwitch}
             data={CATEGORYARR}

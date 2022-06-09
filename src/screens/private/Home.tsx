@@ -41,7 +41,7 @@ const Home = () => {
   const navigation = useNavigation<NavigationProps>();
   const renderSliderItem = ({item}: {item: any}) => {
     return (
-      <Pressable mt={5}>
+      <Pressable mt={5} onPress={() => navigation.navigate('Category', {})}>
         <ImageBackground
           borderRadius={10}
           source={item.img}
@@ -76,7 +76,9 @@ const Home = () => {
   const renderItem = ({item}: any) => {
     return (
       <Box pr={5} mt={4}>
-        <VStack alignItems={'center'}>
+        <Pressable
+          alignItems={'center'}
+          onPress={() => navigation.navigate('Category', item)}>
           <Box
             borderWidth={3}
             borderRadius={40}
@@ -90,7 +92,7 @@ const Home = () => {
             />
           </Box>
           <Text fontSize={13}>{item?.label}</Text>
-        </VStack>
+        </Pressable>
       </Box>
     );
   };
@@ -119,13 +121,8 @@ const Home = () => {
             />
           </HStack>
           <HStack alignItems={'center'} space={7}>
-            <Pressable onPress={() => console.log('bag')}>
-              <Ionicons
-                onPress={() => console.log('hello wishlist')}
-                name="heart-outline"
-                size={25}
-                color={'#4F7942'}
-              />
+            <Pressable onPress={() => navigation.navigate('WishList')}>
+              <Ionicons name="heart-outline" size={25} color={'#4F7942'} />
             </Pressable>
 
             <Pressable onPress={() => console.log('notification')}>
@@ -173,7 +170,9 @@ const Home = () => {
         <Box mt={5} pl={3}>
           <HStack alignItems={'center'} justifyContent={'space-between'}>
             <Heading size={'md'}>Categories</Heading>
-            <Pressable pr={3} onPress={() => navigation.navigate('Category')}>
+            <Pressable
+              pr={3}
+              onPress={() => navigation.navigate('Category', {})}>
               <Text bold color={COLORS.cgcolor}>
                 View All
               </Text>

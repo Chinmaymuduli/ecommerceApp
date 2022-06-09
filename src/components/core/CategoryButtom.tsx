@@ -1,6 +1,6 @@
 import {ScrollView, TouchableOpacity} from 'react-native';
 import {Box, Image, Text, VStack} from 'native-base';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {COLORS} from 'configs';
 import {CATEGORYARR} from '../../constants';
 
@@ -11,6 +11,7 @@ type categoryType = {
 };
 
 const CategoryButtom = ({
+  seletedId,
   selectionMode,
   onSelectSwitch,
   data,
@@ -24,6 +25,13 @@ const CategoryButtom = ({
     onSelectSwitch(value?.id);
     setCategoryName(value?.label);
   };
+  useEffect(() => {
+    if (!seletedId) {
+      updateSwitchData(data[0]);
+    }
+    updateSwitchData(data.find((item: categoryType) => item.id === seletedId));
+  }, [seletedId, data]);
+
   return (
     <Box>
       <ScrollView>
