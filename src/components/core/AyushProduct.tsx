@@ -22,7 +22,8 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FilterSheet from './FilterSheet';
 import {Banner} from 'assets';
 import Animatable from 'react-native-animatable';
-import AllProduct from './AllProduct';
+
+import HomeCategoryItem from './HomeCategoryItem';
 
 const AyushProduct = ({data}: any) => {
   const navigation = useNavigation<NavigationProps>();
@@ -32,7 +33,11 @@ const AyushProduct = ({data}: any) => {
   const [sortData, setSortData] = React.useState<any>([]);
 
   const renderItem = ({item, index}: any) => {
-    return <AllProduct item={item} />;
+    return (
+      <Box pl={1}>
+        <HomeCategoryItem item={item} />
+      </Box>
+    );
   };
 
   return (
@@ -41,6 +46,7 @@ const AyushProduct = ({data}: any) => {
         data={data}
         renderItem={renderItem}
         numColumns={2}
+        showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{paddingBottom: 200}}
         ListHeaderComponent={() => (

@@ -9,4 +9,6 @@ export {default as Accordion} from './Accordion';
 export {default as AyushProduct} from './AyushProduct';
 export {default as FilterSheet} from './FilterSheet';
 export {default as CartItem} from './CartItem';
-export {default as AllProduct} from './AllProduct';
+export {default as Track} from './Track';
+export {default as PastOrder} from './PastOrder';
+export {default as HomeCategoryItem} from './HomeCategoryItem';

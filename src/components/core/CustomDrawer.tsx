@@ -14,6 +14,7 @@ import {ICONS} from 'assets';
 import {COLORS} from 'configs';
 import {useNavigation} from '@react-navigation/native';
 import Materialicons from 'react-native-vector-icons/MaterialIcons';
+import {useAppContext} from 'contexts';
 
 const drawerArray = [
   {
@@ -102,6 +103,7 @@ const CustomDrawer = () => {
   const navigation = useNavigation();
   const [selectedButton, setSelectedButton] = React.useState(1);
   // console.log('object', selectedButton);
+  const {setIsLoggedIn} = useAppContext();
   const DrawerNaviagte = (item: any) => {
     setSelectedButton(item?.id);
     navigation.navigate(item?.route);
@@ -173,7 +175,7 @@ const CustomDrawer = () => {
         <Divider />
       </Box>
       <Box px={5}>
-        <Pressable onPress={() => console.log('pressed')}>
+        <Pressable onPress={() => setIsLoggedIn(false)}>
           <HStack justifyContent={'space-between'}>
             <HStack space={3}>
               <Materialicons name="power-settings-new" size={22} color="#000" />

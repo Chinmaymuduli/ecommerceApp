@@ -1,5 +1,5 @@
-import {Dimensions, SafeAreaView, StyleSheet} from 'react-native';
-import React, {useRef, useState} from 'react';
+import {Dimensions, SafeAreaView, Share, StyleSheet} from 'react-native';
+import React, {useCallback, useRef, useState} from 'react';
 import {
   Actionsheet,
   Alert,
@@ -64,8 +64,6 @@ const ProductDetails = ({route, navigation}: Props) => {
   const {isOpen, onOpen, onClose} = useDisclose();
 
   const {setCartItems, cartItems} = useAppContext();
-  // console.log('object', cartItems);
-  // console.log('first', route.params);
 
   const handleCart = (data: any) => {
     setCartItems((prev: any) => [...prev, data]);
@@ -122,6 +120,18 @@ const ProductDetails = ({route, navigation}: Props) => {
       setShowAlert(false);
     }, 2000);
   };
+
+  const handelShare = useCallback(async () => {
+    try {
+      await Share.share({
+        message: 'Aloe Vera Bodywash',
+        // url: 'https://play.google.com/store/apps/details?id=com.DigiVyapaar',
+        title: 'title',
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
   return (
     <SafeAreaView style={{flex: 1}}>
       <HStack justifyContent={'space-between'} px={3} py={3}>
@@ -178,6 +188,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                 name="share-social-outline"
                 size={25}
                 color={COLORS.fadeBlack}
+                onPress={handelShare}
               />
             </Box>
           </HStack>

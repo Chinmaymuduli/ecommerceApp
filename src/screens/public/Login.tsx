@@ -18,6 +18,7 @@ import {GOOGLE, ICONS, LoginBg, LOGO, PHONE} from 'assets';
 import {useNavigation} from '@react-navigation/native';
 import {PublicNavigation} from 'src/routes/PublicRoutes';
 import {Controller, useForm} from 'react-hook-form';
+import {useAppContext} from 'contexts';
 
 type DATATYPE = {
   email?: string;
@@ -28,6 +29,7 @@ const Login = () => {
   const navigation = useNavigation<PublicNavigation>();
   const [loader, setLoader] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(true);
+  const {isLoggedIn, setIsLoggedIn} = useAppContext();
   const {
     control,
     handleSubmit,
@@ -36,6 +38,13 @@ const Login = () => {
   const onSubmit = async (data: DATATYPE) => {
     try {
       setLoader(true);
+      if (
+        data.email === 'demouser@gmail.com' &&
+        data.password === 'demouser@gmail.com'
+      ) {
+        setIsLoggedIn(true);
+        // navigation.navigate('Home');
+      }
     } catch (error) {
       console.log('object', error);
     } finally {
@@ -199,7 +208,7 @@ const Login = () => {
               </Row>
             </Pressable>
 
-            <Pressable mt={5} onPress={() => {}}>
+            <Pressable mt={5} onPress={() => setIsLoggedIn(true)}>
               <Row justifyContent={'center'}>
                 <Text fontSize={15} underline>
                   Continue as guest

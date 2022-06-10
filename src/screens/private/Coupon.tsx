@@ -2,7 +2,9 @@ import {StyleSheet} from 'react-native';
 import React from 'react';
 import {
   Actionsheet,
+  Alert,
   Box,
+  Center,
   Heading,
   HStack,
   Input,
@@ -14,6 +16,8 @@ import {
 } from 'native-base';
 import {COLORS} from 'configs';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {useNavigation} from '@react-navigation/native';
+import {NavigationProps} from 'src/routes/PrivateRoutes';
 
 const CouponArr = [
   {
@@ -41,15 +45,24 @@ const CouponArr = [
 ];
 
 const Coupon = () => {
+  const navigation = useNavigation<NavigationProps>();
   const [couponCode, setCouponCode] = React.useState('');
   //   console.log('object', couponCode.length);
   const [termandcondition, setTermandcondition] = React.useState<any>();
   //   console.log('object', termandcondition);
+  const [couponAlert, setCouponAlert] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
 
   const Conditions = (item: any) => {
     setTermandcondition(item);
     onOpen();
+  };
+  const ApplyCoupon = (item: any) => {
+    setCouponAlert(true);
+    setTimeout(() => {
+      setCouponAlert(false);
+      navigation.goBack();
+    }, 2000);
   };
   return (
     <Box bg={COLORS.textWhite} flex={1}>
@@ -144,14 +157,15 @@ const Coupon = () => {
                         {item?.code}
                       </Text>
                     </Box>
-                    <Box
+                    <Pressable
+                      onPress={() => ApplyCoupon(item)}
                       borderWidth={1}
                       borderRadius={6}
                       borderColor={COLORS.cgcolor}>
                       <Text color={COLORS.cgcolor} px={2} py={1}>
                         Apply
                       </Text>
-                    </Box>
+                    </Pressable>
                   </HStack>
                 </HStack>
               </Box>
@@ -198,6 +212,29 @@ const Coupon = () => {
           </Box>
         </Actionsheet.Content>
       </Actionsheet>
+      {/* Coupon alert */}
+      {couponAlert && (
+        <Center mx={3} mb={3}>
+          <Alert
+            w="100%"
+            variant={'subtle'}
+            colorScheme="success"
+            status="success">
+            <VStack space={2} flexShrink={1} w="100%">
+              <HStack
+                flexShrink={1}
+                space={2}
+                alignItems="center"
+                justifyContent="space-between">
+                <HStack space={2} flexShrink={1} alignItems="center">
+                  <Alert.Icon />
+                  <Text color={'coolGray.800'}>Successfully applied!</Text>
+                </HStack>
+              </HStack>
+            </VStack>
+          </Alert>
+        </Center>
+      )}
     </Box>
   );
 };

@@ -21,7 +21,7 @@ import {
 } from 'native-base';
 import {GOOGLE, GOURMEET5, LOGO, MENU2, WOMENEMP} from 'assets';
 import {COLORS} from 'configs';
-import Feather from 'react-native-vector-icons/Feather';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   AYUSHPRODUCT,
@@ -125,7 +125,7 @@ const Home = () => {
               <Ionicons name="heart-outline" size={25} color={'#4F7942'} />
             </Pressable>
 
-            <Pressable onPress={() => console.log('notification')}>
+            <Pressable onPress={() => navigation.navigate('Notifications')}>
               <Badge
                 colorScheme="green"
                 rounded="full"

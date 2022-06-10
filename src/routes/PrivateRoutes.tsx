@@ -12,8 +12,10 @@ import {
   ConfirmOrder,
   Coupon,
   Home,
+  Notifications,
   Offers,
   Order,
+  OrderDetails,
   OrderSummary,
   PaymentScreen,
   ProductDetails,
@@ -75,6 +77,8 @@ export type PrivateRoutesType = {
   };
   SelectAddress: undefined;
   WishList: undefined;
+  OrderDetails: undefined;
+  Notifications: undefined;
 };
 export type NavigationProps = NativeStackNavigationProp<PrivateRoutesType>;
 const Stack = createNativeStackNavigator<PrivateRoutesType>();
@@ -87,16 +91,7 @@ const PrivateRoutes = () => {
         headerTitleStyle: {fontFamily: 'Nunito-Bold'},
       }}>
       <Stack.Screen name="Bottomtab" component={BottomTab} />
-      <Stack.Screen
-        name="Cart"
-        component={Cart}
-        // options={{
-        //   title: 'Cart',
-        //   headerShown: true,
-        //   headerBackTitleVisible: false,
-        //   headerTintColor: '#000',
-        // }}
-      />
+      <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen
         name="Category"
         component={Category}
@@ -127,16 +122,7 @@ const PrivateRoutes = () => {
           headerTintColor: '#000',
         }}
       />
-      <Stack.Screen
-        name="Order"
-        component={Order}
-        // options={{
-        //   title: 'Order',
-        //   headerShown: true,
-        //   headerBackTitleVisible: false,
-        //   headerTintColor: '#000',
-        // }}
-      />
+      <Stack.Screen name="Order" component={Order} />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
       <Stack.Screen
         name="Coupon"
@@ -202,6 +188,26 @@ const PrivateRoutes = () => {
         }}
       />
       <Stack.Screen name="WishList" component={WishList} />
+      <Stack.Screen
+        name="OrderDetails"
+        component={OrderDetails}
+        options={{
+          title: 'Order Details',
+          headerShown: true,
+          headerBackTitleVisible: false,
+          headerTintColor: '#000',
+        }}
+      />
+      <Stack.Screen
+        name="Notifications"
+        component={Notifications}
+        options={{
+          title: 'Notifications',
+          headerShown: true,
+          headerBackTitleVisible: false,
+          headerTintColor: '#000',
+        }}
+      />
     </Stack.Navigator>
   );
 };
