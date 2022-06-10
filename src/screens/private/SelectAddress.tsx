@@ -5,6 +5,7 @@ import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {AYUSH_1} from 'assets';
 const AddressArr = [
   {
     id: 1,
@@ -92,12 +93,20 @@ const SelectAddress = () => {
           )}
         </Box>
       </ScrollView>
-      <Box w={'full'} position={'absolute'} bottom={0}>
+      <Box w={'full'} position={'absolute'} bottom={6}>
         <Pressable
           bg={'#008000'}
           borderRadius={4}
           mx={3}
-          onPress={() => navigation.navigate('OrderSummary')}>
+          onPress={() =>
+            navigation.navigate('OrderSummary', {
+              label: 'Mahua Laddu',
+              price: 250,
+              discount: 300,
+              offer: '20% OFF',
+              img: AYUSH_1,
+            })
+          }>
           <Text
             color={COLORS.textWhite}
             bold
