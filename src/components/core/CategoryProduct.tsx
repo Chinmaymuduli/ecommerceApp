@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
+  Alert,
   Box,
   FlatList,
   Heading,
@@ -8,6 +9,7 @@ import {
   Image,
   Pressable,
   Text,
+  VStack,
 } from 'native-base';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,54 +26,49 @@ type CategoryProductType = {
   label?: string;
   discount?: string;
   price?: string;
+  setOpenAlert?: any;
+  setAlertMessage?: any;
 };
 
-const CategoryProduct = ({title, data}: CategoryProductType) => {
+const CategoryProduct = ({title, data, setOpenAlert, setAlertMessage}: CategoryProductType) => {
   const navigation = useNavigation<NavigationProps>();
   const [wishlist, setWishlist] = useState<any>([]);
   const [count, setCount] = React.useState(0);
   const {cartItems, setCartItems} = useAppContext();
 
-  //wishhlist
-  const handleWishlist = (id: any) => {
-    const index = wishlist.indexOf(id);
-    if (index > -1) {
-      setWishlist(wishlist.filter((item: any) => item !== id));
-    } else {
-      setWishlist([...wishlist, id]);
-    }
-  };
   const renderItem = ({item}: any) => {
-    return <HomeCategoryItem item={item} />;
+    return <HomeCategoryItem item={item} setOpenAlert={setOpenAlert} setAlertMessage={setAlertMessage} />;
   };
   return (
-    <Box mt={4} pl={3}>
-      <HStack alignItems={'center'} justifyContent={'space-between'}>
-        <Box>
-          <Heading size={'sm'}>{title}</Heading>
-          <Text fontSize={12}>Eat healthy , stay healthy</Text>
-        </Box>
-        <Pressable onPress={() => navigation.navigate('Category', {})}>
-          <HStack alignItems={'center'} pr={3} space={1}>
-            <Text fontSize={13}>See All</Text>
-            <Box bg={'#4F7942'} borderRadius={20}>
-              <Ionicons
-                name="chevron-forward"
-                size={16}
-                color={COLORS.textWhite}
-              />
-            </Box>
-          </HStack>
-        </Pressable>
-      </HStack>
-      <FlatList
-        data={data}
-        renderItem={renderItem}
-        keyExtractor={(item, index) => index.toString()}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-      />
-    </Box>
+    <>
+      <Box mt={4} pl={3}>
+        <HStack alignItems={'center'} justifyContent={'space-between'}>
+          <Box>
+            <Heading size={'sm'}>{title}</Heading>
+            <Text fontSize={12}>Eat healthy , stay healthy</Text>
+          </Box>
+          <Pressable onPress={() => navigation.navigate('Category', {})}>
+            <HStack alignItems={'center'} pr={3} space={1}>
+              <Text fontSize={13}>See All</Text>
+              <Box bg={'#4F7942'} borderRadius={20}>
+                <Ionicons
+                  name="chevron-forward"
+                  size={16}
+                  color={COLORS.textWhite}
+                />
+              </Box>
+            </HStack>
+          </Pressable>
+        </HStack>
+        <FlatList
+          data={data}
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        />
+      </Box>
+    </>
   );
 };
 

@@ -12,3 +12,5 @@ export {default as CartItem} from './CartItem';
 export {default as Track} from './Track';
 export {default as PastOrder} from './PastOrder';
 export {default as HomeCategoryItem} from './HomeCategoryItem';
+export {default as AlertComponent} from './AlertComponent';
+export {default as SpecialProductCard} from './SpecialProductCard';

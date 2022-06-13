@@ -19,8 +19,10 @@ import {
   OrderSummary,
   PaymentScreen,
   ProductDetails,
+  Profile,
   Search,
   SelectAddress,
+  SupportUs,
   WishList,
 } from 'screens';
 import BottomTab from './BottomTab';
@@ -79,6 +81,8 @@ export type PrivateRoutesType = {
   WishList: undefined;
   OrderDetails: undefined;
   Notifications: undefined;
+  Profile: undefined;
+  SupportUs: undefined;
 };
 export type NavigationProps = NativeStackNavigationProp<PrivateRoutesType>;
 const Stack = createNativeStackNavigator<PrivateRoutesType>();
@@ -203,6 +207,26 @@ const PrivateRoutes = () => {
         component={Notifications}
         options={{
           title: 'Notifications',
+          headerShown: true,
+          headerBackTitleVisible: false,
+          headerTintColor: '#000',
+        }}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          title: 'Profile',
+          headerShown: true,
+          headerBackTitleVisible: false,
+          headerTintColor: '#000',
+        }}
+      />
+      <Stack.Screen
+        name="SupportUs"
+        component={SupportUs}
+        options={{
+          title: 'Support Us',
           headerShown: true,
           headerBackTitleVisible: false,
           headerTintColor: '#000',

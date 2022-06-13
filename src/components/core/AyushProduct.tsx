@@ -21,11 +21,10 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FilterSheet from './FilterSheet';
 import {Banner} from 'assets';
-import Animatable from 'react-native-animatable';
 
 import HomeCategoryItem from './HomeCategoryItem';
 
-const AyushProduct = ({data}: any) => {
+const AyushProduct = ({data, setOpenAlert, setAlertMessage}: any) => {
   const navigation = useNavigation<NavigationProps>();
   const [filterSheetOpen, setFilterSheetOpen] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
@@ -35,7 +34,11 @@ const AyushProduct = ({data}: any) => {
   const renderItem = ({item, index}: any) => {
     return (
       <Box pl={1}>
-        <HomeCategoryItem item={item} />
+        <HomeCategoryItem
+          item={item}
+          setOpenAlert={setOpenAlert}
+          setAlertMessage={setAlertMessage}
+        />
       </Box>
     );
   };

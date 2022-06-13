@@ -1,7 +1,16 @@
-import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import React, {useCallback, useState} from 'react';
-import {Box, Heading, HStack, Row, ScrollView, VStack} from 'native-base';
-import {AyushProduct, CategoryButtom} from 'components/core';
+import {
+  Alert,
+  Box,
+  Heading,
+  HStack,
+  Row,
+  ScrollView,
+  VStack,
+  Text,
+} from 'native-base';
+import {AlertComponent, AyushProduct, CategoryButtom} from 'components/core';
 import {
   AYUSHPRODUCT,
   CATEGORYARR,
@@ -19,10 +28,12 @@ import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route}: Props) => {
-  // console.log('object', route.params.id);
+  // console.log('object', route.params);
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
   const [tabValue, setTabValue] = useState(1);
+  const [openAlert, setOpenAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('Successfully added');
   const onSelectSwitch = useCallback((value: React.SetStateAction<number>) => {
     setTabValue(value);
   }, []);
@@ -55,28 +66,64 @@ const Category = ({route}: Props) => {
         </Box>
 
         <VStack>
-          <Box>{tabValue === 1 && <AyushProduct data={AYUSHPRODUCT} />}</Box>
-          <Box>{tabValue === 2 && <AyushProduct data={GOURMETPRODUCT} />}</Box>
-          <Box>{tabValue === 3 && <AyushProduct data={PERSONALPRODUCT} />}</Box>
-          <Box>{tabValue === 4 && <AyushProduct data={HOMEPRODUCT} />}</Box>
-          <Box>{tabValue === 5 && <AyushProduct data={SWEETPRODUCT} />}</Box>
+          <Box>
+            {tabValue === 1 && (
+              <AyushProduct
+                data={AYUSHPRODUCT}
+                setOpenAlert={setOpenAlert}
+                setAlertMessage={setAlertMessage}
+              />
+            )}
+          </Box>
+          <Box>
+            {tabValue === 2 && (
+              <AyushProduct
+                data={GOURMETPRODUCT}
+                setOpenAlert={setOpenAlert}
+                setAlertMessage={setAlertMessage}
+              />
+            )}
+          </Box>
+          <Box>
+            {tabValue === 3 && (
+              <AyushProduct
+                data={PERSONALPRODUCT}
+                setOpenAlert={setOpenAlert}
+                setAlertMessage={setAlertMessage}
+              />
+            )}
+          </Box>
+          <Box>
+            {tabValue === 4 && (
+              <AyushProduct
+                data={HOMEPRODUCT}
+                setOpenAlert={setOpenAlert}
+                setAlertMessage={setAlertMessage}
+              />
+            )}
+          </Box>
+          <Box>
+            {tabValue === 5 && (
+              <AyushProduct
+                data={SWEETPRODUCT}
+                setOpenAlert={setOpenAlert}
+                setAlertMessage={setAlertMessage}
+              />
+            )}
+          </Box>
         </VStack>
       </Row>
+      {/* Alert */}
+      <AlertComponent
+        openAlert={openAlert}
+        setOpenAlert={setOpenAlert}
+        setAlertMessage={setAlertMessage}
+        alertMessage={alertMessage}
+      />
     </SafeAreaView>
   );
 };
 
 export default Category;
 
-const styles = StyleSheet.create({
-  // categoryHeader: {
-  //   shadowColor: '#000',
-  //   shadowOffset: {
-  //     width: 0,
-  //     height: 2,
-  //   },
-  //   shadowOpacity: 0.25,
-  //   shadowRadius: 0.84,
-  //   elevation: 5,
-  // },
-});
+const styles = StyleSheet.create({});

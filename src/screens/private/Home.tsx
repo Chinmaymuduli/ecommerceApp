@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import {
+  Alert,
   Badge,
   Box,
   FlatList,
@@ -35,10 +36,14 @@ import {
 } from '../../constants';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
-import {CategoryProduct, SpecialProduct} from 'components/core';
+import {AlertComponent, CategoryProduct, SpecialProduct} from 'components/core';
 
 const Home = () => {
   const navigation = useNavigation<NavigationProps>();
+  const [openAlert, setOpenAlert] = React.useState<any>(false);
+  const [alertMessage, setAlertMessage] =
+    React.useState<any>('Added Successfully');
+  // console.log('search', search);
   const renderSliderItem = ({item}: {item: any}) => {
     return (
       <Pressable mt={5} onPress={() => navigation.navigate('Category', {})}>
@@ -151,20 +156,32 @@ const Home = () => {
       {/* Body Section */}
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box px={3} mt={3}>
-          <Box borderWidth={1} borderRadius={10} borderColor={COLORS.lightGrey}>
-            <Input
+          <Pressable
+            onPress={() => navigation.navigate('Search')}
+            borderWidth={1}
+            borderRadius={10}
+            borderColor={COLORS.lightGrey}>
+            <HStack py={3} space={3} px={3}>
+              <Ionicons name="search" size={20} color={COLORS.fadeBlack} />
+              <Box>
+                <Text color={COLORS.grey}>Search your products</Text>
+              </Box>
+            </HStack>
+            {/* <Input
               placeholder="Search your products here "
               bgColor={COLORS.textWhite}
               variant="unstyled"
               borderRadius={10}
               fontSize={15}
+              value={search}
+              onChangeText={txt => setSearch(txt)}
               InputLeftElement={
                 <Box ml={2}>
                   <Ionicons name="search" size={20} color={COLORS.fadeBlack} />
                 </Box>
               }
-            />
-          </Box>
+            /> */}
+          </Pressable>
         </Box>
         {/* Category Section */}
         <Box mt={5} pl={3}>
@@ -198,19 +215,44 @@ const Home = () => {
         </Box>
         {/* Product Section */}
         <Box mt={2}>
-          <CategoryProduct title="Ayush Product" data={AYUSHPRODUCT} />
+          <CategoryProduct
+            title="Ayush Product"
+            data={AYUSHPRODUCT}
+            setOpenAlert={setOpenAlert}
+            setAlertMessage={setAlertMessage}
+          />
         </Box>
         <Box bg={'#ECFFDC60'}>
-          <CategoryProduct title="Gourmet Foods" data={GOURMETPRODUCT} />
+          <CategoryProduct
+            title="Gourmet Foods"
+            data={GOURMETPRODUCT}
+            setOpenAlert={setOpenAlert}
+            setAlertMessage={setAlertMessage}
+          />
         </Box>
         <Box>
-          <CategoryProduct title="Personal Products" data={PERSONALPRODUCT} />
+          <CategoryProduct
+            title="Personal Products"
+            data={PERSONALPRODUCT}
+            setOpenAlert={setOpenAlert}
+            setAlertMessage={setAlertMessage}
+          />
         </Box>
         <Box bg={'#ECFFDC60'}>
-          <CategoryProduct title="Home Care" data={HOMEPRODUCT} />
+          <CategoryProduct
+            title="Home Care"
+            data={HOMEPRODUCT}
+            setOpenAlert={setOpenAlert}
+            setAlertMessage={setAlertMessage}
+          />
         </Box>
         <Box>
-          <CategoryProduct title="Sweets" data={SWEETPRODUCT} />
+          <CategoryProduct
+            title="Sweets"
+            data={SWEETPRODUCT}
+            setOpenAlert={setOpenAlert}
+            setAlertMessage={setAlertMessage}
+          />
         </Box>
 
         {/* Women Empower */}
@@ -253,7 +295,7 @@ const Home = () => {
         </Box>
         {/* last section */}
         <Box
-          mb={100}
+          // mb={100}
           bg={'#ECFFDC60'}
           // bg={'red.100'}
           mx={2}
@@ -281,6 +323,12 @@ const Home = () => {
           </HStack>
         </Box>
       </ScrollView>
+      {/* Alert */}
+      <AlertComponent
+        openAlert={openAlert}
+        setOpenAlert={setOpenAlert}
+        alertMessage={alertMessage}
+      />
     </SafeAreaView>
   );
 };

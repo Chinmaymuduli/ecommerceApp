@@ -87,7 +87,7 @@ const OnBoarding = () => {
     const radius = size / 2 - strokeWidth / 2;
     const circumference = 2 * Math.PI * radius;
     const progressAnimation = useRef(new Animated.Value(0)).current;
-    const progressRef = useRef(null);
+    const progressRef = useRef<any>(null);
     const percentage = (currentPage + 1) * (100 / onBoardingData.length);
     const animation = (toValue: number) => {
       return Animated.timing(progressAnimation, {

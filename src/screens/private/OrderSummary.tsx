@@ -23,7 +23,16 @@ import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route}: Props) => {
+  // console.log('object', route.params);
   const [ratings, setRatings] = React.useState(3);
+  const [count, setCount] = React.useState(1);
+  const decreaseItem = () => {
+    if (count > 1) {
+      setCount(count - 1);
+    } else {
+      setCount(1);
+    }
+  };
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <ScrollView>
@@ -86,11 +95,11 @@ const OrderSummary = ({navigation, route}: Props) => {
                         style={{
                           padding: 2,
                         }}
-                        // onPress={() => decreaseItem()}
+                        onPress={() => decreaseItem()}
                       />
                     </Box>
                     <Box>
-                      <Text bold>5</Text>
+                      <Text bold>{count}</Text>
                     </Box>
                     <Box bg={'green.600'} borderRadius={15}>
                       <AntDesign
@@ -100,7 +109,7 @@ const OrderSummary = ({navigation, route}: Props) => {
                         name="plus"
                         size={20}
                         color={COLORS.textWhite}
-                        // onPress={increaseItem}
+                        onPress={() => setCount(count + 1)}
                       />
                     </Box>
                   </HStack>

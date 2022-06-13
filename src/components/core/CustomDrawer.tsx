@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import React from 'react';
+import {Alert, BackHandler, StyleSheet} from 'react-native';
+import React, {useCallback} from 'react';
 import {
   Box,
   Divider,
@@ -39,7 +39,7 @@ const drawerArray = [
     icon: ({color}: {color: string}) => (
       <ICONS.Business size={22} color={color || '#000'} />
     ),
-    route: 'Business',
+    route: 'Category',
   },
   {
     id: 4,
@@ -55,7 +55,7 @@ const drawerArray = [
     icon: ({color}: {color: string}) => (
       <ICONS.Favorite size={22} color={color || '#000'} />
     ),
-    route: 'Favorite',
+    route: 'WishList',
   },
   {
     id: 6,
@@ -63,7 +63,7 @@ const drawerArray = [
     icon: ({color}: {color: string}) => (
       <ICONS.Notification size={22} color={color || '#000'} />
     ),
-    route: 'Notification',
+    route: 'Notifications',
   },
   {
     id: 7,
@@ -79,7 +79,7 @@ const drawerArray = [
     icon: ({color}: {color: string}) => (
       <ICONS.Support size={22} color={color || '#000'} />
     ),
-    route: 'Profile',
+    route: 'SupportUs',
   },
   {
     id: 9,
@@ -95,7 +95,7 @@ const drawerArray = [
     icon: ({color}: {color: string}) => (
       <ICONS.ExitApp size={22} color={color || '#000'} />
     ),
-    route: 'Profile',
+    route: 'ExitApp',
   },
 ];
 
@@ -106,8 +106,28 @@ const CustomDrawer = () => {
   const {setIsLoggedIn} = useAppContext();
   const DrawerNaviagte = (item: any) => {
     setSelectedButton(item?.id);
-    navigation.navigate(item?.route);
+    {
+      item?.route === 'ExitApp'
+        ? handelCloseApp()
+        : navigation.navigate(item?.route);
+    }
   };
+
+  const handelCloseApp = useCallback(() => {
+    Alert.alert(
+      'Exit App',
+      'Are You Sure?',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => {},
+          style: 'cancel',
+        },
+        {text: 'OK', onPress: () => BackHandler.exitApp()},
+      ],
+      {cancelable: true},
+    );
+  }, []);
   return (
     <Box flex={1}>
       <HStack

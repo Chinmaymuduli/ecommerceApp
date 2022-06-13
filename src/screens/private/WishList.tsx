@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Badge,
   Box,
+  Center,
   Fab,
   FlatList,
   HStack,
@@ -16,8 +17,9 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS} from 'configs';
-import {AYUSH_1, AYUSH_2} from 'assets';
+import {AYUSH_1, AYUSH_2, FAVORITE, wishlist} from 'assets';
 import {Rating} from 'react-native-ratings';
+import {Empty} from 'components/core';
 
 const wishlistArr = [
   {
@@ -164,6 +166,20 @@ const WishList = ({navigation}: Props) => {
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2}
+          ListEmptyComponent={() => (
+            <Box mt={20}>
+              <Center h={400} w={'full'}>
+                <Image
+                  source={wishlist}
+                  style={styles.wishListimage}
+                  alt={'wishlist image'}
+                />
+                <Text bold color={'black'} fontSize={18} mt={10}>
+                  No Items in Wishlist
+                </Text>
+              </Center>
+            </Box>
+          )}
         />
       </Box>
     </Box>
@@ -176,5 +192,9 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 100,
+  },
+  wishListimage: {
+    width: 300,
+    height: 300,
   },
 });

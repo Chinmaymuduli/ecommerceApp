@@ -45,6 +45,8 @@ type Props = NativeStackScreenProps<PrivateRoutesType, 'Cart'>;
 const Cart = ({route, navigation}: Props) => {
   const [quantity, setQuantity] = React.useState(CartArr);
   // const {cartItems, setCartItems} = useAppContext();
+  // const [quantity, setQuantity] = React.useState(cartItems);
+  // console.log('object369', cartItems);
 
   return (
     <Box flex={1} bg={COLORS.textWhite}>
@@ -69,7 +71,7 @@ const Cart = ({route, navigation}: Props) => {
         </Heading>
       </HStack>
 
-      {CartArr.length > 0 ? (
+      {quantity.length > 0 ? (
         <ScrollView showsVerticalScrollIndicator={false}>
           <Box>
             <HStack
@@ -82,7 +84,7 @@ const Cart = ({route, navigation}: Props) => {
             </HStack>
 
             <Box>
-              {CartArr?.map((item: any, index: any) => (
+              {quantity?.map((item: any, index: any) => (
                 <CartItem item={item} key={index} setQuantity={setQuantity} />
               ))}
             </Box>
@@ -96,7 +98,10 @@ const Cart = ({route, navigation}: Props) => {
                   <Text>
                     &#8377;{' '}
                     {quantity?.reduce(
-                      (acc, item) => acc + item.discount * item.quantity,
+                      (
+                        acc: number,
+                        item: {discount: number; quantity: number},
+                      ) => acc + item.discount * item.quantity,
                       0,
                     )}
                   </Text>
@@ -108,8 +113,14 @@ const Cart = ({route, navigation}: Props) => {
                   <Text color={'green.500'}>
                     - &#8377;
                     {quantity?.reduce(
-                      (acc, item) =>
-                        acc + (item?.discount - item.price) * item.quantity,
+                      (
+                        acc: number,
+                        item: {
+                          discount: number;
+                          price: number;
+                          quantity: number;
+                        },
+                      ) => acc + (item?.discount - item.price) * item.quantity,
                       0,
                     )}
                   </Text>
@@ -129,7 +140,10 @@ const Cart = ({route, navigation}: Props) => {
                 <Text bold>
                   &#8377;{' '}
                   {quantity?.reduce(
-                    (acc, item) =>
+                    (
+                      acc: number,
+                      item: {discount: number; quantity: number; price: number},
+                    ) =>
                       acc +
                       item.discount * item.quantity -
                       (item?.discount - item.price) * item.quantity,
@@ -166,7 +180,14 @@ const Cart = ({route, navigation}: Props) => {
                       <Text bold color={'#fff'}>
                         &#8377;{' '}
                         {quantity?.reduce(
-                          (acc, item) =>
+                          (
+                            acc: number,
+                            item: {
+                              discount: number;
+                              quantity: number;
+                              price: number;
+                            },
+                          ) =>
                             acc +
                             item.discount * item.quantity -
                             (item?.discount - item.price) * item.quantity,
@@ -176,7 +197,14 @@ const Cart = ({route, navigation}: Props) => {
                       <Text textDecorationLine={'line-through'} color={'#fff'}>
                         &#8377;
                         {quantity?.reduce(
-                          (acc, item) =>
+                          (
+                            acc: number,
+                            item: {
+                              discount: number;
+                              price: number;
+                              quantity: number;
+                            },
+                          ) =>
                             acc + (item?.discount - item.price) * item.quantity,
                           0,
                         )}

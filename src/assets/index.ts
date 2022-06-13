@@ -5,6 +5,9 @@ export { default as addproduct } from './animation/addproduct.json'
 export { default as deliveryman } from './animation/deliveryman.json'
 export { default as SUCCESS } from './animation/success.json'
 export { default as CART } from './animation/cart.json'
+export { default as FAVORITE } from './animation/fav.json'
+export { default as NORESULT } from './animation/noresult.json'
+export { default as SUPPORT } from './animation/support.json'
 
 export const LOGO = require('./images/logo.png');
 export const GOOGLE = require('./images/google.webp');
@@ -63,3 +66,5 @@ export const Banner = require('./images/categoryBanner.jpg')
 
 export const NOORDER = require('./images/noorder.webp')
 export const CONFIRM = require('./images/confirm.webp')
+
+export const wishlist = require('./images/wishlist.png')
