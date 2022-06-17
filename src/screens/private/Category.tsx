@@ -1,5 +1,5 @@
 import {SafeAreaView, StyleSheet} from 'react-native';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Alert,
   Box,
@@ -13,6 +13,7 @@ import {
 import {AlertComponent, AyushProduct, CategoryButtom} from 'components/core';
 import {
   AYUSHPRODUCT,
+  AYUSHRAWPRODUCT,
   CATEGORYARR,
   GOURMETPRODUCT,
   HOMEPRODUCT,
@@ -25,19 +26,24 @@ import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {COLORS} from 'configs';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
+import {useAppContext} from 'contexts';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route}: Props) => {
-  // console.log('object', route.params);
+  // console.log('object', route.params?.b2b);
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
   const [tabValue, setTabValue] = useState(1);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('Successfully added');
+  const {userData} = useAppContext();
+
+  console.log('object', userData);
+
   const onSelectSwitch = useCallback((value: React.SetStateAction<number>) => {
     setTabValue(value);
   }, []);
-  // console.log('object', tabValue);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <Box borderBottomWidth={1.5} borderColor={COLORS.lightGrey}>
@@ -69,7 +75,7 @@ const Category = ({route}: Props) => {
           <Box>
             {tabValue === 1 && (
               <AyushProduct
-                data={AYUSHPRODUCT}
+                data={userData.role === 'b2b' ? AYUSHRAWPRODUCT : AYUSHPRODUCT}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {
   Actionsheet,
   Box,
@@ -30,6 +30,8 @@ const AyushProduct = ({data, setOpenAlert, setAlertMessage}: any) => {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [sortPrice, setSortPrice] = React.useState<any>();
   const [sortData, setSortData] = React.useState<any>([]);
+
+  // console.log('data', data);
 
   const renderItem = ({item, index}: any) => {
     return (

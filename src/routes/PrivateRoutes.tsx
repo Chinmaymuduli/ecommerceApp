@@ -37,6 +37,7 @@ export type PrivateRoutesType = {
   };
   Category: {
     id?: number | any;
+    b2b?: boolean;
   };
   Offers: undefined;
   Search: undefined;

@@ -68,3 +68,20 @@ export const NOORDER = require('./images/noorder.webp')
 export const CONFIRM = require('./images/confirm.webp')
 
 export const wishlist = require('./images/wishlist.png')
+// Raw Product
+
+//Ayush
+export const MAHUARAW = require('./images/mahualadduRaw.jpeg');
+export const JOILRAW = require('./images/joilRaw.png');
+export const NIRGUNDIRAW = require('./images/nirgundiRaw.png');
+
+//GOURMET
+export const CHYAWANPRASHRAW = require('./images/chawanprashRaw.png');
+export const RAGIRAW = require('./images/ragiCookiesRaw.png');
+export const ALOEVERARAW = require('./images/aloevera.png')
+export const MAHUACOOKIESRAW = require('./images/mahuaCookies.png');
+export const HONEYRAW = require('./images/honeyRaw.png');
+
+//sweet
+export const CASHEW = require('./images/cashewRaw.png');
+export const AMLARAW = require('./images/amlamurubba.png');

@@ -34,6 +34,12 @@ const quantityArr = [
   {label: '700 gm', value: 700, price: 359, discount: 450, offer: '15% off'},
   {label: '1 kg', value: 1000, price: 459, discount: 500, offer: '20% off'},
 ];
+const B2bProduct = [
+  {label: '10 kg', value: 250, price: 560, discount: 200, offer: '5%'},
+  {label: '20 kg', value: 500, price: 639, discount: 300, offer: '10%'},
+  {label: '30 kg', value: 700, price: 859, discount: 450, offer: '15%'},
+  {label: '50 kg', value: 1000, price: 999, discount: 500, offer: '20%'},
+];
 
 const productData = [
   {
@@ -46,7 +52,7 @@ const productData = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 
 const ProductDetails = ({route, navigation}: Props) => {
-  // console.log('object', route.params);
+  console.log('object', route.params);
   const [index, setIndex] = useState(0);
   const isCarousel = useRef<any>(null);
   const SLIDER_WIDTH = Dimensions.get('window').width;
@@ -86,6 +92,8 @@ const ProductDetails = ({route, navigation}: Props) => {
       setCount(1);
     }
   };
+
+  const {userData} = useAppContext();
   const renderItem = ({item, index}: any) => {
     return (
       <Box
@@ -216,26 +224,72 @@ const ProductDetails = ({route, navigation}: Props) => {
             </HStack>
           </HStack>
 
-          <HStack alignItems={'center'} mt={1}>
-            <HStack space={3} alignItems={'center'}>
-              <Text bold>
-                {/* &#8377;{route.params?.price} */}
-                &#8377;
-                {cardBorder?.price ? cardBorder?.price : route.params?.price}
-              </Text>
-              <Text textDecorationLine={'line-through'} fontSize={14}>
-                {/* &#8377; {route.params?.discount} */}
-                &#8377;{' '}
-                {cardBorder?.discount
-                  ? cardBorder?.discount
-                  : route.params?.discount}
-              </Text>
-              <Text color={COLORS.cgcolor} bold>
-                {/* {route.params?.offer} */}
-                {cardBorder?.offer ? cardBorder?.offer : route.params?.offer}
-              </Text>
+          {userData?.role === 'b2c' ? (
+            <HStack alignItems={'center'} mt={1}>
+              <HStack space={3} alignItems={'center'}>
+                <Text bold>
+                  {/* &#8377;{route.params?.price} */}
+                  &#8377;
+                  {cardBorder?.price ? cardBorder?.price : route.params?.price}
+                </Text>
+                <Text textDecorationLine={'line-through'} fontSize={14}>
+                  &#8377;{' '}
+                  {cardBorder?.discount
+                    ? cardBorder?.discount
+                    : route.params?.discount}
+                </Text>
+                <Text color={COLORS.cgcolor} bold>
+                  {cardBorder?.offer ? cardBorder?.offer : route.params?.offer}
+                </Text>
+              </HStack>
             </HStack>
-          </HStack>
+          ) : (
+            <Box>
+              <HStack
+                alignItems={'center'}
+                mt={2}
+                justifyContent={'space-between'}>
+                <Text bold fontSize={17}>
+                  &#8377;
+                  {cardBorder?.price ? cardBorder?.price : route.params?.price}
+                </Text>
+                <HStack alignItems={'center'} px={3}>
+                  <Text bold>MOQ :</Text>
+                  <Text bold>10kg</Text>
+                </HStack>
+              </HStack>
+              <HStack
+                mt={2}
+                alignItems={'center'}
+                justifyContent={'space-between'}
+                bg={'green.600'}
+                borderRadius={20}>
+                <HStack py={1} px={3}>
+                  <Text bold color={COLORS.textWhite}>
+                    MRP
+                  </Text>
+                  <Text bold color={COLORS.textWhite}>
+                    {' '}
+                    &#8377;{' '}
+                    {cardBorder?.discount
+                      ? cardBorder?.discount
+                      : route.params?.discount}
+                  </Text>
+                </HStack>
+                <HStack py={1} px={3} alignItems={'center'}>
+                  <Text bold color={COLORS.textWhite}>
+                    Retail Margin :
+                  </Text>
+                  <Text bold color={COLORS.textWhite}>
+                    {' '}
+                    {cardBorder?.offer
+                      ? cardBorder?.offer
+                      : route.params?.offer}
+                  </Text>
+                </HStack>
+              </HStack>
+            </Box>
+          )}
           <Box mt={1}>
             <Text color={'#4F7942'} bold>
               Available
@@ -265,35 +319,37 @@ const ProductDetails = ({route, navigation}: Props) => {
               </HStack>
             </Pressable>
             {/* Counter Section */}
-            <Box bg={'#e4e4e460'} justifyContent={'center'} borderRadius={6}>
-              <HStack space={5} px={2}>
-                <Box bg={COLORS.cgcolor} borderRadius={15}>
-                  <AntDesign
-                    name="minus"
-                    size={20}
-                    color={COLORS.textWhite}
-                    style={{
-                      padding: 2,
-                    }}
-                    onPress={() => decreaseItem()}
-                  />
-                </Box>
-                <Box>
-                  <Text bold>{count}</Text>
-                </Box>
-                <Box bg={COLORS.cgcolor} borderRadius={15}>
-                  <AntDesign
-                    style={{
-                      padding: 2,
-                    }}
-                    name="plus"
-                    size={20}
-                    color={COLORS.textWhite}
-                    onPress={increaseItem}
-                  />
-                </Box>
-              </HStack>
-            </Box>
+            {userData?.role === 'b2c' ? (
+              <Box bg={'#e4e4e460'} justifyContent={'center'} borderRadius={6}>
+                <HStack space={5} px={2}>
+                  <Box bg={COLORS.cgcolor} borderRadius={15}>
+                    <AntDesign
+                      name="minus"
+                      size={20}
+                      color={COLORS.textWhite}
+                      style={{
+                        padding: 2,
+                      }}
+                      onPress={() => decreaseItem()}
+                    />
+                  </Box>
+                  <Box>
+                    <Text bold>{count}</Text>
+                  </Box>
+                  <Box bg={COLORS.cgcolor} borderRadius={15}>
+                    <AntDesign
+                      style={{
+                        padding: 2,
+                      }}
+                      name="plus"
+                      size={20}
+                      color={COLORS.textWhite}
+                      onPress={increaseItem}
+                    />
+                  </Box>
+                </HStack>
+              </Box>
+            ) : null}
           </HStack>
           <Box mt={5} mb={5}>
             {productData?.map(item => (
@@ -386,35 +442,65 @@ const ProductDetails = ({route, navigation}: Props) => {
           </Box>
           <Box w={'100%'} px={3}>
             <Row flexWrap={'wrap'}>
-              {quantityArr.map((item, index) => (
-                <Pressable
-                  width={Dimensions.get('window').width / 2.5}
-                  key={index}
-                  borderWidth={1}
-                  borderRadius={5}
-                  bg={'#e4e4e460'}
-                  borderColor={
-                    cardBorder?.value === item.value ? '#228B22' : '#e4e4e4'
-                  }
-                  onPress={() => SelectQuantity(item)}
-                  w={Dimensions.get('window').width / 2.5}
-                  mx={1}
-                  my={1}>
-                  <Text px={2} py={2}>
-                    {item?.label}
-                  </Text>
-                  {cardBorder?.value === item.value && (
-                    <Box
-                      bg={'#228B22'}
-                      borderTopRightRadius={5}
-                      borderBottomLeftRadius={5}
-                      alignSelf={'flex-end'}
-                      position={'absolute'}>
-                      <Ionicons name="checkmark" size={16} color={'#fff'} />
-                    </Box>
-                  )}
-                </Pressable>
-              ))}
+              {userData?.role === 'b2c'
+                ? quantityArr.map((item, index) => (
+                    <Pressable
+                      width={Dimensions.get('window').width / 2.5}
+                      key={index}
+                      borderWidth={1}
+                      borderRadius={5}
+                      bg={'#e4e4e460'}
+                      borderColor={
+                        cardBorder?.value === item.value ? '#228B22' : '#e4e4e4'
+                      }
+                      onPress={() => SelectQuantity(item)}
+                      w={Dimensions.get('window').width / 2.5}
+                      mx={1}
+                      my={1}>
+                      <Text px={2} py={2}>
+                        {item?.label}
+                      </Text>
+                      {cardBorder?.value === item.value && (
+                        <Box
+                          bg={'#228B22'}
+                          borderTopRightRadius={5}
+                          borderBottomLeftRadius={5}
+                          alignSelf={'flex-end'}
+                          position={'absolute'}>
+                          <Ionicons name="checkmark" size={16} color={'#fff'} />
+                        </Box>
+                      )}
+                    </Pressable>
+                  ))
+                : B2bProduct.map((item, index) => (
+                    <Pressable
+                      width={Dimensions.get('window').width / 2.5}
+                      key={index}
+                      borderWidth={1}
+                      borderRadius={5}
+                      bg={'#e4e4e460'}
+                      borderColor={
+                        cardBorder?.value === item.value ? '#228B22' : '#e4e4e4'
+                      }
+                      onPress={() => SelectQuantity(item)}
+                      w={Dimensions.get('window').width / 2.5}
+                      mx={1}
+                      my={1}>
+                      <Text px={2} py={2}>
+                        {item?.label}
+                      </Text>
+                      {cardBorder?.value === item.value && (
+                        <Box
+                          bg={'#228B22'}
+                          borderTopRightRadius={5}
+                          borderBottomLeftRadius={5}
+                          alignSelf={'flex-end'}
+                          position={'absolute'}>
+                          <Ionicons name="checkmark" size={16} color={'#fff'} />
+                        </Box>
+                      )}
+                    </Pressable>
+                  ))}
             </Row>
             <HStack alignItems={'center'} mt={3} ml={5} space={4}>
               <Pressable

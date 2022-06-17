@@ -15,6 +15,7 @@ import {COLORS} from 'configs';
 import {useNavigation} from '@react-navigation/native';
 import Materialicons from 'react-native-vector-icons/MaterialIcons';
 import {useAppContext} from 'contexts';
+import {NavigationProps} from 'src/routes/PrivateRoutes';
 
 const drawerArray = [
   {
@@ -100,17 +101,16 @@ const drawerArray = [
 ];
 
 const CustomDrawer = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProps>();
   const [selectedButton, setSelectedButton] = React.useState(1);
+  const {setUserData} = useAppContext();
   // console.log('object', selectedButton);
   const {setIsLoggedIn} = useAppContext();
   const DrawerNaviagte = (item: any) => {
     setSelectedButton(item?.id);
-    {
-      item?.route === 'ExitApp'
-        ? handelCloseApp()
-        : navigation.navigate(item?.route);
-    }
+    if (item?.route === 'ExitApp') return handelCloseApp();
+    if (item?.label === 'Business') return setUserData({role: 'b2b'});
+    navigation.navigate(item?.route);
   };
 
   const handelCloseApp = useCallback(() => {

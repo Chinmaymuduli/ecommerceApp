@@ -203,6 +203,13 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: any) => {
               &#8377;{item?.discount}
             </Text>
           </HStack>
+          {item?.moq ? (
+            <HStack>
+              <Text fontSize={13} color={COLORS.cgcolor} bold>
+                MOQ: {item?.moq} kg
+              </Text>
+            </HStack>
+          ) : null}
         </Box>
       </Pressable>
     </Box>
