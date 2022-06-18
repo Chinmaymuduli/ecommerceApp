@@ -9,6 +9,8 @@ import {
   Heading,
   HStack,
   Image,
+  Input,
+  Modal,
   Pressable,
   Row,
   ScrollView,
@@ -28,6 +30,8 @@ import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
+import LottieView from 'lottie-react-native';
+import {SUCCESSSQUANTITY} from 'assets';
 const quantityArr = [
   {label: '250 gm', value: 250, price: 159, discount: 200, offer: '5% off'},
   {label: '500 gm', value: 500, price: 259, discount: 300, offer: '10% off'},
@@ -52,20 +56,16 @@ const productData = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 
 const ProductDetails = ({route, navigation}: Props) => {
-  console.log('object', route.params);
+  // console.log('object', route.params);
   const [index, setIndex] = useState(0);
   const isCarousel = useRef<any>(null);
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const [count, setCount] = useState(0);
-  const [cardBorder, setCardBorder] = useState<any>({
-    label: '1 kg',
-    value: 1000,
-    price: 459,
-    discount: 500,
-    offer: '20% off',
-  });
+  const [cardBorder, setCardBorder] = useState<any>();
   const [wishlist, setWishlist] = useState<any>(false);
   const [showAlert, setShowAlert] = useState(false);
+  const [addQuantity, setAddQuantity] = useState<any>();
+  const [modalDialog, setModalDialog] = useState(false);
 
   const {isOpen, onOpen, onClose} = useDisclose();
 
@@ -81,7 +81,7 @@ const ProductDetails = ({route, navigation}: Props) => {
   const cartDatametch = cartItems.some(
     (item: {id: number | undefined}) => item.id === route.params.id,
   );
-  // console.log('faa', cartDatametch);
+
   const increaseItem = () => {
     setCount(count + 1);
   };
@@ -140,6 +140,13 @@ const ProductDetails = ({route, navigation}: Props) => {
       console.log(error);
     }
   }, []);
+
+  const BuyNow = () => {
+    if (addQuantity) {
+      return setModalDialog(true);
+    }
+    navigation.navigate('OrderSummary', route.params);
+  };
   return (
     <SafeAreaView style={{flex: 1}}>
       <HStack justifyContent={'space-between'} px={3} py={3}>
@@ -249,7 +256,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                 alignItems={'center'}
                 mt={2}
                 justifyContent={'space-between'}>
-                <Text bold fontSize={17}>
+                <Text bold fontSize={18}>
                   &#8377;
                   {cardBorder?.price ? cardBorder?.price : route.params?.price}
                 </Text>
@@ -349,7 +356,35 @@ const ProductDetails = ({route, navigation}: Props) => {
                   </Box>
                 </HStack>
               </Box>
-            ) : null}
+            ) : (
+              <Box>
+                <VStack
+                  borderWidth={1}
+                  borderColor={COLORS.lightGrey}
+                  borderRadius={5}>
+                  {/* <Text>Add Quantity</Text> */}
+                  <Input
+                    placeholder="Enter Quantity"
+                    bgColor={COLORS.textWhite}
+                    h={10}
+                    w={150}
+                    fontSize={14}
+                    value={addQuantity}
+                    maxLength={4}
+                    onChangeText={text =>
+                      setAddQuantity(text.replace(/[^0-9]/g, ''))
+                    }
+                    keyboardType={'numeric'}
+                    InputRightElement={
+                      <Text bold pr={2} fontSize={15}>
+                        kg
+                      </Text>
+                    }
+                    variant="unstyled"
+                  />
+                </VStack>
+              </Box>
+            )}
           </HStack>
           <Box mt={5} mb={5}>
             {productData?.map(item => (
@@ -422,7 +457,7 @@ const ProductDetails = ({route, navigation}: Props) => {
             </Pressable>
           )}
           <Pressable
-            onPress={() => navigation.navigate('OrderSummary', route.params)}
+            onPress={() => BuyNow()}
             bg={COLORS.cgcolor}
             w={175}
             borderTopRightRadius={5}
@@ -544,6 +579,48 @@ const ProductDetails = ({route, navigation}: Props) => {
           </Alert>
         </Center>
       ) : null}
+      {/* Modal */}
+      <Modal
+        isOpen={modalDialog}
+        // onClose={() => setModalDialog(false)}
+        safeAreaTop={true}>
+        <Modal.Content maxWidth="350">
+          <Modal.Body>
+            <Center>
+              <LottieView
+                source={SUCCESSSQUANTITY}
+                loop={true}
+                autoPlay
+                style={{
+                  width: 200,
+                  height: 200,
+                }}
+              />
+              <Text textAlign={'center'} fontSize={15} bold mt={-4}>
+                Your order request has been sent successfully. Kindley wait
+              </Text>
+            </Center>
+            <Pressable
+              alignItems={'center'}
+              onPress={() => setModalDialog(false)}>
+              <Box
+                mt={5}
+                borderWidth={2}
+                borderRadius={5}
+                borderColor={'green.600'}>
+                <Text
+                  textAlign={'center'}
+                  fontSize={18}
+                  bold
+                  px={10}
+                  color={'green.600'}>
+                  OK
+                </Text>
+              </Box>
+            </Pressable>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
     </SafeAreaView>
   );
 };

@@ -11,6 +11,7 @@ import {
   Category,
   ConfirmOrder,
   Coupon,
+  EditProfile,
   Home,
   Notifications,
   Offers,
@@ -84,6 +85,7 @@ export type PrivateRoutesType = {
   Notifications: undefined;
   Profile: undefined;
   SupportUs: undefined;
+  EditProfile: undefined;
 };
 export type NavigationProps = NativeStackNavigationProp<PrivateRoutesType>;
 const Stack = createNativeStackNavigator<PrivateRoutesType>();
@@ -216,12 +218,12 @@ const PrivateRoutes = () => {
       <Stack.Screen
         name="Profile"
         component={Profile}
-        options={{
-          title: 'Profile',
-          headerShown: true,
-          headerBackTitleVisible: false,
-          headerTintColor: '#000',
-        }}
+        // options={{
+        //   title: 'Profile',
+        //   headerShown: true,
+        //   headerBackTitleVisible: false,
+        //   headerTintColor: '#000',
+        // }}
       />
       <Stack.Screen
         name="SupportUs"
@@ -233,6 +235,7 @@ const PrivateRoutes = () => {
           headerTintColor: '#000',
         }}
       />
+      <Stack.Screen name="EditProfile" component={EditProfile} />
     </Stack.Navigator>
   );
 };

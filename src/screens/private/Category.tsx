@@ -38,7 +38,7 @@ const Category = ({route}: Props) => {
   const [alertMessage, setAlertMessage] = useState('Successfully added');
   const {userData} = useAppContext();
 
-  console.log('object', userData);
+  // console.log('object', userData);
 
   const onSelectSwitch = useCallback((value: React.SetStateAction<number>) => {
     setTabValue(value);

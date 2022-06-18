@@ -14,3 +14,5 @@ export {default as PastOrder} from './PastOrder';
 export {default as HomeCategoryItem} from './HomeCategoryItem';
 export {default as AlertComponent} from './AlertComponent';
 export {default as SpecialProductCard} from './SpecialProductCard';
+export {default as ImagePicker} from './ImagePicker';
+export {default as BottomSheet} from './BottomSheet';

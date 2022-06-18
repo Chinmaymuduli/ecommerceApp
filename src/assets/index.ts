@@ -8,6 +8,7 @@ export { default as CART } from './animation/cart.json'
 export { default as FAVORITE } from './animation/fav.json'
 export { default as NORESULT } from './animation/noresult.json'
 export { default as SUPPORT } from './animation/support.json'
+export { default as SUCCESSSQUANTITY } from './animation/successquantity.json'
 
 export const LOGO = require('./images/logo.png');
 export const GOOGLE = require('./images/google.webp');
@@ -85,3 +86,5 @@ export const HONEYRAW = require('./images/honeyRaw.png');
 //sweet
 export const CASHEW = require('./images/cashewRaw.png');
 export const AMLARAW = require('./images/amlamurubba.png');
+
+export const GSTIMG = require('./images/gstImg.webp');
