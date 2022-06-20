@@ -123,7 +123,11 @@ const Profile = () => {
                 </Text>
               </Box>
             </Box>
-            <Pressable alignSelf={'flex-end'} px={4} py={3}>
+            <Pressable
+              alignSelf={'flex-end'}
+              px={4}
+              py={3}
+              onPress={() => navigation.navigate('MyReview')}>
               <Text color={COLORS.cgcolor} bold>
                 View Your Review
               </Text>

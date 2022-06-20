@@ -9,6 +9,7 @@ export { default as FAVORITE } from './animation/fav.json'
 export { default as NORESULT } from './animation/noresult.json'
 export { default as SUPPORT } from './animation/support.json'
 export { default as SUCCESSSQUANTITY } from './animation/successquantity.json'
+export { default as REVIEW } from './animation/review.json'
 
 export const LOGO = require('./images/logo.png');
 export const GOOGLE = require('./images/google.webp');

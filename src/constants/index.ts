@@ -8,3 +8,5 @@ export { default as SWEETPRODUCT } from './sweetProduct';
 export { default as SPECIALPRODUCT } from './specialProduct';
 export { default as INDIANSTATE } from './State';
 export { default as AYUSHRAWPRODUCT } from './AyushRawProduct';
+export { default as GOURMETRAWPRODUCT } from './GourmetRawProduct';
+export { default as SWEETRAW } from './SweetRaw';

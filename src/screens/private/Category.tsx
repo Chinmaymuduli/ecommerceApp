@@ -16,9 +16,11 @@ import {
   AYUSHRAWPRODUCT,
   CATEGORYARR,
   GOURMETPRODUCT,
+  GOURMETRAWPRODUCT,
   HOMEPRODUCT,
   PERSONALPRODUCT,
   SWEETPRODUCT,
+  SWEETRAW,
 } from '../../constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
@@ -75,7 +77,7 @@ const Category = ({route}: Props) => {
           <Box>
             {tabValue === 1 && (
               <AyushProduct
-                data={userData.role === 'b2b' ? AYUSHRAWPRODUCT : AYUSHPRODUCT}
+                data={userData?.role === 'b2b' ? AYUSHRAWPRODUCT : AYUSHPRODUCT}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />
@@ -84,7 +86,9 @@ const Category = ({route}: Props) => {
           <Box>
             {tabValue === 2 && (
               <AyushProduct
-                data={GOURMETPRODUCT}
+                data={
+                  userData?.role === 'b2b' ? GOURMETRAWPRODUCT : GOURMETPRODUCT
+                }
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />
@@ -93,7 +97,9 @@ const Category = ({route}: Props) => {
           <Box>
             {tabValue === 3 && (
               <AyushProduct
-                data={PERSONALPRODUCT}
+                data={
+                  userData?.role === 'b2b' ? GOURMETRAWPRODUCT : PERSONALPRODUCT
+                }
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />
@@ -102,7 +108,9 @@ const Category = ({route}: Props) => {
           <Box>
             {tabValue === 4 && (
               <AyushProduct
-                data={HOMEPRODUCT}
+                data={
+                  userData?.role === 'b2b' ? GOURMETRAWPRODUCT : HOMEPRODUCT
+                }
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />
@@ -111,7 +119,7 @@ const Category = ({route}: Props) => {
           <Box>
             {tabValue === 5 && (
               <AyushProduct
-                data={SWEETPRODUCT}
+                data={userData?.role === 'b2b' ? SWEETRAW : SWEETPRODUCT}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />

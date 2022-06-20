@@ -13,6 +13,7 @@ import {
   Coupon,
   EditProfile,
   Home,
+  MyReview,
   Notifications,
   Offers,
   Order,
@@ -86,6 +87,7 @@ export type PrivateRoutesType = {
   Profile: undefined;
   SupportUs: undefined;
   EditProfile: undefined;
+  MyReview: undefined;
 };
 export type NavigationProps = NativeStackNavigationProp<PrivateRoutesType>;
 const Stack = createNativeStackNavigator<PrivateRoutesType>();
@@ -236,6 +238,16 @@ const PrivateRoutes = () => {
         }}
       />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen
+        name="MyReview"
+        component={MyReview}
+        options={{
+          title: 'My Review',
+          headerShown: true,
+          headerBackTitleVisible: false,
+          headerTintColor: '#000',
+        }}
+      />
     </Stack.Navigator>
   );
 };
