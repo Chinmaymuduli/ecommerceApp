@@ -138,7 +138,6 @@ const SupportUs = () => {
                     }
                     placeholder="Subject"
                     fontSize={'14'}
-                    // mb={5}
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}

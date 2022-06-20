@@ -2,7 +2,6 @@ import {StyleSheet} from 'react-native';
 import React from 'react';
 import {
   Box,
-  Collapse,
   Heading,
   HStack,
   Image,
@@ -12,18 +11,14 @@ import {
   VStack,
 } from 'native-base';
 import {COLORS} from 'configs';
-import {AYUSH_1} from 'assets';
 import {Rating} from 'react-native-ratings';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {useNavigation} from '@react-navigation/native';
-import {NavigationProps} from 'src/routes/PrivateRoutes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route}: Props) => {
-  // console.log('object', route.params);
   const [ratings, setRatings] = React.useState(3);
   const [count, setCount] = React.useState(1);
   const decreaseItem = () => {

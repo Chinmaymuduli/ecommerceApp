@@ -68,10 +68,11 @@ const ProductDetails = ({route, navigation}: Props) => {
     discount: 1000,
     offer: '5%',
   });
-  const [wishlist, setWishlist] = useState<any>(false);
+  const [wishlist, setWishlist] = useState<any>([]);
   const [showAlert, setShowAlert] = useState(false);
   const [addQuantity, setAddQuantity] = useState<any>();
   const [modalDialog, setModalDialog] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('Successfully added!');
 
   const {isOpen, onOpen, onClose} = useDisclose();
 
@@ -124,22 +125,33 @@ const ProductDetails = ({route, navigation}: Props) => {
   const SelectQuantity = (item: any) => {
     // border color
     setCardBorder(item);
+    setAddQuantity('');
   };
 
-  const handleWishlist = () => {
-    setWishlist(!wishlist);
-    // set timeout
-    setShowAlert(true);
-    setTimeout(() => {
-      setShowAlert(false);
-    }, 2000);
+  const handleWishlist = (id: any) => {
+    const index = wishlist.indexOf(id);
+    if (index > -1) {
+      setWishlist(wishlist.filter((item: any) => item !== id));
+      setShowAlert(true);
+      setAlertMessage('Remove from wishlist');
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 2000);
+    } else {
+      setWishlist([...wishlist, id]);
+      setShowAlert(true);
+      setAlertMessage('Added to wishlist');
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 2000);
+    }
   };
 
   const handelShare = useCallback(async () => {
     try {
       await Share.share({
         message: 'Aloe Vera Bodywash',
-        // url: 'https://play.google.com/store/apps/details?id=com.DigiVyapaar',
+        // url: 'https://play.google.com/store/apps/details?id=com.chhattisgarhHerbals',
         title: 'title',
       });
     } catch (error) {
@@ -155,9 +167,21 @@ const ProductDetails = ({route, navigation}: Props) => {
   };
 
   const changeQuantity = (text: string) => {
-    setAddQuantity(text.replace(/[^0-9]/g, ''));
-    setCardBorder({});
+    if (text.length > 0) {
+      setAddQuantity(text.replace(/[^0-9]/g, ''));
+      setCardBorder({});
+    } else {
+      setAddQuantity('');
+      setCardBorder({
+        label: '10 kg',
+        value: 10000,
+        price: 560,
+        discount: 1000,
+        offer: '5%',
+      });
+    }
   };
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <HStack justifyContent={'space-between'} px={3} py={3}>
@@ -170,10 +194,12 @@ const ProductDetails = ({route, navigation}: Props) => {
         </Pressable>
         <Box>
           <Ionicons
-            name={wishlist ? 'heart' : 'heart-outline'}
+            name={
+              wishlist.includes(route.params?.id) ? 'heart' : 'heart-outline'
+            }
             size={30}
             color="green"
-            onPress={handleWishlist}
+            onPress={() => handleWishlist(route.params?.id)}
           />
         </Box>
       </HStack>
@@ -251,7 +277,6 @@ const ProductDetails = ({route, navigation}: Props) => {
             <HStack alignItems={'center'} mt={1}>
               <HStack space={3} alignItems={'center'}>
                 <Text bold>
-                  {/* &#8377;{route.params?.price} */}
                   &#8377;
                   {cardBorder?.price ? cardBorder?.price : route.params?.price}
                 </Text>
@@ -272,45 +297,53 @@ const ProductDetails = ({route, navigation}: Props) => {
                 alignItems={'center'}
                 mt={2}
                 justifyContent={'space-between'}>
-                <Text bold fontSize={18}>
-                  &#8377;
-                  {cardBorder?.price ? cardBorder?.price : route.params?.price}
-                </Text>
-                <HStack alignItems={'center'} px={3}>
+                {addQuantity?.length > 0 ? null : (
+                  <Text bold fontSize={18}>
+                    &#8377;
+                    {cardBorder?.price
+                      ? cardBorder?.price
+                      : route.params?.price}
+                  </Text>
+                )}
+                <HStack alignItems={'center'} pr={3}>
                   <Text bold>MOQ :</Text>
                   <Text bold>10kg</Text>
                 </HStack>
               </HStack>
-              <HStack
-                mt={2}
-                alignItems={'center'}
-                justifyContent={'space-between'}
-                bg={'green.600'}
-                borderRadius={20}>
-                <HStack py={1} px={3}>
-                  <Text bold color={COLORS.textWhite}>
-                    MRP
-                  </Text>
-                  <Text bold color={COLORS.textWhite}>
-                    {' '}
-                    &#8377;{' '}
-                    {cardBorder?.discount
-                      ? cardBorder?.discount
-                      : route.params?.discount}
-                  </Text>
-                </HStack>
-                <HStack py={1} px={3} alignItems={'center'}>
-                  <Text bold color={COLORS.textWhite}>
-                    Retail Margin :
-                  </Text>
-                  <Text bold color={COLORS.textWhite}>
-                    {' '}
-                    {cardBorder?.offer
-                      ? cardBorder?.offer
-                      : route.params?.offer}
-                  </Text>
-                </HStack>
-              </HStack>
+              {addQuantity?.length > 0 ? null : (
+                <>
+                  <HStack
+                    mt={2}
+                    alignItems={'center'}
+                    justifyContent={'space-between'}
+                    bg={'green.600'}
+                    borderRadius={20}>
+                    <HStack py={1} px={3}>
+                      <Text bold color={COLORS.textWhite}>
+                        MRP
+                      </Text>
+                      <Text bold color={COLORS.textWhite}>
+                        {' '}
+                        &#8377;{' '}
+                        {cardBorder?.discount
+                          ? cardBorder?.discount
+                          : route.params?.discount}
+                      </Text>
+                    </HStack>
+                    <HStack py={1} px={3} alignItems={'center'}>
+                      <Text bold color={COLORS.textWhite}>
+                        Retail Margin :
+                      </Text>
+                      <Text bold color={COLORS.textWhite}>
+                        {' '}
+                        {cardBorder?.offer
+                          ? cardBorder?.offer
+                          : route.params?.offer}
+                      </Text>
+                    </HStack>
+                  </HStack>
+                </>
+              )}
             </Box>
           )}
           <Box mt={1}>
@@ -586,7 +619,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                 justifyContent="space-between">
                 <HStack space={2} flexShrink={1} alignItems="center">
                   <Alert.Icon />
-                  <Text color={'coolGray.800'}>Successfully added!</Text>
+                  <Text color={'coolGray.800'}>{alertMessage}</Text>
                 </HStack>
               </HStack>
             </VStack>
@@ -603,7 +636,7 @@ const ProductDetails = ({route, navigation}: Props) => {
             <Center>
               <LottieView
                 source={SUCCESSSQUANTITY}
-                loop={true}
+                loop={false}
                 autoPlay
                 style={{
                   width: 200,

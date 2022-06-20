@@ -45,13 +45,6 @@ const Register = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView keyboardShouldPersistTaps={'always'}>
-        {/* <Box bg={COLORS.cgcolor} h={150}>
-          <Pressable alignItems={'flex-end'} px={3} py={3}>
-            <Heading color={COLORS.textWhite} size={'md'}>
-              Skip
-            </Heading>
-          </Pressable>
-        </Box> */}
         <Image source={LoginBg} h={150} w={'full'} alt={'image'} />
         <Box bg={COLORS.textWhite} mt={-12} borderTopRadius={25}>
           <Box px={3}>
@@ -76,7 +69,6 @@ const Register = () => {
                     <Box
                       borderWidth={1}
                       borderColor={COLORS.cgcolor}
-                      // borderRadius={6}
                       borderRadius={10}
                       mt={3}>
                       <Input
@@ -86,7 +78,6 @@ const Register = () => {
                         onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
-                        // bgColor={'#EEEEEE'}
                         borderRadius={10}
                         InputRightElement={
                           <Box mr={2}>
@@ -125,7 +116,6 @@ const Register = () => {
                         onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
-                        // bgColor={'#EEEEEE'}
                         borderRadius={10}
                         InputRightElement={
                           <Box mr={2}>
@@ -164,7 +154,6 @@ const Register = () => {
                         variant={'unstyled'}
                         fontSize={14}
                         type={'password'}
-                        // bgColor={'#EEEEEE'}
                         borderRadius={10}
                         secureTextEntry={showPassword ? true : false}
                         InputRightElement={
@@ -221,52 +210,10 @@ const Register = () => {
             </Pressable>
 
             <Pressable mt={5} onPress={() => {}} alignItems={'center'}>
-              {/* <Row space={1} justifyContent={'center'}> */}
-
               <Text underline color={COLORS.cgcolor} fontSize={15}>
                 Continue as guest
               </Text>
-              {/* </Row> */}
             </Pressable>
-            {/* <HStack alignItems={'center'} mt={4}>
-              <Box
-                w={'33%'}
-                borderWidth={1}
-                bg={COLORS.lightGrey}
-                borderStyle={'dashed'}></Box>
-              <Text bold color={COLORS.cgcolor} mx={2}>
-                Or login with
-              </Text>
-              <Box
-                w={'34%'}
-                borderWidth={1}
-                bg={COLORS.lightGrey}
-                borderStyle={'dashed'}></Box>
-            </HStack>
-
-            <Box mt={4} mb={3}>
-              <Pressable bg={'#EEEEEE'}>
-                <HStack
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  space={3}
-                  py={2}>
-                  <Image alt="image" w={4} h={4} source={GOOGLE} />
-                  <Text bold>Continue With Google</Text>
-                </HStack>
-              </Pressable>
-              <Pressable bg={'#EEEEEE'} mt={3}>
-                <HStack
-                  alignItems={'center'}
-                  justifyContent={'center'}
-                  space={2}
-                  mr={2}
-                  py={2}>
-                  <Image alt="image" w={6} h={6} source={PHONE} />
-                  <Text bold>Continue With Phone</Text>
-                </HStack>
-              </Pressable>
-            </Box> */}
           </Box>
         </Box>
       </ScrollView>

@@ -38,6 +38,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
   const [profileIimage, setprofileimage] = useState<any>('');
   const [document, setDocument] = useState<any>('');
   const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
+  const [GstNumber, setGstNumber] = useState<any>();
 
   const data = {
     label: route?.params?.label,
@@ -58,6 +59,16 @@ const PaymentScreen = ({navigation, route}: Props) => {
     setShowModal(false);
     setDocument('');
     setprofileimage('');
+  };
+
+  const ConfirmOrder = () => {
+    if (profileIimage && document) {
+      navigation.navigate('ConfirmOrder', data);
+    } else if (GstNumber) {
+      navigation.navigate('ConfirmOrder', data);
+    } else {
+      setShowErrorModal(true);
+    }
   };
   return (
     <Box flex={1} bg={COLORS.lightGrey}>
@@ -270,6 +281,10 @@ const PaymentScreen = ({navigation, route}: Props) => {
                             variant="unstyled"
                             borderRadius={6}
                             fontSize={15}
+                            value={GstNumber}
+                            onChangeText={nextValue => {
+                              setGstNumber(nextValue);
+                            }}
                           />
                         </Box>
                         <Box mt={2} mb={3}>
@@ -310,7 +325,12 @@ const PaymentScreen = ({navigation, route}: Props) => {
           mx={4}
           bg={'#008000'}
           borderRadius={4}
-          onPress={() => navigation.navigate('ConfirmOrder', data)}>
+          onPress={() => {
+            if (userData?.role === 'b2b') {
+              return ConfirmOrder();
+            }
+            navigation.navigate('ConfirmOrder', data);
+          }}>
           <HStack justifyContent={'space-between'} py={2} alignItems={'center'}>
             <HStack alignItems={'center'} space={2} pl={2}>
               <Box>

@@ -19,9 +19,6 @@ const ResetPassword = () => {
   const [confirmPassword, setConfirmPassword] = React.useState(false);
   return (
     <Box bg={COLORS.textWhite} flex={1}>
-      {/* <Pressable p={4}>
-        <Ionicons name="arrow-back" size={28} color={COLORS.fadeBlack} />
-      </Pressable> */}
       <ScrollView>
         <Center mt={10}>
           <Image

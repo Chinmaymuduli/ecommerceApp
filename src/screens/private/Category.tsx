@@ -32,15 +32,12 @@ import {useAppContext} from 'contexts';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route}: Props) => {
-  // console.log('object', route.params?.b2b);
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
   const [tabValue, setTabValue] = useState(1);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState('Successfully added');
   const {userData} = useAppContext();
-
-  // console.log('object', userData);
 
   const onSelectSwitch = useCallback((value: React.SetStateAction<number>) => {
     setTabValue(value);

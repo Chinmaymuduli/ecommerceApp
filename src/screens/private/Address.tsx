@@ -35,9 +35,9 @@ const Address = () => {
   const [selectedType, setSelectedType] = React.useState(1);
   const [state, setState] = React.useState<any>('Chhattisgarh');
   const onSubmit = (data: any) => {
-    console.log(data);
+    // console.log(data);
 
-    navigation.navigate('PaymentScreen');
+    navigation.navigate('PaymentScreen', {});
   };
   return (
     <Box flex={1} bg={COLORS.textWhite}>

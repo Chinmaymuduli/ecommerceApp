@@ -167,20 +167,6 @@ const Home = () => {
                 <Text color={COLORS.grey}>Search your products</Text>
               </Box>
             </HStack>
-            {/* <Input
-              placeholder="Search your products here "
-              bgColor={COLORS.textWhite}
-              variant="unstyled"
-              borderRadius={10}
-              fontSize={15}
-              value={search}
-              onChangeText={txt => setSearch(txt)}
-              InputLeftElement={
-                <Box ml={2}>
-                  <Ionicons name="search" size={20} color={COLORS.fadeBlack} />
-                </Box>
-              }
-            /> */}
           </Pressable>
         </Box>
         {/* Category Section */}

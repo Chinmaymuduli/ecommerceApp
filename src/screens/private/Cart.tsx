@@ -12,15 +12,11 @@ import {
 } from 'native-base';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AYUSH_1, AYUSH_2, CART} from 'assets';
 import {DrawerActions, useNavigation, useRoute} from '@react-navigation/native';
-import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {CartItem, Empty} from 'components/core';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {useAppContext} from 'contexts';
 const CartArr = [
   {
     id: 1,

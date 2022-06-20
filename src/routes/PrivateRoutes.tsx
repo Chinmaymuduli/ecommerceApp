@@ -15,7 +15,6 @@ import {
   Home,
   MyReview,
   Notifications,
-  Offers,
   Order,
   OrderDetails,
   OrderSummary,
@@ -28,8 +27,6 @@ import {
   WishList,
 } from 'screens';
 import BottomTab from './BottomTab';
-import {CustomDrawer} from 'components/core';
-import {quantity} from 'types';
 // import {Stall, EventType, User} from 'types';
 
 export type PrivateRoutesType = {
@@ -41,7 +38,6 @@ export type PrivateRoutesType = {
     id?: number | any;
     b2b?: boolean;
   };
-  Offers: undefined;
   Search: undefined;
   Order: undefined;
   Bottomtab: undefined;
@@ -57,26 +53,26 @@ export type PrivateRoutesType = {
   Address: undefined;
   PaymentScreen: {
     label?: string;
-    discount?: number;
-    price?: number;
-    offer?: string;
+    discount?: number | any;
+    price?: number | any;
+    offer?: string | any;
     id?: number;
     img?: any;
   };
   ConfirmOrder: {
     label?: string;
-    discount?: number;
-    price?: number;
-    offer?: string;
+    discount?: number | any;
+    price?: number | any;
+    offer?: string | any;
     id?: number;
     img?: any;
     orderId?: number;
   };
   OrderSummary: {
     label?: string;
-    discount?: number;
-    price?: number;
-    offer?: string;
+    discount?: number | any;
+    price?: number | any;
+    offer?: string | any;
     id?: number;
     img?: any;
   };
@@ -101,26 +97,8 @@ const PrivateRoutes = () => {
       }}>
       <Stack.Screen name="Bottomtab" component={BottomTab} />
       <Stack.Screen name="Cart" component={Cart} />
-      <Stack.Screen
-        name="Category"
-        component={Category}
-        options={{
-          title: 'Category',
-          headerShown: true,
-          headerBackTitleVisible: false,
-          headerTintColor: '#000',
-        }}
-      />
-      <Stack.Screen
-        name="Offers"
-        component={Offers}
-        options={{
-          title: 'Offers',
-          headerShown: true,
-          headerBackTitleVisible: false,
-          headerTintColor: '#000',
-        }}
-      />
+      {/* <Stack.Screen name="Category" component={Category} /> */}
+
       <Stack.Screen
         name="Search"
         component={Search}
@@ -217,16 +195,7 @@ const PrivateRoutes = () => {
           headerTintColor: '#000',
         }}
       />
-      <Stack.Screen
-        name="Profile"
-        component={Profile}
-        // options={{
-        //   title: 'Profile',
-        //   headerShown: true,
-        //   headerBackTitleVisible: false,
-        //   headerTintColor: '#000',
-        // }}
-      />
+      <Stack.Screen name="Profile" component={Profile} />
       <Stack.Screen
         name="SupportUs"
         component={SupportUs}

@@ -187,18 +187,6 @@ const Order = ({navigation}: Props) => {
           <Empty animation={ORDER} title={'No Past Order'} h={400} noLoop />
         </>
       )}
-      {/* <Center height={500}>
-        <Image
-          alt="no order"
-          source={NOORDER}
-          style={{
-            height: 250,
-            width: 250,
-          }}
-        />
-        <Heading>You have no past orders</Heading>
-        <Text>Let's get you started</Text>
-      </Center> */}
     </Box>
   );
 };
