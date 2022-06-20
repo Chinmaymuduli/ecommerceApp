@@ -32,6 +32,7 @@ import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
 import LottieView from 'lottie-react-native';
 import {SUCCESSSQUANTITY} from 'assets';
+import {Rating} from 'react-native-ratings';
 const quantityArr = [
   {label: '250 gm', value: 250, price: 159, discount: 200, offer: '5% off'},
   {label: '500 gm', value: 500, price: 259, discount: 300, offer: '10% off'},
@@ -39,10 +40,10 @@ const quantityArr = [
   {label: '1 kg', value: 1000, price: 459, discount: 500, offer: '20% off'},
 ];
 const B2bProduct = [
-  {label: '10 kg', value: 250, price: 560, discount: 200, offer: '5%'},
-  {label: '20 kg', value: 500, price: 639, discount: 300, offer: '10%'},
-  {label: '30 kg', value: 700, price: 859, discount: 450, offer: '15%'},
-  {label: '50 kg', value: 1000, price: 999, discount: 500, offer: '20%'},
+  {label: '10 kg', value: 10000, price: 560, discount: 1000, offer: '5%'},
+  {label: '20 kg', value: 20000, price: 639, discount: 860, offer: '10%'},
+  {label: '30 kg', value: 30000, price: 859, discount: 1200, offer: '15%'},
+  {label: '50 kg', value: 50000, price: 999, discount: 1500, offer: '20%'},
 ];
 
 const productData = [
@@ -56,12 +57,17 @@ const productData = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 
 const ProductDetails = ({route, navigation}: Props) => {
-  // console.log('object', route.params);
   const [index, setIndex] = useState(0);
   const isCarousel = useRef<any>(null);
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const [count, setCount] = useState(0);
-  const [cardBorder, setCardBorder] = useState<any>();
+  const [cardBorder, setCardBorder] = useState<any>({
+    label: '10 kg',
+    value: 10000,
+    price: 560,
+    discount: 1000,
+    offer: '5%',
+  });
   const [wishlist, setWishlist] = useState<any>(false);
   const [showAlert, setShowAlert] = useState(false);
   const [addQuantity, setAddQuantity] = useState<any>();
@@ -147,6 +153,11 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
     navigation.navigate('OrderSummary', route.params);
   };
+
+  const changeQuantity = (text: string) => {
+    setAddQuantity(text.replace(/[^0-9]/g, ''));
+    setCardBorder({});
+  };
   return (
     <SafeAreaView style={{flex: 1}}>
       <HStack justifyContent={'space-between'} px={3} py={3}>
@@ -208,12 +219,17 @@ const ProductDetails = ({route, navigation}: Props) => {
             </Box>
           </HStack>
           <HStack mt={1}>
-            <HStack space={2}>
-              <FontAwesome name="star" size={20} color={'#F5B21E'} />
-              <FontAwesome name="star" size={20} color={'#F5B21E'} />
-              <FontAwesome name="star" size={20} color={'#F5B21E'} />
-              <FontAwesome name="star" size={20} color={'#F5B21E'} />
-              <FontAwesome name="star-o" size={20} color={'#F5B21E'} />
+            <HStack>
+              <Rating
+                type="custom"
+                startingValue={4}
+                ratingColor={'#F5B21E'}
+                tintColor={'#fff'}
+                ratingBackgroundColor={COLORS.grey}
+                ratingCount={5}
+                imageSize={20}
+                readonly={true}
+              />
             </HStack>
             <Box
               h={5}
@@ -371,9 +387,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                     fontSize={14}
                     value={addQuantity}
                     maxLength={4}
-                    onChangeText={text =>
-                      setAddQuantity(text.replace(/[^0-9]/g, ''))
-                    }
+                    onChangeText={text => changeQuantity(text)}
                     keyboardType={'numeric'}
                     InputRightElement={
                       <Text bold pr={2} fontSize={15}>
@@ -597,7 +611,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                 }}
               />
               <Text textAlign={'center'} fontSize={15} bold mt={-4}>
-                Your order request has been sent successfully. Kindley wait
+                Your order request has been sent successfully. Kindly wait
               </Text>
             </Center>
             <Pressable

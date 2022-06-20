@@ -16,3 +16,4 @@ export {default as AlertComponent} from './AlertComponent';
 export {default as SpecialProductCard} from './SpecialProductCard';
 export {default as ImagePicker} from './ImagePicker';
 export {default as BottomSheet} from './BottomSheet';
+export {default as ErrorModal} from './ErrorModal';

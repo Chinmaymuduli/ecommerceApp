@@ -1,8 +1,7 @@
-import {Alert, StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {
   Box,
-  Button,
   Center,
   Divider,
   Heading,
@@ -17,18 +16,13 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import Entypo from 'react-native-vector-icons/Entypo';
 import {COLORS} from 'configs';
-import Icon from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {NavigationProps} from 'src/routes/PrivateRoutes';
-import {useNavigation} from '@react-navigation/native';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
-import {GSTIMG} from 'assets';
-import {ImagePicker} from 'components/core';
+import {ErrorModal, ImagePicker} from 'components/core';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'PaymentScreen'>;
 const PaymentScreen = ({navigation, route}: Props) => {
@@ -43,8 +37,8 @@ const PaymentScreen = ({navigation, route}: Props) => {
   const [visiable, setVisiable] = useState<boolean>(false);
   const [profileIimage, setprofileimage] = useState<any>('');
   const [document, setDocument] = useState<any>('');
+  const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
 
-  console.log('object', document);
   const data = {
     label: route?.params?.label,
     discount: route?.params?.discount,
@@ -63,6 +57,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
   const handelCancel = () => {
     setShowModal(false);
     setDocument('');
+    setprofileimage('');
   };
   return (
     <Box flex={1} bg={COLORS.lightGrey}>
@@ -234,7 +229,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
                             onPress={() =>
                               document
                                 ? setVisiable(true)
-                                : Alert.alert('Please choose document')
+                                : setShowErrorModal(true)
                             }
                             borderWidth={1}
                             borderRadius={5}
@@ -276,6 +271,12 @@ const PaymentScreen = ({navigation, route}: Props) => {
                             borderRadius={6}
                             fontSize={15}
                           />
+                        </Box>
+                        <Box mt={2} mb={3}>
+                          <Text fontSize={12} color={'blue.400'} bold>
+                            * To get GST invoice and tax benefits, please
+                            provide your GST Number above.
+                          </Text>
                         </Box>
                       </Box>
                     </>
@@ -404,6 +405,12 @@ const PaymentScreen = ({navigation, route}: Props) => {
         setImageURI={setprofileimage}
         cropperCircleOverlay={true}
         postImages={false}
+      />
+      {/* Error Modal */}
+      <ErrorModal
+        setShowErrorModal={setShowErrorModal}
+        showErrorModal={showErrorModal}
+        label="Please select atleast one document."
       />
     </Box>
   );

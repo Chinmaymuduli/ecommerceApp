@@ -29,10 +29,10 @@ const notificationsArr = [
   },
   {
     label: 'Package from your order #CH123456 has arrived',
-    time: 'Yesterday',
+    time: '10:20 AM',
     type: 'shopping',
     isRead: true,
-    new: 'yesterday',
+    new: 'today',
   },
 ];
 

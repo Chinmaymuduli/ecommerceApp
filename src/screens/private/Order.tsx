@@ -13,13 +13,13 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import {AYUSH_1, NOORDER} from 'assets';
+import {AYUSH_1, NOORDER, ORDER} from 'assets';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {DrawerActions} from '@react-navigation/native';
-import {PastOrder} from 'components/core';
+import {Empty, PastOrder} from 'components/core';
 
 const activeOrder = [
   {
@@ -111,8 +111,9 @@ const Order = ({navigation}: Props) => {
           </Box>
         </Pressable>
       </HStack>
-      {selectionMode === 1
-        ? activeOrder.map((item: any, index: any) => (
+      {selectionMode === 1 ? (
+        activeOrder.length > 0 ? (
+          activeOrder.map((item: any, index: any) => (
             <Box key={index} px={4} py={4}>
               <ScrollView>
                 <Box
@@ -172,9 +173,20 @@ const Order = ({navigation}: Props) => {
               </ScrollView>
             </Box>
           ))
-        : pastOrders.map((item: any) => (
-            <PastOrder item={item} key={item.label} />
-          ))}
+        ) : (
+          <>
+            <Empty animation={ORDER} title={'No Active Order'} h={400} noLoop />
+          </>
+        )
+      ) : pastOrders.length > 0 ? (
+        pastOrders.map((item: any) => (
+          <PastOrder item={item} key={item.label} />
+        ))
+      ) : (
+        <>
+          <Empty animation={ORDER} title={'No Past Order'} h={400} noLoop />
+        </>
+      )}
       {/* <Center height={500}>
         <Image
           alt="no order"

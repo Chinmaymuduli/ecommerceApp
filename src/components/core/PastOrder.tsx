@@ -24,7 +24,6 @@ import {NavigationProps} from 'src/routes/PrivateRoutes';
 const PastOrder = ({item}: any) => {
   const [showModal, setShowModal] = useState(false);
   const [ratings, setRatings] = useState(0);
-  //   console.log('object', ratings);
   const navigation = useNavigation<NavigationProps>();
   return (
     <Box px={4} py={4}>

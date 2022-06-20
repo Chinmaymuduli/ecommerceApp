@@ -88,7 +88,7 @@ const drawerArray = [
     icon: ({color}: {color: string}) => (
       <ICONS.TermAndCondition size={22} color={color || '#000'} />
     ),
-    route: 'Profile',
+    route: 'Terms & Conditions',
   },
   {
     id: 10,

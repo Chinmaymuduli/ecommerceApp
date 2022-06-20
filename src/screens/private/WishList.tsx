@@ -157,12 +157,17 @@ const WishList = ({navigation}: Props) => {
             }}>
             2
           </Badge>
-          <Ionicons name={'cart'} size={30} color="green" />
+          <Ionicons
+            name={'cart'}
+            size={30}
+            color="green"
+            onPress={() => navigation.navigate('Cart', {})}
+          />
         </Box>
       </HStack>
       <Box>
         <FlatList
-          data={wishlistArr}
+          data={wishlistArr.length > 0 ? wishlistArr : []}
           renderItem={renderItem}
           keyExtractor={(item, index) => index.toString()}
           numColumns={2}

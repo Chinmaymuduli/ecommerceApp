@@ -10,6 +10,8 @@ export { default as NORESULT } from './animation/noresult.json'
 export { default as SUPPORT } from './animation/support.json'
 export { default as SUCCESSSQUANTITY } from './animation/successquantity.json'
 export { default as REVIEW } from './animation/review.json'
+export { default as ERROR } from './animation/error.json'
+export { default as ORDER } from './animation/order.json'
 
 export const LOGO = require('./images/logo.png');
 export const GOOGLE = require('./images/google.webp');
@@ -89,3 +91,5 @@ export const CASHEW = require('./images/cashewRaw.png');
 export const AMLARAW = require('./images/amlamurubba.png');
 
 export const GSTIMG = require('./images/gstImg.webp');
+
+export const ReviewImg = require('./images/review.jpg');
