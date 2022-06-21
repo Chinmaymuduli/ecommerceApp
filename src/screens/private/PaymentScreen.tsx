@@ -51,7 +51,8 @@ const PaymentScreen = ({navigation, route}: Props) => {
     price: route?.params?.price,
     offer: route?.params?.offer,
     img: route?.params?.img,
-    orderId: Math.floor(Math.random() * 10000000000),
+    discountCoupon: CoupondiscountPrice,
+    orderId: Math.floor(Math.random() * 100000000),
     orderDate: new Date().toLocaleDateString(),
     orderTime: new Date().toLocaleTimeString(),
   };

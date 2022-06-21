@@ -75,6 +75,7 @@ export type PrivateRoutesType = {
     id?: number;
     img?: any;
     orderId?: number;
+    discountCoupon?: number | any;
   };
   OrderSummary: {
     label?: string;

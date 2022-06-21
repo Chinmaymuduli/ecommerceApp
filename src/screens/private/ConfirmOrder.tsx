@@ -20,8 +20,11 @@ import moment from 'moment';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ConfirmOrder'>;
 const ConfirmOrder = ({route, navigation}: Props) => {
+  // console.log('data', route.params);
   const saving = route.params?.discount - route.params?.price;
   const DiscountPrice = route?.params?.discount;
+  const discountCoupon = route?.params?.discountCoupon;
+  const AmoutPayable = DiscountPrice - (saving + discountCoupon);
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <ScrollView>
@@ -103,7 +106,9 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Coupon Discount</Text>
-                  <Text color={'green.500'}>- &#8377;0</Text>
+                  <Text color={'green.500'}>
+                    - &#8377;{route.params?.discountCoupon}
+                  </Text>
                 </HStack>
                 <HStack
                   mb={2}
@@ -119,7 +124,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                 alignItems={'center'}
                 mt={2}>
                 <Text>Amount Payable</Text>
-                <Text bold>&#8377;{DiscountPrice - saving}</Text>
+                <Text bold>&#8377;{AmoutPayable}</Text>
               </HStack>
             </Box>
           </Box>

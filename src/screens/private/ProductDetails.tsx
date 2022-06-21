@@ -59,7 +59,7 @@ type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 const ProductDetails = ({route, navigation}: Props) => {
   const {userData} = useAppContext();
   const [index, setIndex] = useState(0);
-  const isCarousel = useRef<any>(null);
+  // const isCarousel = useRef<any>(null);
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const [count, setCount] = useState(0);
   const [cardBorder, setCardBorder] = useState<any>();
@@ -213,14 +213,14 @@ const ProductDetails = ({route, navigation}: Props) => {
           <Pagination
             dotsLength={SPECIALPRODUCT.length}
             activeDotIndex={index}
-            carouselRef={isCarousel}
+            // carouselRef={isCarousel}
             dotStyle={{
               width: 10,
               height: 10,
               borderRadius: 5,
               backgroundColor: '#228B22',
             }}
-            tappableDots={true}
+            // tappableDots={true}
             inactiveDotStyle={{
               backgroundColor: 'black',
             }}

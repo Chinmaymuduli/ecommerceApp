@@ -14,6 +14,7 @@ import {
 } from 'native-base';
 import {COLORS} from 'configs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {Rating} from 'react-native-ratings';
 const ReviewArray = [
   {
     id: 1,
@@ -89,11 +90,16 @@ const ManageReview = () => {
               <VStack>
                 <Text fontSize={15}>{item?.name}</Text>
                 <HStack space={1}>
-                  <FontAwesome name="star" size={16} color={'#F5B21E'} />
-                  <FontAwesome name="star" size={16} color={'#F5B21E'} />
-                  <FontAwesome name="star" size={16} color={'#F5B21E'} />
-                  <FontAwesome name="star" size={16} color={'#F5B21E'} />
-                  <FontAwesome name="star-o" size={16} color={'#F5B21E'} />
+                  <Rating
+                    type="custom"
+                    startingValue={item?.rating}
+                    ratingColor={'#F5B21E'}
+                    tintColor={'#fff'}
+                    ratingBackgroundColor={COLORS.grey}
+                    ratingCount={5}
+                    imageSize={20}
+                    readonly={true}
+                  />
                 </HStack>
               </VStack>
             </HStack>
@@ -127,31 +133,16 @@ const ManageReview = () => {
                       />
                       <VStack>
                         <Text fontSize={15}>{item?.name}</Text>
-                        <HStack space={1}>
-                          <FontAwesome
-                            name="star"
-                            size={16}
-                            color={'#F5B21E'}
-                          />
-                          <FontAwesome
-                            name="star"
-                            size={16}
-                            color={'#F5B21E'}
-                          />
-                          <FontAwesome
-                            name="star"
-                            size={16}
-                            color={'#F5B21E'}
-                          />
-                          <FontAwesome
-                            name="star"
-                            size={16}
-                            color={'#F5B21E'}
-                          />
-                          <FontAwesome
-                            name="star-o"
-                            size={16}
-                            color={'#F5B21E'}
+                        <HStack>
+                          <Rating
+                            type="custom"
+                            startingValue={item?.rating}
+                            ratingColor={'#F5B21E'}
+                            tintColor={'#fff'}
+                            ratingBackgroundColor={COLORS.grey}
+                            ratingCount={5}
+                            imageSize={20}
+                            readonly={true}
                           />
                         </HStack>
                       </VStack>
