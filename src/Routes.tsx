@@ -1,4 +1,3 @@
-import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import PrivateRoutes from './routes/PrivateRoutes';
 import PublicRoutes from './routes/PublicRoutes';
@@ -12,7 +11,7 @@ const Routes = () => {
   const {isLoggedIn} = useAppContext();
   return (
     <>
-      {isLoggedIn ? (
+      {!isLoggedIn ? (
         <Drawer.Navigator
           screenOptions={{
             headerShown: false,

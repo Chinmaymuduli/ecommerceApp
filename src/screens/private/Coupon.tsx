@@ -51,9 +51,7 @@ type Props = NativeStackScreenProps<PrivateRoutesType, 'Coupon'>;
 const Coupon = ({route}: Props) => {
   const navigation = useNavigation<NavigationProps>();
   const [couponCode, setCouponCode] = React.useState('');
-  //   console.log('object', couponCode.length);
   const [termandcondition, setTermandcondition] = React.useState<any>();
-  //   console.log('object', termandcondition);
   const [couponAlert, setCouponAlert] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
 

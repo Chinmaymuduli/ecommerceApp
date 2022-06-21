@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Box, Center, Image, Pressable, Text} from 'native-base';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
-// import {PublicRoutesType} from 'routes';
+import {Box, Center, Pressable, Text} from 'native-base';
+
 import {
   Animated,
   Dimensions,
@@ -16,7 +15,6 @@ import {PublicNavigation} from 'src/routes/PublicRoutes';
 import {useNavigation} from '@react-navigation/native';
 import {addproduct, Delivery, deliveryman, ICONS} from 'assets';
 import {COLORS} from 'configs';
-import {Empty} from 'components/core';
 import LottieView from 'lottie-react-native';
 
 import Svg, {G, Circle} from 'react-native-svg';
@@ -64,14 +62,7 @@ const OnBoarding = () => {
       index: currentPage + 1,
     });
   };
-  //handle back
-  const handleBack = () => {
-    if (currentPage == 0) return;
-    flatlistRef.current?.scrollToIndex({
-      animated: true,
-      index: currentPage - 1,
-    });
-  };
+
   //skip to end
   const handleSkipToEnd = () => {
     flatlistRef.current?.scrollToIndex({
@@ -104,7 +95,7 @@ const OnBoarding = () => {
       progressAnimation.addListener(value => {
         const strokeDashoffset =
           circumference - (circumference * value.value) / 100;
-        // console.log('data1', strokeDashoffset);
+
         if (progressRef?.current) {
           progressRef.current.setNativeProps({
             strokeDashoffset,
@@ -227,18 +218,6 @@ const OnBoarding = () => {
   const renderFlatListItem = ({item}: any) => {
     return (
       <Box style={styles.midContainer}>
-        {/* <Box alignItems={'center'}>
-          <Image
-            source={{uri: item?.img}}
-            alt={'image'}
-            h={250}
-            // w={'100%'}
-            w={310}
-            resizeMode={'cover'}
-            borderRadius={10}
-          />
-        </Box> */}
-        {/* <Empty animation={item?.img} title={item?.title} /> */}
         <Center h={300}>
           <Box h={300} w={'full'}>
             <LottieView source={item?.img} autoPlay loop />
@@ -263,7 +242,6 @@ const OnBoarding = () => {
   };
 
   return (
-    // <ImageBackground source={{uri: ''}} style={{flex: 1}}>
     <Box
       style={{
         flex: 1,
@@ -286,7 +264,6 @@ const OnBoarding = () => {
       />
       {renderBottomSection()}
     </Box>
-    // </ImageBackground>
   );
 };
 
@@ -294,7 +271,6 @@ export default OnBoarding;
 
 const styles = StyleSheet.create({
   bottomContainer: {
-    // flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 20,
@@ -320,7 +296,6 @@ const styles = StyleSheet.create({
   },
   topHeader: {
     flexDirection: 'row',
-    // alignItems: 'flex-end',
     justifyContent: 'flex-end',
     paddingHorizontal: 12,
     paddingTop: 20,

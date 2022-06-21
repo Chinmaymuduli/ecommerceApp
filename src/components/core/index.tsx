@@ -1,6 +1,7 @@
 export {default as Empty} from './Empty';
 export {default as CustomDrawer} from './CustomDrawer';
-export {default as CategoryProduct} from './CategoryProduct';
+// export {default as CategoryProduct} from './CategoryProducts';
+export {default as CategoryProducts} from './CategoryProducts';
 export {default as SpecialProduct} from './SpecialProduct';
 export {default as CategoryButtom} from './CategoryButtom';
 export {default as ManageReview} from './ManageReview';
@@ -17,3 +18,5 @@ export {default as SpecialProductCard} from './SpecialProductCard';
 export {default as ImagePicker} from './ImagePicker';
 export {default as BottomSheet} from './BottomSheet';
 export {default as ErrorModal} from './ErrorModal';
+export {default as HomeCategories} from './HomeCategories';
+export {default as HomeSlider} from './HomeSlider';

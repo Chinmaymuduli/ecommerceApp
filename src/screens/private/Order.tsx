@@ -1,11 +1,7 @@
 import {Dimensions, StyleSheet} from 'react-native';
 import React from 'react';
 import {
-  Badge,
   Box,
-  Center,
-  FlatList,
-  Heading,
   HStack,
   Image,
   Pressable,
@@ -13,7 +9,7 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import {AYUSH_1, NOORDER, ORDER} from 'assets';
+import {AYUSH_1, ORDER} from 'assets';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -43,9 +39,8 @@ const pastOrders = [
   },
 ];
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Order'>;
-const Order = ({navigation, route}: Props) => {
+const Order = ({navigation}: Props) => {
   const [selectionMode, setSelectionMode] = React.useState<any>(1);
-  // console.log('first', selectionMode);
 
   return (
     <Box flex={1} bg={COLORS.textWhite}>

@@ -4,7 +4,6 @@ import {
   Box,
   FormControl,
   Heading,
-  HStack,
   Image,
   Input,
   Pressable,
@@ -14,7 +13,7 @@ import {
   Text,
 } from 'native-base';
 import {COLORS} from 'configs';
-import {GOOGLE, ICONS, LoginBg, LOGO, PHONE} from 'assets';
+import {ICONS, LoginBg, LOGO} from 'assets';
 import {useNavigation} from '@react-navigation/native';
 import {PublicNavigation} from 'src/routes/PublicRoutes';
 import {Controller, useForm} from 'react-hook-form';
@@ -43,7 +42,6 @@ const Login = () => {
         data.password === 'demouser@gmail.com'
       ) {
         setIsLoggedIn(true);
-        // navigation.navigate('Home');
       }
     } catch (error) {
       console.log('object', error);
@@ -54,13 +52,6 @@ const Login = () => {
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView keyboardShouldPersistTaps="always">
-        {/* <Box bg={COLORS.cgcolor} h={150}>
-          <Pressable alignItems={'flex-end'} px={3} py={3}>
-            <Heading color={COLORS.textWhite} size={'md'}>
-              Skip
-            </Heading>
-          </Pressable>
-        </Box> */}
         <Image source={LoginBg} h={150} w={'full'} alt={'image'} />
         <Box bg={COLORS.textWhite} mt={-12} borderTopRadius={25}>
           <Box px={3}>
@@ -92,7 +83,6 @@ const Login = () => {
                         placeholder="Email Address"
                         variant={'unstyled'}
                         fontSize={14}
-                        // bgColor={COLORS.textWhite}
                         onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
@@ -121,7 +111,6 @@ const Login = () => {
                   {errors.email?.message}
                 </FormControl.ErrorMessage>
               </FormControl>
-              {/* </Box> */}
 
               <FormControl isRequired isInvalid={'password' in errors} mt={2}>
                 <Controller

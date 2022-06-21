@@ -4,14 +4,11 @@ import {
   Box,
   Button,
   Center,
-  FormControl,
-  Heading,
   HStack,
   Image,
   Input,
   Modal,
   Pressable,
-  ScrollView,
   Text,
   VStack,
 } from 'native-base';
@@ -137,7 +134,6 @@ const PastOrder = ({item}: any) => {
                     onFinishRating={(rating: React.SetStateAction<number>) => {
                       setRatings(rating);
                     }}
-                    // style={{paddingVertical: 10}}
                   />
                   <Text ml={3}>({ratings} / 5)</Text>
                 </HStack>

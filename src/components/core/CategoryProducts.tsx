@@ -30,14 +30,22 @@ type CategoryProductType = {
   setAlertMessage?: any;
 };
 
-const CategoryProduct = ({title, data, setOpenAlert, setAlertMessage}: CategoryProductType) => {
+const CategoryProducts = ({
+  title,
+  data,
+  setOpenAlert,
+  setAlertMessage,
+}: CategoryProductType) => {
   const navigation = useNavigation<NavigationProps>();
-  const [wishlist, setWishlist] = useState<any>([]);
-  const [count, setCount] = React.useState(0);
-  const {cartItems, setCartItems} = useAppContext();
 
   const renderItem = ({item}: any) => {
-    return <HomeCategoryItem item={item} setOpenAlert={setOpenAlert} setAlertMessage={setAlertMessage} />;
+    return (
+      <HomeCategoryItem
+        item={item}
+        setOpenAlert={setOpenAlert}
+        setAlertMessage={setAlertMessage}
+      />
+    );
   };
   return (
     <>
@@ -72,7 +80,7 @@ const CategoryProduct = ({title, data, setOpenAlert, setAlertMessage}: CategoryP
   );
 };
 
-export default CategoryProduct;
+export default CategoryProducts;
 
 const styles = StyleSheet.create({
   image: {

@@ -26,7 +26,6 @@ import {ErrorModal, ImagePicker} from 'components/core';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'PaymentScreen'>;
 const PaymentScreen = ({navigation, route}: Props) => {
-  // console.log('object', route.params);
   const saving = route.params?.discount - route.params?.price;
   const DiscountPrice = route?.params?.discount;
   const TotalPrice = DiscountPrice - saving;

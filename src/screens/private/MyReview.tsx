@@ -7,15 +7,12 @@ import {
   Heading,
   HStack,
   Image,
-  Pressable,
   Text,
   VStack,
 } from 'native-base';
 import {COLORS} from 'configs';
 import {AYUSH_1, AYUSH_2, REVIEW, ReviewImg} from 'assets';
 import {Rating} from 'react-native-ratings';
-import LottieView from 'lottie-react-native';
-import {Empty} from 'components/core';
 
 const MyReviewArr = [
   {
@@ -38,8 +35,6 @@ const MyReviewArr = [
 ];
 
 const MyReview = () => {
-  const [ratings, setRatings] = useState(4);
-
   const renderItem = ({item}: any) => {
     return (
       <Box bg={COLORS.lightGrey}>

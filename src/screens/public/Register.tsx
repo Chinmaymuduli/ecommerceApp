@@ -13,7 +13,7 @@ import {
   Text,
 } from 'native-base';
 import {COLORS} from 'configs';
-import {GOOGLE, ICONS, LoginBg, LOGO, PHONE} from 'assets';
+import {ICONS, LoginBg, LOGO} from 'assets';
 import {useNavigation} from '@react-navigation/native';
 import {PublicNavigation} from 'src/routes/PublicRoutes';
 import {Controller, useForm} from 'react-hook-form';

@@ -54,23 +54,6 @@ const OtpScreen = () => {
             handleTextChange={(text: any) => setCode(text)}
           />
         </Flex>
-        {/* <Box alignItems={'center'} mt={5}>
-          <Text>{minutes + 'm' + ' ' + seconds + 's'}</Text>
-          <Text fontSize={16}>Didn't receive the code ?</Text>
-          {minutes === 0 && seconds === 0 ? (
-            <TouchableOpacity 
-            // onPress={() => ResendOTP()}
-            >
-              <Text fontSize={18} bold>
-                Request again
-              </Text>
-            </TouchableOpacity>
-          ) : (
-            <Text fontSize={18} color={COLORS.grey}>
-              Request again
-            </Text>
-          )}
-        </Box> */}
       </Center>
       <Box p={3}>
         {loader ? (

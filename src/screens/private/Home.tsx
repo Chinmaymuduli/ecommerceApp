@@ -1,106 +1,43 @@
-import {
-  Dimensions,
-  ImageBackground,
-  SafeAreaView,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import {ImageBackground, SafeAreaView, StyleSheet} from 'react-native';
 import React from 'react';
 import {
-  Alert,
   Badge,
   Box,
-  FlatList,
   Heading,
   HStack,
   Image,
-  Input,
   Pressable,
   ScrollView,
   Text,
-  VStack,
 } from 'native-base';
-import {GOOGLE, GOURMEET5, LOGO, MENU2, WOMENEMP} from 'assets';
+import {GOURMEET5, LOGO, MENU2, WOMENEMP} from 'assets';
 import {COLORS} from 'configs';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   AYUSHPRODUCT,
-  CATEGORYARR,
   GOURMETPRODUCT,
   HOMEPRODUCT,
   PERSONALPRODUCT,
-  SLIDERDATA,
   SPECIALPRODUCT,
   SWEETPRODUCT,
 } from '../../constants';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
-import {AlertComponent, CategoryProduct, SpecialProduct} from 'components/core';
+import {
+  AlertComponent,
+  CategoryProducts,
+  HomeCategories,
+  HomeSlider,
+  SpecialProduct,
+} from 'components/core';
 
 const Home = () => {
   const navigation = useNavigation<NavigationProps>();
   const [openAlert, setOpenAlert] = React.useState<any>(false);
   const [alertMessage, setAlertMessage] =
     React.useState<any>('Added Successfully');
-  // console.log('search', search);
-  const renderSliderItem = ({item}: {item: any}) => {
-    return (
-      <Pressable mt={5} onPress={() => navigation.navigate('Category', {})}>
-        <ImageBackground
-          borderRadius={10}
-          source={item.img}
-          style={{
-            height: 150,
-            width: 300,
-            marginHorizontal: 10,
-          }}>
-          <Box ml={150} mt={5}>
-            <Text color={COLORS.textWhite} fontSize={12} bold>
-              {item?.label}
-            </Text>
-            <Text bold color={COLORS.textWhite} flexWrap={'wrap'} mt={1}>
-              {item?.offer}
-            </Text>
-            <Box
-              mt={2}
-              bg={COLORS.textWhite}
-              borderRadius={5}
-              alignItems={'center'}
-              w={'2/3'}>
-              <Text color={COLORS.cgcolor} bold py={1}>
-                Shop Now
-              </Text>
-            </Box>
-          </Box>
-        </ImageBackground>
-      </Pressable>
-    );
-  };
 
-  const renderItem = ({item}: any) => {
-    return (
-      <Box pr={5} mt={4}>
-        <Pressable
-          alignItems={'center'}
-          onPress={() => navigation.navigate('Category', item)}>
-          <Box
-            borderWidth={3}
-            borderRadius={40}
-            p={0.5}
-            borderColor={'#4F7942'}>
-            <Image
-              source={item.img}
-              style={styles.imagestyle}
-              alt="categoryimg"
-              resizeMode="contain"
-            />
-          </Box>
-          <Text fontSize={13}>{item?.label}</Text>
-        </Pressable>
-      </Box>
-    );
-  };
   return (
     <SafeAreaView
       style={{
@@ -170,38 +107,14 @@ const Home = () => {
           </Pressable>
         </Box>
         {/* Category Section */}
-        <Box mt={5} pl={3}>
-          <HStack alignItems={'center'} justifyContent={'space-between'}>
-            <Heading size={'md'}>Categories</Heading>
-            <Pressable
-              pr={3}
-              onPress={() => navigation.navigate('Category', {})}>
-              <Text bold color={COLORS.cgcolor}>
-                View All
-              </Text>
-            </Pressable>
-          </HStack>
-          <FlatList
-            data={CATEGORYARR}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-          />
-        </Box>
+        <HomeCategories />
         {/* Slider Section */}
-        <Box>
-          <FlatList
-            data={SLIDERDATA}
-            renderItem={renderSliderItem}
-            keyExtractor={(item, index) => index.toString()}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-          />
-        </Box>
+
+        <HomeSlider />
+
         {/* Product Section */}
         <Box mt={2}>
-          <CategoryProduct
+          <CategoryProducts
             title="Ayush Product"
             data={AYUSHPRODUCT}
             setOpenAlert={setOpenAlert}
@@ -209,7 +122,7 @@ const Home = () => {
           />
         </Box>
         <Box bg={'#ECFFDC60'}>
-          <CategoryProduct
+          <CategoryProducts
             title="Gourmet Foods"
             data={GOURMETPRODUCT}
             setOpenAlert={setOpenAlert}
@@ -217,7 +130,7 @@ const Home = () => {
           />
         </Box>
         <Box>
-          <CategoryProduct
+          <CategoryProducts
             title="Personal Products"
             data={PERSONALPRODUCT}
             setOpenAlert={setOpenAlert}
@@ -225,7 +138,7 @@ const Home = () => {
           />
         </Box>
         <Box bg={'#ECFFDC60'}>
-          <CategoryProduct
+          <CategoryProducts
             title="Home Care"
             data={HOMEPRODUCT}
             setOpenAlert={setOpenAlert}
@@ -233,7 +146,7 @@ const Home = () => {
           />
         </Box>
         <Box>
-          <CategoryProduct
+          <CategoryProducts
             title="Sweets"
             data={SWEETPRODUCT}
             setOpenAlert={setOpenAlert}
@@ -329,12 +242,7 @@ const styles = StyleSheet.create({
     width: 70,
     height: 40,
   },
-  imagestyle: {
-    width: 70,
-    height: 70,
-    // borderColor: COLORS.textWhite,
-    borderRadius: 40,
-  },
+
   womenempower: {
     width: 350,
     height: 160,
@@ -344,6 +252,5 @@ const styles = StyleSheet.create({
   honeyImg: {
     width: 130,
     height: 140,
-    // backgroundColor: 'red',
   },
 });

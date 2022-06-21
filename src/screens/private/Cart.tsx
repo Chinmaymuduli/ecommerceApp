@@ -4,7 +4,6 @@ import {
   Box,
   Heading,
   HStack,
-  Image,
   Pressable,
   ScrollView,
   Text,
@@ -13,7 +12,7 @@ import {
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AYUSH_1, AYUSH_2, CART} from 'assets';
-import {DrawerActions, useNavigation, useRoute} from '@react-navigation/native';
+import {DrawerActions} from '@react-navigation/native';
 import {CartItem, Empty} from 'components/core';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -40,9 +39,6 @@ const CartArr = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Cart'>;
 const Cart = ({route, navigation}: Props) => {
   const [quantity, setQuantity] = React.useState(CartArr);
-  // const {cartItems, setCartItems} = useAppContext();
-  // const [quantity, setQuantity] = React.useState(cartItems);
-  // console.log('object369', cartItems);
 
   return (
     <Box flex={1} bg={COLORS.textWhite}>

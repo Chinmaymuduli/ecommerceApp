@@ -4,10 +4,8 @@ import {
   Badge,
   Box,
   Center,
-  Fab,
   FlatList,
   HStack,
-  Icon,
   Image,
   Pressable,
   Stack,
@@ -17,9 +15,8 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS} from 'configs';
-import {AYUSH_1, AYUSH_2, FAVORITE, wishlist} from 'assets';
+import {AYUSH_1, AYUSH_2, wishlist} from 'assets';
 import {Rating} from 'react-native-ratings';
-import {Empty} from 'components/core';
 
 const wishlistArr = [
   {
@@ -46,12 +43,10 @@ const wishlistArr = [
     offer: '20% off',
     ratingsby: 4,
   },
-  // {label:"Mahua Laddu", img:AYUSH_1, price:250 , discount:350, offer:"20% OFF"},
 ];
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'WishList'>;
 const WishList = ({navigation}: Props) => {
-  const [ratings, setRatings] = React.useState(4);
   const renderItem = ({item}: any) => {
     return (
       <Box
@@ -91,9 +86,6 @@ const WishList = ({navigation}: Props) => {
                 ratingBackgroundColor={COLORS.grey}
                 ratingCount={5}
                 imageSize={17}
-                //   onFinishRating={(rating: React.SetStateAction<number>) => {
-                //     setRatings(rating);
-                //   }}
                 style={{paddingVertical: 5}}
               />
             </HStack>
@@ -144,7 +136,7 @@ const WishList = ({navigation}: Props) => {
           </Text>
         </HStack>
         <Box>
-          <Badge // bg="red.400"
+          <Badge
             colorScheme="danger"
             rounded="full"
             mb={-4}

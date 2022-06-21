@@ -20,7 +20,6 @@ import moment from 'moment';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ConfirmOrder'>;
 const ConfirmOrder = ({route, navigation}: Props) => {
-  // console.log('data', route.params);
   const saving = route.params?.discount - route.params?.price;
   const DiscountPrice = route?.params?.discount;
   const discountCoupon = route?.params?.discountCoupon;
@@ -31,7 +30,6 @@ const ConfirmOrder = ({route, navigation}: Props) => {
         <Center mb={3}>
           <Image
             alt="confirmpic"
-            // h={200}
             source={CONFIRM}
             style={{width: 300, height: 260}}
             resizeMode={'contain'}

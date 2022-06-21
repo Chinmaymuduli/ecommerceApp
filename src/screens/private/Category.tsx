@@ -1,15 +1,6 @@
 import {SafeAreaView, StyleSheet} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
-import {
-  Alert,
-  Box,
-  Heading,
-  HStack,
-  Row,
-  ScrollView,
-  VStack,
-  Text,
-} from 'native-base';
+import React, {useCallback, useState} from 'react';
+import {Box, Heading, HStack, Row, VStack} from 'native-base';
 import {AlertComponent, AyushProduct, CategoryButtom} from 'components/core';
 import {
   AYUSHPRODUCT,

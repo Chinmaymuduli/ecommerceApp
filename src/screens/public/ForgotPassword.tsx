@@ -10,7 +10,6 @@ import {
   ScrollView,
   Text,
 } from 'native-base';
-import {Empty} from 'components/core';
 import {forgotPassword} from 'assets';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';

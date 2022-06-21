@@ -1,5 +1,5 @@
 import {Dimensions, SafeAreaView, Share, StyleSheet} from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Actionsheet,
   Alert,
@@ -451,8 +451,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                 </Heading>
                 <Text fontSize={13}>Pay less, Get More</Text>
               </VStack>
-              <Pressable
-                onPress={() => navigation.navigate('ProductDetails', {})}>
+              <Pressable onPress={() => navigation.navigate('Category', {})}>
                 <Text color={COLORS.cgcolor} bold>
                   See All
                 </Text>
