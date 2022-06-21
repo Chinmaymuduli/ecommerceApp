@@ -1,11 +1,24 @@
 import {StyleSheet} from 'react-native';
 import React, {useState} from 'react';
-import {Box, Center, HStack, Text, Image, Input, Pressable} from 'native-base';
+import {
+  Box,
+  Center,
+  HStack,
+  Text,
+  Image,
+  Input,
+  Pressable,
+  Heading,
+  Radio,
+  Stack,
+  FormControl,
+} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS} from 'configs';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {ImagePicker} from 'components/core';
+import {Controller, useForm} from 'react-hook-form';
 
 const EditProfile = () => {
   const navigation = useNavigation<NavigationProps>();
@@ -13,6 +26,19 @@ const EditProfile = () => {
   const [profileIimage, setprofileimage] = useState<any>('');
   const handleDismiss = () => {
     setVisiable(false);
+  };
+  const {
+    control,
+    handleSubmit,
+    formState: {errors},
+  } = useForm();
+
+  const onSubmit = async (data: any) => {
+    try {
+      console.log('object', data);
+    } catch (error) {
+      console.log('object', error);
+    }
   };
   return (
     <Box flex={1} bg={COLORS.textWhite}>
@@ -74,57 +100,146 @@ const EditProfile = () => {
           </Center>
         </Pressable>
       </Box>
-      <Box px={4} mt={2}>
-        <Box borderBottomWidth={1} borderRadius={5}>
-          <Input
-            placeholder="First Name"
-            variant={'unstyled'}
-            fontSize={15}
-            h={10}
-            bgColor={COLORS.textWhite}
+      <Box px={4} mt={4}>
+        <FormControl isRequired isInvalid={'firstName' in errors}>
+          <Controller
+            control={control}
+            render={({field: {onChange, onBlur, value}}) => (
+              <Box>
+                <Input
+                  placeholder="First Name"
+                  variant={'underlined'}
+                  fontSize={15}
+                  bgColor={COLORS.textWhite}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  borderColor={COLORS.fadeBlack}
+                />
+              </Box>
+            )}
+            name="firstName"
+            rules={{
+              required: 'First Name is required',
+            }}
+            defaultValue=""
           />
-        </Box>
+          <FormControl.ErrorMessage mt={0}>
+            {errors.firstName?.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
 
-        <Box borderBottomWidth={1} borderRadius={5} mt={5}>
-          <Input
-            placeholder="Last Name"
-            variant={'unstyled'}
-            fontSize={15}
-            h={10}
-            bgColor={COLORS.textWhite}
+        <FormControl isRequired isInvalid={'LastName' in errors}>
+          <Controller
+            control={control}
+            render={({field: {onChange, onBlur, value}}) => (
+              <Box mt={3}>
+                <Input
+                  placeholder="Last Name"
+                  variant={'underlined'}
+                  fontSize={15}
+                  h={10}
+                  bgColor={COLORS.textWhite}
+                  borderColor={COLORS.fadeBlack}
+                />
+              </Box>
+            )}
+            name="LastName"
+            rules={{
+              required: 'Last Name is required',
+            }}
+            defaultValue=""
           />
-        </Box>
+          <FormControl.ErrorMessage mt={0}>
+            {errors.LastName?.message}
+          </FormControl.ErrorMessage>
+        </FormControl>
 
-        <Box borderBottomWidth={1} borderRadius={5} mt={5}>
-          <Input
-            placeholder="Mobile Number"
-            variant={'unstyled'}
-            fontSize={15}
-            h={10}
-            bgColor={COLORS.textWhite}
-          />
-        </Box>
-
-        <Box borderBottomWidth={1} borderRadius={5} mt={5}>
-          <Input
-            placeholder="Email ID"
-            variant={'unstyled'}
-            fontSize={15}
-            h={10}
-            bgColor={COLORS.textWhite}
-          />
-        </Box>
-
-        <Box bg={COLORS.cgcolor} borderRadius={4} mt={10}>
-          <Text
-            color={COLORS.textWhite}
-            bold
-            fontSize={16}
-            py={2}
-            textAlign={'center'}>
-            Update
+        <Box mt={3}>
+          <Text fontSize={15} bold>
+            Gender :
           </Text>
+          <Radio.Group
+            mt={2}
+            name="exampleGroup"
+            defaultValue="Male"
+            accessibilityLabel="pick a size">
+            <Stack
+              direction={{
+                base: 'row',
+                md: 'row',
+              }}
+              alignItems={{
+                base: 'flex-start',
+                md: 'center',
+              }}
+              space={5}
+              w="75%"
+              maxW="300px">
+              <Radio value="Male" colorScheme="green" size="sm" my={1}>
+                Male
+              </Radio>
+              <Radio value="Female" colorScheme="green" size="sm" my={1}>
+                Female
+              </Radio>
+            </Stack>
+          </Radio.Group>
         </Box>
+        <Pressable
+          alignItems={'center'}
+          mt={10}
+          onPress={handleSubmit(onSubmit)}>
+          <Heading size={'sm'} color={'green.700'}>
+            SUBMIT
+          </Heading>
+        </Pressable>
+        <Box mt={5}>
+          <Box borderBottomWidth={1} borderRadius={5}>
+            <Input
+              placeholder="Mobile Number"
+              variant={'unstyled'}
+              fontSize={15}
+              h={10}
+              bgColor={COLORS.textWhite}
+              InputRightElement={
+                <Pressable>
+                  <Text bold color={'green.700'}>
+                    Update
+                  </Text>
+                </Pressable>
+              }
+            />
+          </Box>
+
+          <Box borderBottomWidth={1} borderRadius={5} mt={5}>
+            <Input
+              placeholder="Email ID"
+              variant={'unstyled'}
+              fontSize={15}
+              h={10}
+              bgColor={COLORS.textWhite}
+              InputRightElement={
+                <Pressable>
+                  <Text bold color={'green.700'}>
+                    Update
+                  </Text>
+                </Pressable>
+              }
+            />
+          </Box>
+        </Box>
+      </Box>
+      <Box
+        px={5}
+        borderBottomWidth={1}
+        borderTopWidth={1}
+        mt={9}
+        borderColor={COLORS.lightGrey}>
+        <Pressable py={2}>
+          <Text fontSize={16} py={2}>
+            Change Password
+          </Text>
+        </Pressable>
       </Box>
       {/* image */}
       <ImagePicker
