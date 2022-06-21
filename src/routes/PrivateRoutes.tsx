@@ -99,16 +99,7 @@ const PrivateRoutes = () => {
       <Stack.Screen name="Cart" component={Cart} />
       {/* <Stack.Screen name="Category" component={Category} /> */}
 
-      <Stack.Screen
-        name="Search"
-        component={Search}
-        options={{
-          title: 'Search',
-          headerShown: true,
-          headerBackTitleVisible: false,
-          headerTintColor: '#000',
-        }}
-      />
+      <Stack.Screen name="Search" component={Search} />
       <Stack.Screen name="Order" component={Order} />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
       <Stack.Screen

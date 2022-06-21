@@ -22,6 +22,7 @@ const MyReviewArr = [
     img: AYUSH_1,
     name: 'Mahua laddu',
     rating: 4,
+    date: '12/05/2022',
     review:
       ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. The product is so beautifull so i recommend you to buy it.',
   },
@@ -30,6 +31,7 @@ const MyReviewArr = [
     img: AYUSH_2,
     name: 'Ayushmati Oil',
     rating: 4,
+    date: '10/04/2022',
     review:
       ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. The product is so beautifull so i recommend you to buy it.',
   },
@@ -52,11 +54,11 @@ const MyReview = () => {
                   resizeMode="contain"
                 />
               </Box>
-              <VStack>
+              <VStack space={1}>
                 <Text bold fontSize={15}>
                   {item?.name}
                 </Text>
-                <HStack alignItems={'center'} mb={3}>
+                <HStack alignItems={'center'}>
                   <Rating
                     type="custom"
                     startingValue={item?.rating}
@@ -68,6 +70,7 @@ const MyReview = () => {
                     readonly={true}
                   />
                 </HStack>
+                <Text>{item?.date}</Text>
               </VStack>
             </HStack>
             <Box mb={2}>

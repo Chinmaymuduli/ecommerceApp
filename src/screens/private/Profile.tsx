@@ -185,7 +185,7 @@ const Profile = () => {
         <Box borderBottomWidth={1} px={4} borderColor={COLORS.lightGrey}>
           <HStack space={2} py={3} alignItems={'center'}>
             <Ionicons name="exit-outline" size={24} color={COLORS.grey} />
-            <Text bold>Logout of this app</Text>
+            <Text bold>Logout</Text>
           </HStack>
         </Box>
       </ScrollView>

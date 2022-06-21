@@ -34,11 +34,7 @@ const ProductComponent = ({item}: any) => {
             {item?.offer}
           </Text>
         </Box>
-        <Box
-          // mt={1}
-          position={'absolute'}
-          right={4}
-          borderRadius={10}>
+        <Box position={'absolute'} right={4} borderRadius={10}>
           <Ionicons
             onPress={() => console.log('hello')}
             name="heart-outline"
@@ -56,7 +52,6 @@ const ProductComponent = ({item}: any) => {
           bg={COLORS.textWhite}
           mt={-5}
           shadow={1}
-          // borderWidth={1}
           borderRadius={5}
           borderColor={COLORS.lightGrey}>
           <Entypo
