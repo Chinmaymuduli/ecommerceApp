@@ -29,7 +29,14 @@ const PaymentScreen = ({navigation, route}: Props) => {
   // console.log('object', route.params);
   const saving = route.params?.discount - route.params?.price;
   const DiscountPrice = route?.params?.discount;
+  const TotalPrice = DiscountPrice - saving;
+  const CoupondiscountPrice = (
+    TotalPrice *
+    (route?.params?.couponValue / 100)
+  ).toFixed(2);
 
+  // const AmoutPayable = DiscountPrice - (saving + CoupondiscountPrice);
+  console.log('object', saving + CoupondiscountPrice);
   const {userData} = useAppContext();
   const [payment, setPayment] = useState<any>();
   const [gstValue, setGstValue] = useState<any>('noGst');
@@ -103,7 +110,10 @@ const PaymentScreen = ({navigation, route}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Coupon Discount</Text>
-                  <Text color={'green.500'}>- &#8377;0</Text>
+                  <Text color={'green.500'}>
+                    - &#8377;
+                    {route?.params?.couponValue ? CoupondiscountPrice : 0}
+                  </Text>
                 </HStack>
                 <HStack
                   mb={2}
@@ -126,7 +136,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
         <Box>
           <Pressable
             // bg={'#e4e4e460'}
-            onPress={() => navigation.navigate('Coupon')}>
+            onPress={() => navigation.navigate('Coupon', route.params)}>
             <HStack
               my={2}
               bg={'#fff'}

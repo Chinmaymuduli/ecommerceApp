@@ -12,7 +12,7 @@ const Routes = () => {
   const {isLoggedIn} = useAppContext();
   return (
     <>
-      {!isLoggedIn ? (
+      {isLoggedIn ? (
         <Drawer.Navigator
           screenOptions={{
             headerShown: false,

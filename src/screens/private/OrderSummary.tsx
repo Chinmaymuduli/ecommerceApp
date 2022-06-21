@@ -38,7 +38,10 @@ const OrderSummary = ({navigation, route}: Props) => {
           borderColor={COLORS.lightGrey}>
           <HStack justifyContent={'space-between'} alignItems={'center'}>
             <Heading size={'sm'}>Deliver to:</Heading>
-            <Pressable onPress={() => navigation.navigate('SelectAddress')}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate('SelectAddress', route.params)
+              }>
               <Box
                 borderWidth={1}
                 borderColor={COLORS.cgcolor}
@@ -124,9 +127,10 @@ const OrderSummary = ({navigation, route}: Props) => {
                     ratingBackgroundColor={COLORS.grey}
                     ratingCount={5}
                     imageSize={17}
-                    onFinishRating={(rating: React.SetStateAction<number>) => {
-                      setRatings(rating);
-                    }}
+                    // onFinishRating={(rating: React.SetStateAction<number>) => {
+                    //   setRatings(rating);
+                    // }}
+                    readonly={true}
                     style={{paddingVertical: 10}}
                   />
                 </HStack>

@@ -49,7 +49,14 @@ export type PrivateRoutesType = {
     id?: number;
     img?: any;
   };
-  Coupon: undefined;
+  Coupon: {
+    label?: string;
+    discount?: number | any;
+    price?: number | any;
+    offer?: string | any;
+    id?: number;
+    img?: any;
+  };
   Address: undefined;
   PaymentScreen: {
     label?: string;
@@ -58,6 +65,7 @@ export type PrivateRoutesType = {
     offer?: string | any;
     id?: number;
     img?: any;
+    couponValue?: any;
   };
   ConfirmOrder: {
     label?: string;
@@ -76,7 +84,14 @@ export type PrivateRoutesType = {
     id?: number;
     img?: any;
   };
-  SelectAddress: undefined;
+  SelectAddress: {
+    label?: string;
+    discount?: number | any;
+    price?: number | any;
+    offer?: string | any;
+    id?: number;
+    img?: any;
+  };
   WishList: undefined;
   OrderDetails: undefined;
   Notifications: undefined;

@@ -17,7 +17,8 @@ import {
 import {COLORS} from 'configs';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
-import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {NavigationProps, PrivateRoutesType} from 'src/routes/PrivateRoutes';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
 const CouponArr = [
   {
@@ -30,6 +31,7 @@ const CouponArr = [
     term2:
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
     expiry: '20/12/2020',
+    discountValue: 30,
   },
   {
     id: 2,
@@ -41,10 +43,12 @@ const CouponArr = [
     term2:
       'totam ratione voluptas quod exercitationem fuga. Possimus quis earum veniam  quasi aliquam eligendi, placeat qui corporis!',
     expiry: '20/12/2020',
+    discountValue: 20,
   },
 ];
 
-const Coupon = () => {
+type Props = NativeStackScreenProps<PrivateRoutesType, 'Coupon'>;
+const Coupon = ({route}: Props) => {
   const navigation = useNavigation<NavigationProps>();
   const [couponCode, setCouponCode] = React.useState('');
   //   console.log('object', couponCode.length);
@@ -61,8 +65,11 @@ const Coupon = () => {
     setCouponAlert(true);
     setTimeout(() => {
       setCouponAlert(false);
-      navigation.goBack();
-    }, 2000);
+      navigation.navigate('PaymentScreen', {
+        ...route.params,
+        couponValue: item?.discountValue,
+      });
+    }, 1000);
   };
   return (
     <Box bg={COLORS.textWhite} flex={1}>

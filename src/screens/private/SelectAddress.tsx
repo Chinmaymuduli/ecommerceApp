@@ -4,8 +4,9 @@ import {Box, HStack, Pressable, Radio, ScrollView, Text} from 'native-base';
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
-import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {NavigationProps, PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {AYUSH_1} from 'assets';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 const AddressArr = [
   {
     id: 1,
@@ -36,8 +37,9 @@ const AddressArr = [
   },
 ];
 
-const SelectAddress = () => {
-  const navigation = useNavigation<NavigationProps>();
+type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
+const SelectAddress = ({route, navigation}: Props) => {
+  // const navigation = useNavigation<NavigationProps>();
   const [value, setValue] = React.useState(AddressArr[0].address);
 
   return (
@@ -99,13 +101,14 @@ const SelectAddress = () => {
           borderRadius={4}
           mx={3}
           onPress={() =>
-            navigation.navigate('OrderSummary', {
-              label: 'Mahua Laddu',
-              price: 250,
-              discount: 300,
-              offer: '20% OFF',
-              img: AYUSH_1,
-            })
+            // navigation.navigate('OrderSummary', {
+            //   label: 'Mahua Laddu',
+            //   price: 250,
+            //   discount: 300,
+            //   offer: '20% OFF',
+            //   img: AYUSH_1,
+            // })
+            navigation.navigate('OrderSummary', route.params)
           }>
           <Text
             color={COLORS.textWhite}
