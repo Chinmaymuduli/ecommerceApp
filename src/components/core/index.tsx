@@ -1,6 +1,5 @@
 export {default as Empty} from './Empty';
 export {default as CustomDrawer} from './CustomDrawer';
-// export {default as CategoryProduct} from './CategoryProducts';
 export {default as CategoryProducts} from './CategoryProducts';
 export {default as SpecialProduct} from './SpecialProduct';
 export {default as CategoryButtom} from './CategoryButtom';

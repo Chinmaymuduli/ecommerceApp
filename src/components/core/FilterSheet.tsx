@@ -29,7 +29,7 @@ const rattingArr = [
 ];
 
 const FilterSheet = ({setFilterSheet, filterSheetOpen}: any) => {
-  const {isOpen, onOpen, onClose} = useDisclose();
+  const {onClose} = useDisclose();
   const [cardBorder, setCardBorder] = useState<any>();
   const [borderRatting, setBorderRatting] = useState<any>();
 

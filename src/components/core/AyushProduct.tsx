@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import {
   Actionsheet,
   Box,
@@ -14,7 +14,6 @@ import {
 } from 'native-base';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -25,13 +24,8 @@ import {Banner} from 'assets';
 import HomeCategoryItem from './HomeCategoryItem';
 
 const AyushProduct = ({data, setOpenAlert, setAlertMessage}: any) => {
-  const navigation = useNavigation<NavigationProps>();
   const [filterSheetOpen, setFilterSheetOpen] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
-  const [sortPrice, setSortPrice] = React.useState<any>();
-  const [sortData, setSortData] = React.useState<any>([]);
-
-  // console.log('data', data);
 
   const renderItem = ({item, index}: any) => {
     return (

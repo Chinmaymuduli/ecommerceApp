@@ -2,7 +2,6 @@ import {ScrollView, TouchableOpacity} from 'react-native';
 import {Box, Image, Text, VStack} from 'native-base';
 import React, {useEffect, useState} from 'react';
 import {COLORS} from 'configs';
-import {CATEGORYARR} from '../../constants';
 
 type categoryType = {
   label?: string | any;
@@ -44,8 +43,6 @@ const CategoryButtom = ({
             <TouchableOpacity
               key={item.id}
               style={{
-                // backgroundColor:
-                //   getSelectionMode == item?.id ? COLORS.textWhite : '#eae8e4',
                 marginTop: 10,
               }}
               activeOpacity={1}

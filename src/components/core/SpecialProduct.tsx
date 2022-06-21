@@ -1,12 +1,10 @@
-import {Dimensions, StyleSheet} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {StyleSheet} from 'react-native';
+import React from 'react';
 import {Box, FlatList, HStack, Image, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
-import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
-import {useAppContext} from 'contexts';
 import SpecialProductCard from './SpecialProductCard';
 
 const SpecialProduct = ({data}: any) => {

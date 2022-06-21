@@ -1,9 +1,8 @@
 import ImgCropPicker from 'react-native-image-crop-picker';
-import {Alert, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import BottomSheet from './BottomSheet';
 import {Button} from 'native-base';
-import {COLORS} from 'configs';
 
 interface Props {
   visible?: boolean;

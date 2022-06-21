@@ -2,7 +2,7 @@ import {StyleSheet, View} from 'react-native';
 import React, {useState} from 'react';
 import StepIndicator from 'react-native-step-indicator';
 import {COLORS} from 'configs';
-import {Box, Heading, Text} from 'native-base';
+import {Box, Text} from 'native-base';
 const labels: any = [
   <Box>
     <Text>Ordered</Text>

@@ -1,22 +1,10 @@
 import {StyleSheet} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {
-  Alert,
-  Box,
-  FlatList,
-  Heading,
-  HStack,
-  Image,
-  Pressable,
-  Text,
-  VStack,
-} from 'native-base';
+import React from 'react';
+import {Box, FlatList, Heading, HStack, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Entypo from 'react-native-vector-icons/Entypo';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
-import {useAppContext} from 'contexts';
 import HomeCategoryItem from './HomeCategoryItem';
 
 type CategoryProductType = {
@@ -81,11 +69,3 @@ const CategoryProducts = ({
 };
 
 export default CategoryProducts;
-
-const styles = StyleSheet.create({
-  image: {
-    height: 100,
-    width: 100,
-    marginTop: 20,
-  },
-});

@@ -15,7 +15,6 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const CartItem = ({item, setQuantity}: any) => {
-  //   console.log('first', setQuantity);
   const [isOpen, setIsOpen] = React.useState(false);
 
   const onClose = () => setIsOpen(false);

@@ -1,5 +1,4 @@
 import React from 'react';
-import {Text} from 'react-native';
 import {Center, Box, Heading, Button} from 'native-base';
 import LottieView from 'lottie-react-native';
 
