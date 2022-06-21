@@ -1,5 +1,5 @@
 import {Dimensions, SafeAreaView, Share, StyleSheet} from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   Actionsheet,
   Alert,
@@ -57,17 +57,12 @@ const productData = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 
 const ProductDetails = ({route, navigation}: Props) => {
+  const {userData} = useAppContext();
   const [index, setIndex] = useState(0);
   const isCarousel = useRef<any>(null);
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const [count, setCount] = useState(0);
-  const [cardBorder, setCardBorder] = useState<any>({
-    label: '10 kg',
-    value: 10000,
-    price: 560,
-    discount: 1000,
-    offer: '5%',
-  });
+  const [cardBorder, setCardBorder] = useState<any>();
   const [wishlist, setWishlist] = useState<any>([]);
   const [showAlert, setShowAlert] = useState(false);
   const [addQuantity, setAddQuantity] = useState<any>();
@@ -77,6 +72,14 @@ const ProductDetails = ({route, navigation}: Props) => {
   const {isOpen, onOpen, onClose} = useDisclose();
 
   const {setCartItems, cartItems} = useAppContext();
+
+  useEffect(() => {
+    if (userData.role === 'b2c') {
+      return setCardBorder(quantityArr[0]);
+    } else {
+      return setCardBorder(B2bProduct[0]);
+    }
+  }, [userData]);
 
   const handleCart = (data: any) => {
     setCartItems((prev: any) => [...prev, data]);
@@ -100,14 +103,9 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   };
 
-  const {userData} = useAppContext();
   const renderItem = ({item, index}: any) => {
     return (
-      <Box
-        // bg={'amber.300'}
-        alignItems={'center'}
-        h={200}
-        justifyContent={'center'}>
+      <Box alignItems={'center'} h={200} justifyContent={'center'}>
         <Image
           alt="image"
           resizeMode="contain"

@@ -38,7 +38,7 @@ const SpecialProductCard = ({item}: any) => {
   return (
     <Box mb={5} justifyContent={'center'}>
       <Pressable
-        onPress={() => navigation.navigate('ProductDetails', {})}
+        onPress={() => navigation.navigate('ProductDetails', item)}
         borderWidth={1}
         mr={5}
         borderRadius={6}

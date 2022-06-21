@@ -30,13 +30,11 @@ const PaymentScreen = ({navigation, route}: Props) => {
   const saving = route.params?.discount - route.params?.price;
   const DiscountPrice = route?.params?.discount;
   const TotalPrice = DiscountPrice - saving;
-  const CoupondiscountPrice = (
-    TotalPrice *
-    (route?.params?.couponValue / 100)
-  ).toFixed(2);
+  const CoupondiscountPrice = route?.params?.couponValue
+    ? +(TotalPrice * (route?.params?.couponValue / 100)).toFixed(2)
+    : 0;
+  const AmoutPayable = DiscountPrice - (saving + CoupondiscountPrice);
 
-  // const AmoutPayable = DiscountPrice - (saving + CoupondiscountPrice);
-  console.log('object', saving + CoupondiscountPrice);
   const {userData} = useAppContext();
   const [payment, setPayment] = useState<any>();
   const [gstValue, setGstValue] = useState<any>('noGst');
@@ -128,7 +126,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
             <Box px={4} mt={2} mb={2}>
               <HStack justifyContent={'space-between'} alignItems={'center'}>
                 <Text>Amount Payable</Text>
-                <Text bold>&#8377;{DiscountPrice - saving}</Text>
+                <Text bold>&#8377;{AmoutPayable}</Text>
               </HStack>
             </Box>
           </Box>
