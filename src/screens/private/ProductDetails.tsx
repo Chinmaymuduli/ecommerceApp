@@ -206,6 +206,8 @@ const ProductDetails = ({route, navigation}: Props) => {
             sliderWidth={SLIDER_WIDTH}
             itemWidth={300}
             onSnapToItem={index => setIndex(index)}
+            // autoplay={true}
+            // loop={true}
           />
           <Pagination
             dotsLength={SPECIALPRODUCT.length}
