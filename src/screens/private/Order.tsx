@@ -43,7 +43,7 @@ const pastOrders = [
   },
 ];
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Order'>;
-const Order = ({navigation}: Props) => {
+const Order = ({navigation, route}: Props) => {
   const [selectionMode, setSelectionMode] = React.useState<any>(1);
   // console.log('first', selectionMode);
 
@@ -61,6 +61,7 @@ const Order = ({navigation}: Props) => {
             onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
             <Ionicons name="grid-outline" size={25} color="green" />
           </Pressable>
+
           <Text bold fontSize={18}>
             My Order
           </Text>

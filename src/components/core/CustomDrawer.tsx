@@ -76,7 +76,7 @@ const drawerArray = [
   },
   {
     id: 8,
-    label: 'Support Us',
+    label: 'Support',
     icon: ({color}: {color: string}) => (
       <ICONS.Support size={22} color={color || '#000'} />
     ),

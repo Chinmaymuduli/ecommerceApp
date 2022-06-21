@@ -12,12 +12,13 @@ import {
 } from 'native-base';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 const priceArr = [
-  {label: 'Below 100', value: 100 - 0},
-  {label: '100 - 200', value: 101 - 200},
-  {label: '200 - 300', value: 200 - 300},
-  {label: '300 - 500', value: 300 - 500},
-  {label: 'Above 500', value: 500 - 1000},
+  {label: 'Below ₹100', value: 100 - 0},
+  {label: '₹100 - ₹200', value: 101 - 200},
+  {label: '₹200 - ₹300', value: 200 - 300},
+  {label: '₹300 - ₹500', value: 300 - 500},
+  {label: 'Above ₹500', value: 500 - 1000},
 ];
 const rattingArr = [
   {label: '1', value: 1},

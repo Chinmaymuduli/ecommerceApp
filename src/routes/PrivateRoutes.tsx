@@ -115,7 +115,7 @@ const PrivateRoutes = () => {
       {/* <Stack.Screen name="Category" component={Category} /> */}
 
       <Stack.Screen name="Search" component={Search} />
-      <Stack.Screen name="Order" component={Order} />
+      {/* <Stack.Screen name="Order" component={Order} /> */}
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
       <Stack.Screen
         name="Coupon"

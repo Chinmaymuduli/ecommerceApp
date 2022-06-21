@@ -281,9 +281,8 @@ const Home = () => {
         </Box>
         {/* last section */}
         <Box
-          // mb={100}
+          mb={100}
           bg={'#ECFFDC60'}
-          // bg={'red.100'}
           mx={2}
           justifyContent={'center'}
           borderRadius={5}>

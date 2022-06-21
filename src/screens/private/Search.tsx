@@ -44,7 +44,12 @@ const Search = () => {
             onChangeText={text => setSearch(text)}
             InputLeftElement={
               <Pressable pl={2}>
-                <Ionicons name="arrow-back" size={24} color={'#000'} />
+                <Ionicons
+                  name="arrow-back"
+                  size={24}
+                  color={'#000'}
+                  onPress={() => navigation.goBack()}
+                />
               </Pressable>
             }
           />

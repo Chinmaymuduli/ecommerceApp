@@ -94,7 +94,15 @@ const PastOrder = ({item}: any) => {
               </Box>
             </Pressable>
           )}
-          <Pressable flex={1} onPress={() => navigation.navigate('Home')}>
+          <Pressable
+            flex={1}
+            onPress={() =>
+              navigation.navigate('OrderSummary', {
+                ...item,
+                discount: 799,
+                offer: '20% OFF',
+              })
+            }>
             <Box
               //   mr={2}
               bg={'green.100'}
