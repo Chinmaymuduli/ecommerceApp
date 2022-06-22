@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import {Box, Button, Center, HStack, Input, Modal, Text} from 'native-base';
 import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
