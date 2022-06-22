@@ -26,11 +26,13 @@ import {ErrorModal, ImagePicker} from 'components/core';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'PaymentScreen'>;
 const PaymentScreen = ({navigation, route}: Props) => {
-  const saving = route.params?.discount - route.params?.price;
-  const DiscountPrice = route?.params?.discount;
+  const paymentProductData = route.params?.PaymentData;
+  const saving =
+    paymentProductData?.currentPrice + 100 - paymentProductData?.currentPrice;
+  const DiscountPrice = paymentProductData?.currentPrice + 100;
   const TotalPrice = DiscountPrice - saving;
-  const CoupondiscountPrice = route?.params?.couponValue
-    ? +(TotalPrice * (route?.params?.couponValue / 100)).toFixed(2)
+  const CoupondiscountPrice = paymentProductData?.couponValue
+    ? +(TotalPrice * (paymentProductData?.couponValue / 100)).toFixed(2)
     : 0;
   const AmoutPayable = DiscountPrice - (saving + CoupondiscountPrice);
 
@@ -45,11 +47,11 @@ const PaymentScreen = ({navigation, route}: Props) => {
   const [GstNumber, setGstNumber] = useState<any>();
 
   const data = {
-    label: route?.params?.label,
-    discount: route?.params?.discount,
-    price: route?.params?.price,
-    offer: route?.params?.offer,
-    img: route?.params?.img,
+    label: paymentProductData?.name,
+    discount: paymentProductData?.currentPrice + 100,
+    currentPrice: paymentProductData?.currentPrice,
+    offer: paymentProductData?.offer,
+    img: paymentProductData?.img,
     discountCoupon: CoupondiscountPrice,
     orderId: Math.floor(Math.random() * 100000000),
     orderDate: new Date().toLocaleDateString(),
@@ -68,9 +70,9 @@ const PaymentScreen = ({navigation, route}: Props) => {
 
   const ConfirmOrder = () => {
     if (profileIimage && document) {
-      navigation.navigate('ConfirmOrder', data);
+      navigation.navigate('ConfirmOrder', {confirmOrderData: data});
     } else if (GstNumber) {
-      navigation.navigate('ConfirmOrder', data);
+      navigation.navigate('ConfirmOrder', {confirmOrderData: data});
     } else {
       setShowErrorModal(true);
     }
@@ -110,7 +112,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
                   <Text>Coupon Discount</Text>
                   <Text color={'green.500'}>
                     - &#8377;
-                    {route?.params?.couponValue ? CoupondiscountPrice : 0}
+                    {paymentProductData?.couponValue ? CoupondiscountPrice : 0}
                   </Text>
                 </HStack>
                 <HStack
@@ -134,7 +136,9 @@ const PaymentScreen = ({navigation, route}: Props) => {
         <Box>
           <Pressable
             // bg={'#e4e4e460'}
-            onPress={() => navigation.navigate('Coupon', route.params)}>
+            onPress={() =>
+              navigation.navigate('Coupon', {couponProduct: paymentProductData})
+            }>
             <HStack
               my={2}
               bg={'#fff'}
@@ -337,7 +341,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
             if (userData?.role === 'b2b') {
               return ConfirmOrder();
             }
-            navigation.navigate('ConfirmOrder', data);
+            navigation.navigate('ConfirmOrder', {confirmOrderData: data});
           }}>
           <HStack justifyContent={'space-between'} py={2} alignItems={'center'}>
             <HStack alignItems={'center'} space={2} pl={2}>

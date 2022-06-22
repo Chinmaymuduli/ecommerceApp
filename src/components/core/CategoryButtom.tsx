@@ -4,7 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {COLORS} from 'configs';
 
 type categoryType = {
-  label?: string | any;
+  name?: string | any;
   id?: any;
   img?: string | any;
 };
@@ -22,7 +22,7 @@ const CategoryButtom = ({
   const updateSwitchData = (value: categoryType) => {
     setSelectionMode(value?.id);
     onSelectSwitch(value?.id);
-    setCategoryName(value?.label);
+    setCategoryName(value?.name);
   };
   useEffect(() => {
     if (!seletedId) {
@@ -74,7 +74,7 @@ const CategoryButtom = ({
                       ? 'Nunito-Bold'
                       : 'Nunito-Regular'
                   }>
-                  {item?.label}
+                  {item?.name}
                 </Text>
               </VStack>
               {getSelectionMode == item?.id && (

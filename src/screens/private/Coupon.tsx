@@ -19,6 +19,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps, PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {ProductDetailsType} from 'types';
 
 const CouponArr = [
   {
@@ -49,23 +50,25 @@ const CouponArr = [
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Coupon'>;
 const Coupon = ({route}: Props) => {
+  const couponProductData = route.params?.couponProduct;
   const navigation = useNavigation<NavigationProps>();
   const [couponCode, setCouponCode] = React.useState('');
   const [termandcondition, setTermandcondition] = React.useState<any>();
   const [couponAlert, setCouponAlert] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
 
-  const Conditions = (item: any) => {
+  const Conditions = (item: ProductDetailsType) => {
     setTermandcondition(item);
     onOpen();
   };
   const ApplyCoupon = (item: any) => {
+    console.log('object', item);
     setCouponAlert(true);
     setTimeout(() => {
       setCouponAlert(false);
+      navigation.goBack();
       navigation.navigate('PaymentScreen', {
-        ...route.params,
-        couponValue: item?.discountValue,
+        PaymentData: {...couponProductData, couponValue: item?.discountValue},
       });
     }, 1000);
   };

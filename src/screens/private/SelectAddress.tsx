@@ -37,6 +37,8 @@ const AddressArr = [
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
 const SelectAddress = ({route, navigation}: Props) => {
+  const summaryData = route.params.SelectProductData;
+  // console.log('first', summaryData);
   const [value, setValue] = React.useState(AddressArr[0].address);
 
   return (
@@ -97,7 +99,11 @@ const SelectAddress = ({route, navigation}: Props) => {
           bg={'#008000'}
           borderRadius={4}
           mx={3}
-          onPress={() => navigation.navigate('OrderSummary', route.params)}>
+          onPress={() =>
+            navigation.navigate('OrderSummary', {
+              ProductDetailsType: summaryData,
+            })
+          }>
           <Text
             color={COLORS.textWhite}
             bold

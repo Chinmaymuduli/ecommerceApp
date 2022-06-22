@@ -13,7 +13,6 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: any) => {
   const [wishlist, setWishlist] = useState<any>([]);
   const [count, setCount] = React.useState(0);
   const {cartItems, setCartItems} = useAppContext();
-  // console.log('object', cartItems);
 
   //wishhlist
   const handleWishlist = (id: any) => {
@@ -94,7 +93,10 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: any) => {
   };
   return (
     <Box mt={3} overflow={'hidden'} mb={5}>
-      <Pressable onPress={() => navigation.navigate('ProductDetails', item)}>
+      <Pressable
+        onPress={() =>
+          navigation.navigate('ProductDetails', {ProductDetailsType: item})
+        }>
         <Box
           h={120}
           w={120}
@@ -195,12 +197,12 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: any) => {
 
         <Box w={120}>
           <Text bold fontSize={12} numberOfLines={1}>
-            {item?.label}
+            {item?.name}
           </Text>
           <HStack space={2}>
-            <Text fontSize={13}>&#8377;{item?.price}</Text>
+            <Text fontSize={13}>&#8377;{item?.currentPrice}</Text>
             <Text fontSize={13} textDecorationLine={'line-through'}>
-              &#8377;{item?.discount}
+              &#8377;{item?.currentPrice + 100}
             </Text>
           </HStack>
           {item?.moq ? (

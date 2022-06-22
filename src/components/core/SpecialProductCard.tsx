@@ -57,9 +57,9 @@ const SpecialProductCard = ({item}: any) => {
         </Box>
 
         <Box pl={2}>
-          <Text>{item?.label}</Text>
+          <Text>{item?.name}</Text>
           <HStack space={3}>
-            <Text>&#8377; {item?.price}</Text>
+            <Text>&#8377; {item?.currentPrice}</Text>
             <Text textDecorationLine={'line-through'} color={COLORS.cgcolor}>
               &#8377; {item?.discount}
             </Text>

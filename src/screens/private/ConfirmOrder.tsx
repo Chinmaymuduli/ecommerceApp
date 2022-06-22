@@ -20,9 +20,10 @@ import moment from 'moment';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ConfirmOrder'>;
 const ConfirmOrder = ({route, navigation}: Props) => {
-  const saving = route.params?.discount - route.params?.price;
-  const DiscountPrice = route?.params?.discount;
-  const discountCoupon = route?.params?.discountCoupon;
+  const confirmData = route.params?.confirmOrderData;
+  const saving = confirmData?.discount - confirmData?.currentPrice;
+  const DiscountPrice = confirmData?.discount;
+  const discountCoupon = confirmData?.discountCoupon;
   const AmoutPayable = DiscountPrice - (saving + discountCoupon);
   return (
     <Box flex={1} bg={COLORS.textWhite}>
@@ -37,7 +38,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
           <Heading size={'md'}>Thank you for your order !</Heading>
           <Text mt={2} textAlign={'center'}>
             Your order has been placed successfully. your ID is #
-            {route.params?.orderId}
+            {confirmData?.orderId}
           </Text>
         </Center>
         <Box px={4}>
@@ -72,7 +73,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   <Text bold fontSize={12}>
                     Order ID
                   </Text>
-                  <Text fontSize={11}>#{route.params?.orderId}</Text>
+                  <Text fontSize={11}>#{confirmData?.orderId}</Text>
                 </VStack>
               </HStack>
             </HStack>
@@ -89,7 +90,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Price(1 items)</Text>
-                  <Text>&#8377;{route.params?.discount}</Text>
+                  <Text>&#8377;{confirmData?.discount}</Text>
                 </HStack>
 
                 <HStack
@@ -105,7 +106,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   alignItems={'center'}>
                   <Text>Coupon Discount</Text>
                   <Text color={'green.500'}>
-                    - &#8377;{route.params?.discountCoupon}
+                    - &#8377;{confirmData?.discountCoupon}
                   </Text>
                 </HStack>
                 <HStack

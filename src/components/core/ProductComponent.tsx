@@ -67,12 +67,12 @@ const ProductComponent = ({item}: any) => {
         </Box>
         <Box w={120}>
           <Text bold fontSize={12} numberOfLines={1}>
-            {item?.label}
+            {item?.name}
           </Text>
           <HStack space={2}>
-            <Text fontSize={13}>&#8377;{item?.price}</Text>
+            <Text fontSize={13}>&#8377;{item?.currentPrice}</Text>
             <Text fontSize={13} textDecorationLine={'line-through'}>
-              &#8377;{item?.discount}
+              &#8377;{item?.currentPrice + 100}
             </Text>
           </HStack>
         </Box>

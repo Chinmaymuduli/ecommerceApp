@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import HomeCategoryItem from './HomeCategoryItem';
+import {ProductDetailsType} from 'types';
 
 type CategoryProductType = {
   title?: string;

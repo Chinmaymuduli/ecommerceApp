@@ -34,7 +34,7 @@ import {
 
 const Home = () => {
   const navigation = useNavigation<NavigationProps>();
-  const [openAlert, setOpenAlert] = React.useState<any>(false);
+  const [openAlert, setOpenAlert] = React.useState<boolean>(false);
   const [alertMessage, setAlertMessage] =
     React.useState<any>('Added Successfully');
 

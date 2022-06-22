@@ -54,6 +54,8 @@ const productData = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 
 const ProductDetails = ({route, navigation}: Props) => {
+  const productdata = route.params.ProductDetailsType;
+  // console.log('object566', productdata.id);
   const {userData} = useAppContext();
   const [index, setIndex] = useState(0);
   // const isCarousel = useRef<any>(null);
@@ -81,12 +83,13 @@ const ProductDetails = ({route, navigation}: Props) => {
   const handleCart = (data: any) => {
     setCartItems((prev: any) => [...prev, data]);
     setShowAlert(true);
+    setAlertMessage('Added to Cart');
     setTimeout(() => {
       setShowAlert(false);
     }, 4000);
   };
   const cartDatametch = cartItems.some(
-    (item: {id: number | undefined}) => item.id === route.params.id,
+    (item: {id: number | undefined}) => item.id === productdata?.id,
   );
 
   const increaseItem = () => {
@@ -158,7 +161,9 @@ const ProductDetails = ({route, navigation}: Props) => {
     if (addQuantity) {
       return setModalDialog(true);
     }
-    navigation.navigate('OrderSummary', route.params);
+    navigation.navigate('OrderSummary', {
+      ProductDetailsType: route.params?.ProductDetailsType,
+    });
   };
 
   const changeQuantity = (text: string) => {
@@ -190,11 +195,11 @@ const ProductDetails = ({route, navigation}: Props) => {
         <Box>
           <Ionicons
             name={
-              wishlist.includes(route.params?.id) ? 'heart' : 'heart-outline'
+              wishlist.includes(productdata?.id) ? 'heart' : 'heart-outline'
             }
             size={30}
             color="green"
-            onPress={() => handleWishlist(route.params?.id)}
+            onPress={() => handleWishlist(productdata?.id)}
           />
         </Box>
       </HStack>
@@ -230,7 +235,7 @@ const ProductDetails = ({route, navigation}: Props) => {
         <Box bg={COLORS.textWhite} px={3} flex={1}>
           <HStack alignItems={'center'} mt={3} justifyContent={'space-between'}>
             <Box>
-              <Heading size={'sm'}>{route.params?.label}</Heading>
+              <Heading size={'sm'}>{productdata?.name}</Heading>
             </Box>
             <Box mr={5}>
               <Ionicons
@@ -263,8 +268,8 @@ const ProductDetails = ({route, navigation}: Props) => {
               <Text bold>ID :</Text>
               <Text>
                 {' '}
-                {route.params?.id
-                  ? route.params?.id
+                {productdata?.id
+                  ? productdata?.id
                   : Math.floor(Math.random() * 1000000)}
               </Text>
             </HStack>
@@ -275,16 +280,18 @@ const ProductDetails = ({route, navigation}: Props) => {
               <HStack space={3} alignItems={'center'}>
                 <Text bold>
                   &#8377;
-                  {cardBorder?.price ? cardBorder?.price : route.params?.price}
+                  {cardBorder?.price
+                    ? cardBorder?.price
+                    : productdata?.currentPrice}
                 </Text>
                 <Text textDecorationLine={'line-through'} fontSize={14}>
                   &#8377;{' '}
                   {cardBorder?.discount
                     ? cardBorder?.discount
-                    : route.params?.discount}
+                    : productdata?.currentPrice + 100}
                 </Text>
                 <Text color={COLORS.cgcolor} bold>
-                  {cardBorder?.offer ? cardBorder?.offer : route.params?.offer}
+                  {cardBorder?.offer ? cardBorder?.offer : productdata?.offer}
                 </Text>
               </HStack>
             </HStack>
@@ -299,7 +306,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                     &#8377;
                     {cardBorder?.price
                       ? cardBorder?.price
-                      : route.params?.price}
+                      : productdata?.currentPrice}
                   </Text>
                 )}
                 <HStack alignItems={'center'} pr={3}>
@@ -324,7 +331,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                         &#8377;{' '}
                         {cardBorder?.discount
                           ? cardBorder?.discount
-                          : route.params?.discount}
+                          : productdata?.currentPrice + 100}
                       </Text>
                     </HStack>
                     <HStack py={1} px={3} alignItems={'center'}>
@@ -335,7 +342,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                         {' '}
                         {cardBorder?.offer
                           ? cardBorder?.offer
-                          : route.params?.offer}
+                          : productdata?.offer}
                       </Text>
                     </HStack>
                   </HStack>
@@ -475,7 +482,7 @@ const ProductDetails = ({route, navigation}: Props) => {
           {!cartDatametch ? (
             <Pressable
               // onPress={() => navigation.navigate('Cart', {isBack: true})}
-              onPress={() => handleCart(route.params)}
+              onPress={() => handleCart(productdata)}
               bg={'#C1E1C1'}
               w={160}
               alignItems={'center'}

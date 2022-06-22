@@ -28,7 +28,7 @@ import {
   WishList,
 } from 'screens';
 import BottomTab from './BottomTab';
-// import {Stall, EventType, User} from 'types';
+import {ProductDetailsType} from 'types';
 
 export type PrivateRoutesType = {
   Home: undefined;
@@ -43,56 +43,23 @@ export type PrivateRoutesType = {
   Order: undefined;
   Bottomtab: undefined;
   ProductDetails: {
-    label?: string;
-    discount?: number;
-    price?: number;
-    offer?: string;
-    id?: number;
-    img?: any;
+    ProductDetailsType: ProductDetailsType;
   };
   Coupon: {
-    label?: string;
-    discount?: number | any;
-    price?: number | any;
-    offer?: string | any;
-    id?: number;
-    img?: any;
+    couponProduct: ProductDetailsType;
   };
   Address: undefined;
   PaymentScreen: {
-    label?: string;
-    discount?: number | any;
-    price?: number | any;
-    offer?: string | any;
-    id?: number;
-    img?: any;
-    couponValue?: any;
+    PaymentData: ProductDetailsType;
   };
   ConfirmOrder: {
-    label?: string;
-    discount?: number | any;
-    price?: number | any;
-    offer?: string | any;
-    id?: number;
-    img?: any;
-    orderId?: number;
-    discountCoupon?: number | any;
+    confirmOrderData: ProductDetailsType;
   };
   OrderSummary: {
-    label?: string;
-    discount?: number | any;
-    price?: number | any;
-    offer?: string | any;
-    id?: number;
-    img?: any;
+    ProductDetailsType: ProductDetailsType;
   };
   SelectAddress: {
-    label?: string;
-    discount?: number | any;
-    price?: number | any;
-    offer?: string | any;
-    id?: number;
-    img?: any;
+    SelectProductData: ProductDetailsType;
   };
   WishList: undefined;
   OrderDetails: undefined;

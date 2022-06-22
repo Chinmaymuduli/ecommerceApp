@@ -37,7 +37,7 @@ const PastOrder = ({item}: any) => {
             />
             <VStack>
               <Text bold fontSize={14}>
-                {item.label}
+                {item.name}
               </Text>
               <Text fontSize={13}>{item.total}</Text>
             </VStack>
@@ -49,7 +49,7 @@ const PastOrder = ({item}: any) => {
             </HStack>
             <HStack justifyContent={'space-between'}>
               <Text bold>Total Price :</Text>
-              <Text fontSize={15}>&#8377; {item?.price}</Text>
+              <Text fontSize={15}>&#8377; {item?.currentPrice}</Text>
             </HStack>
             <HStack justifyContent={'space-between'}>
               <Text bold>Status :</Text>
@@ -95,9 +95,7 @@ const PastOrder = ({item}: any) => {
             flex={1}
             onPress={() =>
               navigation.navigate('OrderSummary', {
-                ...item,
-                discount: 799,
-                offer: '20% OFF',
+                ProductDetailsType: {...item, discount: 799, offer: '20% OFF'},
               })
             }>
             <Box

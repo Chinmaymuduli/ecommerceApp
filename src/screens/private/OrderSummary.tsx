@@ -19,6 +19,7 @@ import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route}: Props) => {
+  const orderData = route.params?.ProductDetailsType;
   const [ratings, setRatings] = React.useState(3);
   const [count, setCount] = React.useState(1);
   const decreaseItem = () => {
@@ -40,7 +41,9 @@ const OrderSummary = ({navigation, route}: Props) => {
             <Heading size={'sm'}>Deliver to:</Heading>
             <Pressable
               onPress={() =>
-                navigation.navigate('SelectAddress', route.params)
+                navigation.navigate('SelectAddress', {
+                  SelectProductData: orderData,
+                })
               }>
               <Box
                 borderWidth={1}
@@ -71,8 +74,7 @@ const OrderSummary = ({navigation, route}: Props) => {
               <VStack alignItems={'center'}>
                 <Image
                   alt="orderimg"
-                  source={route.params?.img}
-                  //   bg={COLORS.lightGrey}
+                  source={orderData?.img}
                   resizeMode={'contain'}
                   style={{
                     width: 100,
@@ -115,7 +117,7 @@ const OrderSummary = ({navigation, route}: Props) => {
               </VStack>
               <VStack pl={5}>
                 <Text bold fontSize={16}>
-                  {route.params?.label}
+                  {orderData?.name}
                 </Text>
                 <Text mt={1}>400ml</Text>
                 <HStack>
@@ -136,13 +138,13 @@ const OrderSummary = ({navigation, route}: Props) => {
                 </HStack>
                 <HStack space={3}>
                   <Text bold fontSize={16}>
-                    ₹{route.params?.price}
+                    ₹{orderData?.currentPrice}
                   </Text>
                   <Text textDecorationLine={'line-through'} fontSize={16}>
-                    ₹{route.params?.discount}
+                    ₹{orderData?.currentPrice + 100}
                   </Text>
                   <Text color={'green.600'} bold fontSize={16}>
-                    {route.params?.offer}
+                    {orderData?.offer}
                   </Text>
                 </HStack>
                 <HStack mt={1}>
@@ -170,12 +172,13 @@ const OrderSummary = ({navigation, route}: Props) => {
                 borderStyle={'dashed'}>
                 <HStack justifyContent={'space-between'}>
                   <Text>Price</Text>
-                  <Text>&#8377;{route.params?.discount}</Text>
+                  <Text>&#8377;{orderData?.currentPrice + 100}</Text>
                 </HStack>
                 <HStack justifyContent={'space-between'}>
                   <Text>Discount</Text>
                   <Text color={'green.600'}>
-                    - &#8377;{route?.params?.discount - route?.params?.price}
+                    - &#8377;
+                    {orderData?.currentPrice + 100 - orderData?.currentPrice}
                   </Text>
                 </HStack>
                 <HStack justifyContent={'space-between'}>
@@ -189,15 +192,17 @@ const OrderSummary = ({navigation, route}: Props) => {
                 <Text bold>Total Amount</Text>
                 <Text bold>
                   &#8377;{' '}
-                  {route?.params?.discount -
-                    (route?.params?.discount - route?.params?.price)}
+                  {orderData?.currentPrice +
+                    100 -
+                    (orderData?.currentPrice + 100 - orderData?.currentPrice)}
                 </Text>
               </HStack>
             </Box>
             <Box px={4} py={2}>
               <Text color={'green.600'}>
                 You will save &#8377;
-                {route?.params?.discount - route?.params?.price} on this order
+                {orderData?.currentPrice + 100 - orderData?.currentPrice} on
+                this order
               </Text>
             </Box>
           </Box>
@@ -209,7 +214,9 @@ const OrderSummary = ({navigation, route}: Props) => {
           mx={4}
           bg={'#008000'}
           borderRadius={4}
-          onPress={() => navigation.navigate('PaymentScreen', route.params)}>
+          onPress={() =>
+            navigation.navigate('PaymentScreen', {PaymentData: orderData})
+          }>
           <HStack justifyContent={'space-between'} py={2} alignItems={'center'}>
             <HStack alignItems={'center'} space={2} pl={2}>
               <Box>
@@ -222,10 +229,10 @@ const OrderSummary = ({navigation, route}: Props) => {
                   |
                 </Text>
                 <Text bold color={'#fff'}>
-                  &#8377;{route.params?.price}
+                  &#8377;{orderData?.currentPrice}
                 </Text>
                 <Text textDecorationLine={'line-through'} color={'#fff'}>
-                  &#8377; {route.params?.discount}
+                  &#8377; {orderData?.currentPrice + 100}
                 </Text>
               </HStack>
             </HStack>

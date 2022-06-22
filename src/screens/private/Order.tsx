@@ -19,10 +19,10 @@ import {Empty, PastOrder} from 'components/core';
 
 const activeOrder = [
   {
-    label: 'Jyotishmati Oil',
+    name: 'Jyotishmati Oil',
     OrderID: '#12345',
     status: 'Shipping',
-    price: 599,
+    currentPrice: 599,
     img: AYUSH_1,
     total: '3 Items',
   },
@@ -30,10 +30,10 @@ const activeOrder = [
 
 const pastOrders = [
   {
-    label: 'Jyotishmati Oil',
+    name: 'Jyotishmati Oil',
     OrderID: '#12345',
     status: 'Shipped',
-    price: 599,
+    currentPrice: 599,
     img: AYUSH_1,
     total: '1 Items',
   },
@@ -128,7 +128,7 @@ const Order = ({navigation}: Props) => {
                       />
                       <VStack>
                         <Text bold fontSize={14}>
-                          {item.label}
+                          {item.name}
                         </Text>
                         <Text fontSize={13}>{item.total}</Text>
                       </VStack>
@@ -140,7 +140,7 @@ const Order = ({navigation}: Props) => {
                       </HStack>
                       <HStack justifyContent={'space-between'}>
                         <Text bold>Total Price :</Text>
-                        <Text fontSize={15}>&#8377; {item?.price}</Text>
+                        <Text fontSize={15}>&#8377; {item?.currentPrice}</Text>
                       </HStack>
                       <HStack justifyContent={'space-between'}>
                         <Text bold>Status :</Text>
@@ -175,9 +175,7 @@ const Order = ({navigation}: Props) => {
           </>
         )
       ) : pastOrders.length > 0 ? (
-        pastOrders.map((item: any) => (
-          <PastOrder item={item} key={item.label} />
-        ))
+        pastOrders.map((item: any) => <PastOrder item={item} key={item.name} />)
       ) : (
         <>
           <Empty animation={ORDER} title={'No Past Order'} h={400} noLoop />

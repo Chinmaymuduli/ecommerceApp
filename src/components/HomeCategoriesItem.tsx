@@ -19,7 +19,7 @@ const HomeCategoriesItem = ({item}: any) => {
             resizeMode="contain"
           />
         </Box>
-        <Text fontSize={13}>{item?.label}</Text>
+        <Text fontSize={13}>{item?.name}</Text>
       </Pressable>
     </Box>
   );
