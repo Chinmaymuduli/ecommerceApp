@@ -138,7 +138,7 @@ const PastOrder = ({item}: any) => {
                   <Text ml={3}>({ratings} / 5)</Text>
                 </HStack>
               </Box>
-              {/* </Box> */}
+
               <Box>
                 <Input
                   placeholder="Write your review here..."

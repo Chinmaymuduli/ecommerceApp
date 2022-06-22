@@ -7,6 +7,7 @@ import {
   HStack,
   Image,
   Pressable,
+  ScrollView,
   Text,
   VStack,
 } from 'native-base';
@@ -92,6 +93,14 @@ const drawerArray = [
   },
   {
     id: 10,
+    label: 'Privacy Policy',
+    icon: ({color}: {color: string}) => (
+      <ICONS.Privacy size={22} color={color || '#000'} />
+    ),
+    route: 'Terms & Conditions',
+  },
+  {
+    id: 11,
     label: 'Exit App',
     icon: ({color}: {color: string}) => (
       <ICONS.ExitApp size={22} color={color || '#000'} />
@@ -133,57 +142,85 @@ const CustomDrawer = () => {
   }, []);
   return (
     <Box flex={1}>
-      <HStack
-        space={3}
-        alignItems={'center'}
-        justifyContent={'center'}
-        pt={7}
-        px={4}>
-        <Image
-          alt="drawerImage"
-          source={{
-            uri: 'https://t3.ftcdn.net/jpg/01/17/72/36/240_F_117723612_z7zQmUrrpG4IRGQLvgX5nwtwC18ke3qU.jpg',
-          }}
-          style={styles.drawerImage}
-        />
-        <VStack>
-          <Heading size={'xs'}>Chinmay muduli</Heading>
-          <Text numberOfLines={1}>demouser@gmail.com</Text>
-        </VStack>
-      </HStack>
-      <Box alignItems={'center'} py={5}>
-        <Divider w={250} />
-      </Box>
-      <Box>
-        {drawerArray.map(item => (
-          <Pressable
-            onPress={() => DrawerNaviagte(item)}
-            key={item.id}
-            py={3}
-            px={3}
-            bg={selectedButton === item.id ? '#4F7942' : '#fff'}
-            mt={2}
-            borderRadius={10}
-            mx={2}>
-            <HStack justifyContent={'space-between'}>
-              <HStack key={item?.id} space={4} alignItems={'center'}>
-                <Box>
-                  {item.icon({
-                    color: selectedButton === item.id ? '#fff' : '#000',
-                  })}
-                </Box>
-                <Box>
-                  <Text
-                    color={
-                      selectedButton === item.id ? COLORS.textWhite : '#000'
-                    }>
-                    {item.label}
-                  </Text>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <HStack
+          space={3}
+          alignItems={'center'}
+          justifyContent={'center'}
+          pt={7}
+          px={4}>
+          <Image
+            alt="drawerImage"
+            source={{
+              uri: 'https://t3.ftcdn.net/jpg/01/17/72/36/240_F_117723612_z7zQmUrrpG4IRGQLvgX5nwtwC18ke3qU.jpg',
+            }}
+            style={styles.drawerImage}
+          />
+          <VStack>
+            <Heading size={'xs'}>Chinmay muduli</Heading>
+            <Text numberOfLines={1}>demouser@gmail.com</Text>
+          </VStack>
+        </HStack>
+        <Box alignItems={'center'} py={5}>
+          <Divider w={250} />
+        </Box>
+        <Box>
+          {drawerArray.map(item => (
+            <Pressable
+              onPress={() => DrawerNaviagte(item)}
+              key={item.id}
+              py={3}
+              px={3}
+              bg={selectedButton === item.id ? '#4F7942' : '#fff'}
+              mt={2}
+              borderRadius={10}
+              mx={2}>
+              <HStack justifyContent={'space-between'}>
+                <HStack key={item?.id} space={4} alignItems={'center'}>
+                  <Box>
+                    {item.icon({
+                      color: selectedButton === item.id ? '#fff' : '#000',
+                    })}
+                  </Box>
+                  <Box>
+                    <Text
+                      color={
+                        selectedButton === item.id ? COLORS.textWhite : '#000'
+                      }>
+                      {item.label}
+                    </Text>
+                  </Box>
+                </HStack>
+                <Box
+                  bg={
+                    selectedButton === item?.id ? COLORS.textWhite : '#C1E1C1'
+                  }
+                  borderRadius={20}>
+                  <ICONS.ChevronRight
+                    size={22}
+                    color={'#000'}
+                    style={{padding: 10}}
+                  />
                 </Box>
               </HStack>
-              <Box
-                bg={selectedButton === item?.id ? COLORS.textWhite : '#C1E1C1'}
-                borderRadius={20}>
+            </Pressable>
+          ))}
+        </Box>
+        <Box py={2}>
+          <Divider />
+        </Box>
+        <Box px={5} mb={8} mt={2}>
+          <Pressable onPress={() => setIsLoggedIn(false)}>
+            <HStack justifyContent={'space-between'}>
+              <HStack space={3}>
+                <Materialicons
+                  name="power-settings-new"
+                  size={22}
+                  color="#000"
+                />
+                <Text>Sign Out</Text>
+              </HStack>
+              <Box bg={'#C1E1C1'} borderRadius={20}>
                 <ICONS.ChevronRight
                   size={22}
                   color={'#000'}
@@ -192,28 +229,8 @@ const CustomDrawer = () => {
               </Box>
             </HStack>
           </Pressable>
-        ))}
-      </Box>
-      <Box py={2}>
-        <Divider />
-      </Box>
-      <Box px={5}>
-        <Pressable onPress={() => setIsLoggedIn(false)}>
-          <HStack justifyContent={'space-between'}>
-            <HStack space={3}>
-              <Materialicons name="power-settings-new" size={22} color="#000" />
-              <Text>Sign Out</Text>
-            </HStack>
-            <Box bg={'#C1E1C1'} borderRadius={20}>
-              <ICONS.ChevronRight
-                size={22}
-                color={'#000'}
-                style={{padding: 10}}
-              />
-            </Box>
-          </HStack>
-        </Pressable>
-      </Box>
+        </Box>
+      </ScrollView>
     </Box>
   );
 };

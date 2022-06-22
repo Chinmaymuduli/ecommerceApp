@@ -9,6 +9,7 @@ import {
   Address,
   Cart,
   Category,
+  ChangePassword,
   ConfirmOrder,
   Coupon,
   EditProfile,
@@ -100,6 +101,7 @@ export type PrivateRoutesType = {
   SupportUs: undefined;
   EditProfile: undefined;
   MyReview: undefined;
+  ChangePassword: undefined;
 };
 export type NavigationProps = NativeStackNavigationProp<PrivateRoutesType>;
 const Stack = createNativeStackNavigator<PrivateRoutesType>();
@@ -224,6 +226,7 @@ const PrivateRoutes = () => {
           headerTintColor: '#000',
         }}
       />
+      <Stack.Screen name="ChangePassword" component={ChangePassword} />
     </Stack.Navigator>
   );
 };

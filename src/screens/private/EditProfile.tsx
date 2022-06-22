@@ -40,6 +40,14 @@ const EditProfile = () => {
       console.log('object', error);
     }
   };
+
+  const emailSubmit = async (data: any) => {
+    console.log(data);
+  };
+
+  const mobileSubmit = async (data: any) => {
+    console.log(data);
+  };
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <Box bg={COLORS.cgcolor}>
@@ -141,6 +149,9 @@ const EditProfile = () => {
                   h={10}
                   bgColor={COLORS.textWhite}
                   borderColor={COLORS.fadeBlack}
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  value={value}
                 />
               </Box>
             )}
@@ -194,39 +205,75 @@ const EditProfile = () => {
           </Heading>
         </Pressable>
         <Box mt={5}>
-          <Box borderBottomWidth={1} borderRadius={5}>
-            <Input
-              placeholder="Mobile Number"
-              variant={'unstyled'}
-              fontSize={15}
-              h={10}
-              bgColor={COLORS.textWhite}
-              InputRightElement={
-                <Pressable>
-                  <Text bold color={'green.700'}>
-                    Update
-                  </Text>
-                </Pressable>
-              }
+          <FormControl isRequired isInvalid={'MobileNumber' in errors}>
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <Input
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={value}
+                  placeholder="Mobile Number"
+                  variant={'underlined'}
+                  fontSize={15}
+                  h={10}
+                  borderColor={COLORS.fadeBlack}
+                  bgColor={COLORS.textWhite}
+                  InputRightElement={
+                    <Pressable onPress={handleSubmit(mobileSubmit)}>
+                      <Text bold color={'green.700'}>
+                        Update
+                      </Text>
+                    </Pressable>
+                  }
+                />
+              )}
+              name="MobileNumber"
+              rules={{
+                required: 'Mobile Number is required',
+              }}
+              defaultValue=""
             />
-          </Box>
+            <FormControl.ErrorMessage mt={0}>
+              {errors.MobileNumber?.message}
+            </FormControl.ErrorMessage>
+          </FormControl>
 
-          <Box borderBottomWidth={1} borderRadius={5} mt={5}>
-            <Input
-              placeholder="Email ID"
-              variant={'unstyled'}
-              fontSize={15}
-              h={10}
-              bgColor={COLORS.textWhite}
-              InputRightElement={
-                <Pressable>
-                  <Text bold color={'green.700'}>
-                    Update
-                  </Text>
-                </Pressable>
-              }
+          <FormControl isRequired isInvalid={'EmailId' in errors}>
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <Box mt={4}>
+                  <Input
+                    placeholder="Email ID"
+                    variant={'underlined'}
+                    fontSize={15}
+                    h={10}
+                    borderColor={COLORS.fadeBlack}
+                    bgColor={COLORS.textWhite}
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    InputRightElement={
+                      <Pressable onPress={handleSubmit(emailSubmit)}>
+                        <Text bold color={'green.700'}>
+                          Update
+                        </Text>
+                      </Pressable>
+                    }
+                  />
+                </Box>
+              )}
+              name="EmailId"
+              rules={{
+                required: 'Email Id is required',
+              }}
+              defaultValue=""
             />
-          </Box>
+            <FormControl.ErrorMessage mt={0}>
+              {errors.EmailId?.message}
+            </FormControl.ErrorMessage>
+          </FormControl>
         </Box>
       </Box>
       <Box
@@ -235,7 +282,7 @@ const EditProfile = () => {
         borderTopWidth={1}
         mt={9}
         borderColor={COLORS.lightGrey}>
-        <Pressable py={2}>
+        <Pressable py={2} onPress={() => navigation.navigate('ChangePassword')}>
           <Text fontSize={16} py={2}>
             Change Password
           </Text>

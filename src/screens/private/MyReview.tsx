@@ -13,6 +13,7 @@ import {
 import {COLORS} from 'configs';
 import {AYUSH_1, AYUSH_2, REVIEW, ReviewImg} from 'assets';
 import {Rating} from 'react-native-ratings';
+import {MyReviewCard} from 'components';
 
 const MyReviewArr = [
   {
@@ -36,45 +37,7 @@ const MyReviewArr = [
 
 const MyReview = () => {
   const renderItem = ({item}: any) => {
-    return (
-      <Box bg={COLORS.lightGrey}>
-        <Box bg={COLORS.textWhite} mx={2} mb={2} mt={1}>
-          <Box px={4}>
-            <HStack space={4} alignItems={'center'}>
-              <Box h={100} alignItems={'center'} justifyContent={'center'}>
-                <Image
-                  source={item?.img}
-                  style={styles.image}
-                  alt={'reviewImg'}
-                  resizeMode="contain"
-                />
-              </Box>
-              <VStack space={1}>
-                <Text bold fontSize={15}>
-                  {item?.name}
-                </Text>
-                <HStack alignItems={'center'}>
-                  <Rating
-                    type="custom"
-                    startingValue={item?.rating}
-                    ratingColor={'green'}
-                    tintColor={'#fff'}
-                    ratingBackgroundColor={COLORS.grey}
-                    ratingCount={5}
-                    imageSize={30}
-                    readonly={true}
-                  />
-                </HStack>
-                <Text>{item?.date}</Text>
-              </VStack>
-            </HStack>
-            <Box mb={2}>
-              <Text>{item?.review}</Text>
-            </Box>
-          </Box>
-        </Box>
-      </Box>
-    );
+    return <MyReviewCard item={item} />;
   };
 
   return (
