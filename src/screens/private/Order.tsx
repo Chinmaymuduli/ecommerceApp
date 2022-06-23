@@ -16,6 +16,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {DrawerActions} from '@react-navigation/native';
 import {Empty, PastOrder} from 'components/core';
+import {activeOrderType} from 'types';
 
 const activeOrder = [
   {
@@ -109,7 +110,7 @@ const Order = ({navigation}: Props) => {
       </HStack>
       {selectionMode === 1 ? (
         activeOrder.length > 0 ? (
-          activeOrder.map((item: any, index: any) => (
+          activeOrder.map((item: activeOrderType, index: any) => (
             <Box key={index} px={4} py={4}>
               <ScrollView>
                 <Box

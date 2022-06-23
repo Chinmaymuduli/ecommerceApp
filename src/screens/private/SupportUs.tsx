@@ -21,6 +21,13 @@ import LottieView from 'lottie-react-native';
 import {SUPPORT} from 'assets';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+type supportType = {
+  Name?: string;
+  Email?: string;
+  Subject?: string;
+  Message?: string;
+};
+
 const SupportUs = () => {
   const [loader, setLoader] = React.useState(false);
   const {
@@ -30,7 +37,7 @@ const SupportUs = () => {
     formState: {errors},
   } = useForm();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: supportType) => {
     console.log('object', data);
   };
   return (

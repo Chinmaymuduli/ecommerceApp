@@ -30,6 +30,7 @@ import {useAppContext} from 'contexts';
 import LottieView from 'lottie-react-native';
 import {SUCCESSSQUANTITY} from 'assets';
 import {Rating} from 'react-native-ratings';
+import {ProductDetailsType, SelectQuantityType} from 'types';
 const quantityArr = [
   {label: '250 gm', value: 250, price: 159, discount: 200, offer: '5% off'},
   {label: '500 gm', value: 500, price: 259, discount: 300, offer: '10% off'},
@@ -52,6 +53,10 @@ const productData = [
 ];
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
+
+type productType = {
+  item: ProductDetailsType;
+};
 
 const ProductDetails = ({route, navigation}: Props) => {
   const productdata = route.params.ProductDetailsType;
@@ -80,7 +85,7 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   }, [userData]);
 
-  const handleCart = (data: any) => {
+  const handleCart = (data: ProductDetailsType) => {
     setCartItems((prev: any) => [...prev, data]);
     setShowAlert(true);
     setAlertMessage('Added to Cart');
@@ -103,7 +108,7 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   };
 
-  const renderItem = ({item, index}: any) => {
+  const renderItem = ({item}: productType) => {
     return (
       <Box alignItems={'center'} h={200} justifyContent={'center'}>
         <Image
@@ -116,11 +121,11 @@ const ProductDetails = ({route, navigation}: Props) => {
     );
   };
 
-  const renderSimilarProduct = ({item, index}: any) => {
+  const renderSimilarProduct = ({item}: productType) => {
     return <ProductComponent item={item} />;
   };
 
-  const SelectQuantity = (item: any) => {
+  const SelectQuantity = (item: SelectQuantityType) => {
     // border color
     setCardBorder(item);
     setAddQuantity('');

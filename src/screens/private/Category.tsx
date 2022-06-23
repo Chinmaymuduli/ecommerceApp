@@ -26,7 +26,7 @@ const Category = ({route}: Props) => {
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
   const [tabValue, setTabValue] = useState(1);
-  const [openAlert, setOpenAlert] = useState(false);
+  const [openAlert, setOpenAlert] = useState<any>(false);
   const [alertMessage, setAlertMessage] = useState('Successfully added');
   const {userData} = useAppContext();
 

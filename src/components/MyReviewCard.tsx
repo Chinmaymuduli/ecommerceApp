@@ -14,12 +14,18 @@ import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import ReviewModal from './ReviewModal';
-const MyReviewCard = ({item}: any) => {
+import {reviewType} from 'types';
+type Props = {
+  item: reviewType;
+};
+
+const MyReviewCard = ({item}: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [ratings, setRatings] = useState(item?.rating);
   const [review, setReview] = useState();
   const [reviewText, setReviewText] = useState();
   const [isOpen, setIsOpen] = React.useState(false);
+  // console.log(item);
   const openModal = (item: any) => {
     setShowModal(true);
     setReview(item);

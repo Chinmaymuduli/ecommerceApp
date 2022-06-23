@@ -61,14 +61,14 @@ const Coupon = ({route}: Props) => {
     setTermandcondition(item);
     onOpen();
   };
-  const ApplyCoupon = (item: any) => {
-    console.log('object', item);
+  const ApplyCoupon = (value: number) => {
+    console.log('object', value);
     setCouponAlert(true);
     setTimeout(() => {
       setCouponAlert(false);
       navigation.goBack();
       navigation.navigate('PaymentScreen', {
-        PaymentData: {...couponProductData, couponValue: item?.discountValue},
+        PaymentData: {...couponProductData, couponValue: value},
       });
     }, 1000);
   };
@@ -166,7 +166,7 @@ const Coupon = ({route}: Props) => {
                       </Text>
                     </Box>
                     <Pressable
-                      onPress={() => ApplyCoupon(item)}
+                      onPress={() => ApplyCoupon(item?.discountValue)}
                       borderWidth={1}
                       borderRadius={6}
                       borderColor={COLORS.cgcolor}>

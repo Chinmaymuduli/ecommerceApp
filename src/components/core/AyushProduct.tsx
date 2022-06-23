@@ -14,8 +14,6 @@ import {
 } from 'native-base';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useNavigation} from '@react-navigation/native';
-import {NavigationProps} from 'src/routes/PrivateRoutes';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FilterSheet from './FilterSheet';
@@ -23,27 +21,42 @@ import {Banner} from 'assets';
 
 import HomeCategoryItem from './HomeCategoryItem';
 
-const AyushProduct = ({data, setOpenAlert, setAlertMessage}: any) => {
+type CategoryProductType = {
+  data?: {
+    id?: number;
+    name?: string;
+    discount?: number;
+    img?: any;
+    currentPrice?: number;
+    offer?: string;
+    moq?: number;
+  }[];
+  setOpenAlert?: boolean | any;
+  setAlertMessage?: string | any;
+};
+
+const AyushProduct = ({
+  data,
+  setOpenAlert,
+  setAlertMessage,
+}: CategoryProductType) => {
   const [filterSheetOpen, setFilterSheetOpen] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
-
-  const renderItem = ({item, index}: any) => {
-    return (
-      <Box pl={1}>
-        <HomeCategoryItem
-          item={item}
-          setOpenAlert={setOpenAlert}
-          setAlertMessage={setAlertMessage}
-        />
-      </Box>
-    );
-  };
+  // console.log('data', data);
 
   return (
     <>
       <FlatList
         data={data}
-        renderItem={renderItem}
+        renderItem={({item}) => (
+          <Box pl={1}>
+            <HomeCategoryItem
+              item={item}
+              setOpenAlert={setOpenAlert}
+              setAlertMessage={setAlertMessage}
+            />
+          </Box>
+        )}
         numColumns={2}
         showsVerticalScrollIndicator={false}
         keyExtractor={(item, index) => index.toString()}
@@ -52,7 +65,7 @@ const AyushProduct = ({data, setOpenAlert, setAlertMessage}: any) => {
           <Box py={1}>
             <Box px={3}>
               <Text fontSize={15} py={2}>
-                {data.length} products
+                {data?.length} products
               </Text>
             </Box>
             <Box h={150} mt={2}>

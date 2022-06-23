@@ -8,13 +8,13 @@ import {
   Pressable,
   Stack,
   Text,
-  VStack,
 } from 'native-base';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {Controller, useForm} from 'react-hook-form';
+import {changePasswordType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ChangePassword'>;
 const ChangePassword = ({navigation}: Props) => {
@@ -24,7 +24,7 @@ const ChangePassword = ({navigation}: Props) => {
     formState: {errors},
   } = useForm();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: changePasswordType) => {
     try {
       console.log(data);
     } catch (error) {

@@ -5,10 +5,8 @@ import {
   Animated,
   Dimensions,
   FlatList,
-  ImageBackground,
   SafeAreaView,
   StyleSheet,
-  TouchableOpacity,
   useWindowDimensions,
 } from 'react-native';
 import {PublicNavigation} from 'src/routes/PublicRoutes';

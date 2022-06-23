@@ -14,6 +14,7 @@ import {COLORS} from 'configs';
 import {AYUSH_1, AYUSH_2, REVIEW, ReviewImg} from 'assets';
 import {Rating} from 'react-native-ratings';
 import {MyReviewCard} from 'components';
+import {reviewType} from 'types';
 
 const MyReviewArr = [
   {
@@ -36,16 +37,12 @@ const MyReviewArr = [
 ];
 
 const MyReview = () => {
-  const renderItem = ({item}: any) => {
-    return <MyReviewCard item={item} />;
-  };
-
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <Box>
         <FlatList
           data={MyReviewArr.length > 0 ? MyReviewArr : []}
-          renderItem={renderItem}
+          renderItem={({item}) => <MyReviewCard item={item} />}
           keyExtractor={(item, index) => index.toString()}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={() => (

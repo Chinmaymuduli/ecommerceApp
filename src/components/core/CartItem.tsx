@@ -13,8 +13,14 @@ import {
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import {CartType} from 'types';
 
-const CartItem = ({item, setQuantity}: any) => {
+type CartItemType = {
+  item?: CartType;
+  setQuantity?: number | any;
+};
+
+const CartItem = ({item, setQuantity}: CartItemType) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const onClose = () => setIsOpen(false);
@@ -52,14 +58,14 @@ const CartItem = ({item, setQuantity}: any) => {
         <Box alignItems={'center'} justifyContent={'center'}>
           <Image
             alt="cartImg"
-            source={item.img}
+            source={item?.img}
             style={{height: 110, width: 100}}
             resizeMode="contain"
           />
         </Box>
         <VStack px={3} space={3}>
           <HStack space={20}>
-            <Text>{item?.label}</Text>
+            <Text>{item?.name}</Text>
             <MaterialIcons
               name="delete"
               size={25}
@@ -69,10 +75,10 @@ const CartItem = ({item, setQuantity}: any) => {
           </HStack>
           <HStack space={2}>
             <Text color={'#000'} bold>
-              &#8377;{item.price}
+              &#8377;{item?.currentPrice}
             </Text>
             <Text textDecorationLine={'line-through'}>
-              &#8377;{item.discount}
+              &#8377;{item?.discount}
             </Text>
           </HStack>
           <Text>1 Kg</Text>
@@ -95,7 +101,7 @@ const CartItem = ({item, setQuantity}: any) => {
             </Pressable>
             <Box>
               <Text bold color={COLORS.fadeBlack}>
-                {item.quantity}
+                {item?.quantity}
               </Text>
             </Box>
             <Pressable py={1} onPress={() => increment(item)}>

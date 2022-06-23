@@ -17,17 +17,23 @@ const searchArr = [
   {id: 6, label: 'Jyotismati Oil', img: GOURMEET5},
 ];
 
+type searchgArrType = {
+  id: number;
+  label: string;
+  img: string | any;
+};
+
 const Search = () => {
   const navigation = useNavigation<NavigationProps>();
-  const [search, setSearch] = React.useState<any>('');
-  const [searchData, setSearchData] = React.useState<any>([]);
+  const [search, setSearch] = React.useState<string>('');
+  const [searchData, setSearchData] = React.useState<any[]>([]);
 
   useEffect(() => {
     if (!search.trim()) {
       setSearchData(searchArr.slice(0, 3));
       return;
     }
-    const searching = searchArr.filter((item: any) =>
+    const searching = searchArr.filter((item: searchgArrType) =>
       item?.label?.toLowerCase().includes(search?.toLowerCase()),
     );
     setSearchData(searching);
@@ -61,7 +67,7 @@ const Search = () => {
                 Tranding Product
               </Text>
             </Box>
-            {searchData?.map((item: any) => (
+            {searchData?.map((item: searchgArrType) => (
               <Pressable
                 key={item.id}
                 mt={4}

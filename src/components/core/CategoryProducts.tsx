@@ -1,4 +1,3 @@
-import {StyleSheet} from 'react-native';
 import React from 'react';
 import {Box, FlatList, Heading, HStack, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
@@ -6,11 +5,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import HomeCategoryItem from './HomeCategoryItem';
-import {ProductDetailsType} from 'types';
+import {HomeProductType} from 'types';
 
 type CategoryProductType = {
   title?: string;
-  data?: any;
+  data?: HomeProductType[];
   image?: string | any;
   label?: string;
   discount?: string;
@@ -27,15 +26,6 @@ const CategoryProducts = ({
 }: CategoryProductType) => {
   const navigation = useNavigation<NavigationProps>();
 
-  const renderItem = ({item}: any) => {
-    return (
-      <HomeCategoryItem
-        item={item}
-        setOpenAlert={setOpenAlert}
-        setAlertMessage={setAlertMessage}
-      />
-    );
-  };
   return (
     <>
       <Box mt={4} pl={3}>
@@ -59,7 +49,13 @@ const CategoryProducts = ({
         </HStack>
         <FlatList
           data={data}
-          renderItem={renderItem}
+          renderItem={({item}) => (
+            <HomeCategoryItem
+              item={item}
+              setOpenAlert={setOpenAlert}
+              setAlertMessage={setAlertMessage}
+            />
+          )}
           keyExtractor={(item, index) => index.toString()}
           horizontal={true}
           showsHorizontalScrollIndicator={false}

@@ -16,22 +16,23 @@ import {DrawerActions} from '@react-navigation/native';
 import {CartItem, Empty} from 'components/core';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {CartType} from 'types';
 const CartArr = [
   {
     id: 1,
-    label: 'Mahua Laddu',
+    name: 'Mahua Laddu',
     discount: 300,
     img: AYUSH_1,
-    price: 250,
+    currentPrice: 250,
     offer: '20% OFF',
     quantity: 1,
   },
   {
     id: 2,
-    label: 'Jyotishmati Oil',
+    name: 'Jyotishmati Oil',
     discount: 599,
     img: AYUSH_2,
-    price: 499,
+    currentPrice: 499,
     offer: '20% OFF',
     quantity: 1,
   },
@@ -76,7 +77,7 @@ const Cart = ({route, navigation}: Props) => {
             </HStack>
 
             <Box>
-              {quantity?.map((item: any, index: any) => (
+              {quantity?.map((item: CartType, index: any) => (
                 <CartItem item={item} key={index} setQuantity={setQuantity} />
               ))}
             </Box>
@@ -109,10 +110,12 @@ const Cart = ({route, navigation}: Props) => {
                         acc: number,
                         item: {
                           discount: number;
-                          price: number;
+                          currentPrice: number;
                           quantity: number;
                         },
-                      ) => acc + (item?.discount - item.price) * item.quantity,
+                      ) =>
+                        acc +
+                        (item?.discount - item.currentPrice) * item.quantity,
                       0,
                     )}
                   </Text>
@@ -134,11 +137,15 @@ const Cart = ({route, navigation}: Props) => {
                   {quantity?.reduce(
                     (
                       acc: number,
-                      item: {discount: number; quantity: number; price: number},
+                      item: {
+                        discount: number;
+                        quantity: number;
+                        currentPrice: number;
+                      },
                     ) =>
                       acc +
                       item.discount * item.quantity -
-                      (item?.discount - item.price) * item.quantity,
+                      (item?.discount - item.currentPrice) * item.quantity,
                     0,
                   )}
                 </Text>
@@ -151,11 +158,13 @@ const Cart = ({route, navigation}: Props) => {
                 mt={2}
                 onPress={() =>
                   navigation.navigate('OrderSummary', {
-                    label: 'Mahua Laddu',
-                    price: 250,
-                    discount: 300,
-                    offer: '20% OFF',
-                    img: AYUSH_1,
+                    ProductDetailsType: {
+                      name: 'Mahua Laddu',
+                      currentPrice: 250,
+                      discount: 300,
+                      offer: '20% OFF',
+                      img: AYUSH_1,
+                    },
                   })
                 }>
                 <HStack justifyContent={'space-between'} py={2}>
@@ -177,12 +186,13 @@ const Cart = ({route, navigation}: Props) => {
                             item: {
                               discount: number;
                               quantity: number;
-                              price: number;
+                              currentPrice: number;
                             },
                           ) =>
                             acc +
                             item.discount * item.quantity -
-                            (item?.discount - item.price) * item.quantity,
+                            (item?.discount - item.currentPrice) *
+                              item.quantity,
                           0,
                         )}
                       </Text>
@@ -193,11 +203,13 @@ const Cart = ({route, navigation}: Props) => {
                             acc: number,
                             item: {
                               discount: number;
-                              price: number;
+                              currentPrice: number;
                               quantity: number;
                             },
                           ) =>
-                            acc + (item?.discount - item.price) * item.quantity,
+                            acc +
+                            (item?.discount - item.currentPrice) *
+                              item.quantity,
                           0,
                         )}
                       </Text>

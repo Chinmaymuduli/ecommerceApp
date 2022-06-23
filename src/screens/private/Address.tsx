@@ -1,5 +1,5 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Actionsheet,
   Box,
@@ -22,6 +22,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {INDIANSTATE} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {AddressType} from 'types';
 
 const Address = () => {
   const navigation = useNavigation<NavigationProps>();
@@ -34,10 +35,28 @@ const Address = () => {
   const [loader, setLoader] = React.useState(false);
   const [selectedType, setSelectedType] = React.useState(1);
   const [state, setState] = React.useState<any>('Chhattisgarh');
-  const onSubmit = (data: any) => {
-    // console.log(data);
+  const [addressTypeText, setAddressTypeText] = useState('Home');
 
-    navigation.navigate('PaymentScreen', {});
+  const onSubmit = (data: AddressType) => {
+    const AddressData = {
+      ...data,
+      addressType: addressTypeText,
+      state: state,
+    };
+
+    navigation.navigate('PaymentScreen', {
+      PaymentData: {},
+    });
+  };
+
+  const Hometype = () => {
+    setSelectedType(1);
+    setAddressTypeText('Home');
+  };
+
+  const Worktype = () => {
+    setSelectedType(2);
+    setAddressTypeText('Work');
   };
   return (
     <Box flex={1} bg={COLORS.textWhite}>
@@ -231,7 +250,7 @@ const Address = () => {
             <Text bold>Type of address</Text>
             <HStack space={5} mt={3}>
               <Pressable
-                onPress={() => setSelectedType(1)}
+                onPress={() => Hometype()}
                 borderWidth={1}
                 borderRadius={15}
                 bg={selectedType === 1 ? '#98FB9860' : COLORS.textWhite}
@@ -256,7 +275,7 @@ const Address = () => {
               </Pressable>
 
               <Pressable
-                onPress={() => setSelectedType(2)}
+                onPress={() => Worktype()}
                 borderWidth={1}
                 borderRadius={15}
                 bg={selectedType === 2 ? '#98FB9860' : COLORS.textWhite}
