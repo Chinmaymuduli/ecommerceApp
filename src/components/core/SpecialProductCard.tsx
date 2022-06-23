@@ -6,8 +6,13 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
 import Entypo from 'react-native-vector-icons/Entypo';
+import {HomeProductType} from 'types';
 
-const SpecialProductCard = ({item}: any) => {
+type Props = {
+  item: HomeProductType;
+};
+
+const SpecialProductCard = ({item}: Props) => {
   const navigation = useNavigation<NavigationProps>();
   const [count, setCount] = useState(0);
   const {setCartItems, cartItems} = useAppContext();
@@ -38,7 +43,9 @@ const SpecialProductCard = ({item}: any) => {
   return (
     <Box mb={5} justifyContent={'center'}>
       <Pressable
-        onPress={() => navigation.navigate('ProductDetails', item)}
+        onPress={() =>
+          navigation.navigate('ProductDetails', {ProductDetailsType: item})
+        }
         borderWidth={1}
         mr={5}
         borderRadius={6}
@@ -128,7 +135,6 @@ const SpecialProductCard = ({item}: any) => {
                 paddingHorizontal: 3,
                 paddingVertical: 3,
               }}
-              // onPress={() => console.log('Add Cart', item)}
               onPress={() => AddSpecialCart(item)}
             />
           </Box>

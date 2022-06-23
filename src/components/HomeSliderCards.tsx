@@ -5,7 +5,16 @@ import {COLORS} from 'configs';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 
-const HomeSliderCards = ({item}: any) => {
+type Props = {
+  item: {
+    id: number;
+    name: string;
+    img: any;
+    offer: string;
+  };
+};
+
+const HomeSliderCards = ({item}: Props) => {
   const navigation = useNavigation<NavigationProps>();
   return (
     <>
@@ -20,7 +29,7 @@ const HomeSliderCards = ({item}: any) => {
           }}>
           <Box ml={150} mt={5}>
             <Text color={COLORS.textWhite} fontSize={12} bold>
-              {item?.label}
+              {item?.name}
             </Text>
             <Text bold color={COLORS.textWhite} flexWrap={'wrap'} mt={1}>
               {item?.offer}

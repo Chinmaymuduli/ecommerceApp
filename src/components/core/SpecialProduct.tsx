@@ -6,12 +6,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import SpecialProductCard from './SpecialProductCard';
+import {HomeProductType, ProductDetailsType} from 'types';
 
-const SpecialProduct = ({data}: any) => {
+type Props = {
+  data: HomeProductType[];
+};
+
+const SpecialProduct = ({data}: Props) => {
   const navigation = useNavigation<NavigationProps>();
-  const renderItem = ({item}: any) => {
-    return <SpecialProductCard item={item} />;
-  };
   return (
     <Box mb={3} px={4}>
       <HStack alignItems={'center'} space={3}>
@@ -50,7 +52,7 @@ const SpecialProduct = ({data}: any) => {
       <Box mt={2}>
         <FlatList
           data={data}
-          renderItem={renderItem}
+          renderItem={({item}) => <SpecialProductCard item={item} />}
           keyExtractor={(item: any) => item.id}
           numColumns={2}
         />

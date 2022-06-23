@@ -15,12 +15,8 @@ import {COLORS} from 'configs';
 import {CATEGORYARR} from '../../constants';
 import HomeCategoriesItem from '../HomeCategoriesItem';
 
-const HomeCategories = ({item}: any) => {
+const HomeCategories = () => {
   const navigation = useNavigation<NavigationProps>();
-
-  const renderItem = ({item}: any) => {
-    return <HomeCategoriesItem item={item} />;
-  };
   return (
     <>
       <Box mt={5} pl={3}>
@@ -34,7 +30,7 @@ const HomeCategories = ({item}: any) => {
         </HStack>
         <FlatList
           data={CATEGORYARR}
-          renderItem={renderItem}
+          renderItem={({item}) => <HomeCategoriesItem item={item} />}
           keyExtractor={(item, index) => index.toString()}
           horizontal={true}
           showsHorizontalScrollIndicator={false}

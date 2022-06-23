@@ -6,15 +6,11 @@ import {SLIDERDATA} from '../../constants';
 import HomeSliderCards from '../HomeSliderCards';
 
 const HomeSlider = () => {
-  const renderSliderItem = ({item}: {item: any}) => {
-    return <HomeSliderCards item={item} />;
-  };
-
   return (
     <>
       <FlatList
         data={SLIDERDATA}
-        renderItem={renderSliderItem}
+        renderItem={({item}) => <HomeSliderCards item={item} />}
         keyExtractor={(item, index) => index.toString()}
         horizontal={true}
         showsHorizontalScrollIndicator={false}

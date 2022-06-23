@@ -4,7 +4,15 @@ import {Box, Image, Pressable, Text} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 
-const HomeCategoriesItem = ({item}: any) => {
+type Props = {
+  item: {
+    id: number;
+    name: string;
+    img: any;
+  };
+};
+
+const HomeCategoriesItem = ({item}: Props) => {
   const navigation = useNavigation<NavigationProps>();
   return (
     <Box pr={5} mt={4}>
