@@ -1,12 +1,16 @@
 import {StyleSheet} from 'react-native';
 import React from 'react';
 import {
+  Actionsheet,
+  AlertDialog,
   Box,
+  Button,
   HStack,
   Pressable,
   Row,
   ScrollView,
   Text,
+  useDisclose,
   VStack,
 } from 'native-base';
 import {COLORS} from 'configs';
@@ -39,21 +43,21 @@ const notificationsArr = [
 const notificationsEarlierArr = [
   {
     label: 'Package from your order #CH123456 has arrived',
-    time: '11:29 AM',
+    time: 'yesterday',
     type: 'shopping',
     isRead: false,
     new: 'today',
   },
   {
     label: '70% off in Ayush Products',
-    time: '7:13 AM',
+    time: 'june 19',
     type: 'Product',
     new: 'today',
     isRead: false,
   },
   {
     label: '55% off in Gurumet Products',
-    time: '4:20 AM',
+    time: 'june 15',
     type: 'Product',
     new: 'today',
     isRead: false,
@@ -61,11 +65,17 @@ const notificationsEarlierArr = [
 ];
 
 const Notifications = () => {
+  const {isOpen, onOpen, onClose} = useDisclose();
+  const [openAlert, setOpenAlert] = React.useState(false);
+
+  const onCloseAlert = () => setOpenAlert(false);
+
+  const cancelRef = React.useRef(null);
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <HStack justifyContent={'space-between'} px={4}>
-          <Pressable py={3}>
+          <Pressable py={3} onPress={() => setOpenAlert(!openAlert)}>
             <Box
               borderWidth={1}
               alignItems={'center'}
@@ -100,7 +110,8 @@ const Notifications = () => {
             </Box>
           </Row>
           {notificationsArr.map((item, index) => (
-            <Box
+            <Pressable
+              onPress={onOpen}
               key={index}
               borderBottomWidth={1}
               borderColor={COLORS.lightGrey}>
@@ -124,7 +135,7 @@ const Notifications = () => {
                   )}
                 </VStack>
               </Row>
-            </Box>
+            </Pressable>
           ))}
         </Box>
         <Box px={3} mt={4}>
@@ -139,7 +150,8 @@ const Notifications = () => {
             </Box>
           </Row>
           {notificationsEarlierArr.map((item, index) => (
-            <Box
+            <Pressable
+              onPress={onOpen}
               key={index}
               borderBottomWidth={1}
               borderColor={COLORS.lightGrey}>
@@ -163,10 +175,60 @@ const Notifications = () => {
                   )}
                 </VStack>
               </Row>
-            </Box>
+            </Pressable>
           ))}
         </Box>
       </ScrollView>
+      {/* Actionsheet */}
+      <Actionsheet isOpen={isOpen} onClose={onClose}>
+        <Actionsheet.Content>
+          <Text>
+            In publishing and graphic design, Lorem ipsum is a placeholder text
+            commonly used to demonstrate the visual form of a document or a
+            typeface without relying on meaningful content.
+          </Text>
+          <HStack space={6} mt={4}>
+            <Pressable bg={'red.600'} borderRadius={5} onPress={onClose}>
+              <Text px={7} py={1} color={COLORS.textWhite} bold>
+                Delete
+              </Text>
+            </Pressable>
+            <Pressable bg={'green.800'} borderRadius={5} onPress={onClose}>
+              <Text px={7} py={1} color={COLORS.textWhite} bold>
+                Cancel
+              </Text>
+            </Pressable>
+          </HStack>
+        </Actionsheet.Content>
+      </Actionsheet>
+      {/* Alert */}
+      <AlertDialog
+        leastDestructiveRef={cancelRef}
+        isOpen={openAlert}
+        onClose={onCloseAlert}>
+        <AlertDialog.Content>
+          <AlertDialog.CloseButton />
+          <AlertDialog.Header>Delete Item</AlertDialog.Header>
+          <AlertDialog.Body>
+            This will all notifications data. This action cannot be reversed.
+            Deleted data can not be recovered.
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="unstyled"
+                colorScheme="coolGray"
+                onPress={onClose}
+                ref={cancelRef}>
+                Cancel
+              </Button>
+              <Button colorScheme="danger" onPress={onCloseAlert}>
+                Delete
+              </Button>
+            </Button.Group>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
     </Box>
   );
 };

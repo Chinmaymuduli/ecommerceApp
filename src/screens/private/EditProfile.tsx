@@ -21,10 +21,18 @@ import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {ImagePicker} from 'components/core';
 import {Controller, useForm} from 'react-hook-form';
 
+type Prop3 = {
+  mobileData: {
+    MobileNumber?: string;
+  };
+};
+
 const EditProfile = () => {
   const navigation = useNavigation<NavigationProps>();
   const [visiable, setVisiable] = useState<boolean>(false);
   const [profileIimage, setprofileimage] = useState<any>('');
+  const [gender, setGender] = useState<string>('Male');
+
   const handleDismiss = () => {
     setVisiable(false);
   };
@@ -34,9 +42,25 @@ const EditProfile = () => {
     formState: {errors},
   } = useForm();
 
+  const {
+    control: control2,
+    formState: {errors: errors2},
+    handleSubmit: handleSubmit2,
+  } = useForm();
+
+  const {
+    control: control3,
+    formState: {errors: errors3},
+    handleSubmit: handleSubmit3,
+  } = useForm();
+
   const onSubmit = async (data: any) => {
+    const EditProfileData = {
+      ...data,
+      gender: gender,
+    };
     try {
-      console.log('object', data);
+      console.log('object', EditProfileData);
     } catch (error) {
       console.log('object', error);
     }
@@ -44,14 +68,14 @@ const EditProfile = () => {
 
   const emailSubmit = async (emaildata: any) => {
     try {
-      console.log('data');
+      console.log('data', emaildata);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const mobileSubmit = async (data: any) => {
-    console.log(data);
+  const handelMobileUpdate = async (mobileData: any) => {
+    console.log(mobileData);
   };
   return (
     <Box flex={1} bg={COLORS.textWhite}>
@@ -177,6 +201,8 @@ const EditProfile = () => {
               Gender :
             </Text>
             <Radio.Group
+              value={gender}
+              onChange={gen => setGender(gen)}
               mt={2}
               name="exampleGroup"
               defaultValue="Male"
@@ -201,19 +227,21 @@ const EditProfile = () => {
                 </Radio>
               </Stack>
             </Radio.Group>
+
+            <Pressable
+              alignItems={'center'}
+              mt={10}
+              onPress={handleSubmit(onSubmit)}>
+              <Heading size={'sm'} color={'green.700'}>
+                SUBMIT
+              </Heading>
+            </Pressable>
           </Box>
-          <Pressable
-            alignItems={'center'}
-            mt={10}
-            onPress={handleSubmit(onSubmit)}>
-            <Heading size={'sm'} color={'green.700'}>
-              SUBMIT
-            </Heading>
-          </Pressable>
+
           <Box mt={5}>
-            <FormControl isRequired isInvalid={'MobileNumber' in errors}>
+            <FormControl isRequired isInvalid={'MobileNumber' in errors2}>
               <Controller
-                control={control}
+                control={control2}
                 render={({field: {onChange, onBlur, value}}) => (
                   <Input
                     onChangeText={onChange}
@@ -224,9 +252,10 @@ const EditProfile = () => {
                     fontSize={15}
                     h={10}
                     borderColor={COLORS.fadeBlack}
+                    keyboardType={'numeric'}
                     bgColor={COLORS.textWhite}
                     InputRightElement={
-                      <Pressable onPress={handleSubmit(mobileSubmit)}>
+                      <Pressable onPress={handleSubmit2(handelMobileUpdate)}>
                         <Text bold color={'green.700'}>
                           Update
                         </Text>
@@ -241,13 +270,13 @@ const EditProfile = () => {
                 defaultValue=""
               />
               <FormControl.ErrorMessage mt={0}>
-                {errors.MobileNumber?.message}
+                {errors2.MobileNumber?.message}
               </FormControl.ErrorMessage>
             </FormControl>
 
-            <FormControl isRequired isInvalid={'EmailId' in errors}>
+            <FormControl isRequired isInvalid={'EmailId' in errors3}>
               <Controller
-                control={control}
+                control={control3}
                 render={({field: {onChange, onBlur, value}}) => (
                   <Box mt={4}>
                     <Input
@@ -260,8 +289,10 @@ const EditProfile = () => {
                       onChangeText={onChange}
                       onBlur={onBlur}
                       value={value}
+                      keyboardType={'email-address'}
+                      autoCapitalize={'none'}
                       InputRightElement={
-                        <Pressable onPress={handleSubmit(emailSubmit)}>
+                        <Pressable onPress={handleSubmit3(emailSubmit)}>
                           <Text bold color={'green.700'}>
                             Update
                           </Text>
@@ -277,7 +308,7 @@ const EditProfile = () => {
                 defaultValue=""
               />
               <FormControl.ErrorMessage mt={0}>
-                {errors.EmailId?.message}
+                {errors3.EmailId?.message}
               </FormControl.ErrorMessage>
             </FormControl>
           </Box>

@@ -15,8 +15,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {DrawerActions} from '@react-navigation/native';
-import {Empty, PastOrder} from 'components/core';
+import {Empty} from 'components/core';
 import {activeOrderType} from 'types';
+import {PastOrder} from 'components';
 
 const activeOrder = [
   {

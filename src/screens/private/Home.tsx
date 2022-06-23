@@ -24,13 +24,13 @@ import {
 } from '../../constants';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {AlertComponent} from 'components/core';
 import {
-  AlertComponent,
   CategoryProducts,
   HomeCategories,
   HomeSlider,
   SpecialProduct,
-} from 'components/core';
+} from 'components';
 
 const Home = () => {
   const navigation = useNavigation<NavigationProps>();

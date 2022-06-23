@@ -1,7 +1,7 @@
 import {SafeAreaView, StyleSheet} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {Box, Heading, HStack, Row, VStack} from 'native-base';
-import {AlertComponent, AyushProduct, CategoryButtom} from 'components/core';
+import {AlertComponent, CategoryButtom} from 'components/core';
 import {
   AYUSHPRODUCT,
   AYUSHRAWPRODUCT,
@@ -20,6 +20,7 @@ import {COLORS} from 'configs';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
+import {CategorySection} from 'components';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route}: Props) => {
@@ -64,7 +65,7 @@ const Category = ({route}: Props) => {
         <VStack>
           <Box>
             {tabValue === 1 && (
-              <AyushProduct
+              <CategorySection
                 data={userData?.role === 'b2b' ? AYUSHRAWPRODUCT : AYUSHPRODUCT}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
@@ -73,7 +74,7 @@ const Category = ({route}: Props) => {
           </Box>
           <Box>
             {tabValue === 2 && (
-              <AyushProduct
+              <CategorySection
                 data={
                   userData?.role === 'b2b' ? GOURMETRAWPRODUCT : GOURMETPRODUCT
                 }
@@ -84,7 +85,7 @@ const Category = ({route}: Props) => {
           </Box>
           <Box>
             {tabValue === 3 && (
-              <AyushProduct
+              <CategorySection
                 data={
                   userData?.role === 'b2b' ? GOURMETRAWPRODUCT : PERSONALPRODUCT
                 }
@@ -95,7 +96,7 @@ const Category = ({route}: Props) => {
           </Box>
           <Box>
             {tabValue === 4 && (
-              <AyushProduct
+              <CategorySection
                 data={
                   userData?.role === 'b2b' ? GOURMETRAWPRODUCT : HOMEPRODUCT
                 }
@@ -106,7 +107,7 @@ const Category = ({route}: Props) => {
           </Box>
           <Box>
             {tabValue === 5 && (
-              <AyushProduct
+              <CategorySection
                 data={userData?.role === 'b2b' ? SWEETRAW : SWEETPRODUCT}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}

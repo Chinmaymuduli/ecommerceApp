@@ -13,10 +13,11 @@ import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AYUSH_1, AYUSH_2, CART} from 'assets';
 import {DrawerActions} from '@react-navigation/native';
-import {CartItem, Empty} from 'components/core';
+import {Empty} from 'components/core';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CartType} from 'types';
+import {CartItem} from 'components';
 const CartArr = [
   {
     id: 1,

@@ -23,7 +23,7 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {SPECIALPRODUCT} from '../../constants';
 import {COLORS} from 'configs';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {Accordion, ManageReview, ProductComponent} from 'components/core';
+// import {ProductComponent} from 'components/core';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
@@ -31,6 +31,7 @@ import LottieView from 'lottie-react-native';
 import {SUCCESSSQUANTITY} from 'assets';
 import {Rating} from 'react-native-ratings';
 import {ProductDetailsType, SelectQuantityType} from 'types';
+import {Accordion, ManageReview, ProductComponent} from 'components';
 const quantityArr = [
   {label: '250 gm', value: 250, price: 159, discount: 200, offer: '5% off'},
   {label: '500 gm', value: 500, price: 259, discount: 300, offer: '10% off'},

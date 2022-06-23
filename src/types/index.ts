@@ -60,6 +60,20 @@ export type CartType =
         offer: string;
         quantity: number;
     }
+// *****
+export type weightType = {
+    weight?: string
+    currentPrice?: number
+    inStock?: boolean
+    discount?: number
+}
+
+export type CartItemType = {
+    product: ProductDetailsType
+    quantity: number
+    weight?: weightType
+}
+// *****
 export type changePasswordType = {
     newPassword?: string
     retypePassword?: string

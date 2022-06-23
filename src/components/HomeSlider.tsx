@@ -1,9 +1,8 @@
 import {StyleSheet} from 'react-native';
 import React from 'react';
 import {FlatList} from 'native-base';
-import {SLIDERDATA} from '../../constants';
-
-import HomeSliderCards from '../HomeSliderCards';
+import {SLIDERDATA} from '../constants';
+import HomeSliderCards from './HomeSliderCards';
 
 const HomeSlider = () => {
   return (

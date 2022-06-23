@@ -35,7 +35,7 @@ type CategoryProductType = {
   setAlertMessage?: string | any;
 };
 
-const AyushProduct = ({
+const CategorySection = ({
   data,
   setOpenAlert,
   setAlertMessage,
@@ -190,7 +190,7 @@ const AyushProduct = ({
   );
 };
 
-export default AyushProduct;
+export default CategorySection;
 
 const styles = StyleSheet.create({
   image: {
