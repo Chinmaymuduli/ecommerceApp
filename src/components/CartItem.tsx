@@ -16,7 +16,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {CartType} from 'types';
 
 type CartItemType = {
-  item?: CartType;
+  item: CartType;
   setQuantity?: number | any;
 };
 
@@ -27,7 +27,7 @@ const CartItem = ({item, setQuantity}: CartItemType) => {
 
   const cancelRef = React.useRef(null);
 
-  const increment = (item: any) => {
+  const increment = (Item: CartType) => {
     setQuantity((prev: any) => {
       const newQuantity = [...prev];
       const index = newQuantity.indexOf(item);
@@ -36,7 +36,7 @@ const CartItem = ({item, setQuantity}: CartItemType) => {
     });
   };
 
-  const decrement = (item: any) => {
+  const decrement = (item: CartType) => {
     if (item.quantity > 1) {
       setQuantity((prev: any) => {
         const newQuantity = [...prev];
@@ -89,7 +89,6 @@ const CartItem = ({item, setQuantity}: CartItemType) => {
           </Text>
         </Box>
         <Box
-          // bg={'#D1B000'}
           bg={'#F8D210'}
           position={'absolute'}
           borderRadius={3}

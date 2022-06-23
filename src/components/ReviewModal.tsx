@@ -4,6 +4,15 @@ import {Box, Button, Center, HStack, Input, Modal, Text} from 'native-base';
 import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
 
+type ReviewModalType = {
+  setShowModal: (previousValue: boolean) => void;
+  showModal: boolean;
+  ratings?: number;
+  reviewData?: string;
+  setReview: (txt: string) => void;
+  setRatings: number | any;
+};
+
 const ReviewModal = ({
   setShowModal,
   showModal,
@@ -11,7 +20,7 @@ const ReviewModal = ({
   setRatings,
   reviewData,
   setReview,
-}: any) => {
+}: ReviewModalType) => {
   return (
     <Center>
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
@@ -44,8 +53,8 @@ const ReviewModal = ({
               textAlignVertical="top"
               fontSize={15}
               variant="unstyled"
-              value={reviewData?.review}
-              onChange={txt => setReview(txt)}
+              value={reviewData}
+              onChangeText={txt => setReview(txt)}
             />
           </Modal.Body>
           <Modal.Footer>

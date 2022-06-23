@@ -149,7 +149,11 @@ const Profile = () => {
               alignSelf={'flex-end'}
               px={4}
               py={3}
-              onPress={() => navigation.navigate('SelectAddress', {})}>
+              onPress={() =>
+                navigation.navigate('SelectAddress', {
+                  SelectProductData: {},
+                })
+              }>
               <Text color={COLORS.cgcolor} bold>
                 View Your Address
               </Text>

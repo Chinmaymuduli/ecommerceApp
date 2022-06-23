@@ -4,8 +4,12 @@ import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Box, HStack, Image, Pressable, Text} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {ProductDetailsType} from 'types';
+type productType = {
+  item: ProductDetailsType;
+};
 
-const ProductComponent = ({item}: any) => {
+const ProductComponent = ({item}: productType) => {
   return (
     <Box mt={3} overflow={'hidden'} mb={5}>
       <Pressable>

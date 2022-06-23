@@ -2,8 +2,12 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import {Box} from 'native-base';
+type Props = {
+  title?: string;
+  subtitle?: string;
+};
 
-const Accordion = ({title, subtitle}: any) => {
+const Accordion = ({title, subtitle}: Props) => {
   const [open, setOpen] = useState(true);
 
   const toggleExpand = () => {
@@ -30,7 +34,7 @@ const Accordion = ({title, subtitle}: any) => {
       </TouchableOpacity>
       <View style={styles.parentHr} />
       {open && (
-        <View style={styles.child}>
+        <View>
           <Text style={styles.subtitle}>{subtitle}</Text>
         </View>
       )}
@@ -60,9 +64,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     width: '100%',
   },
-  child: {
-    // padding: 16,
-  },
+
   subtitle: {
     textAlign: 'justify',
     fontFamily: 'Nunito-Regular',

@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import React from 'react';
-import {Box, FlatList, HStack, Image, Pressable, Text} from 'native-base';
+import {Box, FlatList, HStack, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';

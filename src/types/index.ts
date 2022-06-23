@@ -40,6 +40,7 @@ export type HomeProductType = {
     img?: string | any
     currentPrice?: number | any
     offer?: string
+    moq?: number
 }
 
 export type AddressType = {
@@ -109,3 +110,12 @@ export type WishListCardType = {
     discount?: number
     offer?: string
 }
+
+export type PastOrderType = {
+    name: string;
+    OrderID: string;
+    status: string;
+    currentPrice: number;
+    img: string | any;
+    total: string;
+};

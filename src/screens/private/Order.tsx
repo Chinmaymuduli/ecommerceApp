@@ -16,7 +16,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {DrawerActions} from '@react-navigation/native';
 import {Empty} from 'components/core';
-import {activeOrderType} from 'types';
+import {activeOrderType, PastOrderType} from 'types';
 import {PastOrder} from 'components';
 
 const activeOrder = [
@@ -41,6 +41,15 @@ const pastOrders = [
   },
 ];
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Order'>;
+
+// type PastOrderType = {
+//   name: string;
+//   OrderID: string;
+//   status: string;
+//   currentPrice: number;
+//   img: string | any;
+//   total: string;
+// };
 const Order = ({navigation}: Props) => {
   const [selectionMode, setSelectionMode] = React.useState<any>(1);
 
@@ -177,7 +186,9 @@ const Order = ({navigation}: Props) => {
           </>
         )
       ) : pastOrders.length > 0 ? (
-        pastOrders.map((item: any) => <PastOrder item={item} key={item.name} />)
+        pastOrders.map((item: PastOrderType) => (
+          <PastOrder item={item} key={item.name} />
+        ))
       ) : (
         <>
           <Empty animation={ORDER} title={'No Past Order'} h={400} noLoop />

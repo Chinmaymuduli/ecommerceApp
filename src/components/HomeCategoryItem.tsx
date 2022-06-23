@@ -7,8 +7,15 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {useAppContext} from 'contexts';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {HomeProductType} from 'types';
 
-const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: any) => {
+type Props = {
+  item: HomeProductType;
+  setOpenAlert: (previousValue: boolean) => void;
+  setAlertMessage: (txt: string) => void;
+};
+
+const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
   const navigation = useNavigation<NavigationProps>();
   const [wishlist, setWishlist] = useState<any>([]);
   const [count, setCount] = React.useState(0);

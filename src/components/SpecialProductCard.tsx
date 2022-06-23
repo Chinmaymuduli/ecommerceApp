@@ -36,7 +36,7 @@ const SpecialProductCard = ({item}: Props) => {
   const increment = () => {
     setCount(count + 1);
   };
-  const AddSpecialCart = (item: any) => {
+  const AddSpecialCart = (item: HomeProductType) => {
     increment();
     setCartItems((prev: any) => [...prev, item]);
   };

@@ -20,15 +20,15 @@ type Props = {
 };
 
 const MyReviewCard = ({item}: Props) => {
-  const [showModal, setShowModal] = useState(false);
-  const [ratings, setRatings] = useState(item?.rating);
-  const [review, setReview] = useState();
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [ratings, setRatings] = useState<number>(item?.rating);
+  const [review, setReview] = useState<string>();
   const [reviewText, setReviewText] = useState();
   const [isOpen, setIsOpen] = React.useState(false);
   // console.log(item);
-  const openModal = (item: any) => {
+  const openModal = (reviewTxt: string) => {
     setShowModal(true);
-    setReview(item);
+    setReview(reviewTxt);
   };
 
   const onClose = () => setIsOpen(false);
@@ -81,7 +81,7 @@ const MyReviewCard = ({item}: Props) => {
                   </HStack>
                 </Pressable>
                 <Box borderRightWidth={2} borderColor={COLORS.grey}></Box>
-                <Pressable onPress={() => openModal(item)}>
+                <Pressable onPress={() => openModal(item?.review)}>
                   <HStack space={2}>
                     <AntDesign name="edit" size={22} color={COLORS.cgcolor} />
                     <Text bold color={COLORS.fadeBlack}>

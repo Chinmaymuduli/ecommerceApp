@@ -17,8 +17,13 @@ import {AYUSH_1} from 'assets';
 import {Rating} from 'react-native-ratings';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {PastOrderType} from 'types';
 
-const PastOrder = ({item}: any) => {
+type Props = {
+  item: PastOrderType;
+};
+
+const PastOrder = ({item}: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [ratings, setRatings] = useState(0);
   const navigation = useNavigation<NavigationProps>();
