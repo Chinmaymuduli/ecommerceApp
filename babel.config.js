@@ -17,6 +17,7 @@ module.exports = {
           types: './src/types',
           assets: './src/assets',
           'components/core': './src/components/core',
+          app: './src/app',
         },
       },
     ],

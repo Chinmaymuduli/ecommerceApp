@@ -14,8 +14,11 @@ import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {COLORS} from 'configs';
 import {CATEGORYARR} from '../constants';
 import HomeCategoriesItem from './HomeCategoriesItem';
+import {useStore} from 'src/app';
 
 const HomeCategories = () => {
+  // const {category} = useStore();
+  // console.log('object', category);
   const navigation = useNavigation<NavigationProps>();
   return (
     <>

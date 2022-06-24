@@ -119,3 +119,18 @@ export type PastOrderType = {
     img: string | any;
     total: string;
 };
+
+// Zustand
+export type ProductType = {
+    id?: number
+    name?: string
+    description?: string
+    img?: string
+    quantity?: number
+    weightAvailability?: weightType[]
+    ratings?: number
+    category?: string
+    isNew?: boolean
+    b2bImg?: string
+    b2bQuantity?: string
+}
