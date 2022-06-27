@@ -17,14 +17,21 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import moment from 'moment';
+import {getPrice} from 'utils';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ConfirmOrder'>;
 const ConfirmOrder = ({route, navigation}: Props) => {
   const confirmData = route.params?.confirmOrderData;
-  const saving = confirmData?.discount - confirmData?.currentPrice;
-  const DiscountPrice = confirmData?.discount;
-  const discountCoupon = confirmData?.discountCoupon;
-  const AmoutPayable = DiscountPrice - (saving + discountCoupon);
+  // console.log('object', confirmData);
+  // const saving = confirmData?.discount - confirmData?.currentPrice;
+  // const DiscountPrice = confirmData?.discount;
+  // const discountCoupon = confirmData?.discountCoupon;
+  // const AmoutPayable = DiscountPrice - (saving + discountCoupon);
+  const {
+    TotalProductPriceWithoutDiscount,
+    sumTotalPriceCustomerWillPay,
+    totalDiscountAmount,
+  } = getPrice(confirmData);
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <ScrollView>
@@ -38,7 +45,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
           <Heading size={'md'}>Thank you for your order !</Heading>
           <Text mt={2} textAlign={'center'}>
             Your order has been placed successfully. your ID is #
-            {confirmData?.orderId}
+            {Math.floor(Math.random() * 100000000)}
           </Text>
         </Center>
         <Box px={4}>
@@ -73,7 +80,9 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   <Text bold fontSize={12}>
                     Order ID
                   </Text>
-                  <Text fontSize={11}>#{confirmData?.orderId}</Text>
+                  <Text fontSize={11}>
+                    #{Math.floor(Math.random() * 100000000)}
+                  </Text>
                 </VStack>
               </HStack>
             </HStack>
@@ -90,7 +99,11 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Price(1 items)</Text>
-                  <Text>&#8377;{confirmData?.discount}</Text>
+                  <Text>
+                    &#8377;
+                    {/* {confirmData?.discount} */}
+                    {TotalProductPriceWithoutDiscount}
+                  </Text>
                 </HStack>
 
                 <HStack
@@ -98,7 +111,11 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Saving</Text>
-                  <Text color={'green.500'}>- &#8377;{saving}</Text>
+                  <Text color={'green.500'}>
+                    - &#8377;
+                    {/* {saving} */}
+                    {totalDiscountAmount}
+                  </Text>
                 </HStack>
                 <HStack
                   pt={2}
@@ -106,7 +123,8 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   alignItems={'center'}>
                   <Text>Coupon Discount</Text>
                   <Text color={'green.500'}>
-                    - &#8377;{confirmData?.discountCoupon}
+                    - &#8377;
+                    {/* {confirmData?.discountCoupon} */}0
                   </Text>
                 </HStack>
                 <HStack
@@ -123,7 +141,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                 alignItems={'center'}
                 mt={2}>
                 <Text>Amount Payable</Text>
-                <Text bold>&#8377;{AmoutPayable}</Text>
+                <Text bold>&#8377;{sumTotalPriceCustomerWillPay}</Text>
               </HStack>
             </Box>
           </Box>

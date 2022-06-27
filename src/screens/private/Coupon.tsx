@@ -20,33 +20,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps, PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ProductDetailsType} from 'types';
-
-const CouponArr = [
-  {
-    id: 1,
-    code: 'COUPON1',
-    discount: '10%',
-    description: 'Use code COUPON1 to get Rs.50 OFF on orders above Rs.400',
-    term1:
-      'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without',
-    term2:
-      'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
-    expiry: '20/12/2020',
-    discountValue: 30,
-  },
-  {
-    id: 2,
-    code: 'COUPON2',
-    discount: '20%',
-    description: '20% discount on all products',
-    term1:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae',
-    term2:
-      'totam ratione voluptas quod exercitationem fuga. Possimus quis earum veniam  quasi aliquam eligendi, placeat qui corporis!',
-    expiry: '20/12/2020',
-    discountValue: 20,
-  },
-];
+import {useStore} from 'app';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Coupon'>;
 const Coupon = ({route}: Props) => {
@@ -56,20 +30,20 @@ const Coupon = ({route}: Props) => {
   const [termandcondition, setTermandcondition] = React.useState<any>();
   const [couponAlert, setCouponAlert] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
-
+  const {CouponArr} = useStore();
   const Conditions = (item: ProductDetailsType) => {
     setTermandcondition(item);
     onOpen();
   };
   const ApplyCoupon = (value: number) => {
-    console.log('object', value);
+    // console.log('object', value);
     setCouponAlert(true);
     setTimeout(() => {
       setCouponAlert(false);
       navigation.goBack();
-      navigation.navigate('PaymentScreen', {
-        PaymentData: {...couponProductData, couponValue: value},
-      });
+      // navigation.navigate('PaymentScreen', {
+      //   PaymentData: {...couponProductData, couponValue: value},
+      // });
     }, 1000);
   };
   return (
@@ -134,7 +108,7 @@ const Coupon = ({route}: Props) => {
         <Box px={5} mt={6}>
           <Heading size={'sm'}>Available coupons</Heading>
           <Box mt={4}>
-            {CouponArr.map(item => (
+            {CouponArr?.map(item => (
               <Box
                 key={item.id}
                 py={2}
@@ -166,7 +140,7 @@ const Coupon = ({route}: Props) => {
                       </Text>
                     </Box>
                     <Pressable
-                      onPress={() => ApplyCoupon(item?.discountValue)}
+                      onPress={() => ApplyCoupon(item?.discountValue || 0)}
                       borderWidth={1}
                       borderRadius={6}
                       borderColor={COLORS.cgcolor}>

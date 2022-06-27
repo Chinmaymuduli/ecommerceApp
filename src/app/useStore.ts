@@ -1,16 +1,18 @@
-import { AYUSH, AYUSH_1, AYUSH_2, GFOOD, GOURMEET1, GOURMEET2, GOURMEET4, HOMECARE, PCARE, PERSONAL1, PERSONAL2, SWEET1, SWEET2, SWEETS } from 'assets'
+import { AYUSH, AYUSH_1, AYUSH_2, AYUSH_3, AYUSH_4, AYUSH_5, GFOOD, GOURMEET1, GOURMEET2, GOURMEET3, GOURMEET4, GOURMEET5, HOMECARE, PCARE, PERSONAL1, PERSONAL2, PERSONAL3, PERSONAL4, PERSONAL5, SWEET1, SWEET2, SWEETS } from 'assets'
 // import { b_1, b_2, b_3, b_4, b_5, b_6, b_8 } from 'assets/business'
 
-import { CartItemType, CategoryType, ProductType } from 'types'
+import { CartItemType, CategoryType, CouponType, ProductType } from 'types'
 import create from 'zustand'
 
 type ProductStoreType = {
     products: ProductType[]
     category: CategoryType[]
     cartItems: CartItemType[]
+    CouponArr: CouponType[]
     addToCart: (cartItem: CartItemType) => void
     removeFromCart: (productId?: number) => void
     incrementQuantity: (productId: number) => void
+    decrementQuantity: (id: number) => void
     updateQuantity: (productId: number, quantity: number) => void
     wishlistItems: ProductType[]
     addToWishlist: (wishlistItem: ProductType) => void
@@ -80,7 +82,106 @@ const useStore = create<ProductStoreType>((set) => ({
                 },
             ],
             ratings: 5,
-            category: 'ayush product',
+            category: 'ayush products',
+            isNew: true,
+            // b2bImg: b_5.src,
+            // b2bQuantity: '10 L',
+        },
+        {
+            id: 11,
+            name: 'Jyotishmati Oil',
+            description:
+                'made from pure cold pressed Coconut oil (from the heart of chhattishgarh)',
+            img: AYUSH_3,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100ml',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250ml',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500ml',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 5,
+            category: 'ayush products',
+            isNew: true,
+            // b2bImg: b_5.src,
+            // b2bQuantity: '10 L',
+        },
+        {
+            id: 12,
+            name: 'Jyotishmati Oil',
+            description:
+                'made from pure cold pressed Coconut oil (from the heart of chhattishgarh)',
+            img: AYUSH_4,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100ml',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250ml',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500ml',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 5,
+            category: 'ayush products',
+            isNew: true,
+            // b2bImg: b_5.src,
+            // b2bQuantity: '10 L',
+        },
+        {
+            id: 13,
+            name: 'Jyotishmati Oil',
+            description:
+                'made from pure cold pressed Coconut oil (from the heart of chhattishgarh)',
+            img: AYUSH_5,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100ml',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250ml',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500ml',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 5,
+            category: 'ayush products',
             isNew: true,
             // b2bImg: b_5.src,
             // b2bQuantity: '10 L',
@@ -124,6 +225,105 @@ const useStore = create<ProductStoreType>((set) => ({
             description:
                 'made with jungle harvest amla, honey and other ingredients (from the heart of chhattishgarh)',
             img: GOURMEET2,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '250gm',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '500gm',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '1kg',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 5,
+            category: 'gourmet foods',
+            isNew: false,
+            // b2bImg: b_1.src,
+            // b2bQuantity: '20 Kg',
+        },
+        {
+            id: 14,
+            name: 'Chyawanprash',
+            description:
+                'made with jungle harvest amla, honey and other ingredients (from the heart of chhattishgarh)',
+            img: GOURMEET3,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '250gm',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '500gm',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '1kg',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 5,
+            category: 'gourmet foods',
+            isNew: false,
+            // b2bImg: b_1.src,
+            // b2bQuantity: '20 Kg',
+        },
+        {
+            id: 15,
+            name: 'Chyawanprash',
+            description:
+                'made with jungle harvest amla, honey and other ingredients (from the heart of chhattishgarh)',
+            img: GOURMEET4,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '250gm',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '500gm',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '1kg',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 5,
+            category: 'gourmet foods',
+            isNew: false,
+            // b2bImg: b_1.src,
+            // b2bQuantity: '20 Kg',
+        },
+        {
+            id: 16,
+            name: 'Chyawanprash',
+            description:
+                'made with jungle harvest amla, honey and other ingredients (from the heart of chhattishgarh)',
+            img: GOURMEET5,
             quantity: 1,
             weightAvailability: [
                 {
@@ -219,6 +419,105 @@ const useStore = create<ProductStoreType>((set) => ({
             // b2bQuantity: '10 L',
         },
         {
+            id: 17,
+            name: 'Aloe Vera Bodywash',
+            description:
+                'made with jungle harvest aloe vera (from the heart of chhattishgarh)',
+            img: PERSONAL3,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100ml',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250ml',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500ml',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 4,
+            category: 'personal care',
+            isNew: true,
+            // b2bImg: b_6.src,
+            // b2bQuantity: '10 L',
+        },
+        {
+            id: 18,
+            name: 'Aloe Vera Bodywash',
+            description:
+                'made with jungle harvest aloe vera (from the heart of chhattishgarh)',
+            img: PERSONAL4,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100ml',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250ml',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500ml',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 4,
+            category: 'personal care',
+            isNew: true,
+            // b2bImg: b_6.src,
+            // b2bQuantity: '10 L',
+        },
+        {
+            id: 19,
+            name: 'Aloe Vera Bodywash',
+            description:
+                'made with jungle harvest aloe vera (from the heart of chhattishgarh)',
+            img: PERSONAL5,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100ml',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250ml',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500ml',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 4,
+            category: 'personal care',
+            isNew: true,
+            // b2bImg: b_6.src,
+            // b2bQuantity: '10 L',
+        },
+        {
             id: 7,
             name: 'Mahua Laddu',
             description:
@@ -257,6 +556,105 @@ const useStore = create<ProductStoreType>((set) => ({
             description:
                 'made with jungle harvest Mahua  (from the heart of chhattishgarh)',
             img: GOURMEET4,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100gm',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250gm',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500gm',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 4,
+            category: 'home care',
+            isNew: false,
+            // b2bImg: b_3.src,
+            // b2bQuantity: '20 Kg',
+        },
+        {
+            id: 20,
+            name: 'Mahua cookies',
+            description:
+                'made with jungle harvest Mahua  (from the heart of chhattishgarh)',
+            img: AYUSH_3,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100gm',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250gm',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500gm',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 4,
+            category: 'home care',
+            isNew: false,
+            // b2bImg: b_3.src,
+            // b2bQuantity: '20 Kg',
+        },
+        {
+            id: 20,
+            name: 'Mahua cookies',
+            description:
+                'made with jungle harvest Mahua  (from the heart of chhattishgarh)',
+            img: GOURMEET5,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100gm',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250gm',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500gm',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 4,
+            category: 'home care',
+            isNew: false,
+            // b2bImg: b_3.src,
+            // b2bQuantity: '20 Kg',
+        },
+        {
+            id: 21,
+            name: 'Mahua cookies',
+            description:
+                'made with jungle harvest Mahua  (from the heart of chhattishgarh)',
+            img: PERSONAL5,
             quantity: 1,
             weightAvailability: [
                 {
@@ -350,6 +748,105 @@ const useStore = create<ProductStoreType>((set) => ({
             // b2bImg: b_2.src,
             // b2bQuantity: '30 L',
         },
+        {
+            id: 22,
+            name: 'Amla murabba',
+            description:
+                'made with jungle harvest Jamun  (from the heart of chhattishgarh)',
+            img: SWEET2,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100ml',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250ml',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500ml',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 4,
+            category: 'sweets',
+            isNew: true,
+            // b2bImg: b_2.src,
+            // b2bQuantity: '30 L',
+        },
+        {
+            id: 23,
+            name: 'Jamun Juice',
+            description:
+                'made with jungle harvest Jamun  (from the heart of chhattishgarh)',
+            img: SWEET1,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100ml',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250ml',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500ml',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 4,
+            category: 'sweets',
+            isNew: true,
+            // b2bImg: b_2.src,
+            // b2bQuantity: '30 L',
+        },
+        {
+            id: 24,
+            name: 'Amla murabba',
+            description:
+                'made with jungle harvest Jamun  (from the heart of chhattishgarh)',
+            img: SWEET2,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100ml',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250ml',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500ml',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 4,
+            category: 'sweets',
+            isNew: true,
+            // b2bImg: b_2.src,
+            // b2bQuantity: '30 L',
+        },
     ],
     category: [
         {
@@ -378,7 +875,32 @@ const useStore = create<ProductStoreType>((set) => ({
             img: SWEETS,
         },
     ],
-    //--------
+    CouponArr: [
+        {
+            id: 1,
+            code: 'COUPON1',
+            discount: '10%',
+            description: 'Use code COUPON1 to get Rs.50 OFF on orders above Rs.400',
+            term1:
+                'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without',
+            term2:
+                'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+            expiry: '20/12/2020',
+            discountValue: 30,
+        },
+        {
+            id: 2,
+            code: 'COUPON2',
+            discount: '20%',
+            description: '20% discount on all products',
+            term1:
+                'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia, molestiae quas vel sint commodi repudiandae',
+            term2:
+                'totam ratione voluptas quod exercitationem fuga. Possimus quis earum veniam  quasi aliquam eligendi, placeat qui corporis!',
+            expiry: '20/12/2020',
+            discountValue: 20,
+        },
+    ],
     //TODO: CART_ITEM
 
     cartItems: [],
@@ -395,7 +917,7 @@ const useStore = create<ProductStoreType>((set) => ({
     removeFromCart: (productId) => {
         set((state) => ({
             cartItems: state.cartItems.filter(
-                (cartItem) => cartItem.product.id !== productId
+                (cartItem) => cartItem?.product?.id !== productId
             ),
         }))
     },
@@ -414,18 +936,32 @@ const useStore = create<ProductStoreType>((set) => ({
             }),
         }))
     },
+    //TODO: DECREMENT_QUANTITY
+    decrementQuantity: (id) => {
+        set((state) => ({
+            cartItems: state.cartItems.map((cartItem) => {
+                if (cartItem.product.id === id)
+                    return {
+                        ...cartItem,
+                        quantity: cartItem.quantity - 1,
+                    }
+                return cartItem
+            }),
+        }))
+    },
 
     //TODO: UPDATE_QUANTITY ( BOTH INCR & DECR )
 
     updateQuantity: (productID, quantity) => {
         set((state) => ({
             cartItems: state.cartItems.map((cartItem) => {
-                if (cartItem.product.id === productID)
+                if (cartItem?.product?.id === productID)
                     return {
                         ...cartItem,
                         quantity: quantity,
                     }
                 return cartItem
+
             }),
         }))
     },

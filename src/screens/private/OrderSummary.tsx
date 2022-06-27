@@ -11,27 +11,27 @@ import {
   VStack,
 } from 'native-base';
 import {COLORS} from 'configs';
-import {Rating} from 'react-native-ratings';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
+import {OrderSummaryCard} from 'components';
+import {getPrice} from 'utils';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route}: Props) => {
-  const orderData = route.params?.ProductDetailsType;
-  const [ratings, setRatings] = React.useState(3);
-  const [count, setCount] = React.useState(1);
-  const decreaseItem = () => {
-    if (count > 1) {
-      setCount(count - 1);
-    } else {
-      setCount(1);
-    }
-  };
+  const ordersData = route.params?.CartItems;
+
+  const {
+    totalProductPriceWithDiscount,
+    TotalProductPriceWithoutDiscount,
+    totalDiscountAmount,
+    sumTotalPriceCustomerWillPay,
+    deliveryCharge,
+  } = getPrice(ordersData);
+
   return (
     <Box flex={1} bg={COLORS.textWhite}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <Box
           px={5}
           mt={5}
@@ -42,7 +42,7 @@ const OrderSummary = ({navigation, route}: Props) => {
             <Pressable
               onPress={() =>
                 navigation.navigate('SelectAddress', {
-                  SelectProductData: orderData,
+                  SelectProductData: ordersData,
                 })
               }>
               <Box
@@ -64,102 +64,13 @@ const OrderSummary = ({navigation, route}: Props) => {
             <Text>1234567890</Text>
           </VStack>
         </Box>
-        <Box
-          px={4}
-          //   mt={2}
-          borderBottomWidth={10}
-          borderColor={COLORS.lightGrey}>
-          <Box pb={5} pt={5}>
-            <HStack>
-              <VStack alignItems={'center'}>
-                <Image
-                  alt="orderimg"
-                  source={orderData?.img}
-                  resizeMode={'contain'}
-                  style={{
-                    width: 100,
-                    height: 100,
-                  }}
-                />
-                <Box
-                  mt={1}
-                  bg={'#e4e4e460'}
-                  justifyContent={'center'}
-                  borderRadius={6}>
-                  <HStack space={5}>
-                    <Box bg={'green.600'} borderRadius={15}>
-                      <AntDesign
-                        name="minus"
-                        size={20}
-                        color={COLORS.textWhite}
-                        style={{
-                          padding: 2,
-                        }}
-                        onPress={() => decreaseItem()}
-                      />
-                    </Box>
-                    <Box>
-                      <Text bold>{count}</Text>
-                    </Box>
-                    <Box bg={'green.600'} borderRadius={15}>
-                      <AntDesign
-                        style={{
-                          padding: 2,
-                        }}
-                        name="plus"
-                        size={20}
-                        color={COLORS.textWhite}
-                        onPress={() => setCount(count + 1)}
-                      />
-                    </Box>
-                  </HStack>
-                </Box>
-              </VStack>
-              <VStack pl={5}>
-                <Text bold fontSize={16}>
-                  {orderData?.name}
-                </Text>
-                <Text mt={1}>400ml</Text>
-                <HStack>
-                  <Rating
-                    type="custom"
-                    startingValue={ratings}
-                    ratingColor={'green'}
-                    tintColor={'#fff'}
-                    ratingBackgroundColor={COLORS.grey}
-                    ratingCount={5}
-                    imageSize={17}
-                    // onFinishRating={(rating: React.SetStateAction<number>) => {
-                    //   setRatings(rating);
-                    // }}
-                    readonly={true}
-                    style={{paddingVertical: 10}}
-                  />
-                </HStack>
-                <HStack space={3}>
-                  <Text bold fontSize={16}>
-                    ₹{orderData?.currentPrice}
-                  </Text>
-                  <Text textDecorationLine={'line-through'} fontSize={16}>
-                    ₹{orderData?.currentPrice + 100}
-                  </Text>
-                  <Text color={'green.600'} bold fontSize={16}>
-                    {orderData?.offer}
-                  </Text>
-                </HStack>
-                <HStack mt={1}>
-                  <Text>Delivery Charges :</Text>
-                  <Text color={'green.600'} bold>
-                    {' '}
-                    Free
-                  </Text>
-                </HStack>
-              </VStack>
-            </HStack>
-          </Box>
-        </Box>
+        {/* card */}
+        {ordersData.map(od => (
+          <OrderSummaryCard orderData={od} key={od.quantity} />
+        ))}
+        {/* Card End */}
         <Box>
-          <Box py={4}>
+          <Box py={4} mb={10}>
             <Heading size={'sm'} px={4}>
               Price Details
             </Heading>
@@ -172,13 +83,13 @@ const OrderSummary = ({navigation, route}: Props) => {
                 borderStyle={'dashed'}>
                 <HStack justifyContent={'space-between'}>
                   <Text>Price</Text>
-                  <Text>&#8377;{orderData?.currentPrice + 100}</Text>
+                  <Text>{TotalProductPriceWithoutDiscount}</Text>
                 </HStack>
                 <HStack justifyContent={'space-between'}>
                   <Text>Discount</Text>
                   <Text color={'green.600'}>
                     - &#8377;
-                    {orderData?.currentPrice + 100 - orderData?.currentPrice}
+                    {totalDiscountAmount}
                   </Text>
                 </HStack>
                 <HStack justifyContent={'space-between'}>
@@ -190,19 +101,13 @@ const OrderSummary = ({navigation, route}: Props) => {
             <Box borderBottomWidth={1} borderColor={COLORS.lightGrey}>
               <HStack px={4} justifyContent={'space-between'} py={3}>
                 <Text bold>Total Amount</Text>
-                <Text bold>
-                  &#8377;{' '}
-                  {orderData?.currentPrice +
-                    100 -
-                    (orderData?.currentPrice + 100 - orderData?.currentPrice)}
-                </Text>
+                <Text bold>&#8377; {sumTotalPriceCustomerWillPay}</Text>
               </HStack>
             </Box>
             <Box px={4} py={2}>
               <Text color={'green.600'}>
                 You will save &#8377;
-                {orderData?.currentPrice + 100 - orderData?.currentPrice} on
-                this order
+                {totalDiscountAmount} on this order
               </Text>
             </Box>
           </Box>
@@ -211,17 +116,18 @@ const OrderSummary = ({navigation, route}: Props) => {
       </ScrollView>
       <Box w={'full'} position={'absolute'} bottom={1}>
         <Pressable
+          justifyContent={'center'}
           mx={4}
           bg={'#008000'}
           borderRadius={4}
           onPress={() =>
-            navigation.navigate('PaymentScreen', {PaymentData: orderData})
+            navigation.navigate('PaymentScreen', {PaymentData: ordersData})
           }>
           <HStack justifyContent={'space-between'} py={2} alignItems={'center'}>
             <HStack alignItems={'center'} space={2} pl={2}>
               <Box>
                 <Text bold color={'#fff'}>
-                  1 items
+                  {ordersData.length} items
                 </Text>
               </Box>
               <HStack space={2}>
@@ -229,10 +135,10 @@ const OrderSummary = ({navigation, route}: Props) => {
                   |
                 </Text>
                 <Text bold color={'#fff'}>
-                  &#8377;{orderData?.currentPrice}
+                  &#8377; {sumTotalPriceCustomerWillPay}
                 </Text>
                 <Text textDecorationLine={'line-through'} color={'#fff'}>
-                  &#8377; {orderData?.currentPrice + 100}
+                  &#8377; {TotalProductPriceWithoutDiscount}
                 </Text>
               </HStack>
             </HStack>

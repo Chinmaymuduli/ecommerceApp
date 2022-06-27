@@ -31,8 +31,15 @@ import {
   HomeSlider,
   SpecialProduct,
 } from 'components';
+import {useStore} from 'app';
 
 const Home = () => {
+  const {products} = useStore();
+  const AYUSHPRODUCTS = products.filter(pd => pd.category === 'ayush products');
+  const GOURMEET = products.filter(pd => pd.category === 'gourmet foods');
+  const PERSONALCARE = products.filter(pd => pd.category === 'personal care');
+  const HOMECARE = products.filter(pd => pd.category === 'home care');
+  const SWEET = products.filter(pd => pd.category === 'sweets');
   const navigation = useNavigation<NavigationProps>();
   const [openAlert, setOpenAlert] = React.useState<boolean>(false);
   const [alertMessage, setAlertMessage] =
@@ -116,7 +123,7 @@ const Home = () => {
         <Box mt={2}>
           <CategoryProducts
             title="Ayush Product"
-            data={AYUSHPRODUCT}
+            data={AYUSHPRODUCTS}
             setOpenAlert={setOpenAlert}
             setAlertMessage={setAlertMessage}
           />
@@ -124,7 +131,7 @@ const Home = () => {
         <Box bg={'#ECFFDC60'}>
           <CategoryProducts
             title="Gourmet Foods"
-            data={GOURMETPRODUCT}
+            data={GOURMEET}
             setOpenAlert={setOpenAlert}
             setAlertMessage={setAlertMessage}
           />
@@ -132,7 +139,7 @@ const Home = () => {
         <Box>
           <CategoryProducts
             title="Personal Products"
-            data={PERSONALPRODUCT}
+            data={PERSONALCARE}
             setOpenAlert={setOpenAlert}
             setAlertMessage={setAlertMessage}
           />
@@ -140,7 +147,7 @@ const Home = () => {
         <Box bg={'#ECFFDC60'}>
           <CategoryProducts
             title="Home Care"
-            data={HOMEPRODUCT}
+            data={HOMECARE}
             setOpenAlert={setOpenAlert}
             setAlertMessage={setAlertMessage}
           />
@@ -148,7 +155,7 @@ const Home = () => {
         <Box>
           <CategoryProducts
             title="Sweets"
-            data={SWEETPRODUCT}
+            data={SWEET}
             setOpenAlert={setOpenAlert}
             setAlertMessage={setAlertMessage}
           />

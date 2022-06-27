@@ -11,10 +11,17 @@ export type quantity = {
 }
 
 export type CategoryType = {
-    id?: number
-    img?: string
+    id: number
+    img?: ImageSourcePropType
     categoryName?: string
 }
+type ChooseWeight = {
+    weight?: string
+    currentPrice?: number | any
+    inStock?: boolean
+    discount?: number
+}
+
 export type ProductDetailsType = {
     id?: number
     name?: string
@@ -32,6 +39,8 @@ export type ProductDetailsType = {
     couponValue?: any;
     discountCoupon?: any
     orderId?: number
+    weightAvailability?: weightType[]
+    chooseWeight?: ChooseWeight
 }
 export type HomeProductType = {
     id?: number
@@ -62,15 +71,11 @@ export type CartType =
         quantity: number;
     }
 // *****
-export type weightType = {
-    weight?: string
-    currentPrice?: number
-    inStock?: boolean
-    discount?: number
-}
+
 
 export type CartItemType = {
-    product: ProductDetailsType
+    // product: ProductDetailsType
+    product: ProductType
     quantity: number
     weight?: weightType
 }
@@ -96,11 +101,17 @@ export type activeOrderType = {
 }
 
 export type SelectQuantityType = {
-    label: string;
-    value: number;
-    price: number;
-    discount: number;
-    offer: string;
+    // label: string;
+    // value: number;
+    // price: number;
+    // discount: number;
+    // offer: string;
+    weight?: string
+    currentPrice?: number
+    inStock?: boolean
+    discount?: number
+
+
 }
 export type WishListCardType = {
     label?: string
@@ -121,11 +132,17 @@ export type PastOrderType = {
 };
 
 // Zustand
+type weightType = {
+    weight?: string
+    currentPrice?: number
+    inStock?: boolean
+    discount?: number
+}
 export type ProductType = {
-    id?: number
+    id: number
     name?: string
     description?: string
-    img?: string
+    img?: ImageSourcePropType
     quantity?: number
     weightAvailability?: weightType[]
     ratings?: number
@@ -133,4 +150,14 @@ export type ProductType = {
     isNew?: boolean
     b2bImg?: string
     b2bQuantity?: string
+}
+export type CouponType = {
+    id?: number
+    code?: string
+    discount?: string
+    term1?: string
+    term2?: string
+    expiry?: string
+    discountValue?: number
+    description?: string
 }

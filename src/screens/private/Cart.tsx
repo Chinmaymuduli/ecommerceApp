@@ -16,8 +16,10 @@ import {DrawerActions} from '@react-navigation/native';
 import {Empty} from 'components/core';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CartType} from 'types';
+import {CartItemType, CartType} from 'types';
 import {CartItem} from 'components';
+import {useStore} from 'app';
+import {getPrice} from 'utils';
 const CartArr = [
   {
     id: 1,
@@ -41,6 +43,14 @@ const CartArr = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Cart'>;
 const Cart = ({route, navigation}: Props) => {
   const [quantity, setQuantity] = React.useState(CartArr);
+  const {cartItems} = useStore();
+  // console.log('object', cartItems);
+  const {
+    TotalProductPriceWithoutDiscount,
+    sumTotalPriceCustomerWillPay,
+    totalProductPriceWithDiscount,
+    totalDiscountAmount,
+  } = getPrice(cartItems);
 
   return (
     <Box flex={1} bg={COLORS.textWhite}>
@@ -65,7 +75,7 @@ const Cart = ({route, navigation}: Props) => {
         </Heading>
       </HStack>
 
-      {quantity.length > 0 ? (
+      {cartItems.length > 0 ? (
         <ScrollView showsVerticalScrollIndicator={false}>
           <Box>
             <HStack
@@ -74,11 +84,11 @@ const Cart = ({route, navigation}: Props) => {
               bg={'#e4e4e460'}
               py={3}>
               <Text fontSize={13}>shipment 1 of 1</Text>
-              <Text fontSize={13}>2 items</Text>
+              <Text fontSize={13}>{cartItems.length} items</Text>
             </HStack>
 
             <Box>
-              {quantity?.map((item: CartType, index: any) => (
+              {cartItems?.map((item: CartItemType, index: any) => (
                 <CartItem item={item} key={index} setQuantity={setQuantity} />
               ))}
             </Box>
@@ -89,16 +99,7 @@ const Cart = ({route, navigation}: Props) => {
                   <Text fontSize={12} bold>
                     MRP
                   </Text>
-                  <Text>
-                    &#8377;{' '}
-                    {quantity?.reduce(
-                      (
-                        acc: number,
-                        item: {discount: number; quantity: number},
-                      ) => acc + item.discount * item.quantity,
-                      0,
-                    )}
-                  </Text>
+                  <Text>&#8377; {TotalProductPriceWithoutDiscount}</Text>
                 </HStack>
                 <HStack alignItems={'center'} justifyContent={'space-between'}>
                   <Text fontSize={12} bold>
@@ -106,19 +107,7 @@ const Cart = ({route, navigation}: Props) => {
                   </Text>
                   <Text color={'green.500'}>
                     - &#8377;
-                    {quantity?.reduce(
-                      (
-                        acc: number,
-                        item: {
-                          discount: number;
-                          currentPrice: number;
-                          quantity: number;
-                        },
-                      ) =>
-                        acc +
-                        (item?.discount - item.currentPrice) * item.quantity,
-                      0,
-                    )}
+                    {totalDiscountAmount}
                   </Text>
                 </HStack>
                 <HStack alignItems={'center'} justifyContent={'space-between'}>
@@ -133,23 +122,7 @@ const Cart = ({route, navigation}: Props) => {
                 justifyContent={'space-between'}
                 mt={1}>
                 <Heading size={'sm'}>Bill total</Heading>
-                <Text bold>
-                  &#8377;{' '}
-                  {quantity?.reduce(
-                    (
-                      acc: number,
-                      item: {
-                        discount: number;
-                        quantity: number;
-                        currentPrice: number;
-                      },
-                    ) =>
-                      acc +
-                      item.discount * item.quantity -
-                      (item?.discount - item.currentPrice) * item.quantity,
-                    0,
-                  )}
-                </Text>
+                <Text bold>&#8377; {sumTotalPriceCustomerWillPay}</Text>
               </HStack>
             </Box>
             <Box pb={40} px={3}>
@@ -159,20 +132,14 @@ const Cart = ({route, navigation}: Props) => {
                 mt={2}
                 onPress={() =>
                   navigation.navigate('OrderSummary', {
-                    ProductDetailsType: {
-                      name: 'Mahua Laddu',
-                      currentPrice: 250,
-                      discount: 300,
-                      offer: '20% OFF',
-                      img: AYUSH_1,
-                    },
+                    CartItems: cartItems,
                   })
                 }>
                 <HStack justifyContent={'space-between'} py={2}>
                   <HStack alignItems={'center'} space={2} pl={2}>
                     <Box>
                       <Text bold color={'#fff'}>
-                        {quantity?.length} items
+                        {cartItems?.length} items
                       </Text>
                     </Box>
                     <HStack space={2}>
@@ -180,39 +147,11 @@ const Cart = ({route, navigation}: Props) => {
                         |
                       </Text>
                       <Text bold color={'#fff'}>
-                        &#8377;{' '}
-                        {quantity?.reduce(
-                          (
-                            acc: number,
-                            item: {
-                              discount: number;
-                              quantity: number;
-                              currentPrice: number;
-                            },
-                          ) =>
-                            acc +
-                            item.discount * item.quantity -
-                            (item?.discount - item.currentPrice) *
-                              item.quantity,
-                          0,
-                        )}
+                        &#8377; {sumTotalPriceCustomerWillPay}
                       </Text>
                       <Text textDecorationLine={'line-through'} color={'#fff'}>
                         &#8377;
-                        {quantity?.reduce(
-                          (
-                            acc: number,
-                            item: {
-                              discount: number;
-                              currentPrice: number;
-                              quantity: number;
-                            },
-                          ) =>
-                            acc +
-                            (item?.discount - item.currentPrice) *
-                              item.quantity,
-                          0,
-                        )}
+                        {totalDiscountAmount}
                       </Text>
                     </HStack>
                   </HStack>

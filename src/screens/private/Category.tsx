@@ -5,7 +5,6 @@ import {AlertComponent, CategoryButtom} from 'components/core';
 import {
   AYUSHPRODUCT,
   AYUSHRAWPRODUCT,
-  CATEGORYARR,
   GOURMETPRODUCT,
   GOURMETRAWPRODUCT,
   HOMEPRODUCT,
@@ -21,9 +20,16 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
 import {CategorySection} from 'components';
+import {useStore} from 'app';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route}: Props) => {
+  const {category, products} = useStore();
+  const AYUSHPRODUCTS = products.filter(pd => pd.category === 'ayush products');
+  const GOURMEET = products.filter(pd => pd.category === 'gourmet foods');
+  const PERSONALCARE = products.filter(pd => pd.category === 'personal care');
+  const HOMECARE = products.filter(pd => pd.category === 'home care');
+  const SWEET = products.filter(pd => pd.category === 'sweets');
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
   const [tabValue, setTabValue] = useState(1);
@@ -57,7 +63,7 @@ const Category = ({route}: Props) => {
             seletedId={route.params?.id || 1}
             selectionMode={1}
             onSelectSwitch={onSelectSwitch}
-            data={CATEGORYARR}
+            data={category}
             setCategoryName={setCategoryName}
           />
         </Box>
@@ -66,7 +72,8 @@ const Category = ({route}: Props) => {
           <Box>
             {tabValue === 1 && (
               <CategorySection
-                data={userData?.role === 'b2b' ? AYUSHRAWPRODUCT : AYUSHPRODUCT}
+                // data={userData?.role === 'b2b' ? AYUSHRAWPRODUCT : AYUSHPRODUCT}
+                data={AYUSHPRODUCTS}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />
@@ -75,9 +82,10 @@ const Category = ({route}: Props) => {
           <Box>
             {tabValue === 2 && (
               <CategorySection
-                data={
-                  userData?.role === 'b2b' ? GOURMETRAWPRODUCT : GOURMETPRODUCT
-                }
+                // data={
+                //   userData?.role === 'b2b' ? GOURMETRAWPRODUCT : GOURMETPRODUCT
+                // }
+                data={GOURMEET}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />
@@ -86,9 +94,10 @@ const Category = ({route}: Props) => {
           <Box>
             {tabValue === 3 && (
               <CategorySection
-                data={
-                  userData?.role === 'b2b' ? GOURMETRAWPRODUCT : PERSONALPRODUCT
-                }
+                // data={
+                //   userData?.role === 'b2b' ? GOURMETRAWPRODUCT : PERSONALPRODUCT
+                // }
+                data={PERSONALCARE}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />
@@ -97,9 +106,10 @@ const Category = ({route}: Props) => {
           <Box>
             {tabValue === 4 && (
               <CategorySection
-                data={
-                  userData?.role === 'b2b' ? GOURMETRAWPRODUCT : HOMEPRODUCT
-                }
+                // data={
+                //   userData?.role === 'b2b' ? GOURMETRAWPRODUCT : HOMEPRODUCT
+                // }
+                data={HOMECARE}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />
@@ -108,7 +118,8 @@ const Category = ({route}: Props) => {
           <Box>
             {tabValue === 5 && (
               <CategorySection
-                data={userData?.role === 'b2b' ? SWEETRAW : SWEETPRODUCT}
+                // data={userData?.role === 'b2b' ? SWEETRAW : SWEETPRODUCT}
+                data={SWEET}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />

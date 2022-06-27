@@ -14,11 +14,10 @@ import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {COLORS} from 'configs';
 import {CATEGORYARR} from '../constants';
 import HomeCategoriesItem from './HomeCategoriesItem';
-import {useStore} from 'src/app';
+import {useStore} from '../../src/app';
 
 const HomeCategories = () => {
-  // const {category} = useStore();
-  // console.log('object', category);
+  const {category} = useStore();
   const navigation = useNavigation<NavigationProps>();
   return (
     <>
@@ -32,7 +31,7 @@ const HomeCategories = () => {
           </Pressable>
         </HStack>
         <FlatList
-          data={CATEGORYARR}
+          data={category}
           renderItem={({item}) => <HomeCategoriesItem item={item} />}
           keyExtractor={(item, index) => index.toString()}
           horizontal={true}

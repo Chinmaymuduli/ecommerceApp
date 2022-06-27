@@ -16,3 +16,6 @@ export { default as ProductComponent } from './ProductComponent'
 export { default as SpecialProduct } from './SpecialProduct'
 export { default as SpecialProductCard } from './SpecialProductCard'
 export { default as FilterSheet } from './FilterSheet'
+export { default as OrderSummaryCard } from './OrderSummaryCard'
+export { default as Counter } from './Counter'
+

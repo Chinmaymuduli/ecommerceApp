@@ -23,18 +23,29 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
 import {ErrorModal, ImagePicker} from 'components/core';
+import {getPrice} from 'utils';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'PaymentScreen'>;
 const PaymentScreen = ({navigation, route}: Props) => {
   const paymentProductData = route.params?.PaymentData;
-  const saving =
-    paymentProductData?.currentPrice + 100 - paymentProductData?.currentPrice;
-  const DiscountPrice = paymentProductData?.currentPrice + 100;
-  const TotalPrice = DiscountPrice - saving;
-  const CoupondiscountPrice = paymentProductData?.couponValue
-    ? +(TotalPrice * (paymentProductData?.couponValue / 100)).toFixed(2)
-    : 0;
-  const AmoutPayable = DiscountPrice - (saving + CoupondiscountPrice);
+
+  // console.log('object', paymentProductData);
+  const {
+    totalProductPriceWithDiscount,
+    TotalProductPriceWithoutDiscount,
+    totalDiscountAmount,
+    sumTotalPriceCustomerWillPay,
+    deliveryCharge,
+  } = getPrice(paymentProductData);
+
+  // const saving =
+  //   paymentProductData?.currentPrice + 100 - paymentProductData?.currentPrice;
+  // const DiscountPrice = paymentProductData?.currentPrice + 100;
+  // const TotalPrice = DiscountPrice - saving;
+  // const CoupondiscountPrice = paymentProductData?.couponValue
+  //   ? +(TotalPrice * (paymentProductData?.couponValue / 100)).toFixed(2)
+  //   : 0;
+  // const AmoutPayable = DiscountPrice - (saving + CoupondiscountPrice);
 
   const {userData} = useAppContext();
   const [payment, setPayment] = useState<any>();
@@ -46,17 +57,17 @@ const PaymentScreen = ({navigation, route}: Props) => {
   const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
   const [GstNumber, setGstNumber] = useState<any>();
 
-  const data = {
-    label: paymentProductData?.name,
-    discount: paymentProductData?.currentPrice + 100,
-    currentPrice: paymentProductData?.currentPrice,
-    offer: paymentProductData?.offer,
-    img: paymentProductData?.img,
-    discountCoupon: CoupondiscountPrice,
-    orderId: Math.floor(Math.random() * 100000000),
-    orderDate: new Date().toLocaleDateString(),
-    orderTime: new Date().toLocaleTimeString(),
-  };
+  // const data = {
+  //   label: paymentProductData?.name,
+  //   discount: paymentProductData?.currentPrice + 100,
+  //   currentPrice: paymentProductData?.currentPrice,
+  //   offer: paymentProductData?.offer,
+  //   img: paymentProductData?.img,
+  //   discountCoupon: CoupondiscountPrice,
+  //   orderId: Math.floor(Math.random() * 100000000),
+  //   orderDate: new Date().toLocaleDateString(),
+  //   orderTime: new Date().toLocaleTimeString(),
+  // };
 
   const handleDismiss = () => {
     setVisiable(false);
@@ -70,9 +81,13 @@ const PaymentScreen = ({navigation, route}: Props) => {
 
   const ConfirmOrder = () => {
     if (profileIimage && document) {
-      navigation.navigate('ConfirmOrder', {confirmOrderData: data});
+      navigation.navigate('ConfirmOrder', {
+        confirmOrderData: paymentProductData,
+      });
     } else if (GstNumber) {
-      navigation.navigate('ConfirmOrder', {confirmOrderData: data});
+      navigation.navigate('ConfirmOrder', {
+        confirmOrderData: paymentProductData,
+      });
     } else {
       setShowErrorModal(true);
     }
@@ -95,7 +110,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Price(1 items)</Text>
-                  <Text>&#8377;{DiscountPrice}</Text>
+                  <Text>&#8377;{TotalProductPriceWithoutDiscount}</Text>
                 </HStack>
 
                 <HStack
@@ -103,7 +118,9 @@ const PaymentScreen = ({navigation, route}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Saving</Text>
-                  <Text color={'green.500'}>- &#8377;{saving}</Text>
+                  <Text color={'green.500'}>
+                    - &#8377;{totalDiscountAmount}
+                  </Text>
                 </HStack>
                 <HStack
                   pt={2}
@@ -112,7 +129,8 @@ const PaymentScreen = ({navigation, route}: Props) => {
                   <Text>Coupon Discount</Text>
                   <Text color={'green.500'}>
                     - &#8377;
-                    {paymentProductData?.couponValue ? CoupondiscountPrice : 0}
+                    {/* {paymentProductData?.couponValue ? CoupondiscountPrice : 0} */}
+                    0
                   </Text>
                 </HStack>
                 <HStack
@@ -128,7 +146,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
             <Box px={4} mt={2} mb={2}>
               <HStack justifyContent={'space-between'} alignItems={'center'}>
                 <Text>Amount Payable</Text>
-                <Text bold>&#8377;{AmoutPayable}</Text>
+                <Text bold>&#8377;{sumTotalPriceCustomerWillPay}</Text>
               </HStack>
             </Box>
           </Box>
@@ -341,7 +359,9 @@ const PaymentScreen = ({navigation, route}: Props) => {
             if (userData?.role === 'b2b') {
               return ConfirmOrder();
             }
-            navigation.navigate('ConfirmOrder', {confirmOrderData: data});
+            navigation.navigate('ConfirmOrder', {
+              confirmOrderData: paymentProductData,
+            });
           }}>
           <HStack justifyContent={'space-between'} py={2} alignItems={'center'}>
             <HStack alignItems={'center'} space={2} pl={2}>
@@ -355,10 +375,14 @@ const PaymentScreen = ({navigation, route}: Props) => {
                   |
                 </Text>
                 <Text bold color={'#fff'}>
-                  &#8377;{DiscountPrice - saving}
+                  &#8377;
+                  {/* {DiscountPrice - saving} */}
+                  {sumTotalPriceCustomerWillPay}
                 </Text>
                 <Text textDecorationLine={'line-through'} color={'#fff'}>
-                  &#8377; {DiscountPrice}
+                  &#8377;
+                  {/* {DiscountPrice} */}
+                  {TotalProductPriceWithoutDiscount}
                 </Text>
               </HStack>
             </HStack>

@@ -30,8 +30,14 @@ import {useAppContext} from 'contexts';
 import LottieView from 'lottie-react-native';
 import {SUCCESSSQUANTITY} from 'assets';
 import {Rating} from 'react-native-ratings';
-import {ProductDetailsType, SelectQuantityType} from 'types';
+import {
+  CartItemType,
+  ProductDetailsType,
+  ProductType,
+  SelectQuantityType,
+} from 'types';
 import {Accordion, ManageReview, ProductComponent} from 'components';
+import {useStore} from 'app';
 const quantityArr = [
   {label: '250 gm', value: 250, price: 159, discount: 200, offer: '5% off'},
   {label: '500 gm', value: 500, price: 259, discount: 300, offer: '10% off'},
@@ -45,13 +51,13 @@ const B2bProduct = [
   {label: '50 kg', value: 50000, price: 999, discount: 1500, offer: '20%'},
 ];
 
-const productData = [
-  {
-    id: 1,
-    title:
-      'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.',
-  },
-];
+// const productData = [
+//   {
+//     id: 1,
+//     title:
+//       'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.',
+//   },
+// ];
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 
@@ -61,13 +67,17 @@ type productType = {
 
 const ProductDetails = ({route, navigation}: Props) => {
   const productdata = route.params.ProductDetailsType;
-  // console.log('object566', productdata.id);
+  // console.log('object566', productdata.inStock);
+  const SelecetedWeight = productdata?.weightAvailability?.reduce((pV, cV) => {
+    if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
+    return pV;
+  }, {});
+  // const isCarousel = useRef<any>(null);
   const {userData} = useAppContext();
   const [index, setIndex] = useState(0);
-  // const isCarousel = useRef<any>(null);
   const SLIDER_WIDTH = Dimensions.get('window').width;
-  const [count, setCount] = useState(0);
-  const [cardBorder, setCardBorder] = useState<any>();
+  const [count, setCount] = useState<any>(productdata?.quantity);
+  const [chooseWeight, setchooseWeight] = useState<any>(SelecetedWeight);
   const [wishlist, setWishlist] = useState<any>([]);
   const [showAlert, setShowAlert] = useState(false);
   const [addQuantity, setAddQuantity] = useState<any>();
@@ -76,26 +86,37 @@ const ProductDetails = ({route, navigation}: Props) => {
 
   const {isOpen, onOpen, onClose} = useDisclose();
 
-  const {setCartItems, cartItems} = useAppContext();
+  // const {setCartItems, cartItems} = useAppContext();
 
-  useEffect(() => {
-    if (userData.role === 'b2c') {
-      return setCardBorder(quantityArr[0]);
-    } else {
-      return setCardBorder(B2bProduct[0]);
-    }
-  }, [userData]);
+  const {addToCart, cartItems} = useStore();
+  console.log('object', productdata.id);
 
-  const handleCart = (data: ProductDetailsType) => {
-    setCartItems((prev: any) => [...prev, data]);
+  // useEffect(() => {
+  //   if (userData.role === 'b2c') {
+  //     return setchooseWeight(quantityArr[0]);
+  //   } else {
+  //     return setchooseWeight(B2bProduct[0]);
+  //   }
+  // }, [userData]);
+
+  // console.log('object', chooseWeight);
+
+  const handleCart = (data: ProductType) => {
+    // setCartItems((prev: any) => [...prev, data]);
+    addToCart({
+      product: data,
+      quantity: 1,
+      weight: SelecetedWeight,
+    });
     setShowAlert(true);
     setAlertMessage('Added to Cart');
     setTimeout(() => {
       setShowAlert(false);
     }, 4000);
   };
+
   const cartDatametch = cartItems.some(
-    (item: {id: number | undefined}) => item.id === productdata?.id,
+    item => item?.product?.id === productdata?.id,
   );
 
   const increaseItem = () => {
@@ -128,8 +149,8 @@ const ProductDetails = ({route, navigation}: Props) => {
 
   const SelectQuantity = (item: SelectQuantityType) => {
     // border color
-    setCardBorder(item);
-    setAddQuantity('');
+    setchooseWeight(item);
+    // setAddQuantity('');
   };
 
   const handleWishlist = (id: any) => {
@@ -167,18 +188,31 @@ const ProductDetails = ({route, navigation}: Props) => {
     if (addQuantity) {
       return setModalDialog(true);
     }
+    addToCart({
+      product: productdata,
+      quantity: 1,
+      weight: chooseWeight,
+    });
+
     navigation.navigate('OrderSummary', {
-      ProductDetailsType: route.params?.ProductDetailsType,
+      CartItems: [
+        {
+          // ...route.params?.ProductDetailsType,
+          product: productdata,
+          quantity: 1,
+          weight: chooseWeight,
+        },
+      ],
     });
   };
 
   const changeQuantity = (text: string) => {
     if (text.length > 0) {
       setAddQuantity(text.replace(/[^0-9]/g, ''));
-      setCardBorder({});
+      setchooseWeight({});
     } else {
       setAddQuantity('');
-      setCardBorder({
+      setchooseWeight({
         label: '10 kg',
         value: 10000,
         price: 560,
@@ -256,7 +290,7 @@ const ProductDetails = ({route, navigation}: Props) => {
             <HStack>
               <Rating
                 type="custom"
-                startingValue={4}
+                startingValue={productdata.ratings}
                 ratingColor={'#F5B21E'}
                 tintColor={'#fff'}
                 ratingBackgroundColor={COLORS.grey}
@@ -281,81 +315,86 @@ const ProductDetails = ({route, navigation}: Props) => {
             </HStack>
           </HStack>
 
-          {userData?.role === 'b2c' ? (
-            <HStack alignItems={'center'} mt={1}>
-              <HStack space={3} alignItems={'center'}>
-                <Text bold>
-                  &#8377;
-                  {cardBorder?.price
-                    ? cardBorder?.price
-                    : productdata?.currentPrice}
-                </Text>
-                <Text textDecorationLine={'line-through'} fontSize={14}>
-                  &#8377;{' '}
-                  {cardBorder?.discount
-                    ? cardBorder?.discount
-                    : productdata?.currentPrice + 100}
-                </Text>
-                <Text color={COLORS.cgcolor} bold>
-                  {cardBorder?.offer ? cardBorder?.offer : productdata?.offer}
-                </Text>
-              </HStack>
+          {/* {userData?.role === 'b2c' ? ( */}
+          <HStack alignItems={'center'} mt={1}>
+            <HStack space={3} alignItems={'center'}>
+              <Text bold>
+                &#8377;
+                {chooseWeight?.currentPrice
+                  ? chooseWeight?.currentPrice
+                  : SelecetedWeight?.currentPrice}
+              </Text>
+              <Text textDecorationLine={'line-through'} fontSize={14}>
+                &#8377;{' '}
+                {chooseWeight?.currentPrice
+                  ? chooseWeight?.currentPrice + 100
+                  : (SelecetedWeight?.currentPrice || 0) + 100}
+              </Text>
+              <Text color={COLORS.cgcolor} bold>
+                {chooseWeight?.discount
+                  ? chooseWeight?.discount
+                  : SelecetedWeight?.discount}
+                % off
+              </Text>
             </HStack>
-          ) : (
-            <Box>
-              <HStack
-                alignItems={'center'}
-                mt={2}
-                justifyContent={'space-between'}>
-                {addQuantity?.length > 0 ? null : (
-                  <Text bold fontSize={18}>
-                    &#8377;
-                    {cardBorder?.price
-                      ? cardBorder?.price
-                      : productdata?.currentPrice}
-                  </Text>
-                )}
-                <HStack alignItems={'center'} pr={3}>
-                  <Text bold>MOQ :</Text>
-                  <Text bold>10kg</Text>
-                </HStack>
-              </HStack>
-              {addQuantity?.length > 0 ? null : (
-                <>
-                  <HStack
-                    mt={2}
-                    alignItems={'center'}
-                    justifyContent={'space-between'}
-                    bg={'green.600'}
-                    borderRadius={20}>
-                    <HStack py={1} px={3}>
-                      <Text bold color={COLORS.textWhite}>
-                        MRP
-                      </Text>
-                      <Text bold color={COLORS.textWhite}>
-                        {' '}
-                        &#8377;{' '}
-                        {cardBorder?.discount
-                          ? cardBorder?.discount
-                          : productdata?.currentPrice + 100}
-                      </Text>
-                    </HStack>
-                    <HStack py={1} px={3} alignItems={'center'}>
-                      <Text bold color={COLORS.textWhite}>
-                        Retail Margin :
-                      </Text>
-                      <Text bold color={COLORS.textWhite}>
-                        {' '}
-                        {cardBorder?.offer
-                          ? cardBorder?.offer
-                          : productdata?.offer}
-                      </Text>
-                    </HStack>
-                  </HStack>
-                </>
-              )}
-            </Box>
-          )}
+          </HStack>
+          {/* // ) : 
+          // (
+          //   <Box>
+          //     <HStack
+          //       alignItems={'center'}
+          //       mt={2}
+          //       justifyContent={'space-between'}>
+          //       {addQuantity?.length > 0 ? null : (
+          //         <Text bold fontSize={18}>
+          //           &#8377;
+          //           {chooseWeight?.price
+          //             ? chooseWeight?.price
+          //             : productdata?.currentPrice}
+          //         </Text>
+          //       )}
+          //       <HStack alignItems={'center'} pr={3}>
+          //         <Text bold>MOQ :</Text>
+          //         <Text bold>10kg</Text>
+          //       </HStack>
+          //     </HStack>
+          //     {addQuantity?.length > 0 ? null : (
+          //       <>
+          //         <HStack
+          //           mt={2}
+          //           alignItems={'center'}
+          //           justifyContent={'space-between'}
+          //           bg={'green.600'}
+          //           borderRadius={20}>
+          //           <HStack py={1} px={3}>
+          //             <Text bold color={COLORS.textWhite}>
+          //               MRP
+          //             </Text>
+          //             <Text bold color={COLORS.textWhite}>
+          //               {' '}
+          //               &#8377;{' '}
+          //               {chooseWeight?.discount
+          //                 ? chooseWeight?.discount
+          //                 : productdata?.currentPrice + 100}
+          //             </Text>
+          //           </HStack>
+          //           <HStack py={1} px={3} alignItems={'center'}>
+          //             <Text bold color={COLORS.textWhite}>
+          //               Retail Margin :
+          //             </Text>
+          //             <Text bold color={COLORS.textWhite}>
+          //               {' '}
+          //               {chooseWeight?.offer
+          //                 ? chooseWeight?.offer
+          //                 : productdata?.offer}
+          //             </Text>
+          //           </HStack>
+          //         </HStack>
+          //       </>
+          //     )}
+          //   </Box>
+          // )
+          // } */}
           <Box mt={1}>
             <Text color={'#4F7942'} bold>
               Available
@@ -375,7 +414,9 @@ const ProductDetails = ({route, navigation}: Props) => {
                 alignItems={'center'}
                 px={2}>
                 <Text>
-                  {cardBorder?.label ? cardBorder?.label : 'Select Quantity'}
+                  {chooseWeight?.weight
+                    ? chooseWeight?.weight
+                    : 'Select Quantity'}
                 </Text>
                 <Ionicons
                   name="chevron-down"
@@ -416,41 +457,39 @@ const ProductDetails = ({route, navigation}: Props) => {
                 </HStack>
               </Box>
             ) : (
-              <Box>
-                <VStack
-                  borderWidth={1}
-                  borderColor={COLORS.lightGrey}
-                  borderRadius={5}>
-                  {/* <Text>Add Quantity</Text> */}
-                  <Input
-                    placeholder="Enter Quantity"
-                    bgColor={COLORS.textWhite}
-                    h={10}
-                    w={150}
-                    fontSize={14}
-                    value={addQuantity}
-                    maxLength={4}
-                    onChangeText={text => changeQuantity(text)}
-                    keyboardType={'numeric'}
-                    InputRightElement={
-                      <Text bold pr={2} fontSize={15}>
-                        kg
-                      </Text>
-                    }
-                    variant="unstyled"
-                  />
-                </VStack>
-              </Box>
+              <VStack
+                borderWidth={1}
+                borderColor={COLORS.lightGrey}
+                borderRadius={5}>
+                {/* <Text>Add Quantity</Text> */}
+                <Input
+                  placeholder="Enter Quantity"
+                  bgColor={COLORS.textWhite}
+                  h={10}
+                  w={150}
+                  fontSize={14}
+                  value={addQuantity}
+                  maxLength={4}
+                  onChangeText={text => changeQuantity(text)}
+                  keyboardType={'numeric'}
+                  InputRightElement={
+                    <Text bold pr={2} fontSize={15}>
+                      kg
+                    </Text>
+                  }
+                  variant="unstyled"
+                />
+              </VStack>
             )}
           </HStack>
           <Box mt={5} mb={5}>
-            {productData?.map(item => (
-              <Accordion
-                title="Product Details"
-                subtitle={item.title}
-                key={item.id}
-              />
-            ))}
+            {/* {productData?.map(item => ( */}
+            <Accordion
+              title="Product Details"
+              subtitle={productdata?.description}
+              key={productdata.id}
+            />
+            {/* ))} */}
           </Box>
           <Box>
             <ManageReview />
@@ -533,25 +572,55 @@ const ProductDetails = ({route, navigation}: Props) => {
           </Box>
           <Box w={'100%'} px={3}>
             <Row flexWrap={'wrap'}>
-              {userData?.role === 'b2c'
+              {productdata.weightAvailability?.map((pd, index) => (
+                <Pressable
+                  width={Dimensions.get('window').width / 2.5}
+                  key={index}
+                  borderWidth={1}
+                  borderRadius={5}
+                  bg={'#e4e4e460'}
+                  borderColor={
+                    chooseWeight?.weight === pd.weight ? '#228B22' : '#e4e4e4'
+                  }
+                  onPress={() => SelectQuantity(pd)}
+                  w={Dimensions.get('window').width / 2.5}
+                  mx={1}
+                  my={1}>
+                  <Text px={2} py={2}>
+                    {pd?.weight}
+                  </Text>
+                  {chooseWeight?.weight === pd.weight && (
+                    <Box
+                      bg={'#228B22'}
+                      borderTopRightRadius={5}
+                      borderBottomLeftRadius={5}
+                      alignSelf={'flex-end'}
+                      position={'absolute'}>
+                      <Ionicons name="checkmark" size={16} color={'#fff'} />
+                    </Box>
+                  )}
+                </Pressable>
+              ))}
+              {/* {userData?.role === 'b2c'
                 ? quantityArr.map((item, index) => (
-                    <Pressable
-                      width={Dimensions.get('window').width / 2.5}
-                      key={index}
-                      borderWidth={1}
-                      borderRadius={5}
-                      bg={'#e4e4e460'}
-                      borderColor={
-                        cardBorder?.value === item.value ? '#228B22' : '#e4e4e4'
-                      }
-                      onPress={() => SelectQuantity(item)}
-                      w={Dimensions.get('window').width / 2.5}
-                      mx={1}
-                      my={1}>
-                      <Text px={2} py={2}>
-                        {item?.label}
-                      </Text>
-                      {cardBorder?.value === item.value && (
+              <Pressable
+                width={Dimensions.get('window').width / 2.5}
+                key={index}
+                borderWidth={1}
+                borderRadius={5}
+                bg={'#e4e4e460'}
+                borderColor={
+                  chooseWeight?.value === item.value ? '#228B22' : '#e4e4e4'
+                }
+                onPress={() => SelectQuantity(item)}
+                w={Dimensions.get('window').width / 2.5}
+                mx={1}
+                my={1}>
+                <Text px={2} py={2}>
+                  {SelecetedWeight?.label}
+                  10Kg
+                </Text>
+                {chooseWeight?.value === item.value && (
                         <Box
                           bg={'#228B22'}
                           borderTopRightRadius={5}
@@ -560,9 +629,9 @@ const ProductDetails = ({route, navigation}: Props) => {
                           position={'absolute'}>
                           <Ionicons name="checkmark" size={16} color={'#fff'} />
                         </Box>
-                      )}
-                    </Pressable>
-                  ))
+                       )}
+              </Pressable>
+              ))
                 : B2bProduct.map((item, index) => (
                     <Pressable
                       width={Dimensions.get('window').width / 2.5}
@@ -571,7 +640,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                       borderRadius={5}
                       bg={'#e4e4e460'}
                       borderColor={
-                        cardBorder?.value === item.value ? '#228B22' : '#e4e4e4'
+                        chooseWeight?.value === item.value ? '#228B22' : '#e4e4e4'
                       }
                       onPress={() => SelectQuantity(item)}
                       w={Dimensions.get('window').width / 2.5}
@@ -580,7 +649,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                       <Text px={2} py={2}>
                         {item?.label}
                       </Text>
-                      {cardBorder?.value === item.value && (
+                      {chooseWeight?.value === item.value && (
                         <Box
                           bg={'#228B22'}
                           borderTopRightRadius={5}
@@ -591,7 +660,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                         </Box>
                       )}
                     </Pressable>
-                  ))}
+                  ))} */}
             </Row>
             <HStack alignItems={'center'} mt={3} ml={5} space={4}>
               <Pressable

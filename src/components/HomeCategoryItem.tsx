@@ -7,22 +7,32 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {useAppContext} from 'contexts';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
-import {HomeProductType} from 'types';
+import {CartItemType, ProductDetailsType, ProductType} from 'types';
+import {useStore} from 'app';
 
 type Props = {
-  item: HomeProductType;
+  item: ProductType;
   setOpenAlert: (previousValue: boolean) => void;
   setAlertMessage: (txt: string) => void;
 };
 
 const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
+  // console.log('object', item);
+  const SelecetedWeight = item?.weightAvailability?.reduce((pV, cV) => {
+    if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
+    return pV;
+  }, {});
+
+  const {addToCart, cartItems, removeFromCart, updateQuantity} = useStore();
+
   const navigation = useNavigation<NavigationProps>();
   const [wishlist, setWishlist] = useState<any>([]);
   const [count, setCount] = React.useState(0);
-  const {cartItems, setCartItems} = useAppContext();
+  // const {cartItems, setCartItems} = useAppContext();
+  // console.log('object', cartItems);
 
   //wishhlist
-  const handleWishlist = (id: any) => {
+  const handleWishlist = (id: number) => {
     const index = wishlist.indexOf(id);
     if (index > -1) {
       setWishlist(wishlist.filter((item: any) => item !== id));
@@ -41,14 +51,16 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
     }
   };
 
-  //   add to cart logic
-  const increment = () => {
+  //   add to cart logic //
+  const increment = (id: number) => {
     setCount(count + 1);
+    updateQuantity(id, count);
   };
 
-  const decrement = (id: any) => {
+  const decrement = (id: number) => {
     if (count === 1) {
       setCount(count - 1);
+      removeFromCart(id);
       setOpenAlert(true);
       setAlertMessage('Removed from cart');
       setTimeout(() => {
@@ -57,41 +69,45 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
       return;
     } else if (count > 1) {
       setCount(count - 1);
+      updateQuantity(id, count);
     } else {
       setCount(0);
     }
   };
 
-  useEffect(() => {
-    if (count === 0) {
-      const newCartItems = cartItems.filter((data: any) => data.id !== item.id);
+  // useEffect(() => {
+  //   if (count === 0) {
+  //     const newCartItems = cartItems.filter((data: any) => data.id !== item.id);
 
-      setCartItems(newCartItems);
-    }
-    return () => {};
-  }, [count]);
+  //     setCartItems(newCartItems);
+  //   }
+  //   return () => {};
+  // }, [count]);
 
-  useEffect(() => {
-    const newCartItems = cartItems?.map((data: any) => {
-      if (data.id === item.id) {
-        return {...data, quantity: count};
-      } else {
-        return data;
-      }
+  // useEffect(() => {
+  //   const newCartItems = cartItems?.map((data: any) => {
+  //     if (data.id === item.id) {
+  //       return {...data, quantity: count};
+  //     } else {
+  //       return data;
+  //     }
+  //   });
+  //   setCartItems(newCartItems);
+  // }, [count]);
+
+  // const incrementQuantity = (id: number) => {
+  //   setCount(count + 1);
+  //   updateQuantity(id, count);
+  // };
+
+  const addtoCartItem = (data: ProductType) => {
+    increment(data?.id);
+    // setCartItems((prev: any) => [...prev, item]);
+    addToCart({
+      product: data,
+      quantity: 1,
+      weight: SelecetedWeight,
     });
-    setCartItems(newCartItems);
-  }, [count]);
-
-  const AddtoCartItem = (item: any) => {
-    increment();
-    setCartItems((prev: any) => [
-      ...prev,
-      item,
-      // {
-      //   ...item,
-      //   quantity: count,
-      // },
-    ]);
     setOpenAlert(true);
     setAlertMessage('Added to cart');
     setTimeout(() => {
@@ -126,7 +142,7 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
           borderTopLeftRadius={5}
           borderBottomRightRadius={5}>
           <Text fontSize={10} flexWrap={'wrap'} px={1} color={COLORS.textWhite}>
-            {item?.offer}
+            {SelecetedWeight?.discount}% OFF
           </Text>
         </Box>
         <Box
@@ -154,7 +170,7 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
           shadow={1}
           borderRadius={5}
           borderColor={COLORS.lightGrey}>
-          {cartItems?.some((data: any) => data?.id === item?.id) &&
+          {cartItems?.some((data: any) => data?.product?.id === item?.id) &&
           count > 0 ? (
             <HStack
               bg={'#FFFF0060'}
@@ -169,6 +185,7 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
                   onPress={() => decrement(item.id)}
                 />
               </Box>
+
               <Box>
                 <Text>{count}</Text>
               </Box>
@@ -181,7 +198,7 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
                     paddingHorizontal: 3,
                     paddingVertical: 3,
                   }}
-                  onPress={() => setCount(count + 1)}
+                  onPress={() => increment(item.id)}
                 />
               </Box>
             </HStack>
@@ -196,7 +213,7 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
                   paddingVertical: 3,
                 }}
                 // onPress={() => console.log('Add Cart', item)}
-                onPress={() => AddtoCartItem(item)}
+                onPress={() => addtoCartItem(item)}
               />
             </Box>
           )}
@@ -207,18 +224,18 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
             {item?.name}
           </Text>
           <HStack space={2}>
-            <Text fontSize={13}>&#8377;{item?.currentPrice}</Text>
+            <Text fontSize={13}>&#8377;{SelecetedWeight?.currentPrice}</Text>
             <Text fontSize={13} textDecorationLine={'line-through'}>
-              &#8377;{item?.currentPrice + 100}
+              &#8377;{(SelecetedWeight?.currentPrice || 0) + 100}
             </Text>
           </HStack>
-          {item?.moq ? (
+          {/* {item?.moq ? (
             <HStack>
               <Text fontSize={13} color={COLORS.cgcolor} bold>
                 MOQ: {item?.moq} kg
               </Text>
             </HStack>
-          ) : null}
+          ) : null} */}
         </Box>
       </Pressable>
     </Box>

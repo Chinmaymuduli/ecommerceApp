@@ -101,7 +101,7 @@ const SelectAddress = ({route, navigation}: Props) => {
           mx={3}
           onPress={() =>
             navigation.navigate('OrderSummary', {
-              ProductDetailsType: summaryData,
+              CartItems: summaryData,
             })
           }>
           <Text

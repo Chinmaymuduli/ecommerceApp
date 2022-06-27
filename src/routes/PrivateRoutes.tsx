@@ -28,7 +28,7 @@ import {
   WishList,
 } from 'screens';
 import BottomTab from './BottomTab';
-import {ProductDetailsType} from 'types';
+import {CartItemType, ProductDetailsType, ProductType} from 'types';
 
 export type PrivateRoutesType = {
   Home: undefined;
@@ -43,23 +43,26 @@ export type PrivateRoutesType = {
   Order: undefined;
   Bottomtab: undefined;
   ProductDetails: {
-    ProductDetailsType: ProductDetailsType;
+    ProductDetailsType: ProductType;
   };
   Coupon: {
-    couponProduct: ProductDetailsType;
+    couponProduct: CartItemType[];
   };
   Address: undefined;
   PaymentScreen: {
-    PaymentData: ProductDetailsType;
+    // PaymentData: ProductDetailsType;
+    PaymentData: CartItemType[];
   };
   ConfirmOrder: {
-    confirmOrderData: ProductDetailsType;
+    confirmOrderData: CartItemType[];
   };
   OrderSummary: {
-    ProductDetailsType: ProductDetailsType;
+    // ProductDetailsType: ProductDetailsType[];
+    CartItems: CartItemType[];
   };
   SelectAddress: {
-    SelectProductData: ProductDetailsType;
+    // SelectProductData: ProductDetailsType;
+    SelectProductData: CartItemType[];
   };
   WishList: undefined;
   OrderDetails: undefined;

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Box,
   HStack,
@@ -13,40 +13,55 @@ import {
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {CartType} from 'types';
+import {CartItemType, CartType} from 'types';
+import {useStore} from 'app';
 
-type CartItemType = {
-  item: CartType;
+type CartItemTypes = {
+  item: CartItemType;
   setQuantity?: number | any;
 };
 
-const CartItem = ({item, setQuantity}: CartItemType) => {
+const CartItem = ({item, setQuantity}: CartItemTypes) => {
+  const {updateQuantity, cartItems, removeFromCart} = useStore();
   const [isOpen, setIsOpen] = React.useState(false);
+  const [deleteData, setDeleteData] = useState<number>();
 
   const onClose = () => setIsOpen(false);
 
   const cancelRef = React.useRef(null);
 
-  const increment = (Item: CartType) => {
-    setQuantity((prev: any) => {
-      const newQuantity = [...prev];
-      const index = newQuantity.indexOf(item);
-      newQuantity[index].quantity += 1;
-      return newQuantity;
-    });
+  const increment = (item: CartItemType) => {
+    // console.log('object', id);
+    // setQuantity((prev: any) => {
+    //   const newQuantity = [...prev];
+    //   const index = newQuantity.indexOf(item);
+    //   newQuantity[index].quantity += 1;
+    //   return newQuantity;
+    // });
+    updateQuantity(item?.product?.id, item?.quantity + 1);
   };
 
-  const decrement = (item: CartType) => {
-    if (item.quantity > 1) {
-      setQuantity((prev: any) => {
-        const newQuantity = [...prev];
-        const index = newQuantity.indexOf(item);
-        newQuantity[index].quantity -= 1;
-        return newQuantity;
-      });
-    } else {
-      return;
+  const decrement = (item: CartItemType) => {
+    // if (item.quantity > 1) {
+    //   setQuantity((prev: any) => {
+    //     const newQuantity = [...prev];
+    //     const index = newQuantity.indexOf(item);
+    //     newQuantity[index].quantity -= 1;
+    //     return newQuantity;
+    //   });
+    // } else {
+    //   return;
+    // }
+    updateQuantity(item?.product?.id, item?.quantity - 1);
+    if (item?.quantity < 2) {
+      removeFromCart(item?.product?.id);
     }
+  };
+
+  // console.log('CartItem', cartItems);
+
+  const handleDelete = (id: number) => {
+    removeFromCart(id);
   };
   return (
     <Box
@@ -58,14 +73,16 @@ const CartItem = ({item, setQuantity}: CartItemType) => {
         <Box alignItems={'center'} justifyContent={'center'}>
           <Image
             alt="cartImg"
-            source={item?.img}
+            source={item?.product?.img}
             style={{height: 110, width: 100}}
             resizeMode="contain"
           />
         </Box>
         <VStack px={3} space={3}>
           <HStack space={20}>
-            <Text>{item?.name}</Text>
+            <Text w={100} noOfLines={2}>
+              {item?.product?.name}
+            </Text>
             <MaterialIcons
               name="delete"
               size={25}
@@ -75,17 +92,17 @@ const CartItem = ({item, setQuantity}: CartItemType) => {
           </HStack>
           <HStack space={2}>
             <Text color={'#000'} bold>
-              &#8377;{item?.currentPrice}
+              &#8377;{item?.weight?.currentPrice}
             </Text>
             <Text textDecorationLine={'line-through'}>
-              &#8377;{item?.discount}
+              &#8377;{(item?.weight?.currentPrice || 0) + 100}
             </Text>
           </HStack>
           <Text>1 Kg</Text>
         </VStack>
         <Box bg={COLORS.cgcolor} position={'absolute'} top={2} borderRadius={6}>
           <Text color={COLORS.textWhite} fontSize={8} px={1}>
-            {item?.offer}
+            {item?.weight?.discount} % OFF
           </Text>
         </Box>
         <Box
@@ -131,7 +148,9 @@ const CartItem = ({item, setQuantity}: CartItemType) => {
                 ref={cancelRef}>
                 Cancel
               </Button>
-              <Button colorScheme="danger" onPress={onClose}>
+              <Button
+                colorScheme="danger"
+                onPress={() => handleDelete(item?.product?.id)}>
                 Delete
               </Button>
             </Button.Group>
