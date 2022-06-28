@@ -46,6 +46,7 @@ const CartItem = ({item, setQuantity}: CartItemTypes) => {
 
   const handleDelete = (id: number) => {
     removeFromCart(id);
+    onClose();
   };
   return (
     <Box

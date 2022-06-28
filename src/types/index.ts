@@ -43,7 +43,7 @@ export type ProductDetailsType = {
     chooseWeight?: ChooseWeight
 }
 export type HomeProductType = {
-    id?: number
+    id: number
     name?: string
     discount?: number | any
     img?: string | any

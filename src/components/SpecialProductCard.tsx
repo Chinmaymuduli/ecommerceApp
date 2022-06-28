@@ -6,16 +6,22 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {HomeProductType} from 'types';
+import {HomeProductType, ProductType} from 'types';
 
 type Props = {
-  item: HomeProductType;
+  item: ProductType;
 };
 
 const SpecialProductCard = ({item}: Props) => {
+  // console.log('object', item);
   const navigation = useNavigation<NavigationProps>();
   const [count, setCount] = useState(0);
   const {setCartItems, cartItems} = useAppContext();
+
+  const SelecetedWeight = item?.weightAvailability?.reduce((pV, cV) => {
+    if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
+    return pV;
+  }, {});
 
   const decrement = () => {
     if (count > 1) {
@@ -64,11 +70,13 @@ const SpecialProductCard = ({item}: Props) => {
         </Box>
 
         <Box pl={2}>
-          <Text>{item?.name}</Text>
+          <Text noOfLines={1}>{item?.name}</Text>
           <HStack space={3}>
-            <Text>&#8377; {item?.currentPrice}</Text>
+            <Text>&#8377; {SelecetedWeight?.currentPrice}</Text>
             <Text textDecorationLine={'line-through'} color={COLORS.cgcolor}>
-              &#8377; {item?.discount}
+              &#8377;{' '}
+              {((SelecetedWeight?.currentPrice || 0) * 100) /
+                (100 - (SelecetedWeight?.discount || 0))}
             </Text>
           </HStack>
         </Box>
@@ -81,7 +89,7 @@ const SpecialProductCard = ({item}: Props) => {
           alignItems={'center'}
           borderBottomRightRadius={5}>
           <Text fontSize={10} flexWrap={'wrap'} color={COLORS.textWhite}>
-            {item?.offer}
+            {SelecetedWeight?.discount} % OFF
           </Text>
         </Box>
       </Pressable>
@@ -117,7 +125,6 @@ const SpecialProductCard = ({item}: Props) => {
                 size={18}
                 color={COLORS.fadeBlack}
                 style={{
-                  //   marginRight: 10,
                   paddingHorizontal: 3,
                   paddingVertical: 3,
                 }}

@@ -4,7 +4,7 @@ import {Box, HStack, Image, Text, VStack} from 'native-base';
 import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {CartItemType, ProductDetailsType} from 'types';
+import {CartItemType} from 'types';
 import {useStore} from 'app';
 
 type Props = {
@@ -12,21 +12,16 @@ type Props = {
 };
 
 const OrderSummaryCard = ({orderData}: Props) => {
-  console.log('object', orderData);
   const [count, setCount] = React.useState<number>(orderData?.quantity);
+  // console.log('object', count);
   const {updateQuantity} = useStore();
-  const [ratings, setRatings] = React.useState(3);
   const decreaseItem = (orderItem: CartItemType) => {
     // if (count > 1) {
     //   setCount(count - 1);
     // } else {
-    //   setCount(1);
+    //   setCount(orderData?.quantity);
     // }
-    if (orderItem.quantity > 1) {
-      return orderItem.quantity + 1;
-    } else {
-      return orderItem?.quantity;
-    }
+    updateQuantity(orderItem?.product?.id, orderItem.quantity - 1);
   };
   const increment = (order: CartItemType) => {
     updateQuantity(order?.product?.id, order.quantity + 1);
@@ -63,7 +58,7 @@ const OrderSummaryCard = ({orderData}: Props) => {
                   />
                 </Box>
                 <Box>
-                  <Text bold>{orderData.quantity}</Text>
+                  <Text bold>{orderData?.quantity}</Text>
                 </Box>
                 <Box bg={'green.600'} borderRadius={15}>
                   <AntDesign
@@ -87,15 +82,12 @@ const OrderSummaryCard = ({orderData}: Props) => {
             <HStack>
               <Rating
                 type="custom"
-                startingValue={ratings}
+                startingValue={orderData.product.ratings}
                 ratingColor={'green'}
                 tintColor={'#fff'}
                 ratingBackgroundColor={COLORS.grey}
                 ratingCount={5}
                 imageSize={17}
-                // onFinishRating={(rating: React.SetStateAction<number>) => {
-                //   setRatings(rating);
-                // }}
                 readonly={true}
                 style={{paddingVertical: 10}}
               />
@@ -105,7 +97,9 @@ const OrderSummaryCard = ({orderData}: Props) => {
                 ₹{orderData?.weight?.currentPrice}
               </Text>
               <Text textDecorationLine={'line-through'} fontSize={16}>
-                ₹{(orderData?.weight?.currentPrice || 0) + 100}
+                ₹
+                {((orderData?.weight?.currentPrice || 0) * 100) /
+                  (100 - (orderData?.weight?.discount || 0))}
               </Text>
               <Text color={'green.600'} bold fontSize={16}>
                 {orderData.weight?.discount}% off

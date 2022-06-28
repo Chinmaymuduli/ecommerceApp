@@ -1,5 +1,5 @@
 import {Dimensions, SafeAreaView, Share, StyleSheet} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   Actionsheet,
   Alert,
@@ -23,19 +23,13 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 import {SPECIALPRODUCT} from '../../constants';
 import {COLORS} from 'configs';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-// import {ProductComponent} from 'components/core';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
 import LottieView from 'lottie-react-native';
 import {SUCCESSSQUANTITY} from 'assets';
 import {Rating} from 'react-native-ratings';
-import {
-  CartItemType,
-  ProductDetailsType,
-  ProductType,
-  SelectQuantityType,
-} from 'types';
+import {ProductDetailsType, ProductType, SelectQuantityType} from 'types';
 import {Accordion, ManageReview, ProductComponent} from 'components';
 import {useStore} from 'app';
 
@@ -69,6 +63,8 @@ const ProductDetails = ({route, navigation}: Props) => {
   const [alertMessage, setAlertMessage] = useState('Successfully added!');
 
   const {isOpen, onOpen, onClose} = useDisclose();
+
+  // console.log('object', chooseWeight);
 
   const {
     addToCart,
@@ -328,21 +324,19 @@ const ProductDetails = ({route, navigation}: Props) => {
               <HStack space={3} alignItems={'center'}>
                 <Text bold>
                   &#8377;
-                  {chooseWeight?.currentPrice
-                    ? chooseWeight?.currentPrice
-                    : SelecetedWeight?.currentPrice}
+                  {chooseWeight?.currentPrice}
                 </Text>
                 <Text textDecorationLine={'line-through'} fontSize={14}>
                   &#8377;{' '}
-                  {chooseWeight?.currentPrice
-                    ? chooseWeight?.currentPrice + 100
-                    : (SelecetedWeight?.currentPrice || 0) + 100}
+                  {
+                    +(
+                      ((chooseWeight?.currentPrice || 0) * 100) /
+                      (100 - (chooseWeight?.discount || 0))
+                    ).toFixed(2)
+                  }
                 </Text>
                 <Text color={COLORS.cgcolor} bold>
-                  {chooseWeight?.discount
-                    ? chooseWeight?.discount
-                    : SelecetedWeight?.discount}
-                  % off
+                  {chooseWeight?.discount}% off
                 </Text>
               </HStack>
             </HStack>

@@ -35,6 +35,10 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
   const navigation = useNavigation<NavigationProps>();
   const [count, setCount] = React.useState(0);
 
+  const cartItemMetch = cartItems.some(
+    cartData => cartData.product.id === item.id,
+  );
+
   //wishhlist
   const handleWishlist = (wishlistItem: ProductType) => {
     const removeWishList = wishlistItems.some(data => {
@@ -83,9 +87,6 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
   };
 
   const addtoCartItem = (data: ProductType) => {
-    // const cartItemMetch = cartItems.some(
-    //   cartData => cartData.product.id === data.id,
-    // );
     increment(data?.id),
       addToCart({
         product: data,
@@ -144,7 +145,6 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
                 ? 'heart'
                 : 'heart-outline'
             }
-            // wishlistItems.includes(item.id) ? 'heart' : 'heart-outline'
             size={22}
             color={COLORS.cgcolor}
             style={{
@@ -204,7 +204,6 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
                   paddingHorizontal: 3,
                   paddingVertical: 3,
                 }}
-                // onPress={() => console.log('Add Cart', item)}
                 onPress={() => addtoCartItem(item)}
               />
             </Box>
@@ -218,7 +217,9 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
           <HStack space={2}>
             <Text fontSize={13}>&#8377;{SelecetedWeight?.currentPrice}</Text>
             <Text fontSize={13} textDecorationLine={'line-through'}>
-              &#8377;{(SelecetedWeight?.currentPrice || 0) + 100}
+              &#8377;
+              {((SelecetedWeight?.currentPrice || 0) * 100) /
+                (100 - (SelecetedWeight?.discount || 0))}
             </Text>
           </HStack>
           {/* {item?.moq ? (

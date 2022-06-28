@@ -34,7 +34,7 @@ import {
 import {useStore} from 'app';
 
 const Home = () => {
-  const {products} = useStore();
+  const {products, spacialProduct} = useStore();
   const AYUSHPRODUCTS = products.filter(pd => pd.category === 'ayush products');
   const GOURMEET = products.filter(pd => pd.category === 'gourmet foods');
   const PERSONALCARE = products.filter(pd => pd.category === 'personal care');
@@ -197,7 +197,7 @@ const Home = () => {
 
         {/* Special Product Section */}
         <Box mt={4}>
-          <SpecialProduct data={SPECIALPRODUCT} />
+          <SpecialProduct data={spacialProduct} />
         </Box>
         {/* last section */}
         <Box

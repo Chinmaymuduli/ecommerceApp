@@ -9,6 +9,7 @@ type ProductStoreType = {
     category: CategoryType[]
     cartItems: CartItemType[]
     CouponArr: CouponType[]
+    spacialProduct: ProductType[]
     addToCart: (cartItem: CartItemType) => void
     removeFromCart: (productId?: number) => void
     incrementQuantity: (productId: number) => void
@@ -45,7 +46,7 @@ const useStore = create<ProductStoreType>((set) => ({
                     weight: '1kg',
                     currentPrice: 399,
                     inStock: true,
-                    discount: 25,
+                    discount: 20,
                 },
             ],
             ratings: 5,
@@ -846,6 +847,205 @@ const useStore = create<ProductStoreType>((set) => ({
             isNew: true,
             // b2bImg: b_2.src,
             // b2bQuantity: '30 L',
+        },
+    ],
+    spacialProduct: [
+        {
+            id: 201,
+            name: 'Pure Wildforest Honey',
+            description:
+                'made with pure wildforest honey (from the heart of chhattishgarh)',
+            img: AYUSH_1,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '250gm',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '500gm',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '1kg',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 5,
+            category: 'ayush products',
+            isNew: false,
+            //   b2bImg: b_4.src,
+            //   b2bQuantity: '20 Kg',
+        },
+        {
+            id: 202,
+            name: 'Ragi Cookies',
+            description: 'made with pure ragi (from the heart of chhattishgarh)',
+            img: GOURMEET1,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100gm',
+                    currentPrice: 99,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '200gm',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '350gm',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 5,
+            category: 'gourmet foods',
+            isNew: true,
+            // b2bImg: b_8.src,
+            // b2bQuantity: '10 Kg',
+        },
+        {
+            id: 203,
+            name: 'Chyawanprash',
+            description:
+                'made with jungle harvest amla, honey and other ingredients (from the heart of chhattishgarh)',
+            img: GOURMEET5,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '250gm',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '500gm',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '1kg',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 5,
+            category: 'gourmet foods',
+            isNew: false,
+            // b2bImg: b_1.src,
+            // b2bQuantity: '20 Kg',
+        },
+        {
+            id: 204,
+            name: 'Aloe Vera Soap',
+            description:
+                'made with jungle harvest aloe vera (from the heart of chhattishgarh)',
+            img: PERSONAL1,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '25gm',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '50gm',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '75gm',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 4,
+            category: 'personal care',
+            isNew: false,
+            // b2bImg: b_6.src,
+            // b2bQuantity: '10 Kg',
+        },
+        {
+            id: 205,
+            name: 'Aloe Vera Bodywash',
+            description:
+                'made with jungle harvest aloe vera (from the heart of chhattishgarh)',
+            img: PERSONAL3,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '100ml',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '250ml',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '500ml',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 4,
+            category: 'personal care',
+            isNew: true,
+            // b2bImg: b_6.src,
+            // b2bQuantity: '10 L',
+        },
+        {
+            id: 206,
+            name: 'Pure Wildforest Honey',
+            description:
+                'made with pure wildforest honey (from the heart of chhattishgarh)',
+            img: AYUSH_1,
+            quantity: 1,
+            weightAvailability: [
+                {
+                    weight: '250gm',
+                    currentPrice: 199,
+                    inStock: true,
+                    discount: 10,
+                },
+                {
+                    weight: '500gm',
+                    currentPrice: 299,
+                    inStock: false,
+                    discount: 15,
+                },
+                {
+                    weight: '1kg',
+                    currentPrice: 399,
+                    inStock: true,
+                    discount: 25,
+                },
+            ],
+            ratings: 5,
+            category: 'ayush products',
+            isNew: false,
+            //   b2bImg: b_4.src,
+            //   b2bQuantity: '20 Kg',
         },
     ],
     category: [
