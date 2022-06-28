@@ -20,15 +20,12 @@ export const getPrice = (catchArray: CartItemType[]) => {
             (100 / (100 - (curr?.weight?.discount || 0)))
         ).toFixed(2)
     }, 0)
-    // console.log("first", TotalProductPriceWithoutDiscount)
     const totalDiscountAmount =
         +(TotalProductPriceWithoutDiscount - totalProductPriceWithDiscount).toFixed(2)
     const deliveryCharge = 0
     // const deliveryCharge = 50
     const sumTotalPriceCustomerWillPay =
         totalProductPriceWithDiscount + deliveryCharge
-
-    // if coupon
 
 
     return {

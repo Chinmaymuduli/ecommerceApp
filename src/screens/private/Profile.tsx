@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import React from 'react';
 import {
+  Badge,
   Box,
   Center,
   HStack,
@@ -14,9 +15,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useStore} from 'app';
 
 const Profile = () => {
   const navigation = useNavigation<NavigationProps>();
+  const {cartItems} = useStore();
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <Box bg={COLORS.cgcolor}>
@@ -39,12 +42,27 @@ const Profile = () => {
               color={COLORS.textWhite}
               onPress={() => navigation.navigate('Search')}
             />
-            <Ionicons
-              name="cart"
-              size={24}
-              color={COLORS.textWhite}
-              onPress={() => navigation.navigate('Cart', {})}
-            />
+            <Box>
+              <Badge
+                colorScheme="danger"
+                rounded="full"
+                mb={-4}
+                mr={-2}
+                zIndex={1}
+                variant="solid"
+                alignSelf="flex-end"
+                _text={{
+                  fontSize: 7,
+                }}>
+                {cartItems.length ? cartItems.length : 0}
+              </Badge>
+              <Ionicons
+                name="cart"
+                size={24}
+                color={COLORS.textWhite}
+                onPress={() => navigation.navigate('Cart', {})}
+              />
+            </Box>
           </HStack>
         </HStack>
       </Box>
@@ -151,7 +169,7 @@ const Profile = () => {
               py={3}
               onPress={() =>
                 navigation.navigate('SelectAddress', {
-                  SelectProductData: {},
+                  SelectProductData: [],
                 })
               }>
               <Text color={COLORS.cgcolor} bold>

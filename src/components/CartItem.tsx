@@ -25,33 +25,17 @@ const CartItem = ({item, setQuantity}: CartItemTypes) => {
   const {updateQuantity, cartItems, removeFromCart} = useStore();
   const [isOpen, setIsOpen] = React.useState(false);
   const [deleteData, setDeleteData] = useState<number>();
+  console.log('first', cartItems);
 
   const onClose = () => setIsOpen(false);
 
   const cancelRef = React.useRef(null);
 
   const increment = (item: CartItemType) => {
-    // console.log('object', id);
-    // setQuantity((prev: any) => {
-    //   const newQuantity = [...prev];
-    //   const index = newQuantity.indexOf(item);
-    //   newQuantity[index].quantity += 1;
-    //   return newQuantity;
-    // });
     updateQuantity(item?.product?.id, item?.quantity + 1);
   };
 
   const decrement = (item: CartItemType) => {
-    // if (item.quantity > 1) {
-    //   setQuantity((prev: any) => {
-    //     const newQuantity = [...prev];
-    //     const index = newQuantity.indexOf(item);
-    //     newQuantity[index].quantity -= 1;
-    //     return newQuantity;
-    //   });
-    // } else {
-    //   return;
-    // }
     updateQuantity(item?.product?.id, item?.quantity - 1);
     if (item?.quantity < 2) {
       removeFromCart(item?.product?.id);
@@ -98,7 +82,7 @@ const CartItem = ({item, setQuantity}: CartItemTypes) => {
               &#8377;{(item?.weight?.currentPrice || 0) + 100}
             </Text>
           </HStack>
-          <Text>1 Kg</Text>
+          <Text>{item.weight?.weight}</Text>
         </VStack>
         <Box bg={COLORS.cgcolor} position={'absolute'} top={2} borderRadius={6}>
           <Text color={COLORS.textWhite} fontSize={8} px={1}>

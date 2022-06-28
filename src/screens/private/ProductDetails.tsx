@@ -38,26 +38,13 @@ import {
 } from 'types';
 import {Accordion, ManageReview, ProductComponent} from 'components';
 import {useStore} from 'app';
-const quantityArr = [
-  {label: '250 gm', value: 250, price: 159, discount: 200, offer: '5% off'},
-  {label: '500 gm', value: 500, price: 259, discount: 300, offer: '10% off'},
-  {label: '700 gm', value: 700, price: 359, discount: 450, offer: '15% off'},
-  {label: '1 kg', value: 1000, price: 459, discount: 500, offer: '20% off'},
-];
+
 const B2bProduct = [
   {label: '10 kg', value: 10000, price: 560, discount: 1000, offer: '5%'},
   {label: '20 kg', value: 20000, price: 639, discount: 860, offer: '10%'},
   {label: '30 kg', value: 30000, price: 859, discount: 1200, offer: '15%'},
   {label: '50 kg', value: 50000, price: 999, discount: 1500, offer: '20%'},
 ];
-
-// const productData = [
-//   {
-//     id: 1,
-//     title:
-//       'In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available.',
-//   },
-// ];
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 
@@ -67,18 +54,15 @@ type productType = {
 
 const ProductDetails = ({route, navigation}: Props) => {
   const productdata = route.params.ProductDetailsType;
-  // console.log('object566', productdata.inStock);
   const SelecetedWeight = productdata?.weightAvailability?.reduce((pV, cV) => {
     if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
     return pV;
   }, {});
-  // const isCarousel = useRef<any>(null);
   const {userData} = useAppContext();
   const [index, setIndex] = useState(0);
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const [count, setCount] = useState<any>(productdata?.quantity);
   const [chooseWeight, setchooseWeight] = useState<any>(SelecetedWeight);
-  const [wishlist, setWishlist] = useState<any>([]);
   const [showAlert, setShowAlert] = useState(false);
   const [addQuantity, setAddQuantity] = useState<any>();
   const [modalDialog, setModalDialog] = useState(false);
@@ -86,10 +70,13 @@ const ProductDetails = ({route, navigation}: Props) => {
 
   const {isOpen, onOpen, onClose} = useDisclose();
 
-  // const {setCartItems, cartItems} = useAppContext();
-
-  const {addToCart, cartItems} = useStore();
-  console.log('object', productdata.id);
+  const {
+    addToCart,
+    cartItems,
+    addToWishlist,
+    removeFromWishlist,
+    wishlistItems,
+  } = useStore();
 
   // useEffect(() => {
   //   if (userData.role === 'b2c') {
@@ -102,10 +89,9 @@ const ProductDetails = ({route, navigation}: Props) => {
   // console.log('object', chooseWeight);
 
   const handleCart = (data: ProductType) => {
-    // setCartItems((prev: any) => [...prev, data]);
     addToCart({
       product: data,
-      quantity: 1,
+      quantity: count,
       weight: SelecetedWeight,
     });
     setShowAlert(true);
@@ -150,20 +136,23 @@ const ProductDetails = ({route, navigation}: Props) => {
   const SelectQuantity = (item: SelectQuantityType) => {
     // border color
     setchooseWeight(item);
-    // setAddQuantity('');
+    setAddQuantity('');
   };
 
-  const handleWishlist = (id: any) => {
-    const index = wishlist.indexOf(id);
-    if (index > -1) {
-      setWishlist(wishlist.filter((item: any) => item !== id));
+  const handleWishlist = (wishlistItem: ProductType) => {
+    const removeWishList = wishlistItems.some(data => {
+      return data.id === wishlistItem.id;
+    });
+
+    if (removeWishList) {
+      removeFromWishlist(wishlistItem?.id);
       setShowAlert(true);
       setAlertMessage('Remove from wishlist');
       setTimeout(() => {
         setShowAlert(false);
       }, 2000);
     } else {
-      setWishlist([...wishlist, id]);
+      addToWishlist(wishlistItem);
       setShowAlert(true);
       setAlertMessage('Added to wishlist');
       setTimeout(() => {
@@ -184,26 +173,41 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   }, []);
 
-  const BuyNow = () => {
+  const BuyNow = (buyItem: ProductType) => {
+    const productCart = cartItems.some(
+      _item => _item.product.id === buyItem.id,
+    );
+
     if (addQuantity) {
       return setModalDialog(true);
     }
-    addToCart({
-      product: productdata,
-      quantity: 1,
-      weight: chooseWeight,
-    });
 
-    navigation.navigate('OrderSummary', {
-      CartItems: [
-        {
-          // ...route.params?.ProductDetailsType,
-          product: productdata,
-          quantity: 1,
-          weight: chooseWeight,
-        },
-      ],
-    });
+    if (productCart) {
+      return navigation.navigate('OrderSummary', {
+        CartItems: [
+          {
+            product: productdata,
+            quantity: count,
+            weight: chooseWeight,
+          },
+        ],
+      });
+    } else {
+      addToCart({
+        product: productdata,
+        quantity: count,
+        weight: chooseWeight,
+      });
+      navigation.navigate('OrderSummary', {
+        CartItems: [
+          {
+            product: productdata,
+            quantity: count,
+            weight: chooseWeight,
+          },
+        ],
+      });
+    }
   };
 
   const changeQuantity = (text: string) => {
@@ -235,11 +239,15 @@ const ProductDetails = ({route, navigation}: Props) => {
         <Box>
           <Ionicons
             name={
-              wishlist.includes(productdata?.id) ? 'heart' : 'heart-outline'
+              wishlistItems.some(data => {
+                return data.id === productdata.id;
+              })
+                ? 'heart'
+                : 'heart-outline'
             }
             size={30}
             color="green"
-            onPress={() => handleWishlist(productdata?.id)}
+            onPress={() => handleWishlist(productdata)}
           />
         </Box>
       </HStack>
@@ -315,86 +323,88 @@ const ProductDetails = ({route, navigation}: Props) => {
             </HStack>
           </HStack>
 
-          {/* {userData?.role === 'b2c' ? ( */}
-          <HStack alignItems={'center'} mt={1}>
-            <HStack space={3} alignItems={'center'}>
-              <Text bold>
-                &#8377;
-                {chooseWeight?.currentPrice
-                  ? chooseWeight?.currentPrice
-                  : SelecetedWeight?.currentPrice}
-              </Text>
-              <Text textDecorationLine={'line-through'} fontSize={14}>
-                &#8377;{' '}
-                {chooseWeight?.currentPrice
-                  ? chooseWeight?.currentPrice + 100
-                  : (SelecetedWeight?.currentPrice || 0) + 100}
-              </Text>
-              <Text color={COLORS.cgcolor} bold>
-                {chooseWeight?.discount
-                  ? chooseWeight?.discount
-                  : SelecetedWeight?.discount}
-                % off
-              </Text>
+          {userData?.role === 'b2c' ? (
+            <HStack alignItems={'center'} mt={1}>
+              <HStack space={3} alignItems={'center'}>
+                <Text bold>
+                  &#8377;
+                  {chooseWeight?.currentPrice
+                    ? chooseWeight?.currentPrice
+                    : SelecetedWeight?.currentPrice}
+                </Text>
+                <Text textDecorationLine={'line-through'} fontSize={14}>
+                  &#8377;{' '}
+                  {chooseWeight?.currentPrice
+                    ? chooseWeight?.currentPrice + 100
+                    : (SelecetedWeight?.currentPrice || 0) + 100}
+                </Text>
+                <Text color={COLORS.cgcolor} bold>
+                  {chooseWeight?.discount
+                    ? chooseWeight?.discount
+                    : SelecetedWeight?.discount}
+                  % off
+                </Text>
+              </HStack>
             </HStack>
-          </HStack>
-          {/* // ) : 
-          // (
-          //   <Box>
-          //     <HStack
-          //       alignItems={'center'}
-          //       mt={2}
-          //       justifyContent={'space-between'}>
-          //       {addQuantity?.length > 0 ? null : (
-          //         <Text bold fontSize={18}>
-          //           &#8377;
-          //           {chooseWeight?.price
-          //             ? chooseWeight?.price
-          //             : productdata?.currentPrice}
-          //         </Text>
-          //       )}
-          //       <HStack alignItems={'center'} pr={3}>
-          //         <Text bold>MOQ :</Text>
-          //         <Text bold>10kg</Text>
-          //       </HStack>
-          //     </HStack>
-          //     {addQuantity?.length > 0 ? null : (
-          //       <>
-          //         <HStack
-          //           mt={2}
-          //           alignItems={'center'}
-          //           justifyContent={'space-between'}
-          //           bg={'green.600'}
-          //           borderRadius={20}>
-          //           <HStack py={1} px={3}>
-          //             <Text bold color={COLORS.textWhite}>
-          //               MRP
-          //             </Text>
-          //             <Text bold color={COLORS.textWhite}>
-          //               {' '}
-          //               &#8377;{' '}
-          //               {chooseWeight?.discount
-          //                 ? chooseWeight?.discount
-          //                 : productdata?.currentPrice + 100}
-          //             </Text>
-          //           </HStack>
-          //           <HStack py={1} px={3} alignItems={'center'}>
-          //             <Text bold color={COLORS.textWhite}>
-          //               Retail Margin :
-          //             </Text>
-          //             <Text bold color={COLORS.textWhite}>
-          //               {' '}
-          //               {chooseWeight?.offer
-          //                 ? chooseWeight?.offer
-          //                 : productdata?.offer}
-          //             </Text>
-          //           </HStack>
-          //         </HStack>
-          //       </>
-          //     )}
-          //   </Box>
-          // )
-          // } */}
+          ) : (
+            // b2b user
+            <Box>
+              <HStack
+                alignItems={'center'}
+                mt={2}
+                justifyContent={'space-between'}>
+                {addQuantity?.length > 0 ? null : (
+                  <Text bold fontSize={18}>
+                    &#8377;
+                    {chooseWeight?.currentPrice
+                      ? chooseWeight?.currentPrice
+                      : SelecetedWeight?.currentPrice}
+                  </Text>
+                )}
+                <HStack alignItems={'center'} pr={3}>
+                  <Text bold>MOQ :</Text>
+                  <Text bold>10kg</Text>
+                </HStack>
+              </HStack>
+              {addQuantity?.length > 0 ? null : (
+                <>
+                  <HStack
+                    mt={2}
+                    alignItems={'center'}
+                    justifyContent={'space-between'}
+                    bg={'green.600'}
+                    borderRadius={20}>
+                    <HStack py={1} px={3}>
+                      <Text bold color={COLORS.textWhite}>
+                        MRP
+                      </Text>
+                      <Text bold color={COLORS.textWhite}>
+                        {' '}
+                        &#8377;{' '}
+                        {chooseWeight?.currentPrice
+                          ? chooseWeight?.currentPrice + 100
+                          : (SelecetedWeight?.currentPrice || 0) + 100}
+                      </Text>
+                    </HStack>
+                    <HStack py={1} px={3} alignItems={'center'}>
+                      <Text bold color={COLORS.textWhite}>
+                        Retail Margin :
+                      </Text>
+                      <Text bold color={COLORS.textWhite}>
+                        {' '}
+                        {chooseWeight?.discount
+                          ? chooseWeight?.discount
+                          : SelecetedWeight?.discount}{' '}
+                        %
+                      </Text>
+                    </HStack>
+                  </HStack>
+                </>
+              )}
+            </Box>
+          )}
+
+          {/* lower section */}
           <Box mt={1}>
             <Text color={'#4F7942'} bold>
               Available
@@ -461,7 +471,6 @@ const ProductDetails = ({route, navigation}: Props) => {
                 borderWidth={1}
                 borderColor={COLORS.lightGrey}
                 borderRadius={5}>
-                {/* <Text>Add Quantity</Text> */}
                 <Input
                   placeholder="Enter Quantity"
                   bgColor={COLORS.textWhite}
@@ -483,13 +492,11 @@ const ProductDetails = ({route, navigation}: Props) => {
             )}
           </HStack>
           <Box mt={5} mb={5}>
-            {/* {productData?.map(item => ( */}
             <Accordion
               title="Product Details"
               subtitle={productdata?.description}
               key={productdata.id}
             />
-            {/* ))} */}
           </Box>
           <Box>
             <ManageReview />
@@ -552,7 +559,7 @@ const ProductDetails = ({route, navigation}: Props) => {
             </Pressable>
           )}
           <Pressable
-            onPress={() => BuyNow()}
+            onPress={() => BuyNow(productdata)}
             bg={COLORS.cgcolor}
             w={175}
             borderTopRightRadius={5}

@@ -4,13 +4,48 @@ import {Box, HStack, Image, Pressable, Stack, Text} from 'native-base';
 import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {WishListCardType} from 'types';
+import {ProductType, WishListCardType} from 'types';
+import {useStore} from 'app';
 
 type Props = {
-  item: WishListCardType;
+  item: ProductType;
+  setAlertMessage: (prev: string) => void;
+  setShownAlert: (previous: boolean) => void;
 };
 
-const WishListCard = ({item}: Props) => {
+const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
+  const {cartItems, addToCart, removeFromCart, removeFromWishlist} = useStore();
+  const SelecetedWeight = item?.weightAvailability?.reduce((pV, cV) => {
+    if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
+    return pV;
+  }, {});
+  const handleAddCart = () => {
+    addToCart({
+      product: item,
+      quantity: 1,
+      weight: SelecetedWeight,
+    });
+    setShownAlert(true);
+    setAlertMessage('Added to Cart');
+    setTimeout(() => {
+      setShownAlert(false);
+    }, 4000);
+  };
+
+  const removeCart = () => {
+    removeFromCart(item.id);
+    setShownAlert(true);
+    setAlertMessage('Remove from Cart');
+    setTimeout(() => {
+      setShownAlert(false);
+    }, 4000);
+  };
+
+  const removeWishlist = () => {
+    removeFromWishlist(item.id);
+  };
+
+  const cartDatametch = cartItems.some(data => data?.product?.id === item?.id);
   return (
     <>
       <Box
@@ -30,21 +65,23 @@ const WishListCard = ({item}: Props) => {
           />
           <Stack px={2} space={1}>
             <Text bold color={'gray.400'} mt={2}>
-              {item?.label}
+              {item?.name}
             </Text>
             <HStack space={2}>
-              <Text fontFamily={'Nunito-Bold'}>&#8377;{item?.price}</Text>
+              <Text fontFamily={'Nunito-Bold'}>
+                &#8377;{SelecetedWeight?.currentPrice}
+              </Text>
               <Text textDecorationLine={'line-through'} color={'gray.400'}>
-                &#8377;{item?.discount}
+                &#8377;{(SelecetedWeight?.currentPrice || 0) + 100}
               </Text>
               <Text color={'green.500'} bold>
-                {item?.offer}
+                {SelecetedWeight?.discount} % off
               </Text>
             </HStack>
             <HStack>
               <Rating
                 type="custom"
-                startingValue={item.ratingsby}
+                startingValue={item.ratings}
                 ratingColor={'green'}
                 tintColor={'#fff'}
                 ratingBackgroundColor={COLORS.grey}
@@ -55,7 +92,7 @@ const WishListCard = ({item}: Props) => {
             </HStack>
           </Stack>
           <Pressable
-            onPress={() => console.log('pressed')}
+            onPress={removeWishlist}
             position={'absolute'}
             bg={COLORS.textWhite}
             borderRadius={30}
@@ -69,13 +106,29 @@ const WishListCard = ({item}: Props) => {
             />
           </Pressable>
         </Pressable>
-        <Box px={3} py={3}>
-          <Box borderWidth={1} borderRadius={4} borderColor={COLORS.lightGrey}>
-            <Text textAlign={'center'} color={'#15803d'} bold py={1}>
-              Add To Cart
-            </Text>
-          </Box>
-        </Box>
+        {!cartDatametch ? (
+          <Pressable px={3} py={3} onPress={handleAddCart}>
+            <Box
+              borderWidth={1}
+              borderRadius={4}
+              borderColor={COLORS.lightGrey}>
+              <Text textAlign={'center'} color={'#15803d'} bold py={1}>
+                Add To Cart
+              </Text>
+            </Box>
+          </Pressable>
+        ) : (
+          <Pressable px={3} py={3} onPress={removeCart}>
+            <Box
+              borderWidth={1}
+              borderRadius={4}
+              borderColor={COLORS.lightGrey}>
+              <Text textAlign={'center'} color={'#15803d'} bold py={1}>
+                Remove From Cart
+              </Text>
+            </Box>
+          </Pressable>
+        )}
       </Box>
     </>
   );

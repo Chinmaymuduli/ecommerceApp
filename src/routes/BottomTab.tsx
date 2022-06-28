@@ -1,4 +1,5 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {useStore} from 'app';
 import {ICONS} from 'assets';
 import {CustomDrawer} from 'components/core';
 import {COLORS} from 'configs';
@@ -34,7 +35,7 @@ const CustomTabbarButton = ({children, onPress}: any) => (
 );
 
 export default function BottomTab() {
-  const {cartItems} = useAppContext();
+  const {cartItems} = useStore();
   return (
     <Tab.Navigator
       screenOptions={{

@@ -20,10 +20,11 @@ import FilterSheet from './FilterSheet';
 import {Banner} from 'assets';
 
 import HomeCategoryItem from './HomeCategoryItem';
+import {ProductType} from 'types';
 
 type CategoryProductType = {
-  data?: {
-    id?: number;
+  data: {
+    id: number;
     name?: string;
     discount?: number;
     img?: any;
@@ -42,7 +43,6 @@ const CategorySection = ({
 }: CategoryProductType) => {
   const [filterSheetOpen, setFilterSheetOpen] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
-  // console.log('data', data);
 
   return (
     <>
