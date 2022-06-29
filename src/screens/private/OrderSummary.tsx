@@ -16,18 +16,19 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {OrderSummaryCard} from 'components';
 import {getPrice} from 'utils';
+import {useStore} from 'app';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route}: Props) => {
-  const ordersData = route.params?.CartItems;
+  // const ordersData = route.params?.CartItems;
+  const {cartItems, orderItems} = useStore();
+  // console.log('object', orderItems.length);
 
   const {
-    totalProductPriceWithDiscount,
     TotalProductPriceWithoutDiscount,
     totalDiscountAmount,
     sumTotalPriceCustomerWillPay,
-    deliveryCharge,
-  } = getPrice(ordersData);
+  } = getPrice(orderItems);
 
   return (
     <Box flex={1} bg={COLORS.textWhite}>
@@ -41,9 +42,12 @@ const OrderSummary = ({navigation, route}: Props) => {
             <Heading size={'sm'}>Deliver to:</Heading>
             <Pressable
               onPress={() =>
-                navigation.navigate('SelectAddress', {
-                  SelectProductData: ordersData,
-                })
+                navigation.navigate(
+                  'SelectAddress',
+                  // {
+                  //   SelectProductData: ordersData,
+                  // }
+                )
               }>
               <Box
                 borderWidth={1}
@@ -56,7 +60,12 @@ const OrderSummary = ({navigation, route}: Props) => {
             </Pressable>
           </HStack>
           <VStack mt={2} space={1} pb={4}>
-            <Text bold>John Deo</Text>
+            <HStack space={4}>
+              <Text bold>John Deo</Text>
+              <Box bg={'green.100'} borderRadius={5}>
+                <Text px={2}>Home</Text>
+              </Box>
+            </HStack>
             <Text fontSize={13}>
               Akshya Nagar 1st Block 1st Cross, Rammurthy nagar,
               Bangalore-560016
@@ -65,7 +74,7 @@ const OrderSummary = ({navigation, route}: Props) => {
           </VStack>
         </Box>
         {/* card */}
-        {ordersData.map(od => (
+        {orderItems.map(od => (
           <OrderSummaryCard orderData={od} key={od.quantity} />
         ))}
         {/* Card End */}
@@ -121,13 +130,14 @@ const OrderSummary = ({navigation, route}: Props) => {
           bg={'#008000'}
           borderRadius={4}
           onPress={() =>
-            navigation.navigate('PaymentScreen', {PaymentData: ordersData})
+            navigation.navigate('PaymentScreen', {PaymentData: orderItems})
           }>
           <HStack justifyContent={'space-between'} py={2} alignItems={'center'}>
             <HStack alignItems={'center'} space={2} pl={2}>
               <Box>
                 <Text bold color={'#fff'}>
-                  {ordersData.length} items
+                  {/* {ordersData.length} items */}
+                  {orderItems.length} items
                 </Text>
               </Box>
               <HStack space={2}>

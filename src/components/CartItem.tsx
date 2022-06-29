@@ -24,8 +24,8 @@ type CartItemTypes = {
 const CartItem = ({item, setQuantity}: CartItemTypes) => {
   const {updateQuantity, cartItems, removeFromCart} = useStore();
   const [isOpen, setIsOpen] = React.useState(false);
-  const [deleteData, setDeleteData] = useState<number>();
-  console.log('first', cartItems);
+
+  // console.log('first', item);
 
   const onClose = () => setIsOpen(false);
 

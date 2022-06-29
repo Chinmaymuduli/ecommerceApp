@@ -64,14 +64,13 @@ const ProductDetails = ({route, navigation}: Props) => {
 
   const {isOpen, onOpen, onClose} = useDisclose();
 
-  // console.log('object', chooseWeight);
-
   const {
     addToCart,
     cartItems,
     addToWishlist,
     removeFromWishlist,
     wishlistItems,
+    addToOrderItems,
   } = useStore();
 
   // useEffect(() => {
@@ -174,36 +173,70 @@ const ProductDetails = ({route, navigation}: Props) => {
       _item => _item.product.id === buyItem.id,
     );
 
-    if (addQuantity) {
-      return setModalDialog(true);
-    }
-
-    if (productCart) {
-      return navigation.navigate('OrderSummary', {
-        CartItems: [
-          {
-            product: productdata,
-            quantity: count,
-            weight: chooseWeight,
-          },
-        ],
-      });
-    } else {
+    if (!productCart) {
       addToCart({
         product: productdata,
         quantity: count,
         weight: chooseWeight,
       });
-      navigation.navigate('OrderSummary', {
-        CartItems: [
-          {
-            product: productdata,
-            quantity: count,
-            weight: chooseWeight,
-          },
-        ],
+      addToOrderItems({
+        product: productdata,
+        quantity: count,
+        weight: chooseWeight,
       });
+      navigation.navigate('OrderSummary');
+    } else {
+      addToOrderItems({
+        product: productdata,
+        quantity: count,
+        weight: chooseWeight,
+      });
+      navigation.navigate('OrderSummary');
     }
+
+    if (addQuantity) {
+      return setModalDialog(true);
+    }
+
+    // if (productCart) {
+    //   return (
+    //     addToCart({
+    //       product: productdata,
+    //       quantity: count,
+    //       weight: chooseWeight,
+    //     }),
+    //     navigation.navigate(
+    //       'OrderSummary',
+    //       //  {
+    //       //   CartItems: [
+    //       //     {
+    //       //       product: productdata,
+    //       //       quantity: count,
+    //       //       weight: chooseWeight,
+    //       //     },
+    //       //   ],
+    //       // }
+    //     )
+    //   );
+    // } else {
+    //   addToCart({
+    //     product: productdata,
+    //     quantity: count,
+    //     weight: chooseWeight,
+    //   });
+    //   navigation.navigate(
+    //     'OrderSummary',
+    //     //  {
+    //     //   CartItems: [
+    //     //     {
+    //     //       product: productdata,
+    //     //       quantity: count,
+    //     //       weight: chooseWeight,
+    //     //     },
+    //     //   ],
+    //     // }
+    //   );
+    // }
   };
 
   const changeQuantity = (text: string) => {

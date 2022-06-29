@@ -21,11 +21,14 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {INDIANSTATE} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
-import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {NavigationProps, PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {AddressType} from 'types';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-const Address = () => {
-  const navigation = useNavigation<NavigationProps>();
+type Props = NativeStackScreenProps<PrivateRoutesType, 'Address'>;
+const Address = ({route, navigation}: Props) => {
+  // console.log('objectAddress', route.params.SelectAddress);
+  const previousData = route.params.SelectAddress;
   const {
     control,
     handleSubmit,
@@ -34,7 +37,7 @@ const Address = () => {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [loader, setLoader] = React.useState(false);
   const [selectedType, setSelectedType] = React.useState(1);
-  const [state, setState] = React.useState<any>('Chhattisgarh');
+  const [state, setState] = React.useState<string>('Chhattisgarh');
   const [addressTypeText, setAddressTypeText] = useState('Home');
 
   const onSubmit = (data: AddressType) => {
@@ -44,8 +47,8 @@ const Address = () => {
       state: state,
     };
 
-    navigation.navigate('PaymentScreen', {
-      PaymentData: {},
+    navigation.navigate('SelectAddress', {
+      SelectProductData: previousData,
     });
   };
 

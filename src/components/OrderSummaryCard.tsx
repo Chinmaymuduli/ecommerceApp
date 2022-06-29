@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Box, HStack, Image, Text, VStack} from 'native-base';
 import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
@@ -13,19 +13,16 @@ type Props = {
 
 const OrderSummaryCard = ({orderData}: Props) => {
   const [count, setCount] = React.useState<number>(orderData?.quantity);
-  // console.log('object', count);
   const {updateQuantity} = useStore();
-  const decreaseItem = (orderItem: CartItemType) => {
-    // if (count > 1) {
-    //   setCount(count - 1);
-    // } else {
-    //   setCount(orderData?.quantity);
-    // }
-    updateQuantity(orderItem?.product?.id, orderItem.quantity - 1);
+  // console.log('object', orderData);
+
+  const decreaseItem = () => {
+    updateQuantity(orderData?.product?.id, orderData?.quantity - 1);
   };
-  const increment = (order: CartItemType) => {
-    updateQuantity(order?.product?.id, order.quantity + 1);
+  const increment = () => {
+    updateQuantity(orderData?.product?.id, orderData?.quantity + 1);
   };
+
   return (
     <Box px={4} borderBottomWidth={10} borderColor={COLORS.lightGrey}>
       <Box pb={5} pt={5}>
@@ -54,7 +51,7 @@ const OrderSummaryCard = ({orderData}: Props) => {
                     style={{
                       padding: 2,
                     }}
-                    onPress={() => decreaseItem(orderData)}
+                    onPress={() => decreaseItem()}
                   />
                 </Box>
                 <Box>
@@ -68,7 +65,7 @@ const OrderSummaryCard = ({orderData}: Props) => {
                     name="plus"
                     size={20}
                     color={COLORS.textWhite}
-                    onPress={() => increment(orderData)}
+                    onPress={() => increment()}
                   />
                 </Box>
               </HStack>
@@ -97,9 +94,13 @@ const OrderSummaryCard = ({orderData}: Props) => {
                 ₹{orderData?.weight?.currentPrice}
               </Text>
               <Text textDecorationLine={'line-through'} fontSize={16}>
-                ₹
-                {((orderData?.weight?.currentPrice || 0) * 100) /
-                  (100 - (orderData?.weight?.discount || 0))}
+                ₹{' '}
+                {
+                  +(
+                    ((orderData?.weight?.currentPrice || 0) * 100) /
+                    (100 - (orderData?.weight?.discount || 0))
+                  ).toFixed(2)
+                }
               </Text>
               <Text color={'green.600'} bold fontSize={16}>
                 {orderData.weight?.discount}% off

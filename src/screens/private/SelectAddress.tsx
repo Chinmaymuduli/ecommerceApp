@@ -13,6 +13,7 @@ const AddressArr = [
       '#12, 1st Cross, 1st Main, 1st Block, Koramangala, Bengaluru, Karnataka 560034',
     phone: '+91 9876543210',
     default: true,
+    addressType: 'Home',
     value: '1',
   },
   {
@@ -22,6 +23,7 @@ const AddressArr = [
       '#12, 1st Cross, 2nd Main, 2nd Block, Koramangala, Bengaluru, Karnataka 560032',
     phone: '+91 1234567890',
     default: false,
+    addressType: 'Home',
     value: '2',
   },
   {
@@ -31,6 +33,7 @@ const AddressArr = [
       '#15, 3rd Cross, 1st Main, 3rd Block, Koramangala, Bengaluru, Karnataka 560031',
     phone: '+91 8794562310',
     default: false,
+    addressType: 'Work',
     value: '3',
   },
 ];
@@ -38,14 +41,19 @@ const AddressArr = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
 const SelectAddress = ({route, navigation}: Props) => {
   const summaryData = route.params.SelectProductData;
-  // console.log('first', summaryData);
   const [value, setValue] = React.useState(AddressArr[0].address);
-
+  console.log('object', value);
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box px={4} borderBottomWidth={10} borderColor={COLORS.lightGrey}>
-          <Pressable onPress={() => navigation.navigate('Address')} py={4}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate('Address', {
+                SelectAddress: summaryData,
+              })
+            }
+            py={4}>
             <HStack
               py={1}
               borderRadius={5}
@@ -75,7 +83,12 @@ const SelectAddress = ({route, navigation}: Props) => {
                   accessibilityLabel="favorite number">
                   <Radio value={item?.value} my={4} mx={2} colorScheme="green">
                     <Box pb={3}>
-                      <Text bold>{item?.name}</Text>
+                      <HStack space={2}>
+                        <Text bold>{item?.name}</Text>
+                        <Box bg={'green.100'} borderRadius={5}>
+                          <Text px={2}>{item.addressType}</Text>
+                        </Box>
+                      </HStack>
                       <Text flexWrap={'wrap'} mt={2} w={300}>
                         {item?.address}
                       </Text>

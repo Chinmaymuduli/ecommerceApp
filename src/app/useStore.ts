@@ -10,7 +10,10 @@ type ProductStoreType = {
     cartItems: CartItemType[]
     CouponArr: CouponType[]
     spacialProduct: ProductType[]
+    orderItems: CartItemType[]
     addToCart: (cartItem: CartItemType) => void
+    addToOrderItems: (orderItem: CartItemType) => void
+    addToOrderItemFromCart: () => void
     removeFromCart: (productId?: number) => void
     incrementQuantity: (productId: number) => void
     decrementQuantity: (id: number) => void
@@ -1163,6 +1166,21 @@ const useStore = create<ProductStoreType>((set) => ({
                 return cartItem
 
             }),
+        }))
+    },
+
+    orderItems: [],
+
+    //TODO: ORDERITEMS
+    addToOrderItems: (orderItem) => {
+        set((state) => ({
+            orderItems: [orderItem],
+        }))
+    },
+
+    addToOrderItemFromCart: () => {
+        set((state) => ({
+            orderItems: [...state.cartItems]
         }))
     },
 

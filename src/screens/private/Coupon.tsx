@@ -36,7 +36,7 @@ const Coupon = ({route}: Props) => {
     onOpen();
   };
   const ApplyCoupon = (value: number) => {
-    // console.log('object', value);
+    console.log('object', value);
     setCouponAlert(true);
     setTimeout(() => {
       setCouponAlert(false);

@@ -48,20 +48,20 @@ export type PrivateRoutesType = {
   Coupon: {
     couponProduct: CartItemType[];
   };
-  Address: undefined;
+  Address: {
+    SelectAddress: CartItemType[];
+  };
   PaymentScreen: {
-    // PaymentData: ProductDetailsType;
     PaymentData: CartItemType[];
   };
   ConfirmOrder: {
     confirmOrderData: CartItemType[];
   };
-  OrderSummary: {
-    // ProductDetailsType: ProductDetailsType[];
-    CartItems: CartItemType[];
-  };
+  OrderSummary: undefined;
+  //  {
+  //   CartItems: CartItemType[];
+  // };
   SelectAddress: {
-    // SelectProductData: ProductDetailsType;
     SelectProductData: CartItemType[];
   };
   WishList: undefined;

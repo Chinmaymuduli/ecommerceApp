@@ -31,21 +31,10 @@ const PaymentScreen = ({navigation, route}: Props) => {
 
   // console.log('object', paymentProductData);
   const {
-    totalProductPriceWithDiscount,
     TotalProductPriceWithoutDiscount,
     totalDiscountAmount,
     sumTotalPriceCustomerWillPay,
-    deliveryCharge,
   } = getPrice(paymentProductData);
-
-  // const saving =
-  //   paymentProductData?.currentPrice + 100 - paymentProductData?.currentPrice;
-  // const DiscountPrice = paymentProductData?.currentPrice + 100;
-  // const TotalPrice = DiscountPrice - saving;
-  // const CoupondiscountPrice = paymentProductData?.couponValue
-  //   ? +(TotalPrice * (paymentProductData?.couponValue / 100)).toFixed(2)
-  //   : 0;
-  // const AmoutPayable = DiscountPrice - (saving + CoupondiscountPrice);
 
   const {userData} = useAppContext();
   const [payment, setPayment] = useState<any>();
@@ -153,7 +142,6 @@ const PaymentScreen = ({navigation, route}: Props) => {
         </Box>
         <Box>
           <Pressable
-            // bg={'#e4e4e460'}
             onPress={() =>
               navigation.navigate('Coupon', {couponProduct: paymentProductData})
             }>

@@ -36,3 +36,4 @@ export const getPrice = (catchArray: CartItemType[]) => {
         deliveryCharge,
     }
 }
+

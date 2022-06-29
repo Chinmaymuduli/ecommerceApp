@@ -43,14 +43,23 @@ const CartArr = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Cart'>;
 const Cart = ({route, navigation}: Props) => {
   const [quantity, setQuantity] = React.useState(CartArr);
-  const {cartItems} = useStore();
-  // console.log('object', cartItems);
+  const {cartItems, addToOrderItemFromCart} = useStore(state => state);
+  // console.log('object', cartItems.length);
   const {
     TotalProductPriceWithoutDiscount,
     sumTotalPriceCustomerWillPay,
-    totalProductPriceWithDiscount,
     totalDiscountAmount,
   } = getPrice(cartItems);
+
+  const handleProceed = () => {
+    addToOrderItemFromCart();
+    navigation.navigate(
+      'OrderSummary',
+      // {
+      //   CartItems: cartItems,
+      // }
+    );
+  };
 
   return (
     <Box flex={1} bg={COLORS.textWhite}>
@@ -130,11 +139,7 @@ const Cart = ({route, navigation}: Props) => {
                 bg={'#008000'}
                 borderRadius={4}
                 mt={2}
-                onPress={() =>
-                  navigation.navigate('OrderSummary', {
-                    CartItems: cartItems,
-                  })
-                }>
+                onPress={() => handleProceed()}>
                 <HStack justifyContent={'space-between'} py={2}>
                   <HStack alignItems={'center'} space={2} pl={2}>
                     <Box>
