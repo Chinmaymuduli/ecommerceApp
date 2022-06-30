@@ -38,6 +38,7 @@ export type PrivateRoutesType = {
   Category: {
     id?: number | any;
     b2b?: boolean;
+    isBussiness?: boolean;
   };
   Search: undefined;
   Order: undefined;
@@ -48,9 +49,10 @@ export type PrivateRoutesType = {
   Coupon: {
     couponProduct: CartItemType[];
   };
-  Address: {
-    SelectAddress: CartItemType[];
-  };
+  Address: undefined;
+  // {
+  //   SelectAddress: CartItemType[];
+  // };
   PaymentScreen: {
     PaymentData: CartItemType[];
   };
@@ -61,9 +63,10 @@ export type PrivateRoutesType = {
   //  {
   //   CartItems: CartItemType[];
   // };
-  SelectAddress: {
-    SelectProductData: CartItemType[];
-  };
+  SelectAddress: undefined;
+  //  {
+  //   SelectProductData: CartItemType[];
+  // };
   WishList: undefined;
   OrderDetails: undefined;
   Notifications: undefined;

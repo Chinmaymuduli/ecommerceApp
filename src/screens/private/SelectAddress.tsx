@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {Box, HStack, Pressable, Radio, ScrollView, Text} from 'native-base';
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -40,18 +40,19 @@ const AddressArr = [
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
 const SelectAddress = ({route, navigation}: Props) => {
-  const summaryData = route.params.SelectProductData;
   const [value, setValue] = React.useState(AddressArr[0].address);
-  console.log('object', value);
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <Box px={4} borderBottomWidth={10} borderColor={COLORS.lightGrey}>
           <Pressable
             onPress={() =>
-              navigation.navigate('Address', {
-                SelectAddress: summaryData,
-              })
+              navigation.navigate(
+                'Address',
+                // {
+                //   SelectAddress: summaryData,
+                // }
+              )
             }
             py={4}>
             <HStack
@@ -80,6 +81,7 @@ const SelectAddress = ({route, navigation}: Props) => {
                     setValue(nextValue);
                   }}
                   name="myRadioGroup"
+                  defaultValue={value}
                   accessibilityLabel="favorite number">
                   <Radio value={item?.value} my={4} mx={2} colorScheme="green">
                     <Box pb={3}>
@@ -113,9 +115,12 @@ const SelectAddress = ({route, navigation}: Props) => {
           borderRadius={4}
           mx={3}
           onPress={() =>
-            navigation.navigate('OrderSummary', {
-              CartItems: summaryData,
-            })
+            navigation.navigate(
+              'OrderSummary',
+              //  {
+              //   CartItems: summaryData,
+              // }
+            )
           }>
           <Text
             color={COLORS.textWhite}

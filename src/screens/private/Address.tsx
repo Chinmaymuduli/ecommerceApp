@@ -28,7 +28,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Address'>;
 const Address = ({route, navigation}: Props) => {
   // console.log('objectAddress', route.params.SelectAddress);
-  const previousData = route.params.SelectAddress;
+  // const previousData = route.params.SelectAddress;
   const {
     control,
     handleSubmit,
@@ -47,9 +47,12 @@ const Address = ({route, navigation}: Props) => {
       state: state,
     };
 
-    navigation.navigate('SelectAddress', {
-      SelectProductData: previousData,
-    });
+    navigation.navigate(
+      'SelectAddress',
+      //  {
+      //   SelectProductData: previousData,
+      // }
+    );
   };
 
   const Hometype = () => {

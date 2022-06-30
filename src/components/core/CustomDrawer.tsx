@@ -119,7 +119,11 @@ const CustomDrawer = () => {
     setSelectedButton(item?.id);
     if (item?.route === 'ExitApp') return handelCloseApp();
     if (item?.label === 'Business')
-      return setUserData({role: 'b2b'}), navigation.navigate(item?.route);
+      return navigation.navigate(item?.route, {
+        isBussiness: true,
+      });
+    // setUserData({role: 'b2b'}),
+    // navigation.navigate(item?.route)
     if (item?.label === 'Category')
       return setUserData({role: 'b2c'}), navigation.navigate(item?.route);
     navigation.navigate(item?.route);

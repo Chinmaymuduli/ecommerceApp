@@ -1,4 +1,5 @@
-import { AYUSH, AYUSH_1, AYUSH_2, AYUSH_3, AYUSH_4, AYUSH_5, GFOOD, GOURMEET1, GOURMEET2, GOURMEET3, GOURMEET4, GOURMEET5, HOMECARE, PCARE, PERSONAL1, PERSONAL2, PERSONAL3, PERSONAL4, PERSONAL5, SWEET1, SWEET2, SWEETS } from 'assets'
+import { ALOEVERARAW, AMLARAW, AYUSH, AYUSH_1, AYUSH_2, AYUSH_3, AYUSH_4, AYUSH_5, CHYAWANPRASHRAW, GFOOD, GOURMEET1, GOURMEET2, GOURMEET3, GOURMEET4, GOURMEET5, HOMECARE, JOILRAW, MAHUACOOKIESRAW, MAHUARAW, NIRGUNDIRAW, PCARE, PERSONAL1, PERSONAL2, PERSONAL3, PERSONAL4, PERSONAL5, RAGIRAW, SWEET1, SWEET2, SWEETS } from 'assets'
+
 // import { b_1, b_2, b_3, b_4, b_5, b_6, b_8 } from 'assets/business'
 
 import { CartItemType, CategoryType, CouponType, ProductType } from 'types'
@@ -55,8 +56,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 5,
             category: 'ayush products',
             isNew: false,
-            //   b2bImg: b_4.src,
-            //   b2bQuantity: '20 Kg',
+            b2bImg: MAHUARAW,
+            b2bQuantity: '20 Kg',
         },
         {
             id: 2,
@@ -88,8 +89,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 5,
             category: 'ayush products',
             isNew: true,
-            // b2bImg: b_5.src,
-            // b2bQuantity: '10 L',
+            b2bImg: JOILRAW,
+            b2bQuantity: '10 L',
         },
         {
             id: 11,
@@ -121,8 +122,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 5,
             category: 'ayush products',
             isNew: true,
-            // b2bImg: b_5.src,
-            // b2bQuantity: '10 L',
+            b2bImg: JOILRAW,
+            b2bQuantity: '10 L',
         },
         {
             id: 12,
@@ -154,8 +155,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 5,
             category: 'ayush products',
             isNew: true,
-            // b2bImg: b_5.src,
-            // b2bQuantity: '10 L',
+            b2bImg: NIRGUNDIRAW,
+            b2bQuantity: '10 L',
         },
         {
             id: 13,
@@ -187,8 +188,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 5,
             category: 'ayush products',
             isNew: true,
-            // b2bImg: b_5.src,
-            // b2bQuantity: '10 L',
+            b2bImg: NIRGUNDIRAW,
+            b2bQuantity: '10 L',
         },
 
         {
@@ -220,8 +221,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 5,
             category: 'gourmet foods',
             isNew: true,
-            // b2bImg: b_8.src,
-            // b2bQuantity: '10 Kg',
+            b2bImg: CHYAWANPRASHRAW,
+            b2bQuantity: '10 Kg',
         },
         {
             id: 4,
@@ -253,8 +254,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 5,
             category: 'gourmet foods',
             isNew: false,
-            // b2bImg: b_1.src,
-            // b2bQuantity: '20 Kg',
+            b2bImg: RAGIRAW,
+            b2bQuantity: '20 Kg',
         },
         {
             id: 14,
@@ -286,8 +287,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 5,
             category: 'gourmet foods',
             isNew: false,
-            // b2bImg: b_1.src,
-            // b2bQuantity: '20 Kg',
+            b2bImg: MAHUACOOKIESRAW,
+            b2bQuantity: '20 Kg',
         },
         {
             id: 15,
@@ -319,8 +320,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 5,
             category: 'gourmet foods',
             isNew: false,
-            // b2bImg: b_1.src,
-            // b2bQuantity: '20 Kg',
+            b2bImg: CHYAWANPRASHRAW,
+            b2bQuantity: '20 Kg',
         },
         {
             id: 16,
@@ -352,8 +353,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 5,
             category: 'gourmet foods',
             isNew: false,
-            // b2bImg: b_1.src,
-            // b2bQuantity: '20 Kg',
+            b2bImg: CHYAWANPRASHRAW,
+            b2bQuantity: '20 Kg',
         },
 
         {
@@ -386,8 +387,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'personal care',
             isNew: false,
-            // b2bImg: b_6.src,
-            // b2bQuantity: '10 Kg',
+            b2bImg: ALOEVERARAW,
+            b2bQuantity: '10 Kg',
         },
         {
             id: 6,
@@ -419,8 +420,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'personal care',
             isNew: true,
-            // b2bImg: b_6.src,
-            // b2bQuantity: '10 L',
+            b2bImg: ALOEVERARAW,
+            b2bQuantity: '10 L',
         },
         {
             id: 17,
@@ -452,8 +453,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'personal care',
             isNew: true,
-            // b2bImg: b_6.src,
-            // b2bQuantity: '10 L',
+            b2bImg: ALOEVERARAW,
+            b2bQuantity: '10 L',
         },
         {
             id: 18,
@@ -485,8 +486,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'personal care',
             isNew: true,
-            // b2bImg: b_6.src,
-            // b2bQuantity: '10 L',
+            b2bImg: ALOEVERARAW,
+            b2bQuantity: '10 L',
         },
         {
             id: 19,
@@ -518,8 +519,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'personal care',
             isNew: true,
-            // b2bImg: b_6.src,
-            // b2bQuantity: '10 L',
+            b2bImg: ALOEVERARAW,
+            b2bQuantity: '10 L',
         },
         {
             id: 7,
@@ -551,8 +552,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'home care',
             isNew: false,
-            // b2bImg: b_3.src,
-            // b2bQuantity: '20 Kg',
+            b2bImg: MAHUARAW,
+            b2bQuantity: '20 Kg',
         },
         {
             id: 8,
@@ -584,8 +585,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'home care',
             isNew: false,
-            // b2bImg: b_3.src,
-            // b2bQuantity: '20 Kg',
+            b2bImg: MAHUARAW,
+            b2bQuantity: '20 Kg',
         },
         {
             id: 20,
@@ -617,8 +618,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'home care',
             isNew: false,
-            // b2bImg: b_3.src,
-            // b2bQuantity: '20 Kg',
+            b2bImg: MAHUARAW,
+            b2bQuantity: '20 Kg',
         },
         {
             id: 20,
@@ -650,8 +651,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'home care',
             isNew: false,
-            // b2bImg: b_3.src,
-            // b2bQuantity: '20 Kg',
+            b2bImg: MAHUARAW,
+            b2bQuantity: '20 Kg',
         },
         {
             id: 21,
@@ -683,8 +684,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'home care',
             isNew: false,
-            // b2bImg: b_3.src,
-            // b2bQuantity: '20 Kg',
+            b2bImg: MAHUARAW,
+            b2bQuantity: '20 Kg',
         },
         {
             id: 9,
@@ -716,8 +717,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'sweets',
             isNew: false,
-            // b2bImg: b_5.src,
-            // b2bQuantity: '30 Kg',
+            b2bImg: AMLARAW,
+            b2bQuantity: '30 Kg',
         },
         {
             id: 10,
@@ -749,8 +750,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'sweets',
             isNew: true,
-            // b2bImg: b_2.src,
-            // b2bQuantity: '30 L',
+            b2bImg: JOILRAW,
+            b2bQuantity: '30 L',
         },
         {
             id: 22,
@@ -782,8 +783,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'sweets',
             isNew: true,
-            // b2bImg: b_2.src,
-            // b2bQuantity: '30 L',
+            b2bImg: AMLARAW,
+            b2bQuantity: '30 L',
         },
         {
             id: 23,
@@ -815,8 +816,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'sweets',
             isNew: true,
-            // b2bImg: b_2.src,
-            // b2bQuantity: '30 L',
+            b2bImg: AMLARAW,
+            b2bQuantity: '30 L',
         },
         {
             id: 24,
@@ -848,8 +849,8 @@ const useStore = create<ProductStoreType>((set) => ({
             ratings: 4,
             category: 'sweets',
             isNew: true,
-            // b2bImg: b_2.src,
-            // b2bQuantity: '30 L',
+            b2bImg: AMLARAW,
+            b2bQuantity: '30 L',
         },
     ],
     spacialProduct: [
@@ -1137,6 +1138,14 @@ const useStore = create<ProductStoreType>((set) => ({
                     }
                 return cartItem
             }),
+            orderItems: state.orderItems.map((cartItem) => {
+                if (cartItem.product.id === productID)
+                    return {
+                        ...cartItem,
+                        quantity: cartItem.quantity + 1,
+                    }
+                return cartItem
+            }),
         }))
     },
     //TODO: DECREMENT_QUANTITY
@@ -1150,6 +1159,7 @@ const useStore = create<ProductStoreType>((set) => ({
                     }
                 return cartItem
             }),
+
         }))
     },
 
@@ -1166,8 +1176,18 @@ const useStore = create<ProductStoreType>((set) => ({
                 return cartItem
 
             }),
+            orderItems: state.orderItems.map((cartItem) => {
+                if (cartItem.product.id === productID)
+                    return {
+                        ...cartItem,
+                        quantity: quantity,
+                    }
+                return cartItem
+            }),
         }))
     },
+
+
 
     orderItems: [],
 

@@ -31,12 +31,8 @@ const OrderDetails = () => {
               {Math.floor(Math.random() * (999999 - 100000) + 10000000)}
             </Text>
           </Box>
-          <Box>
-            <HStack
-              px={5}
-              py={5}
-              borderBottomWidth={3}
-              borderColor={COLORS.lightGrey}>
+          <Box borderBottomWidth={3} borderColor={COLORS.lightGrey}>
+            <HStack px={5} pt={5}>
               <VStack space={1} w={'70%'}>
                 <Heading size={'sm'} flexWrap={'wrap'}>
                   Jyotishmati Oil
@@ -58,6 +54,17 @@ const OrderDetails = () => {
                 />
               </Box>
             </HStack>
+            <Pressable
+              borderWidth={1}
+              alignSelf={'flex-start'}
+              mx={4}
+              borderColor={'red.400'}
+              borderRadius={5}
+              my={3}>
+              <Text px={3} py={1} bold color={'red.400'}>
+                Cancel Order
+              </Text>
+            </Pressable>
           </Box>
           <Box borderBottomWidth={3} borderColor={COLORS.lightGrey}>
             <Track />

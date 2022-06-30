@@ -148,7 +148,7 @@ export type ProductType = {
     ratings?: number
     category?: string
     isNew?: boolean
-    b2bImg?: string
+    b2bImg?: ImageSourcePropType
     b2bQuantity?: string
 }
 export type CouponType = {

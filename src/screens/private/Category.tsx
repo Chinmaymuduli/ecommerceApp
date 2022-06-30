@@ -24,6 +24,7 @@ import {useStore} from 'app';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route}: Props) => {
+  // console.log('objectRoute', route.params?.isBussiness);
   const {category, products} = useStore();
   const AYUSHPRODUCTS = products.filter(pd => pd.category === 'ayush products');
   const GOURMEET = products.filter(pd => pd.category === 'gourmet foods');
@@ -76,6 +77,7 @@ const Category = ({route}: Props) => {
                 data={AYUSHPRODUCTS}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
+                isBussiness={route.params?.isBussiness}
               />
             )}
           </Box>
@@ -88,6 +90,7 @@ const Category = ({route}: Props) => {
                 data={GOURMEET}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
+                isBussiness={route.params?.isBussiness}
               />
             )}
           </Box>
@@ -100,6 +103,7 @@ const Category = ({route}: Props) => {
                 data={PERSONALCARE}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
+                isBussiness={route.params?.isBussiness}
               />
             )}
           </Box>
@@ -112,6 +116,7 @@ const Category = ({route}: Props) => {
                 data={HOMECARE}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
+                isBussiness={route.params?.isBussiness}
               />
             )}
           </Box>
@@ -122,6 +127,7 @@ const Category = ({route}: Props) => {
                 data={SWEET}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
+                isBussiness={route.params?.isBussiness}
               />
             )}
           </Box>

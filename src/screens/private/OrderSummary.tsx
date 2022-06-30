@@ -4,7 +4,6 @@ import {
   Box,
   Heading,
   HStack,
-  Image,
   Pressable,
   ScrollView,
   Text,
@@ -20,9 +19,7 @@ import {useStore} from 'app';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route}: Props) => {
-  // const ordersData = route.params?.CartItems;
-  const {cartItems, orderItems} = useStore();
-  // console.log('object', orderItems.length);
+  const {cartItems, orderItems} = useStore(state => state);
 
   const {
     TotalProductPriceWithoutDiscount,
@@ -75,7 +72,7 @@ const OrderSummary = ({navigation, route}: Props) => {
         </Box>
         {/* card */}
         {orderItems.map(od => (
-          <OrderSummaryCard orderData={od} key={od.quantity} />
+          <OrderSummaryCard key={od.product?.id} orderData={od} />
         ))}
         {/* Card End */}
         <Box>

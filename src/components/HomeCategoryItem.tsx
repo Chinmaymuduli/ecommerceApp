@@ -13,10 +13,16 @@ type Props = {
   item: ProductType;
   setOpenAlert: (previousValue: boolean) => void;
   setAlertMessage: (txt: string) => void;
+  isBussiness?: boolean;
 };
 
-const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
-  // console.log('object', item);
+const HomeCategoryItem = ({
+  item,
+  setOpenAlert,
+  setAlertMessage,
+  isBussiness,
+}: Props) => {
+  // console.log('object', isBussiness);
   const SelecetedWeight = item?.weightAvailability?.reduce((pV, cV) => {
     if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
     return pV;
@@ -115,7 +121,7 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
           borderRadius={5}>
           <Image
             alt="image"
-            source={item?.img}
+            source={isBussiness ? item?.b2bImg : item?.img}
             style={styles.image}
             resizeMode={'contain'}
           />
@@ -222,13 +228,13 @@ const HomeCategoryItem = ({item, setOpenAlert, setAlertMessage}: Props) => {
                 (100 - (SelecetedWeight?.discount || 0))}
             </Text>
           </HStack>
-          {/* {item?.moq ? (
+          {isBussiness ? (
             <HStack>
               <Text fontSize={13} color={COLORS.cgcolor} bold>
-                MOQ: {item?.moq} kg
+                MOQ: {item.b2bQuantity}
               </Text>
             </HStack>
-          ) : null} */}
+          ) : null}
         </Box>
       </Pressable>
     </Box>

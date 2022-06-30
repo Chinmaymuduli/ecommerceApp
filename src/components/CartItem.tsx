@@ -15,6 +15,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {CartItemType, CartType} from 'types';
 import {useStore} from 'app';
+import OrderSummaryCounter from './OrderSummaryCounter';
 
 type CartItemTypes = {
   item: CartItemType;
@@ -111,6 +112,10 @@ const CartItem = ({item, setQuantity}: CartItemTypes) => {
           </HStack>
         </Box>
       </HStack>
+      {/* <OrderSummaryCounter
+        orderQuantity={item?.quantity}
+        productID={item?.product.id}
+      /> */}
 
       {/* alert dialog */}
       <AlertDialog
