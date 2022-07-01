@@ -8,6 +8,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {ProductType} from 'types';
 import {useStore} from 'app';
+import Counter from './Counter';
 
 type Props = {
   item: ProductType;
@@ -39,7 +40,7 @@ const HomeCategoryItem = ({
   } = useStore();
 
   const navigation = useNavigation<NavigationProps>();
-  const [count, setCount] = React.useState(0);
+  // const [count, setCount] = React.useState(0);
 
   const cartItemMetch = cartItems.some(
     cartData => cartData.product.id === item.id,
@@ -69,42 +70,42 @@ const HomeCategoryItem = ({
   };
 
   //   add to cart logic //
-  const increment = (id: number) => {
-    setCount(count + 1);
-    updateQuantity(id, count);
-  };
+  // const increment = (id: number) => {
+  //   setCount(count + 1);
+  //   updateQuantity(id, count);
+  // };
 
-  const decrement = (id: number) => {
-    if (count === 1) {
-      setCount(count - 1);
-      removeFromCart(id);
-      setOpenAlert(true);
-      setAlertMessage('Removed from cart');
-      setTimeout(() => {
-        setOpenAlert(false);
-      }, 2000);
-      return;
-    } else if (count > 1) {
-      setCount(count - 1);
-      updateQuantity(id, count);
-    } else {
-      setCount(0);
-    }
-  };
+  // const decrement = (id: number) => {
+  //   if (count === 1) {
+  //     setCount(count - 1);
+  //     removeFromCart(id);
+  //     setOpenAlert(true);
+  //     setAlertMessage('Removed from cart');
+  //     setTimeout(() => {
+  //       setOpenAlert(false);
+  //     }, 2000);
+  //     return;
+  //   } else if (count > 1) {
+  //     setCount(count - 1);
+  //     updateQuantity(id, count);
+  //   } else {
+  //     setCount(0);
+  //   }
+  // };
 
-  const addtoCartItem = (data: ProductType) => {
-    increment(data?.id),
-      addToCart({
-        product: data,
-        quantity: 1,
-        weight: SelecetedWeight,
-      }),
-      setOpenAlert(true),
-      setAlertMessage('Added to cart'),
-      setTimeout(() => {
-        setOpenAlert(false);
-      }, 4000);
-  };
+  // const addtoCartItem = (data: ProductType) => {
+  //   increment(data?.id),
+  //     addToCart({
+  //       product: data,
+  //       quantity: 1,
+  //       weight: SelecetedWeight,
+  //     }),
+  //     setOpenAlert(true),
+  //     setAlertMessage('Added to cart'),
+  //     setTimeout(() => {
+  //       setOpenAlert(false);
+  //     }, 4000);
+  // };
   return (
     <Box mt={3} overflow={'hidden'} mb={5}>
       <Pressable
@@ -160,7 +161,12 @@ const HomeCategoryItem = ({
           />
         </Box>
         {/* Add to cart */}
-        <Box
+        <Counter
+          item={item}
+          setOpenAlert={setOpenAlert}
+          setAlertMessage={setAlertMessage}
+        />
+        {/* <Box
           alignSelf={'flex-end'}
           right={2}
           bg={COLORS.textWhite}
@@ -214,7 +220,7 @@ const HomeCategoryItem = ({
               />
             </Box>
           )}
-        </Box>
+        </Box> */}
 
         <Box w={120}>
           <Text bold fontSize={12} numberOfLines={1}>

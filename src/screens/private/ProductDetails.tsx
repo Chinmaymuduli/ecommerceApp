@@ -63,6 +63,7 @@ const ProductDetails = ({route, navigation}: Props) => {
   const [alertMessage, setAlertMessage] = useState('Successfully added!');
 
   const {isOpen, onOpen, onClose} = useDisclose();
+  // console.log('first', count);
 
   const {
     addToCart,

@@ -46,9 +46,10 @@ export type PrivateRoutesType = {
   ProductDetails: {
     ProductDetailsType: ProductType;
   };
-  Coupon: {
-    couponProduct: CartItemType[];
-  };
+  Coupon: undefined;
+  // {
+  //   couponProduct: CartItemType[];
+  // };
   Address: undefined;
   // {
   //   SelectAddress: CartItemType[];

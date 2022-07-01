@@ -4,12 +4,36 @@ import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Box, HStack, Image, Pressable, Text} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {ProductDetailsType} from 'types';
+import {ProductDetailsType, ProductType} from 'types';
+import {useStore} from 'app';
 type productType = {
   item: ProductDetailsType;
 };
 
 const ProductComponent = ({item}: productType) => {
+  const {wishlistItems, removeFromWishlist, addToWishlist} = useStore();
+
+  const handleWishlist = (wishlistItem: ProductType) => {
+    const removeWishList = wishlistItems.some(data => {
+      return data.id === wishlistItem.id;
+    });
+
+    if (removeWishList) {
+      removeFromWishlist(wishlistItem?.id);
+      // setShowAlert(true);
+      // setAlertMessage('Remove from wishlist');
+      // setTimeout(() => {
+      //   setShowAlert(false);
+      // }, 2000);
+    } else {
+      addToWishlist(wishlistItem);
+      // setShowAlert(true);
+      // setAlertMessage('Added to wishlist');
+      // setTimeout(() => {
+      //   setShowAlert(false);
+      // }, 2000);
+    }
+  };
   return (
     <Box mt={3} overflow={'hidden'} mb={5}>
       <Pressable>
@@ -40,8 +64,14 @@ const ProductComponent = ({item}: productType) => {
         </Box>
         <Box position={'absolute'} right={4} borderRadius={10}>
           <Ionicons
-            onPress={() => console.log('hello')}
-            name="heart-outline"
+            onPress={() => handleWishlist(item)}
+            name={
+              wishlistItems.some(data => {
+                return data?.id === item.id;
+              })
+                ? 'heart'
+                : 'heart-outline'
+            }
             size={22}
             color={COLORS.cgcolor}
             style={{

@@ -141,10 +141,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
           </Box>
         </Box>
         <Box>
-          <Pressable
-            onPress={() =>
-              navigation.navigate('Coupon', {couponProduct: paymentProductData})
-            }>
+          <Pressable onPress={() => navigation.navigate('Coupon')}>
             <HStack
               my={2}
               bg={'#fff'}

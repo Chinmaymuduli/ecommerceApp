@@ -24,7 +24,7 @@ import {useStore} from 'app';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Coupon'>;
 const Coupon = ({route}: Props) => {
-  const couponProductData = route.params?.couponProduct;
+  // const couponProductData = route.params?.couponProduct;
   const navigation = useNavigation<NavigationProps>();
   const [couponCode, setCouponCode] = React.useState('');
   const [termandcondition, setTermandcondition] = React.useState<any>();
@@ -40,6 +40,7 @@ const Coupon = ({route}: Props) => {
     setCouponAlert(true);
     setTimeout(() => {
       setCouponAlert(false);
+
       navigation.goBack();
       // navigation.navigate('PaymentScreen', {
       //   PaymentData: {...couponProductData, couponValue: value},
