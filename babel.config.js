@@ -18,6 +18,7 @@ module.exports = {
           assets: './src/assets',
           'components/core': './src/components/core',
           app: './src/app',
+          api: './src/api',
         },
       },
     ],

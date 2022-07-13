@@ -1,4 +1,5 @@
 import { ImageSourcePropType } from "react-native";
+import type { APIFunction } from './api';
 
 export type quantity = {
     id?: number;
@@ -161,3 +162,36 @@ export type CouponType = {
     discountValue?: number
     description?: string
 }
+
+export type Pagination = { page?: number; limit?: number };
+
+export type User = {
+    Age?: string;
+    academicLevel?: string;
+    uid: string;
+    displayName: string;
+    email: string;
+    password: string;
+    createdAt: string;
+    updatedAt: string;
+    isBlocked: boolean;
+    photoURL?: string;
+    photoRef?: string;
+    // role: UserRole;
+    _vid: number;
+    // nationality?: Country;
+    // gender?: Gender;
+    phone?: string;
+    address?: string;
+    stallId?: string;
+    isOnline?: boolean;
+    place?: string;
+    // profession?:
+    // | 'Student'
+    // | 'Parent'
+    // | 'School Counsellors / Administrative'
+    // | 'Visitors'
+    // | 'Other';
+};
+
+export { APIFunction };
