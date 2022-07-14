@@ -1,10 +1,11 @@
 export { default as Login } from './public/Login'
 export { default as Register } from './public/Register'
-export { default as SplashScreen } from './public/SplashScreen'
 export { default as OnBoarding } from './public/OnBoarding'
 export { default as ForgotPassword } from './public/ForgotPassword'
 export { default as OtpScreen } from './public/OtpScreen'
 export { default as ResetPassword } from './public/ResetPassword'
+export { default as SplashScreen } from './common/SplashScreen'
+
 
 export { default as Home } from './private/Home'
 export { default as Cart } from './private/Cart'

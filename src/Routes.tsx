@@ -5,19 +5,26 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import ICONS from './assets/icons';
 import CustomDrawer from './components/core/CustomDrawer';
 import useAppContext from './contexts/useAppContext';
+import useAuth from './app/useAuth';
+import SplashScreen from './screens/common/SplashScreen';
+import useAppLoad from './hooks/useAppLoad';
 
 const Drawer = createDrawerNavigator();
 const Routes = () => {
-  const {isLoggedIn} = useAppContext();
+  const {user} = useAuth(state => state);
+
+  useAppLoad();
+
+  // if (!user) return <SplashScreen />;
+
   return (
     <>
-      {!isLoggedIn ? (
+      {!user?.uid ? (
         <Drawer.Navigator
           screenOptions={{
             headerShown: false,
             drawerStyle: {
               flex: 1,
-
               borderTopRightRadius: 20,
               borderBottomRightRadius: 20,
             },
@@ -35,7 +42,7 @@ const Routes = () => {
           />
         </Drawer.Navigator>
       ) : (
-        <PublicRoutes />
+        <PublicRoutes initialRouteName="OnBoarding" />
       )}
     </>
   );

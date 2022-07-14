@@ -10,14 +10,12 @@ import {
   OtpScreen,
   Register,
   ResetPassword,
-  SplashScreen,
 } from 'screens';
 
 export type PublicRoutesType = {
   Login: undefined;
   Register: undefined;
   OnBoarding: undefined;
-  SplashScreen: undefined;
   ForgotPassword: undefined;
   OtpScreen: undefined;
   ResetPassword: undefined;
@@ -26,10 +24,15 @@ export type PublicRoutesType = {
 export type PublicNavigation = NativeStackNavigationProp<PublicRoutesType>;
 const Stack = createNativeStackNavigator<PublicRoutesType>();
 
-const PublicRoutes = () => {
+const PublicRoutes = ({
+  initialRouteName = 'OnBoarding',
+}: {
+  initialRouteName: keyof PublicRoutesType;
+}) => {
   return (
-    <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="SplashScreen" component={SplashScreen} />
+    <Stack.Navigator
+      screenOptions={{headerShown: false}}
+      initialRouteName={initialRouteName}>
       <Stack.Screen name="OnBoarding" component={OnBoarding} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
