@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Badge,
   Box,
+  FlatList,
   Heading,
   HStack,
   Image,
@@ -14,14 +15,6 @@ import {GOURMEET5, LOGO, MENU2, WOMENEMP} from 'assets';
 import {COLORS} from 'configs';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {
-  AYUSHPRODUCT,
-  GOURMETPRODUCT,
-  HOMEPRODUCT,
-  PERSONALPRODUCT,
-  SPECIALPRODUCT,
-  SWEETPRODUCT,
-} from '../../constants';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {AlertComponent} from 'components/core';

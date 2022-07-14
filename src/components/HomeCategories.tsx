@@ -12,7 +12,6 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {COLORS} from 'configs';
-import {CATEGORYARR} from '../constants';
 import HomeCategoriesItem from './HomeCategoriesItem';
 import {useStore} from '../../src/app';
 
