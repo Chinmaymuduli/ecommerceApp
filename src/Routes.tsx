@@ -4,7 +4,6 @@ import PublicRoutes from './routes/PublicRoutes';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import ICONS from './assets/icons';
 import CustomDrawer from './components/core/CustomDrawer';
-import useAppContext from './contexts/useAppContext';
 import useAuth from './app/useAuth';
 import SplashScreen from './screens/common/SplashScreen';
 import useAppLoad from './hooks/useAppLoad';
@@ -15,7 +14,7 @@ const Routes = () => {
 
   useAppLoad();
 
-  // if (!user) return <SplashScreen />;
+  if (!user) return <SplashScreen />;
 
   return (
     <>

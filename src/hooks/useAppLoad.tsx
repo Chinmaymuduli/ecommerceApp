@@ -41,7 +41,9 @@ export default function useAppLoad() {
         const userStr = await AsyncStorage.getItem('user');
         const userJSON = JSON.parse(userStr || `{}`);
         console.log({userJSON});
-        await setUser(userJSON);
+        setTimeout(async () => {
+          await setUser(userJSON);
+        }, 2000);
       } catch (error) {
         console.log(error);
       }
