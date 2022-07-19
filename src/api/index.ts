@@ -1,7 +1,6 @@
 import { APIFunction } from 'types';
 
-export const BASE_URL = `https://https://chhattisgarh-herbals-web.vercel.app/api`;
-// export const AGORA_API = `https://study-in-russia-api.herokuapp.com`;
+export const BASE_URL = `https://chhattisgarh-herbals-api.herokuapp.com/api`;
 
 export const post: APIFunction = async ({
   path,

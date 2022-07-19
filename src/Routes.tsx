@@ -7,6 +7,7 @@ import CustomDrawer from './components/core/CustomDrawer';
 import useAuth from './app/useAuth';
 import SplashScreen from './screens/common/SplashScreen';
 import useAppLoad from './hooks/useAppLoad';
+import AppProvider from './layouts';
 
 const Drawer = createDrawerNavigator();
 const Routes = () => {
@@ -17,8 +18,8 @@ const Routes = () => {
   if (!user) return <SplashScreen />;
 
   return (
-    <>
-      {!user?.uid ? (
+    <AppProvider>
+      {user?.uid ? (
         <Drawer.Navigator
           screenOptions={{
             headerShown: false,
@@ -43,7 +44,7 @@ const Routes = () => {
       ) : (
         <PublicRoutes initialRouteName="OnBoarding" />
       )}
-    </>
+    </AppProvider>
   );
 };
 

@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {Alert, SafeAreaView, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {
   Box,
@@ -17,29 +17,53 @@ import {ICONS, LoginBg, LOGO} from 'assets';
 import {useNavigation} from '@react-navigation/native';
 import {PublicNavigation} from 'src/routes/PublicRoutes';
 import {Controller, useForm} from 'react-hook-form';
+import {useActions, useIsMounted} from 'hooks';
+import {post} from 'api';
+import {SuccessModal} from 'components/core';
 
 type REGISTERDATA = {
   email?: string;
   password?: string;
   name?: string;
+  confirmPassword?: string;
 };
 const Register = () => {
   const navigation = useNavigation<PublicNavigation>();
-  const [loader, setLoader] = useState(true);
   const [showPassword, setShowPassword] = useState(true);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(true);
+  const {setLoading} = useActions();
+  const [showModal, setShowModal] = useState(false);
   const {
     control,
     handleSubmit,
     formState: {errors},
+    watch,
+    reset,
   } = useForm();
+  const isMounted = useIsMounted();
+
   const onSubmit = async (data: REGISTERDATA) => {
     try {
-      setLoader(true);
-      console.log('object', data);
-    } catch (error) {
-      console.log('object', error);
+      isMounted.current && setLoading(true);
+      const createData = await post({
+        path: 'auth/signup',
+        body: JSON.stringify({
+          displayName: data.name,
+          email: data.email,
+          password: data.password,
+          confirmPassword: data.confirmPassword,
+        }),
+      });
+      if (createData.status === 200) {
+        setShowModal(true);
+        return;
+      }
+    } catch (error: any) {
+      if (error instanceof Error) return Alert.alert('Error', error.message);
+      return Alert.alert('Error', 'Something went wrong');
     } finally {
-      setLoader(false);
+      isMounted.current && setLoading(false);
+      reset();
     }
   };
   return (
@@ -152,6 +176,9 @@ const Register = () => {
                       <Input
                         placeholder="Password"
                         variant={'unstyled'}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        value={value}
                         fontSize={14}
                         type={'password'}
                         borderRadius={10}
@@ -186,6 +213,65 @@ const Register = () => {
                   {errors.password?.message}
                 </FormControl.ErrorMessage>
               </FormControl>
+
+              <FormControl isRequired isInvalid={'confirmPassword' in errors}>
+                <Controller
+                  control={control}
+                  render={({field: {onChange, onBlur, value}}) => (
+                    <Box
+                      borderWidth={1}
+                      borderColor={COLORS.cgcolor}
+                      borderRadius={10}
+                      mt={5}>
+                      <Input
+                        placeholder="Confirm Password"
+                        variant={'unstyled'}
+                        fontSize={14}
+                        type={'password'}
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        value={value}
+                        borderRadius={10}
+                        secureTextEntry={showConfirmPassword ? true : false}
+                        InputRightElement={
+                          <Box mr={2}>
+                            {showConfirmPassword ? (
+                              <ICONS.EyeClose
+                                size={22}
+                                color={COLORS.fadeBlack}
+                                onPress={() =>
+                                  setShowConfirmPassword(!showConfirmPassword)
+                                }
+                              />
+                            ) : (
+                              <ICONS.Eye
+                                size={22}
+                                color={COLORS.fadeBlack}
+                                onPress={() =>
+                                  setShowConfirmPassword(!showConfirmPassword)
+                                }
+                              />
+                            )}
+                          </Box>
+                        }
+                      />
+                    </Box>
+                  )}
+                  name="confirmPassword"
+                  rules={{
+                    required: 'Confirm Password is required',
+                    validate: (val: string) => {
+                      if (watch('password') != val) {
+                        return 'Your passwords do no match';
+                      }
+                    },
+                  }}
+                  defaultValue=""
+                />
+                <FormControl.ErrorMessage mt={0}>
+                  {errors.confirmPassword?.message}
+                </FormControl.ErrorMessage>
+              </FormControl>
               <Pressable onPress={handleSubmit(onSubmit)}>
                 <Box
                   bg={COLORS.cgcolor}
@@ -217,6 +303,8 @@ const Register = () => {
           </Box>
         </Box>
       </ScrollView>
+      {/* Modal */}
+      <SuccessModal setShowModal={setShowModal} showModal={showModal} />
     </SafeAreaView>
   );
 };
