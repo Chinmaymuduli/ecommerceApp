@@ -17,8 +17,13 @@ export type PublicRoutesType = {
   Register: undefined;
   OnBoarding: undefined;
   ForgotPassword: undefined;
-  OtpScreen: undefined;
-  ResetPassword: undefined;
+  OtpScreen: {
+    email?: string;
+  };
+  ResetPassword: {
+    Email?: string;
+    code?: number;
+  };
 };
 
 export type PublicNavigation = NativeStackNavigationProp<PublicRoutesType>;

@@ -19,4 +19,5 @@ export { default as FilterSheet } from './FilterSheet'
 export { default as OrderSummaryCard } from './OrderSummaryCard'
 export { default as OrderSummaryCounter } from './OrderSummaryCounter'
 export { default as Counter } from './Counter'
+export { default as VerifyEmailModal } from './VerifyEmailModal'
 

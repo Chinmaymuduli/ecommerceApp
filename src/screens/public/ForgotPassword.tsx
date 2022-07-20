@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import React from 'react';
+import {Alert, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
 import {
   Box,
   Center,
@@ -15,15 +15,47 @@ import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {PublicNavigation} from 'src/routes/PublicRoutes';
+import {post} from 'api';
+import {ErrorModal} from 'components/core';
+import {useActions, useIsMounted} from 'hooks';
 
 const ForgotPassword = () => {
   const navigation = useNavigation<PublicNavigation>();
+  const [email, setEmail] = useState<string>();
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [label, setLabel] = useState();
+  const {setLoading} = useActions();
+  const isMounted = useIsMounted();
+  const handelForgotPassword = async () => {
+    try {
+      isMounted.current && setLoading(true);
+      const verifyEmail = await post({
+        path: 'auth/forgot-password',
+        body: JSON.stringify({
+          email: email,
+        }),
+      });
+      console.log({verifyEmail});
+      if (verifyEmail.status === 500) {
+        setShowErrorModal(true);
+        setLabel(verifyEmail.error);
+        return;
+      }
+      navigation.navigate('OtpScreen', {email: email});
+    } catch (error) {
+      if (error instanceof Error) return Alert.alert('Error', error.message);
+      return Alert.alert('Error', 'Something went wrong');
+    } finally {
+      isMounted.current && setLoading(false);
+      setEmail('');
+    }
+  };
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <Pressable p={4} onPress={() => navigation.goBack()}>
         <Ionicons name="ios-arrow-back" size={28} color={COLORS.fadeBlack} />
       </Pressable>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps={'always'}>
         <Center>
           <Image
             source={forgotPassword}
@@ -44,6 +76,8 @@ const ForgotPassword = () => {
               fontSize={15}
               autoCapitalize="none"
               keyboardType="email-address"
+              value={email}
+              onChangeText={em => setEmail(em)}
               InputRightElement={
                 <>
                   <Ionicons name="at" size={30} color={COLORS.fadeBlack} />
@@ -51,7 +85,7 @@ const ForgotPassword = () => {
               }
             />
           </Box>
-          <Pressable mt={10} onPress={() => navigation.navigate('OtpScreen')}>
+          <Pressable mt={10} onPress={handelForgotPassword}>
             <Box bg={'#92E3A9'} borderRadius={5}>
               <Text
                 color={COLORS.fadeBlack}
@@ -65,6 +99,13 @@ const ForgotPassword = () => {
           </Pressable>
         </Box>
       </ScrollView>
+
+      {/* Error Modal */}
+      <ErrorModal
+        setShowErrorModal={setShowErrorModal}
+        showErrorModal={showErrorModal}
+        label={label}
+      />
     </Box>
   );
 };

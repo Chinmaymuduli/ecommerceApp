@@ -17,14 +17,16 @@ import LottieView from 'lottie-react-native';
 import {SUCCESS} from 'assets';
 import OTPTextInput from 'react-native-otp-textinput';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useNavigation} from '@react-navigation/native';
-import {PublicNavigation} from 'src/routes/PublicRoutes';
+import {PublicRoutesType} from 'src/routes/PublicRoutes';
+import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-const OtpScreen = () => {
+type Props = NativeStackScreenProps<PublicRoutesType, 'OtpScreen'>;
+const OtpScreen = ({route: {params}, navigation}: Props) => {
   let outInput = useRef(null);
-  const navigation = useNavigation<PublicNavigation>();
-  const [code, setCode] = React.useState('');
+  const Email = params.email;
+  const [code, setCode] = React.useState<number>();
   const [loader, setLoader] = React.useState(false);
+
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.textWhite}}>
       <Pressable p={4} onPress={() => navigation.goBack()}>
@@ -41,7 +43,7 @@ const OtpScreen = () => {
         fontStyle="normal"
         fontSize={18}
         color={COLORS.textSecondary}>
-        Code sent to bbggu@gmail.com
+        Code sent to {Email}
       </Text>
       <Center mt={5}>
         <Flex flexDirection="row">
@@ -51,7 +53,7 @@ const OtpScreen = () => {
             textInputStyle={styles.otpTextInput}
             tintColor={COLORS.primary}
             offTintColor={'#e4e4e4'}
-            handleTextChange={(text: any) => setCode(text)}
+            handleTextChange={(text: number) => setCode(text)}
           />
         </Flex>
       </Center>
@@ -69,7 +71,12 @@ const OtpScreen = () => {
         ) : (
           <Button
             // onPress={() => ConfirmOtp()}
-            onPress={() => navigation.navigate('ResetPassword')}
+            onPress={() =>
+              navigation.navigate('ResetPassword', {
+                Email,
+                code,
+              })
+            }
             style={styles.sendOtpButton}
             fontSize={18}
             color={COLORS.textWhite}

@@ -12,6 +12,7 @@ export { default as SUCCESSSQUANTITY } from './animation/successquantity.json'
 export { default as REVIEW } from './animation/review.json'
 export { default as ERROR } from './animation/error.json'
 export { default as ORDER } from './animation/order.json'
+export { default as EMAIL } from './animation/email.json'
 export { default as REGISTER_SUCCESS } from './animation/registerSuccess.json'
 
 export const LOGO = require('./images/logo.png');

@@ -19,7 +19,7 @@ import {PublicNavigation} from 'src/routes/PublicRoutes';
 import {Controller, useForm} from 'react-hook-form';
 import {useActions, useIsMounted} from 'hooks';
 import {post} from 'api';
-import {SuccessModal} from 'components/core';
+import {ErrorModal, SuccessModal} from 'components/core';
 
 type REGISTERDATA = {
   email?: string;
@@ -33,6 +33,8 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(true);
   const {setLoading} = useActions();
   const [showModal, setShowModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [label, setLabel] = useState();
   const {
     control,
     handleSubmit,
@@ -54,10 +56,13 @@ const Register = () => {
           confirmPassword: data.confirmPassword,
         }),
       });
+
       if (createData.status === 200) {
         setShowModal(true);
         return;
       }
+      setShowErrorModal(true);
+      setLabel(createData.error);
     } catch (error: any) {
       if (error instanceof Error) return Alert.alert('Error', error.message);
       return Alert.alert('Error', 'Something went wrong');
@@ -305,6 +310,11 @@ const Register = () => {
       </ScrollView>
       {/* Modal */}
       <SuccessModal setShowModal={setShowModal} showModal={showModal} />
+      <ErrorModal
+        setShowErrorModal={setShowErrorModal}
+        showErrorModal={showErrorModal}
+        label={label}
+      />
     </SafeAreaView>
   );
 };

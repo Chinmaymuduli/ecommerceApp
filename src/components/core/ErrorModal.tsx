@@ -4,7 +4,13 @@ import {Box, Center, Heading, Modal, Pressable, Text} from 'native-base';
 import LottieView from 'lottie-react-native';
 import {ERROR} from 'assets';
 
-const ErrorModal = ({showErrorModal, setShowErrorModal, label}: any) => {
+type Props = {
+  showErrorModal?: boolean;
+  setShowErrorModal: (prev: boolean) => void;
+  label?: string;
+};
+
+const ErrorModal = ({showErrorModal, setShowErrorModal, label}: Props) => {
   return (
     <>
       <Center>
