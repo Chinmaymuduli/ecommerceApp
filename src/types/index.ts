@@ -102,11 +102,6 @@ export type activeOrderType = {
 }
 
 export type SelectQuantityType = {
-    // label: string;
-    // value: number;
-    // price: number;
-    // discount: number;
-    // offer: string;
     weight?: string
     currentPrice?: number
     inStock?: boolean
@@ -168,7 +163,7 @@ export type Pagination = { page?: number; limit?: number };
 export type User = {
     Age?: string;
     academicLevel?: string;
-    uid: string;
+    _id: string;
     displayName: string;
     email: string;
     password: string;

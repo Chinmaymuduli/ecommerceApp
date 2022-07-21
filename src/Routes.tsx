@@ -19,7 +19,7 @@ const Routes = () => {
 
   return (
     <AppProvider>
-      {user?.uid ? (
+      {user?._id ? (
         <Drawer.Navigator
           screenOptions={{
             headerShown: false,

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Box,
   Center,
@@ -20,6 +20,8 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {ImagePicker} from 'components/core';
 import {Controller, useForm} from 'react-hook-form';
+import {useFetch} from 'hooks';
+import {User} from 'types';
 
 type Prop3 = {
   mobileData: {
@@ -28,10 +30,20 @@ type Prop3 = {
 };
 
 const EditProfile = () => {
+  const {data} = useFetch<User>('user');
+  console.log(data?.results.displayName);
   const navigation = useNavigation<NavigationProps>();
   const [visiable, setVisiable] = useState<boolean>(false);
   const [profileIimage, setprofileimage] = useState<any>('');
   const [gender, setGender] = useState<string>('Male');
+  const [userName, setUserName] = useState<string | undefined>();
+  const [userEmail, setUserEmail] = useState<string | undefined>();
+  // console.log({userName});
+  useEffect(() => {
+    setValue('displayName', data?.results?.displayName);
+    // setUserEmail(data?.results.email);
+    setValue('EmailId', data?.results?.email);
+  }, [data?.results]);
 
   const handleDismiss = () => {
     setVisiable(false);
@@ -40,6 +52,7 @@ const EditProfile = () => {
     control,
     handleSubmit,
     formState: {errors},
+    setValue,
   } = useForm();
 
   const {
@@ -139,35 +152,39 @@ const EditProfile = () => {
           </Pressable>
         </Box>
         <Box px={4} mt={4}>
-          <FormControl isRequired isInvalid={'firstName' in errors}>
+          <FormControl isRequired isInvalid={'displayName' in errors}>
             <Controller
               control={control}
               render={({field: {onChange, onBlur, value}}) => (
                 <Box>
                   <Input
-                    placeholder="First Name"
+                    placeholder="Display Name"
                     variant={'underlined'}
                     fontSize={15}
                     bgColor={COLORS.textWhite}
                     onChangeText={onChange}
+                    // onChangeText={dn => {
+                    //   setUserName(dn), onChange();
+                    // }}
                     onBlur={onBlur}
+                    // value={userName}
                     value={value}
                     borderColor={COLORS.fadeBlack}
                   />
                 </Box>
               )}
-              name="firstName"
+              name="displayName"
               rules={{
                 required: 'First Name is required',
               }}
               defaultValue=""
             />
             <FormControl.ErrorMessage mt={0}>
-              {errors.firstName?.message}
+              {errors.displayName?.message}
             </FormControl.ErrorMessage>
           </FormControl>
 
-          <FormControl isRequired isInvalid={'LastName' in errors}>
+          {/* <FormControl isRequired isInvalid={'LastName' in errors}>
             <Controller
               control={control}
               render={({field: {onChange, onBlur, value}}) => (
@@ -194,7 +211,7 @@ const EditProfile = () => {
             <FormControl.ErrorMessage mt={0}>
               {errors.LastName?.message}
             </FormControl.ErrorMessage>
-          </FormControl>
+          </FormControl> */}
 
           <Box mt={3}>
             <Text fontSize={15} bold>
@@ -286,9 +303,11 @@ const EditProfile = () => {
                       h={10}
                       borderColor={COLORS.fadeBlack}
                       bgColor={COLORS.textWhite}
-                      onChangeText={onChange}
+                      // onChangeText={onChange}
                       onBlur={onBlur}
-                      value={value}
+                      // value={value}
+                      onChangeText={em => setUserEmail(em)}
+                      value={userEmail}
                       keyboardType={'email-address'}
                       autoCapitalize={'none'}
                       InputRightElement={

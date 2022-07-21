@@ -16,6 +16,7 @@ import {COLORS} from 'configs';
 import LottieView from 'lottie-react-native';
 
 import Svg, {G, Circle} from 'react-native-svg';
+import {useAuth} from 'app';
 
 const onBoardingData = [
   {
@@ -44,6 +45,8 @@ const OnBoarding = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [viewableItems, setViewableItems] = useState<any>([]);
   const WINDOW_WIDTH = useWindowDimensions();
+  const {user} = useAuth();
+  // console.log({user});
   const handleViewableItemsChanged = useRef(({viewableItems}: any) => {
     setViewableItems(viewableItems);
   });

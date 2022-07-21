@@ -7,6 +7,7 @@ export type APIOptsType = {
   };
   options?: RequestInit;
   token?: string;
+
 };
 
 export type APIReturnType = {

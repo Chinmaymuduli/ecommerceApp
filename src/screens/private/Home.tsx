@@ -24,7 +24,7 @@ import {
   HomeSlider,
   SpecialProduct,
 } from 'components';
-import {useStore} from 'app';
+import {useAuth, useStore} from 'app';
 
 const Home = () => {
   const {products, spacialProduct} = useStore();
@@ -37,7 +37,8 @@ const Home = () => {
   const [openAlert, setOpenAlert] = React.useState<boolean>(false);
   const [alertMessage, setAlertMessage] =
     React.useState<any>('Added Successfully');
-
+  const {user} = useAuth();
+  // console.log({user});
   return (
     <SafeAreaView
       style={{

@@ -17,6 +17,9 @@ import {useNavigation} from '@react-navigation/native';
 import Materialicons from 'react-native-vector-icons/MaterialIcons';
 import {useAppContext} from 'contexts';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {useAuth} from 'app';
+import {useAccessToken, useActions, useIsMounted} from 'hooks';
+import {post, put} from 'api';
 
 const drawerArray = [
   {
@@ -113,9 +116,13 @@ const CustomDrawer = () => {
   const navigation = useNavigation<NavigationProps>();
   const [selectedButton, setSelectedButton] = React.useState(1);
   const {setUserData} = useAppContext();
-  // console.log('object', selectedButton);
-  const {setIsLoggedIn} = useAppContext();
+  const {setLoading} = useActions();
+  const {accessToken} = useAccessToken();
+  const isMounted = useIsMounted();
+  const {user, setUser} = useAuth(state => state);
+
   const DrawerNaviagte = (item: any) => {
+    console.log({user: user});
     setSelectedButton(item?.id);
     if (item?.route === 'ExitApp') return handelCloseApp();
     if (item?.label === 'Business')
@@ -144,27 +151,47 @@ const CustomDrawer = () => {
       {cancelable: true},
     );
   }, []);
+  // const handelLogout = async () => {
+  //   try {
+  //     isMounted.current && setLoading(true);
+  //     const logoutRes = await put({
+  //       path: 'auth/logout',
+  //       token: accessToken,
+  //     });
+
+  //     if (logoutRes.status === 200) {
+  //       setUser({});
+  //     }
+  //   } catch (error) {
+  //     if (error instanceof Error) return Alert.alert('Error', error.message);
+  //     return Alert.alert('Error', 'Something went wrong');
+  //   } finally {
+  //     isMounted.current && setLoading(false);
+  //   }
+  // };
   return (
     <Box flex={1}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <HStack
-          space={3}
-          alignItems={'center'}
-          justifyContent={'center'}
-          pt={7}
-          px={4}>
-          <Image
-            alt="drawerImage"
-            source={{
-              uri: 'https://t3.ftcdn.net/jpg/01/17/72/36/240_F_117723612_z7zQmUrrpG4IRGQLvgX5nwtwC18ke3qU.jpg',
-            }}
-            style={styles.drawerImage}
-          />
-          <VStack>
-            <Heading size={'xs'}>Chinmay muduli</Heading>
-            <Text numberOfLines={1}>demouser@gmail.com</Text>
-          </VStack>
-        </HStack>
+        <Pressable onPress={() => navigation.navigate('Profile')}>
+          <HStack
+            space={3}
+            alignItems={'center'}
+            justifyContent={'center'}
+            pt={7}
+            px={4}>
+            <Image
+              alt="drawerImage"
+              source={{
+                uri: 'https://t3.ftcdn.net/jpg/01/17/72/36/240_F_117723612_z7zQmUrrpG4IRGQLvgX5nwtwC18ke3qU.jpg',
+              }}
+              style={styles.drawerImage}
+            />
+            <VStack>
+              <Heading size={'xs'}>{user?.displayName}</Heading>
+              <Text numberOfLines={1}>{user?.email}</Text>
+            </VStack>
+          </HStack>
+        </Pressable>
         <Box alignItems={'center'} py={5}>
           <Divider w={250} />
         </Box>
@@ -214,7 +241,9 @@ const CustomDrawer = () => {
           <Divider />
         </Box>
         <Box px={5} mb={8} mt={2}>
-          <Pressable onPress={() => setIsLoggedIn(false)}>
+          <Pressable
+          // onPress={handelLogout}
+          >
             <HStack justifyContent={'space-between'}>
               <HStack space={3}>
                 <Materialicons

@@ -16,10 +16,14 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useStore} from 'app';
+import {useFetch} from 'hooks';
+import {User} from 'types';
 
 const Profile = () => {
   const navigation = useNavigation<NavigationProps>();
   const {cartItems} = useStore();
+  const {data} = useFetch<User>('user');
+  console.log({data});
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <Box bg={COLORS.cgcolor}>
@@ -77,12 +81,12 @@ const Profile = () => {
               borderRadius={50}
             />
             <Text color={COLORS.textWhite} mt={4} bold>
-              Chinmay Muduli
+              {data?.results?.displayName}
             </Text>
 
             <Box alignItems={'center'} mt={4}>
               <Text color={COLORS.textWhite}>+91 1234567890</Text>
-              <Text color={COLORS.textWhite}>demouser@gmail.com</Text>
+              <Text color={COLORS.textWhite}>{data?.results?.email}</Text>
             </Box>
             <Box position={'absolute'} right={4} bottom={3}>
               <FontAwesome5
@@ -167,11 +171,12 @@ const Profile = () => {
               alignSelf={'flex-end'}
               px={4}
               py={3}
-              onPress={() =>
-                navigation.navigate('SelectAddress', {
-                  SelectProductData: [],
-                })
-              }>
+              // onPress={() =>
+              //   navigation.navigate('SelectAddress', {
+              //     SelectProductData: [],
+              //   })
+              // }
+            >
               <Text color={COLORS.cgcolor} bold>
                 View Your Address
               </Text>

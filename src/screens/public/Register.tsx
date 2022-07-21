@@ -56,7 +56,7 @@ const Register = () => {
           confirmPassword: data.confirmPassword,
         }),
       });
-
+      console.log({createData});
       if (createData.status === 200) {
         setShowModal(true);
         return;

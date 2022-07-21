@@ -17,7 +17,7 @@ import {ICONS, LoginBg, LOGO} from 'assets';
 import {useNavigation} from '@react-navigation/native';
 import {PublicNavigation} from 'src/routes/PublicRoutes';
 import {Controller, useForm} from 'react-hook-form';
-import {useIsMounted} from 'hooks';
+import {useAccessToken, useIsMounted} from 'hooks';
 import {post} from 'api';
 import {ErrorModal} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -34,7 +34,7 @@ const Login = () => {
   const [loader, setLoader] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(true);
   const isMounted = useIsMounted();
-  const {setUser} = useAuth();
+  const {setUser, user} = useAuth();
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [label, setLabel] = useState();
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -43,6 +43,8 @@ const Login = () => {
     handleSubmit,
     formState: {errors},
   } = useForm();
+  const {setAccessToken, accessToken} = useAccessToken();
+  console.log({user});
   const onSubmit = async (data: DATATYPE) => {
     try {
       isMounted.current && setLoader(true);
@@ -52,15 +54,17 @@ const Login = () => {
           email: data.email,
           password: data.password,
         }),
+        token: accessToken,
       });
       if (loginData.status === 500) {
         setShowErrorModal(true);
         setLabel(loginData.error);
         return;
       }
-      // loginData
+      // console.log({loginData});
       await AsyncStorage.setItem('tokenId', loginData.REFRESH_TOKEN);
-      // setUser({});
+      setAccessToken(loginData.ACCESS_TOKEN);
+      setUser(loginData.data);
     } catch (error) {
       if (error instanceof Error) return Alert.alert('Error', error.message);
       return Alert.alert('Error', 'Something went wrong');
