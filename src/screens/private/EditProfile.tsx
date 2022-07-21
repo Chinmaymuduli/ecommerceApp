@@ -20,29 +20,22 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {ImagePicker} from 'components/core';
 import {Controller, useForm} from 'react-hook-form';
-import {useFetch} from 'hooks';
+import {useAccessToken, useFetch} from 'hooks';
 import {User} from 'types';
-
-type Prop3 = {
-  mobileData: {
-    MobileNumber?: string;
-  };
-};
+import {put} from 'api';
+import {useAuth} from 'app';
 
 const EditProfile = () => {
   const {data} = useFetch<User>('user');
-  console.log(data?.results.displayName);
   const navigation = useNavigation<NavigationProps>();
   const [visiable, setVisiable] = useState<boolean>(false);
   const [profileIimage, setprofileimage] = useState<any>('');
   const [gender, setGender] = useState<string>('Male');
-  const [userName, setUserName] = useState<string | undefined>();
-  const [userEmail, setUserEmail] = useState<string | undefined>();
-  // console.log({userName});
+  const {accessToken} = useAccessToken();
+
   useEffect(() => {
     setValue('displayName', data?.results?.displayName);
-    // setUserEmail(data?.results.email);
-    setValue('EmailId', data?.results?.email);
+    setValue3('email', data?.results?.email);
   }, [data?.results]);
 
   const handleDismiss = () => {
@@ -55,25 +48,62 @@ const EditProfile = () => {
     setValue,
   } = useForm();
 
-  const {
-    control: control2,
-    formState: {errors: errors2},
-    handleSubmit: handleSubmit2,
-  } = useForm();
+  // const {
+  //   control: control2,
+  //   formState: {errors: errors2},
+  //   handleSubmit: handleSubmit2,
+  // } = useForm();
 
   const {
     control: control3,
     formState: {errors: errors3},
     handleSubmit: handleSubmit3,
+    setValue: setValue3,
   } = useForm();
 
   const onSubmit = async (data: any) => {
-    const EditProfileData = {
-      ...data,
-      gender: gender,
-    };
+    // const postImg = async () => {
+    //   try {
+    //     const formData = new FormData();
+    //     formData.append('profilePicture', {
+    //       uri: ImageURI?.path?.uri,
+    //       type: ImageURI?.path?.type,
+    //       name: ImageURI?.path?.fileName,
+    //     });
+    //     let res = await fetch(
+    //       `${BASE_URL}/user/account-update/${userData?._id}`,
+    //       {
+    //         method: 'put',
+    //         body: formData,
+    //         headers: {
+    //           'Content-Type': 'multipart/form-data',
+    //         },
+    //       },
+    //     );
+    //     let response = await res.json();
+    //   } catch (error) {
+    //     console.log('err', error);
+    //   }
+    // };
+    //
     try {
-      console.log('object', EditProfileData);
+      // const formData = new FormData();
+      // formData.append('avatar', {
+      //   uri: profileIimage?.path?.uri,
+      //   type: profileIimage?.path?.type,
+      //   name: profileIimage?.path?.fileName,
+      // })
+      const nameResponse = await put({
+        path: 'user/account',
+        body: JSON.stringify({
+          displayName: data?.displayName,
+          gender: gender,
+          phoneNumber: data?.MobileNumber,
+          // formData,
+        }),
+        token: accessToken,
+      });
+      console.log({nameResponse});
     } catch (error) {
       console.log('object', error);
     }
@@ -87,9 +117,6 @@ const EditProfile = () => {
     }
   };
 
-  const handelMobileUpdate = async (mobileData: any) => {
-    console.log(mobileData);
-  };
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <ScrollView>
@@ -163,11 +190,7 @@ const EditProfile = () => {
                     fontSize={15}
                     bgColor={COLORS.textWhite}
                     onChangeText={onChange}
-                    // onChangeText={dn => {
-                    //   setUserName(dn), onChange();
-                    // }}
                     onBlur={onBlur}
-                    // value={userName}
                     value={value}
                     borderColor={COLORS.fadeBlack}
                   />
@@ -184,35 +207,6 @@ const EditProfile = () => {
             </FormControl.ErrorMessage>
           </FormControl>
 
-          {/* <FormControl isRequired isInvalid={'LastName' in errors}>
-            <Controller
-              control={control}
-              render={({field: {onChange, onBlur, value}}) => (
-                <Box mt={3}>
-                  <Input
-                    placeholder="Last Name"
-                    variant={'underlined'}
-                    fontSize={15}
-                    h={10}
-                    bgColor={COLORS.textWhite}
-                    borderColor={COLORS.fadeBlack}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                  />
-                </Box>
-              )}
-              name="LastName"
-              rules={{
-                required: 'Last Name is required',
-              }}
-              defaultValue=""
-            />
-            <FormControl.ErrorMessage mt={0}>
-              {errors.LastName?.message}
-            </FormControl.ErrorMessage>
-          </FormControl> */}
-
           <Box mt={3}>
             <Text fontSize={15} bold>
               Gender :
@@ -222,7 +216,7 @@ const EditProfile = () => {
               onChange={gen => setGender(gen)}
               mt={2}
               name="exampleGroup"
-              defaultValue="Male"
+              defaultValue="MALE"
               accessibilityLabel="pick a size">
               <Stack
                 direction={{
@@ -236,14 +230,49 @@ const EditProfile = () => {
                 space={5}
                 w="75%"
                 maxW="300px">
-                <Radio value="Male" colorScheme="green" size="sm" my={1}>
+                <Radio value="MALE" colorScheme="green" size="sm" my={1}>
                   Male
                 </Radio>
-                <Radio value="Female" colorScheme="green" size="sm" my={1}>
+                <Radio value="FEMALE" colorScheme="green" size="sm" my={1}>
                   Female
                 </Radio>
               </Stack>
             </Radio.Group>
+
+            <FormControl isRequired isInvalid={'MobileNumber' in errors} mt={5}>
+              <Controller
+                control={control}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <Input
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    placeholder="Mobile Number"
+                    variant={'underlined'}
+                    fontSize={15}
+                    h={10}
+                    borderColor={COLORS.fadeBlack}
+                    keyboardType={'numeric'}
+                    bgColor={COLORS.textWhite}
+                    // InputRightElement={
+                    //   <Pressable onPress={handleSubmit2(handelMobileUpdate)}>
+                    //     <Text bold color={'green.700'}>
+                    //       Update
+                    //     </Text>
+                    //   </Pressable>
+                    // }
+                  />
+                )}
+                name="MobileNumber"
+                rules={{
+                  required: 'Mobile Number is required',
+                }}
+                defaultValue=""
+              />
+              <FormControl.ErrorMessage mt={0}>
+                {errors.MobileNumber?.message}
+              </FormControl.ErrorMessage>
+            </FormControl>
 
             <Pressable
               alignItems={'center'}
@@ -256,7 +285,7 @@ const EditProfile = () => {
           </Box>
 
           <Box mt={5}>
-            <FormControl isRequired isInvalid={'MobileNumber' in errors2}>
+            {/* <FormControl isRequired isInvalid={'MobileNumber' in errors2}>
               <Controller
                 control={control2}
                 render={({field: {onChange, onBlur, value}}) => (
@@ -289,9 +318,9 @@ const EditProfile = () => {
               <FormControl.ErrorMessage mt={0}>
                 {errors2.MobileNumber?.message}
               </FormControl.ErrorMessage>
-            </FormControl>
+            </FormControl> */}
 
-            <FormControl isRequired isInvalid={'EmailId' in errors3}>
+            <FormControl isRequired isInvalid={'email' in errors3}>
               <Controller
                 control={control3}
                 render={({field: {onChange, onBlur, value}}) => (
@@ -303,11 +332,11 @@ const EditProfile = () => {
                       h={10}
                       borderColor={COLORS.fadeBlack}
                       bgColor={COLORS.textWhite}
-                      // onChangeText={onChange}
+                      onChangeText={onChange}
                       onBlur={onBlur}
-                      // value={value}
-                      onChangeText={em => setUserEmail(em)}
-                      value={userEmail}
+                      value={value}
+                      // onChangeText={em => setUserEmail(em)}
+                      // value={userEmail}
                       keyboardType={'email-address'}
                       autoCapitalize={'none'}
                       InputRightElement={
@@ -320,14 +349,14 @@ const EditProfile = () => {
                     />
                   </Box>
                 )}
-                name="EmailId"
+                name="email"
                 rules={{
                   required: 'Email Id is required',
                 }}
                 defaultValue=""
               />
               <FormControl.ErrorMessage mt={0}>
-                {errors3.EmailId?.message}
+                {errors3.email?.message}
               </FormControl.ErrorMessage>
             </FormControl>
           </Box>
