@@ -1,5 +1,5 @@
-import {SafeAreaView, StyleSheet} from 'react-native';
-import React from 'react';
+import {Alert, SafeAreaView, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
 import {
   Box,
   FormControl,
@@ -17,7 +17,12 @@ import {ICONS, LoginBg, LOGO} from 'assets';
 import {useNavigation} from '@react-navigation/native';
 import {PublicNavigation} from 'src/routes/PublicRoutes';
 import {Controller, useForm} from 'react-hook-form';
-import {useAppContext} from 'contexts';
+import {useIsMounted} from 'hooks';
+import {post} from 'api';
+import {ErrorModal} from 'components/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAuth} from 'app';
+import {VerifyEmailModal} from 'components';
 
 type DATATYPE = {
   email?: string;
@@ -28,7 +33,11 @@ const Login = () => {
   const navigation = useNavigation<PublicNavigation>();
   const [loader, setLoader] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(true);
-  const {isLoggedIn, setIsLoggedIn} = useAppContext();
+  const isMounted = useIsMounted();
+  const {setUser} = useAuth();
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [label, setLabel] = useState();
+  const [showEmailModal, setShowEmailModal] = useState(false);
   const {
     control,
     handleSubmit,
@@ -36,15 +45,25 @@ const Login = () => {
   } = useForm();
   const onSubmit = async (data: DATATYPE) => {
     try {
-      setLoader(true);
-      if (
-        data.email === 'demouser@gmail.com' &&
-        data.password === 'demouser@gmail.com'
-      ) {
-        setIsLoggedIn(true);
+      isMounted.current && setLoader(true);
+      const loginData = await post({
+        path: 'auth/login',
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+        }),
+      });
+      if (loginData.status === 500) {
+        setShowErrorModal(true);
+        setLabel(loginData.error);
+        return;
       }
+      // loginData
+      await AsyncStorage.setItem('tokenId', loginData.REFRESH_TOKEN);
+      // setUser({});
     } catch (error) {
-      console.log('object', error);
+      if (error instanceof Error) return Alert.alert('Error', error.message);
+      return Alert.alert('Error', 'Something went wrong');
     } finally {
       setLoader(false);
     }
@@ -160,11 +179,23 @@ const Login = () => {
                   {errors.password?.message}
                 </FormControl.ErrorMessage>
               </FormControl>
-              <Pressable onPress={() => navigation.navigate('ForgotPassword')}>
-                <Box alignItems={'flex-end'} mt={2}>
-                  <Text color={COLORS.grey}>Forgot Password ?</Text>
-                </Box>
-              </Pressable>
+              <Row justifyContent={'space-between'} mt={1}>
+                <Pressable onPress={() => setShowEmailModal(true)}>
+                  <Box mt={1}>
+                    <Text color={COLORS.grey} bold>
+                      Verify Email ?
+                    </Text>
+                  </Box>
+                </Pressable>
+                <Pressable
+                  onPress={() => navigation.navigate('ForgotPassword')}>
+                  <Box mt={1}>
+                    <Text color={COLORS.grey} bold>
+                      Forgot Password ?
+                    </Text>
+                  </Box>
+                </Pressable>
+              </Row>
               <Pressable onPress={handleSubmit(onSubmit)} mt={2}>
                 <Row
                   bg={!loader ? COLORS.cgcolor : COLORS.grey}
@@ -197,7 +228,10 @@ const Login = () => {
               </Row>
             </Pressable>
 
-            <Pressable mt={5} onPress={() => setIsLoggedIn(true)}>
+            <Pressable
+              mt={5}
+              // onPress={() => setIsLoggedIn(true)}
+            >
               <Row justifyContent={'center'}>
                 <Text fontSize={15} underline>
                   Continue as guest
@@ -207,6 +241,17 @@ const Login = () => {
           </Box>
         </Box>
       </ScrollView>
+      {/* Error Modal */}
+      <ErrorModal
+        setShowErrorModal={setShowErrorModal}
+        label={label}
+        showErrorModal={showErrorModal}
+      />
+      {/* Modal */}
+      <VerifyEmailModal
+        setShowEmailModal={setShowEmailModal}
+        showEmailModal={showEmailModal}
+      />
     </SafeAreaView>
   );
 };
