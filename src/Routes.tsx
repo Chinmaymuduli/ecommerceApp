@@ -11,7 +11,8 @@ import AppProvider from './layouts';
 
 const Drawer = createDrawerNavigator();
 const Routes = () => {
-  const {user} = useAuth(state => state);
+  const {user, loggedIn} = useAuth(state => state);
+  console.log({user_data: user});
 
   useAppLoad();
 
@@ -19,7 +20,8 @@ const Routes = () => {
 
   return (
     <AppProvider>
-      {user?._id ? (
+      {loggedIn ? (
+        // {user?._id ? (
         <Drawer.Navigator
           screenOptions={{
             headerShown: false,

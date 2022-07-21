@@ -18,8 +18,9 @@ import Materialicons from 'react-native-vector-icons/MaterialIcons';
 import {useAppContext} from 'contexts';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {useAuth} from 'app';
-import {useAccessToken, useActions, useIsMounted} from 'hooks';
+import {useAccessToken, useActions, useFetch, useIsMounted} from 'hooks';
 import {post, put} from 'api';
+import {User} from 'types';
 
 const drawerArray = [
   {
@@ -119,10 +120,11 @@ const CustomDrawer = () => {
   const {setLoading} = useActions();
   const {accessToken} = useAccessToken();
   const isMounted = useIsMounted();
-  const {user, setUser} = useAuth(state => state);
+  const {user, setUser, setLoggedIn} = useAuth(state => state);
 
   const DrawerNaviagte = (item: any) => {
-    console.log({user: user});
+    // const {data} = useFetch<User>('user');
+    // console.log({data});
     setSelectedButton(item?.id);
     if (item?.route === 'ExitApp') return handelCloseApp();
     if (item?.label === 'Business')
@@ -151,24 +153,25 @@ const CustomDrawer = () => {
       {cancelable: true},
     );
   }, []);
-  // const handelLogout = async () => {
-  //   try {
-  //     isMounted.current && setLoading(true);
-  //     const logoutRes = await put({
-  //       path: 'auth/logout',
-  //       token: accessToken,
-  //     });
-
-  //     if (logoutRes.status === 200) {
-  //       setUser({});
-  //     }
-  //   } catch (error) {
-  //     if (error instanceof Error) return Alert.alert('Error', error.message);
-  //     return Alert.alert('Error', 'Something went wrong');
-  //   } finally {
-  //     isMounted.current && setLoading(false);
-  //   }
-  // };
+  const handelLogout = async () => {
+    try {
+      isMounted.current && setLoading(true);
+      const logoutRes = await put({
+        path: 'auth/logout',
+        token: accessToken,
+      });
+      console.log({logoutRes});
+      if (logoutRes.status === 200) {
+        // setUser({});
+        setLoggedIn(false);
+      }
+    } catch (error) {
+      if (error instanceof Error) return Alert.alert('Error', error.message);
+      return Alert.alert('Error', 'Something went wrong');
+    } finally {
+      isMounted.current && setLoading(false);
+    }
+  };
   return (
     <Box flex={1}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -241,9 +244,7 @@ const CustomDrawer = () => {
           <Divider />
         </Box>
         <Box px={5} mb={8} mt={2}>
-          <Pressable
-          // onPress={handelLogout}
-          >
+          <Pressable onPress={handelLogout}>
             <HStack justifyContent={'space-between'}>
               <HStack space={3}>
                 <Materialicons

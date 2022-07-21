@@ -24,6 +24,7 @@ const Profile = () => {
   const {cartItems} = useStore();
   const {data} = useFetch<User>('user');
   console.log({data});
+
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <Box bg={COLORS.cgcolor}>
@@ -171,12 +172,11 @@ const Profile = () => {
               alignSelf={'flex-end'}
               px={4}
               py={3}
-              // onPress={() =>
-              //   navigation.navigate('SelectAddress', {
-              //     SelectProductData: [],
-              //   })
-              // }
-            >
+              onPress={() =>
+                navigation.navigate('SelectAddress', {
+                  SelectProductData: [],
+                })
+              }>
               <Text color={COLORS.cgcolor} bold>
                 View Your Address
               </Text>

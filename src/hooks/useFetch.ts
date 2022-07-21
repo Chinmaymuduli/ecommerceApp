@@ -1,6 +1,9 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL, END_POINTS } from 'api';
 import { useAuth } from 'app';
 import { useCallback, useEffect, useState } from 'react';
+import { APIOptsType } from 'src/types/api';
+import { APIFunction } from 'types';
 import useAccessToken from './useAccessToken';
 import useIsMounted from './useIsMounted';
 
@@ -29,6 +32,8 @@ export default <TResponse>(path?: GetPaths) => {
     const { user } = useAuth(state => state);
     const { accessToken } = useAccessToken()
 
+
+
     const get = useCallback(
         async ({
             path,
@@ -45,7 +50,9 @@ export default <TResponse>(path?: GetPaths) => {
                     `${BASE_URL}/${END_POINTS.get(user, pagination)[path]}`,
                     API_OPTIONS,
                 );
+
                 const json = await response.json();
+
                 return {
                     ...json,
                     data: json?.data,

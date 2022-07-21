@@ -5,6 +5,8 @@ import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {useFetch} from 'hooks';
+import {AddressType} from 'types';
 const AddressArr = [
   {
     id: 1,
@@ -41,6 +43,8 @@ const AddressArr = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
 const SelectAddress = ({route, navigation}: Props) => {
   const [value, setValue] = React.useState(AddressArr[0].address);
+  const {data} = useFetch<AddressType>('address');
+  console.log({data});
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <ScrollView showsVerticalScrollIndicator={false}>

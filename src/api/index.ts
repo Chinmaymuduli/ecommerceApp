@@ -16,8 +16,8 @@ const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
   })
   if (getResponse.status === 200) {
     setAccessToken(getResponse.ACCESS_TOKEN)
-    if (getResponse.REFRESH_Token) {
-      await AsyncStorage.setItem('tokenId', getResponse.REFRESH_Token)
+    if (getResponse?.REFRESH_Token) {
+      await AsyncStorage.setItem('tokenId', getResponse?.REFRESH_Token)
     }
     successFunction(params)
   }
