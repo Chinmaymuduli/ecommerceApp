@@ -6,7 +6,8 @@ const END_POINTS = {
     user: `user/my-account?page=${pagination?.page}&limit=${pagination?.limit}`,
     notifications: `db/notifications?id=${user?._id}&page=${pagination?.page}&limit=${pagination?.limit}`,
     address: `address/all/my-addresses?page=${pagination?.page}&limit=${pagination?.limit}`,
-    grtToken: "auth/get-access-token"
+    // grtToken: "auth/get-access-token"
+    category: `category/all/category?page=${pagination?.page}&limit=${pagination?.limit}`
   }),
   // POST
   post: (user?: Partial<User>) => ({}),

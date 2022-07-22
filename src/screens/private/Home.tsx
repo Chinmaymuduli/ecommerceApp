@@ -25,6 +25,7 @@ import {
   SpecialProduct,
 } from 'components';
 import {useAuth, useStore} from 'app';
+import {useFetch} from 'hooks';
 
 const Home = () => {
   const {products, spacialProduct} = useStore();
@@ -37,8 +38,9 @@ const Home = () => {
   const [openAlert, setOpenAlert] = React.useState<boolean>(false);
   const [alertMessage, setAlertMessage] =
     React.useState<any>('Added Successfully');
-  const {user} = useAuth();
-  // console.log({user});
+  // const {user} = useAuth();
+  // const {data} = useFetch('category');
+  // console.log({data});
   return (
     <SafeAreaView
       style={{

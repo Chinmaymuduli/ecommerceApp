@@ -1,11 +1,11 @@
 import {StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, HStack, Pressable, Radio, ScrollView, Text} from 'native-base';
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {useFetch} from 'hooks';
+import {useAccessToken, useFetch} from 'hooks';
 import {AddressType} from 'types';
 const AddressArr = [
   {
@@ -42,9 +42,35 @@ const AddressArr = [
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
 const SelectAddress = ({route, navigation}: Props) => {
+  const [address, setAddress] = useState<any>();
   const [value, setValue] = React.useState(AddressArr[0].address);
-  const {data} = useFetch<AddressType>('address');
-  console.log({data});
+  // const [value, setValue] = React.useState(address[0].city);
+  const {accessToken} = useAccessToken();
+  // const {data} = useFetch<AddressType>('address');
+
+  const isProfile = route.params?.isProfile;
+
+  const fetchData = async () => {
+    const resp = await fetch(
+      'https://chhattisgarh-herbals-api.herokuapp.com/api/address/all/my-addresses',
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      },
+    );
+    const response_data = await resp.json();
+    setAddress(response_data?.data);
+    // setLoading(false);
+  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // console.log(address[0]);
+
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -72,10 +98,10 @@ const SelectAddress = ({route, navigation}: Props) => {
           </Pressable>
         </Box>
         <Box px={2}>
-          {AddressArr.length > 0 ? (
-            AddressArr.map(item => (
+          {address?.length > 0 ? (
+            address.map((item: any) => (
               <Box
-                key={item.id}
+                key={item._id}
                 mt={3}
                 borderBottomWidth={1}
                 borderColor={COLORS.lightGrey}>
@@ -86,20 +112,25 @@ const SelectAddress = ({route, navigation}: Props) => {
                   }}
                   name="myRadioGroup"
                   defaultValue={value}
-                  accessibilityLabel="favorite number">
-                  <Radio value={item?.value} my={4} mx={2} colorScheme="green">
+                  accessibilityLabel="Select address">
+                  <Radio
+                    value={item?.landmark}
+                    my={4}
+                    mx={2}
+                    colorScheme="green">
                     <Box pb={3}>
                       <HStack space={2}>
                         <Text bold>{item?.name}</Text>
                         <Box bg={'green.100'} borderRadius={5}>
-                          <Text px={2}>{item.addressType}</Text>
+                          <Text px={2}>{item.type}</Text>
                         </Box>
                       </HStack>
                       <Text flexWrap={'wrap'} mt={2} w={300}>
-                        {item?.address}
+                        {item?.landmark} {item?.street} {item?.city}{' '}
+                        {item?.state} {item?.zip}
                       </Text>
                       <Text mt={2} bold>
-                        {item?.phone}
+                        {item?.phoneNumber}
                       </Text>
                     </Box>
                   </Radio>
@@ -113,29 +144,31 @@ const SelectAddress = ({route, navigation}: Props) => {
           )}
         </Box>
       </ScrollView>
-      <Box w={'full'} position={'absolute'} bottom={6}>
-        <Pressable
-          bg={'#008000'}
-          borderRadius={4}
-          mx={3}
-          onPress={() =>
-            navigation.navigate(
-              'OrderSummary',
-              //  {
-              //   CartItems: summaryData,
-              // }
-            )
-          }>
-          <Text
-            color={COLORS.textWhite}
-            bold
-            textAlign={'center'}
-            py={2}
-            letterSpacing={1}>
-            Deliver Here
-          </Text>
-        </Pressable>
-      </Box>
+      {!isProfile ? (
+        <Box w={'full'} position={'absolute'} bottom={6}>
+          <Pressable
+            bg={'#008000'}
+            borderRadius={4}
+            mx={3}
+            onPress={() =>
+              navigation.navigate(
+                'OrderSummary',
+                //  {
+                //   CartItems: summaryData,
+                // }
+              )
+            }>
+            <Text
+              color={COLORS.textWhite}
+              bold
+              textAlign={'center'}
+              py={2}
+              letterSpacing={1}>
+              Deliver Here
+            </Text>
+          </Pressable>
+        </Box>
+      ) : null}
     </Box>
   );
 };

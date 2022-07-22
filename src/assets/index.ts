@@ -14,8 +14,10 @@ export { default as ERROR } from './animation/error.json'
 export { default as ORDER } from './animation/order.json'
 export { default as EMAIL } from './animation/email.json'
 export { default as REGISTER_SUCCESS } from './animation/registerSuccess.json'
+export { default as LOADER_IMG } from './animation/loader._screen.json'
 
 export const LOGO = require('./images/logo.png');
+export const LOADER = require('./images/loader_img.gif')
 export const GOOGLE = require('./images/google.webp');
 export const PHONE = require('./images/phoneimg.png');
 export const LoginBg = require('./images/loginBg.png');

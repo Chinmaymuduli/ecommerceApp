@@ -59,6 +59,7 @@ export type AddressType = {
     city?: string
     housenumber?: string
     roadName?: string
+    pincode?: string
 }
 
 export type CartType =
@@ -82,8 +83,9 @@ export type CartItemType = {
 }
 // *****
 export type changePasswordType = {
-    newPassword?: string
+    Password?: string
     retypePassword?: string
+    OTP?: number
 }
 export type reviewType = {
     img: ImageSourcePropType
@@ -162,7 +164,6 @@ export type Pagination = { page?: number; limit?: number };
 
 export type User = {
     Age?: string;
-    academicLevel?: string;
     _id: string;
     displayName: string;
     email: string;
@@ -172,21 +173,14 @@ export type User = {
     isBlocked: boolean;
     photoURL?: string;
     photoRef?: string;
-    // role: UserRole;
     _vid: number;
     // nationality?: Country;
-    // gender?: Gender;
-    phone?: string;
+    gender?: string;
+    phoneNumber?: number;
     address?: string;
     stallId?: string;
     isOnline?: boolean;
     place?: string;
-    // profession?:
-    // | 'Student'
-    // | 'Parent'
-    // | 'School Counsellors / Administrative'
-    // | 'Visitors'
-    // | 'Other';
 };
 
 export { APIFunction };

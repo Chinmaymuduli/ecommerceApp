@@ -64,7 +64,9 @@ export type PrivateRoutesType = {
   //  {
   //   CartItems: CartItemType[];
   // };
-  SelectAddress: undefined;
+  SelectAddress: {
+    isProfile?: boolean;
+  };
   //  {
   //   SelectProductData: CartItemType[];
   // };

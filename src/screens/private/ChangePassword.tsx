@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Box,
   FormControl,
@@ -14,21 +14,70 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {Controller, useForm} from 'react-hook-form';
-import {changePasswordType} from 'types';
+import {changePasswordType, User} from 'types';
+import {useActions, useFetch, useIsMounted} from 'hooks';
+import {post} from 'api';
+import {ErrorModal, SuccessVerificationModal} from 'components/core';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ChangePassword'>;
 const ChangePassword = ({navigation}: Props) => {
+  const {data} = useFetch<User>('user');
+  const [showErrorModal, setShowErrorModal] = useState<boolean>();
+  const [label, setLabel] = useState();
+  const [showSuccessModal, setShowSuccessModal] = useState<boolean>();
+  const [successMessage, setSuccessMessage] = useState<string>();
+  const isMounted = useIsMounted();
+  const {setLoading} = useActions();
   const {
     control,
     handleSubmit,
     formState: {errors},
   } = useForm();
 
-  const onSubmit = async (data: changePasswordType) => {
+  const onSubmit = async (Reset_data: changePasswordType) => {
     try {
-      console.log(data);
+      isMounted.current && setLoading(true);
+      const ChangePasswordPost = await post({
+        path: 'auth/forgot-password/verify-otp',
+        body: JSON.stringify({
+          email: data?.results.email,
+          OTP: Reset_data.OTP,
+          newPassword: Reset_data.Password,
+          confirmPassword: Reset_data.retypePassword,
+        }),
+      });
+      // console.log({ChangePasswordPost});
+      if (ChangePasswordPost.status === 500) {
+        setShowErrorModal(true);
+        setLabel(ChangePasswordPost.error);
+        return;
+      }
+      if (ChangePasswordPost.status === 200) {
+        setSuccessMessage('Password Changed Successfully !');
+        setShowSuccessModal(true);
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      isMounted.current && setLoading(false);
+    }
+  };
+
+  const resendOTP = async () => {
+    console.log('object');
+    try {
+      isMounted.current && setLoading(true);
+      const RESEND_OTP = await post({
+        path: 'auth/forgot-password',
+        body: JSON.stringify({
+          email: data?.results?.email,
+        }),
+      });
+      console.log({RESEND_OTP});
+    } catch (error) {
+      console.log(error);
+    } finally {
+      isMounted.current && setLoading(false);
     }
   };
   return (
@@ -68,7 +117,7 @@ const ChangePassword = ({navigation}: Props) => {
             <Text bold color={COLORS.grey}>
               Email ID
             </Text>
-            <Text bold>demouser@gmail.com</Text>
+            <Text bold>{data?.results?.email}</Text>
           </Stack>
           <Stack mt={4}>
             <Text bold color={COLORS.grey}>
@@ -78,7 +127,7 @@ const ChangePassword = ({navigation}: Props) => {
           </Stack>
         </Box>
         <Box mt={2}>
-          <FormControl isRequired isInvalid={'newPassword' in errors}>
+          <FormControl isRequired isInvalid={'Password' in errors}>
             <Controller
               control={control}
               render={({field: {onChange, onBlur, value}}) => (
@@ -90,20 +139,20 @@ const ChangePassword = ({navigation}: Props) => {
                     h={10}
                     borderColor={COLORS.fadeBlack}
                     bgColor={COLORS.textWhite}
-                    onChange={onChange}
+                    onChangeText={onChange}
                     onBlur={onBlur}
                     value={value}
                   />
                 </Box>
               )}
-              name="newPassword"
+              name="Password"
               rules={{
                 required: 'Please provide the necessary details',
               }}
               defaultValue=""
             />
             <FormControl.ErrorMessage mt={0}>
-              {errors.newPassword?.message}
+              {errors.Password?.message}
             </FormControl.ErrorMessage>
           </FormControl>
           <FormControl isRequired isInvalid={'retypePassword' in errors}>
@@ -118,7 +167,7 @@ const ChangePassword = ({navigation}: Props) => {
                     h={10}
                     borderColor={COLORS.fadeBlack}
                     bgColor={COLORS.textWhite}
-                    onChange={onChange}
+                    onChangeText={onChange}
                     onBlur={onBlur}
                     value={value}
                   />
@@ -136,7 +185,7 @@ const ChangePassword = ({navigation}: Props) => {
           </FormControl>
         </Box>
         <Box mt={7}>
-          <Text bold>Enter OTP sent to +911234567890</Text>
+          <Text bold>Enter OTP sent to {data?.results.email}</Text>
           <FormControl isRequired isInvalid={'OTP' in errors}>
             <Controller
               control={control}
@@ -148,11 +197,16 @@ const ChangePassword = ({navigation}: Props) => {
                   variant={'underlined'}
                   bgColor={COLORS.textWhite}
                   borderColor={COLORS.fadeBlack}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                  value={value}
                   InputRightElement={
                     <>
-                      <Text color={'green.600'} bold>
-                        Resend
-                      </Text>
+                      <Pressable onPress={() => console.log('touchaed')}>
+                        <Text color={'green.600'} bold>
+                          Resend
+                        </Text>
+                      </Pressable>
                     </>
                   }
                 />
@@ -183,6 +237,18 @@ const ChangePassword = ({navigation}: Props) => {
           </HStack>
         </Box>
       </Box>
+      {/* Error modal */}
+      <ErrorModal
+        setShowErrorModal={setShowErrorModal}
+        showErrorModal={showErrorModal}
+        label={label}
+      />
+      {/* Success Modal */}
+      <SuccessVerificationModal
+        setShowSuccessModal={setShowSuccessModal}
+        showSuccessModal={showSuccessModal}
+        successMessage={successMessage}
+      />
     </Box>
   );
 };

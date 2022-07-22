@@ -3,6 +3,8 @@ import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import BottomSheet from './BottomSheet';
 import {Button} from 'native-base';
+import {BASE_URL} from 'api';
+import {useAccessToken} from 'hooks';
 
 interface Props {
   visible?: boolean;
@@ -20,6 +22,30 @@ const ImagePicker = ({
   cropperCircleOverlay,
   postImages,
 }: Props) => {
+  const {accessToken} = useAccessToken();
+
+  const postImg = async (img: string) => {
+    try {
+      const imageData = new FormData();
+      imageData.append('avatar', {
+        uri: img,
+        name: 'image.png',
+        fileName: 'image',
+        type: 'image/png',
+      });
+      let res = await fetch(`${BASE_URL}/user/account`, {
+        method: 'put',
+        body: imageData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      let response = await res.json();
+    } catch (error) {
+      console.log('err', error);
+    }
+  };
   const handleChoosePhoto = async () => {
     const options = {
       noData: true,
@@ -33,8 +59,10 @@ const ImagePicker = ({
       cropping: true,
       cropperCircleOverlay,
     }).then(res => {
+      console.log({res});
       setImageURI(res.path);
-      postImages ? postImage(res.path) : null;
+      // postImages ? postImage(res.path) : null;
+      postImg(res.path);
       onDismiss();
     });
   };
@@ -53,7 +81,7 @@ const ImagePicker = ({
     })
       .then(res => {
         setImageURI(res.path);
-        postImage(res.path);
+        postImg(res.path);
         onDismiss();
       })
       .catch(err => {
@@ -96,3 +124,65 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 });
+
+// upload img
+
+// const postImg = async (img: string) => {
+//   try {
+//     const imageData = new FormData();
+//     imageData.append('avatar', {
+//       uri: img,
+//       name: 'image.png',
+//       fileName: 'image',
+//       type: 'image/png',
+//     });
+//     let res = await fetch(`${BASE_URL}/account`, {
+//       method: 'put',
+//       body: imageData,
+//       headers: {
+//         'Content-Type': 'multipart/form-data',
+//         Authorization: `Bearer ${currentUserData?.token}`,
+//       },
+//     });
+//     let response = await res.json();
+
+//     setImageUrl(response.uploadedFiles[0].url);
+//     setImagePath(response.uploadedFiles[0].path);
+//   } catch (error) {
+//     console.log('err', error);
+//   }
+// };
+// const handleChoosePhoto = async () => {
+//   ImgCropPicker.openPicker({
+//     width: 300,
+//     height: 400,
+//     cropping: true,
+//   }).then(res => {
+//     console.log(res);
+//     setImageUri(res.path);
+//     postImg(res?.path);
+//     onClose();
+//   });
+// };
+
+// const handleTakePhoto = () => {
+//   const options = {
+//     noData: true,
+//     quality: 0.25,
+//     maxWidth: 5000,
+//     maxHeight: 1000,
+//     mediaType: 'photo',
+//   };
+//   ImgCropPicker.openCamera({
+//     options,
+//     cropping: true,
+//   })
+//     .then(res => {
+//       setImageUri(res.path);
+//       postImg(res?.path);
+//       onClose();
+//     })
+//     .catch(err => {
+//       console.log(err);
+//     });
+// };

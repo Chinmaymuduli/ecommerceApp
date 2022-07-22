@@ -24,6 +24,8 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps, PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {AddressType} from 'types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
+import {post} from 'api';
+import {useAccessToken, useActions, useIsMounted} from 'hooks';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Address'>;
 const Address = ({route, navigation}: Props) => {
@@ -39,30 +41,59 @@ const Address = ({route, navigation}: Props) => {
   const [selectedType, setSelectedType] = React.useState(1);
   const [state, setState] = React.useState<string>('Chhattisgarh');
   const [addressTypeText, setAddressTypeText] = useState('Home');
-
-  const onSubmit = (data: AddressType) => {
-    const AddressData = {
-      ...data,
-      addressType: addressTypeText,
-      state: state,
-    };
-
-    navigation.navigate(
-      'SelectAddress',
-      //  {
-      //   SelectProductData: previousData,
-      // }
-    );
+  const {accessToken} = useAccessToken();
+  const isMounted = useIsMounted();
+  const {setLoading} = useActions();
+  const onSubmit = async (data: AddressType) => {
+    try {
+      isMounted.current && setLoading(true);
+      const AddressData = JSON.stringify({
+        // ...data,
+        // addressType: addressTypeText,
+        // state: state,
+        landmark: data.housenumber,
+        email: 'demouser@gmail.com',
+        phoneNumber: data.phoneNumber,
+        countryCode: 91,
+        name: data.firstName,
+        street: data.roadName,
+        city: data.city,
+        state: state,
+        country: 'india',
+        zip: data.pincode,
+        isDefault: true,
+        type: addressTypeText,
+      });
+      const postAddress = await post({
+        path: 'address',
+        body: AddressData,
+        token: accessToken,
+      });
+      console.log({postAddress});
+      if (postAddress.status === 200) {
+        navigation.navigate(
+          'SelectAddress',
+          {},
+          //  {
+          //   SelectProductData: previousData,
+          // }
+        );
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      isMounted.current && setLoading(false);
+    }
   };
 
   const Hometype = () => {
     setSelectedType(1);
-    setAddressTypeText('Home');
+    setAddressTypeText('HOME');
   };
 
   const Worktype = () => {
     setSelectedType(2);
-    setAddressTypeText('Work');
+    setAddressTypeText('WORK');
   };
   return (
     <Box flex={1} bg={COLORS.textWhite}>
