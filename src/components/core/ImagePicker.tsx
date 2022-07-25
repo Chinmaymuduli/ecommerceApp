@@ -18,9 +18,7 @@ const ImagePicker = ({
   visible,
   onDismiss,
   setImageURI,
-  postImage,
   cropperCircleOverlay,
-  postImages,
 }: Props) => {
   const {accessToken} = useAccessToken();
 

@@ -34,7 +34,7 @@ const Login = () => {
   const [loader, setLoader] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(true);
   const isMounted = useIsMounted();
-  const {setUser, user, setLoggedIn} = useAuth();
+  const {setUser, setLoggedIn} = useAuth();
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [label, setLabel] = useState();
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -44,7 +44,7 @@ const Login = () => {
     formState: {errors},
   } = useForm();
   const {setAccessToken, accessToken} = useAccessToken();
-  console.log({user});
+  // console.log({user});
   const onSubmit = async (data: DATATYPE) => {
     try {
       isMounted.current && setLoader(true);
@@ -65,7 +65,7 @@ const Login = () => {
       setLoggedIn(true);
       await AsyncStorage.setItem('tokenId', loginData.REFRESH_TOKEN);
       setAccessToken(loginData.ACCESS_TOKEN);
-      // setUser(loginData.data);
+      setUser(loginData.data);
     } catch (error) {
       if (error instanceof Error) return Alert.alert('Error', error.message);
       return Alert.alert('Error', 'Something went wrong');

@@ -123,8 +123,6 @@ const CustomDrawer = () => {
   const {user, setUser, setLoggedIn} = useAuth(state => state);
 
   const DrawerNaviagte = (item: any) => {
-    // const {data} = useFetch<User>('user');
-    // console.log({data});
     setSelectedButton(item?.id);
     if (item?.route === 'ExitApp') return handelCloseApp();
     if (item?.label === 'Business')

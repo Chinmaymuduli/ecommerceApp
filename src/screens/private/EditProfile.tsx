@@ -18,7 +18,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS} from 'configs';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
-import {FetchLoader, ImagePicker} from 'components/core';
+import {
+  FetchLoader,
+  ImagePicker,
+  SuccessVerificationModal,
+} from 'components/core';
 import {Controller, useForm} from 'react-hook-form';
 import {useAccessToken, useActions, useFetch, useIsMounted} from 'hooks';
 import {User} from 'types';
@@ -35,6 +39,8 @@ const EditProfile = () => {
   const {accessToken} = useAccessToken();
   const isMounted = useIsMounted();
   const {setLoading} = useActions();
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string>();
   const {
     control,
     handleSubmit,
@@ -72,7 +78,11 @@ const EditProfile = () => {
         }),
         token: accessToken,
       });
-      console.log({nameResponse});
+      // console.log({nameResponse});
+      if (nameResponse.status === 200) {
+        setShowSuccessModal(true);
+        setSuccessMessage('Profile Updated Successfully');
+      }
     } catch (error) {
       console.log('object', error);
     } finally {
@@ -268,41 +278,6 @@ const EditProfile = () => {
               </Box>
 
               <Box mt={5}>
-                {/* <FormControl isRequired isInvalid={'MobileNumber' in errors2}>
-              <Controller
-                control={control2}
-                render={({field: {onChange, onBlur, value}}) => (
-                  <Input
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    value={value}
-                    placeholder="Mobile Number"
-                    variant={'underlined'}
-                    fontSize={15}
-                    h={10}
-                    borderColor={COLORS.fadeBlack}
-                    keyboardType={'numeric'}
-                    bgColor={COLORS.textWhite}
-                    InputRightElement={
-                      <Pressable onPress={handleSubmit2(handelMobileUpdate)}>
-                        <Text bold color={'green.700'}>
-                          Update
-                        </Text>
-                      </Pressable>
-                    }
-                  />
-                )}
-                name="MobileNumber"
-                rules={{
-                  required: 'Mobile Number is required',
-                }}
-                defaultValue=""
-              />
-              <FormControl.ErrorMessage mt={0}>
-                {errors2.MobileNumber?.message}
-              </FormControl.ErrorMessage>
-            </FormControl> */}
-
                 <FormControl isRequired isInvalid={'email' in errors3}>
                   <Controller
                     control={control3}
@@ -363,7 +338,12 @@ const EditProfile = () => {
             onDismiss={handleDismiss}
             setImageURI={setprofileimage}
             cropperCircleOverlay={true}
-            postImages={false}
+          />
+          {/* success modal */}
+          <SuccessVerificationModal
+            setShowSuccessModal={setShowSuccessModal}
+            showSuccessModal={showSuccessModal}
+            successMessage={successMessage}
           />
         </Box>
       ) : (

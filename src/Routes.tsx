@@ -8,12 +8,12 @@ import useAuth from './app/useAuth';
 import SplashScreen from './screens/common/SplashScreen';
 import useAppLoad from './hooks/useAppLoad';
 import AppProvider from './layouts';
+import useFCMToken from './hooks/useFCMToken';
 
 const Drawer = createDrawerNavigator();
 const Routes = () => {
   const {user, loggedIn} = useAuth(state => state);
-  console.log({user_data: user});
-
+  useFCMToken();
   useAppLoad();
 
   if (!user) return <SplashScreen />;

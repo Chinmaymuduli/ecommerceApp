@@ -2,8 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL, END_POINTS } from 'api';
 import { useAuth } from 'app';
 import { useCallback, useEffect, useState } from 'react';
-import { APIOptsType } from 'src/types/api';
-import { APIFunction } from 'types';
 import useAccessToken from './useAccessToken';
 import useIsMounted from './useIsMounted';
 
@@ -31,7 +29,6 @@ export default <TResponse>(path?: GetPaths) => {
     const [fetchAgain, setFetchAgain] = useState(true);
     const { user } = useAuth(state => state);
     const { accessToken } = useAccessToken()
-
 
 
     const get = useCallback(

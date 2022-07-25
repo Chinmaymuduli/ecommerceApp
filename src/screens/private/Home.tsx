@@ -1,5 +1,5 @@
 import {ImageBackground, SafeAreaView, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Badge,
   Box,
@@ -25,7 +25,7 @@ import {
   SpecialProduct,
 } from 'components';
 import {useAuth, useStore} from 'app';
-import {useFetch} from 'hooks';
+import {useAccessToken, useFetch} from 'hooks';
 
 const Home = () => {
   const {products, spacialProduct} = useStore();
@@ -39,8 +39,11 @@ const Home = () => {
   const [alertMessage, setAlertMessage] =
     React.useState<any>('Added Successfully');
   // const {user} = useAuth();
-  // const {data} = useFetch('category');
-  // console.log({data});
+  const {data} = useFetch('category');
+  console.log(data);
+
+  // console.log(accessToken.accessToken);
+
   return (
     <SafeAreaView
       style={{

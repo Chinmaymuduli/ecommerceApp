@@ -28,8 +28,7 @@ const Profile = () => {
   const isMounted = useIsMounted();
   const {accessToken} = useAccessToken();
   const {setLoading} = useActions();
-  const {setLoggedIn} = useAuth();
-  // console.log({data});
+  const {setLoggedIn, user} = useAuth();
   const handelLogout = async () => {
     try {
       isMounted.current && setLoading(true);
@@ -102,8 +101,8 @@ const Profile = () => {
               <Center mt={5}>
                 <Image
                   source={{
-                    uri: data?.results.photoURL
-                      ? data?.results.photoURL
+                    uri: data?.data?.photoURL
+                      ? data?.data?.photoURL
                       : 'https://www.w3schools.com/howto/img_avatar.png',
                   }}
                   h={70}
@@ -112,14 +111,18 @@ const Profile = () => {
                   borderRadius={50}
                 />
                 <Text color={COLORS.textWhite} mt={4} bold>
-                  {data?.results?.displayName}
+                  {data?.data?.displayName}
                 </Text>
 
                 <Box alignItems={'center'} mt={4}>
                   <Text color={COLORS.textWhite}>
-                    {data?.results.phoneNumber}
+                    {data?.data?.phoneNumber
+                      ? data?.data?.phoneNumber
+                      : 'No Number Found'}
                   </Text>
-                  <Text color={COLORS.textWhite}>{data?.results?.email}</Text>
+                  <Text color={COLORS.textWhite}>
+                    {data?.data?.email ? data?.data?.email : 'No email found'}
+                  </Text>
                 </Box>
                 <Box position={'absolute'} right={4} bottom={3}>
                   <FontAwesome5
