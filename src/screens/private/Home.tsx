@@ -25,7 +25,7 @@ import {
   SpecialProduct,
 } from 'components';
 import {useAuth, useStore} from 'app';
-import {useAccessToken, useFetch} from 'hooks';
+import {useAccessToken, useFetch, useNotifications} from 'hooks';
 
 const Home = () => {
   const {products, spacialProduct} = useStore();
@@ -40,9 +40,8 @@ const Home = () => {
     React.useState<any>('Added Successfully');
   // const {user} = useAuth();
   const {data} = useFetch('category');
-  console.log(data);
-
-  // console.log(accessToken.accessToken);
+  const {notifications} = useNotifications();
+  // console.log(data);
 
   return (
     <SafeAreaView
@@ -85,7 +84,7 @@ const Home = () => {
                 _text={{
                   fontSize: 9,
                 }}>
-                2
+                {notifications?.length ? notifications?.length : 0}
               </Badge>
               <Ionicons
                 name="notifications-outline"
@@ -114,8 +113,8 @@ const Home = () => {
         </Box>
         {/* Category Section */}
         <HomeCategories />
-        {/* Slider Section */}
 
+        {/* Slider Section */}
         <HomeSlider />
 
         {/* Product Section */}

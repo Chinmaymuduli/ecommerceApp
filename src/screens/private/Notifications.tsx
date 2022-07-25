@@ -18,7 +18,7 @@ import {
 import {COLORS} from 'configs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Octicons from 'react-native-vector-icons/Octicons';
-import {useAccessToken, useFetch, useIsMounted} from 'hooks';
+import {useAccessToken, useFetch, useIsMounted, useNotifications} from 'hooks';
 import {Empty, FetchLoader} from 'components/core';
 import {NORESULT, NOTIFICATIONS} from 'assets';
 import LottieView from 'lottie-react-native';
@@ -77,13 +77,13 @@ const notificationsEarlierArr = [
 const Notifications = () => {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [openAlert, setOpenAlert] = React.useState(false);
-  const [notificationData, setNotificationsData] = useState<any | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const onCloseAlert = () => setOpenAlert(false);
-  const [notificationDes, setNotificationDes] = useState();
+  const [notificationDes, setNotificationDes] = useState<any>();
 
   const cancelRef = React.useRef(null);
   const {accessToken} = useAccessToken();
+  const {setNotifications, notifications} = useNotifications();
   const isMounted = useIsMounted();
 
   const AddressFetch = async () => {
@@ -100,7 +100,8 @@ const Notifications = () => {
         },
       );
       const resData = await Response.json();
-      setNotificationsData(resData?.data?.data);
+      // setNotificationsData(resData?.data?.data);
+      setNotifications(resData?.data?.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -168,7 +169,7 @@ const Notifications = () => {
   return (
     <>
       {!isLoading ? (
-        notificationData?.length > 0 ? (
+        notifications?.length > 0 ? (
           <Box flex={1} bg={COLORS.textWhite}>
             <ScrollView showsVerticalScrollIndicator={false}>
               <HStack justifyContent={'space-between'} px={4}>
@@ -206,7 +207,7 @@ const Notifications = () => {
                     </Text>
                   </Box>
                 </Row>
-                {notificationData?.map((item: any) => (
+                {notifications?.map((item: any) => (
                   <Pressable
                     key={item?.id}
                     borderBottomWidth={1}
@@ -284,7 +285,6 @@ const Notifications = () => {
                   <Pressable
                     bg={'red.600'}
                     borderRadius={5}
-                    // onPress={() => handelDelete(notificationDes?.id)}
                     onPress={() => handelDelete(notificationDes?.id)}>
                     <Text px={7} py={1} color={COLORS.textWhite} bold>
                       Delete
