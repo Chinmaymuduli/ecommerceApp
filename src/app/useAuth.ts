@@ -18,17 +18,10 @@ const useAuth = create<AuthState>(set => ({
     user: undefined,
     userData: undefined,
     loggedIn: false,
-    // setLoggedIn: ()=>{
-    //     set(bool=>({
-    //         loggedIn : bool
-    //     }))
-    // }
     setLoggedIn: (bool) => set(() => ({
         loggedIn: bool
     })),
     setUser: async (user: Partial<User>) => {
-        // const jsonValue = JSON.stringify(user)
-        // await AsyncStorage.setItem('user', jsonValue)
         set(state => ({
             ...state,
             user: { ...state?.user, ...user },
@@ -40,18 +33,6 @@ const useAuth = create<AuthState>(set => ({
             user: { ...state?.user, ...user_data },
         }));
     },
-    // logOut: async () => {
-    //     const { accessToken } = useAccessToken()
-    //     try {
-    //         set(state => ({ ...state, user: {} }));
-    //         await put({
-    //             path: 'auth/logout',
-    //             token: accessToken,
-    //         });;
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // },
 }));
 
 export default useAuth;

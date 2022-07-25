@@ -61,11 +61,15 @@ const Login = () => {
         setLabel(loginData.error);
         return;
       }
-      console.log({loginData});
-      setLoggedIn(true);
-      await AsyncStorage.setItem('tokenId', loginData.REFRESH_TOKEN);
-      setAccessToken(loginData.ACCESS_TOKEN);
-      setUser(loginData.data);
+      if (loginData.status === 200) {
+        console.log({loginData});
+        setLoggedIn(true);
+        await AsyncStorage.setItem('tokenId', loginData.REFRESH_TOKEN);
+        await AsyncStorage.setItem('isUserEnter', JSON.stringify(true));
+        setAccessToken(loginData.ACCESS_TOKEN);
+        setUser(loginData.data);
+        return;
+      }
     } catch (error) {
       if (error instanceof Error) return Alert.alert('Error', error.message);
       return Alert.alert('Error', 'Something went wrong');

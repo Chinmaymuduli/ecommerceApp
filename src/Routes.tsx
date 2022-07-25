@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PrivateRoutes from './routes/PrivateRoutes';
 import PublicRoutes from './routes/PublicRoutes';
 import {createDrawerNavigator} from '@react-navigation/drawer';
@@ -9,10 +9,24 @@ import SplashScreen from './screens/common/SplashScreen';
 import useAppLoad from './hooks/useAppLoad';
 import AppProvider from './layouts';
 import useFCMToken from './hooks/useFCMToken';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Drawer = createDrawerNavigator();
 const Routes = () => {
   const {user, loggedIn} = useAuth(state => state);
+  const [userData, setUserData] = useState<string | null>();
+  const getUser = async () => {
+    try {
+      const newUserData = await AsyncStorage.getItem('isUserEnter');
+      setUserData(newUserData);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getUser();
+  }, []);
+
   useFCMToken();
   useAppLoad();
 
@@ -44,7 +58,7 @@ const Routes = () => {
           />
         </Drawer.Navigator>
       ) : (
-        <PublicRoutes initialRouteName="OnBoarding" />
+        <PublicRoutes initialRouteName={userData ? 'Login' : 'OnBoarding'} />
       )}
     </AppProvider>
   );

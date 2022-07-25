@@ -18,7 +18,7 @@ import {
 import {COLORS} from 'configs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Octicons from 'react-native-vector-icons/Octicons';
-import {useAccessToken, useFetch} from 'hooks';
+import {useAccessToken, useFetch, useIsMounted} from 'hooks';
 import {Empty, FetchLoader} from 'components/core';
 import {NORESULT, NOTIFICATIONS} from 'assets';
 import LottieView from 'lottie-react-native';
@@ -84,20 +84,28 @@ const Notifications = () => {
 
   const cancelRef = React.useRef(null);
   const {accessToken} = useAccessToken();
+  const isMounted = useIsMounted();
 
   const AddressFetch = async () => {
-    const Response = await fetch(
-      'https://chhattisgarh-herbals-api.herokuapp.com/api/notifications',
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
+    try {
+      isMounted.current && setIsLoading(true);
+      const Response = await fetch(
+        'https://chhattisgarh-herbals-api.herokuapp.com/api/notifications',
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
         },
-      },
-    );
-    const resData = await Response.json();
-    setNotificationsData(resData?.data?.data);
+      );
+      const resData = await Response.json();
+      setNotificationsData(resData?.data?.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      isMounted.current && setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -129,8 +137,9 @@ const Notifications = () => {
     }
   };
 
-  const handelRead = async ({data}: any) => {
+  const handelRead = async (data: any) => {
     try {
+      console.log({data});
       setNotificationDes(data);
       onOpen();
       const markAsRead = await put({
@@ -197,11 +206,11 @@ const Notifications = () => {
                     </Text>
                   </Box>
                 </Row>
-                {notificationData.map((item: any) => (
+                {notificationData?.map((item: any) => (
                   <Pressable
-                    onPress={() => handelRead(item)}
                     key={item?.id}
                     borderBottomWidth={1}
+                    onPress={() => handelRead(item)}
                     borderColor={COLORS.lightGrey}>
                     <Row space={3} justifyContent={'space-between'} py={5}>
                       <Row space={3} alignItems={'center'} w={230}>
@@ -270,18 +279,13 @@ const Notifications = () => {
             {/* Actionsheet */}
             <Actionsheet isOpen={isOpen} onClose={onClose}>
               <Actionsheet.Content>
-                <Text>
-                  In publishing and graphic design, Lorem ipsum is a placeholder
-                  text commonly used to demonstrate the visual form of a
-                  document or a typeface without relying on meaningful content.
-                  {/* {notificationDes?.label} */}
-                </Text>
+                <Text>{notificationDes?.label}</Text>
                 <HStack space={6} mt={4}>
                   <Pressable
                     bg={'red.600'}
                     borderRadius={5}
                     // onPress={() => handelDelete(notificationDes?.id)}
-                    onPress={() => handelDelete()}>
+                    onPress={() => handelDelete(notificationDes?.id)}>
                     <Text px={7} py={1} color={COLORS.textWhite} bold>
                       Delete
                     </Text>

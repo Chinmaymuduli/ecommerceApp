@@ -20,6 +20,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {useActions, useIsMounted} from 'hooks';
 import {post} from 'api';
 import {ErrorModal, SuccessModal} from 'components/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type REGISTERDATA = {
   email?: string;
@@ -59,6 +60,7 @@ const Register = () => {
       console.log({createData});
       if (createData.status === 200) {
         setShowModal(true);
+        await AsyncStorage.setItem('isUserEnter', JSON.stringify(true));
         return;
       }
       setShowErrorModal(true);
