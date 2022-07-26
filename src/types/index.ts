@@ -15,6 +15,13 @@ export type CategoryType = {
     id: number
     img?: ImageSourcePropType
     categoryName?: string
+    //Api Type
+    _id?: string
+    name?: string
+    description?: string
+    parentCategory?: string
+    isActive?: boolean
+    imageURL?: string
 }
 type ChooseWeight = {
     weight?: string
@@ -148,6 +155,17 @@ export type ProductType = {
     isNew?: boolean
     b2bImg?: ImageSourcePropType
     b2bQuantity?: string
+    // Api type
+    _id?: string
+    isActive?: boolean
+    measureType?: string
+    measureUnit?: number
+    mrp?: number
+    salePrice?: number
+    shortDescription?: string
+    stock?: number
+    title?: string
+    type?: string
 }
 export type CouponType = {
     id?: number

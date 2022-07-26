@@ -134,7 +134,10 @@ const HomeCategoryItem = ({
           borderTopLeftRadius={5}
           borderBottomRightRadius={5}>
           <Text fontSize={10} flexWrap={'wrap'} px={1} color={COLORS.textWhite}>
-            {SelecetedWeight?.discount}% OFF
+            {SelecetedWeight?.discount
+              ? SelecetedWeight?.discount
+              : (+((item?.mrp - item?.salePrice) / item?.mrp) * 100).toFixed(0)}
+            % OFF
           </Text>
         </Box>
         <Box
@@ -224,14 +227,21 @@ const HomeCategoryItem = ({
 
         <Box w={120}>
           <Text bold fontSize={12} numberOfLines={1}>
-            {item?.name}
+            {item?.title ? item?.title : item?.name}
           </Text>
           <HStack space={2}>
-            <Text fontSize={13}>&#8377;{SelecetedWeight?.currentPrice}</Text>
+            <Text fontSize={13}>
+              &#8377;
+              {SelecetedWeight?.currentPrice
+                ? SelecetedWeight?.currentPrice
+                : item?.salePrice}
+            </Text>
             <Text fontSize={13} textDecorationLine={'line-through'}>
               &#8377;
-              {((SelecetedWeight?.currentPrice || 0) * 100) /
-                (100 - (SelecetedWeight?.discount || 0))}
+              {SelecetedWeight?.currentPrice
+                ? ((SelecetedWeight?.currentPrice || 0) * 100) /
+                  (100 - (SelecetedWeight?.discount || 0))
+                : item?.mrp}
             </Text>
           </HStack>
           {isBussiness ? (

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Box,
   FlatList,
@@ -14,10 +14,36 @@ import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {COLORS} from 'configs';
 import HomeCategoriesItem from './HomeCategoriesItem';
 import {useStore} from '../../src/app';
+import {GET} from 'api';
+import {useAccessToken, useIsMounted} from 'hooks';
+import {CategoryType} from 'types';
 
 const HomeCategories = () => {
   const {category} = useStore();
   const navigation = useNavigation<NavigationProps>();
+  const {accessToken} = useAccessToken();
+  const isMounted = useIsMounted();
+  const [isLoading, setIsLoading] = useState<boolean>();
+  const [categoryData, setCategoryData] = useState<CategoryType[]>();
+  const CategoryRes = async () => {
+    try {
+      isMounted.current && setIsLoading(true);
+      const Response = await GET({
+        path: 'categories',
+        token: accessToken,
+      });
+      // console.log(Response.data);
+      setCategoryData(Response.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      isMounted.current && setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    CategoryRes();
+  }, []);
+  // console.log({categoryData});
   return (
     <>
       <Box mt={5} pl={3}>
@@ -30,7 +56,8 @@ const HomeCategories = () => {
           </Pressable>
         </HStack>
         <FlatList
-          data={category}
+          // data={category}
+          data={categoryData}
           renderItem={({item}) => <HomeCategoriesItem item={item} />}
           keyExtractor={(item, index) => index.toString()}
           horizontal={true}

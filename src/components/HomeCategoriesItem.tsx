@@ -7,6 +7,7 @@ import {CategoryType} from 'types';
 
 const HomeCategoriesItem = ({item}: {item: CategoryType}) => {
   const navigation = useNavigation<NavigationProps>();
+  // console.log(item);
   return (
     <Box pr={5} mt={4}>
       <Pressable
@@ -14,13 +15,17 @@ const HomeCategoriesItem = ({item}: {item: CategoryType}) => {
         onPress={() => navigation.navigate('Category', item)}>
         <Box borderWidth={3} borderRadius={40} p={0.5} borderColor={'#4F7942'}>
           <Image
-            source={item?.img}
+            source={{
+              uri: item?.imageURL
+                ? item?.imageURL
+                : 'https://media.istockphoto.com/photos/collection-of-fresh-herbs-picture-id183808249?k=20&m=183808249&s=612x612&w=0&h=rLWcKD1D3FOG7C9tJ98DMzLOpfYA-WDkQC8sqeofvVY=',
+            }}
             style={styles.imagestyle}
-            alt="categoryimg"
+            alt="category_img"
             resizeMode="contain"
           />
         </Box>
-        <Text fontSize={13}>{item?.categoryName}</Text>
+        <Text fontSize={13}>{item?.name}</Text>
       </Pressable>
     </Box>
   );

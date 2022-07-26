@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAccessToken } from 'hooks';
+import { useAccessToken, useIsMounted } from 'hooks';
 import { APIOptsType } from 'src/types/api';
 import { APIFunction } from 'types';
 
 export const BASE_URL = `https://chhattisgarh-herbals-api.herokuapp.com/api`;
+
 
 const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
   const { setAccessToken } = useAccessToken()
@@ -123,8 +124,37 @@ export const remove: APIFunction = async ({
     return { error };
   }
 };
+export const GET: APIFunction = async ({
+  path,
+  // body = JSON.stringify({}),
+  method = 'GET',
+  options = {},
+  headers = { 'Content-Type': 'application/json' },
+  token = '',
+}) => {
+  if (token) headers.Authorization = `Bearer ${token}`;
+  try {
+    const API_OPTIONS = {
+      method,
+      headers,
+      ...options,
+    };
+    const response = await fetch(`${BASE_URL}/${path}`, API_OPTIONS);
+    const json = await response.json();
 
+    return {
+      ...json,
+      data: json?.data,
+      status: response.status,
+      error: json?.error,
+    };
+  } catch (error: any) {
+    return { error };
+  }
+};
 export { default as END_POINTS } from './end-points';
+export { default as authFetch } from './authFetch';
+
 function fsx(fsx: any) {
   throw new Error('Function not implemented.');
 }

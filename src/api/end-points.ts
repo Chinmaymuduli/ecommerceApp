@@ -7,7 +7,8 @@ const END_POINTS = {
     address: `address/all/my-addresses?page=${pagination?.page}&limit=${pagination?.limit}`,
     coupons: `coupons?page=${pagination?.page}&limit=${pagination?.limit}`,
     category: `category/all/category?page=${pagination?.page}&limit=${pagination?.limit}`,
-    notifications: `notifications?page=${pagination?.page}&limit=${pagination?.limit}`
+    notifications: `notifications?page=${pagination?.page}&limit=${pagination?.limit}`,
+
   }),
   // POST
   post: (user?: Partial<User>) => ({}),

@@ -6,3 +6,4 @@ export { default as useToken } from './useToken';
 export { default as useFetch } from './useFetch';
 export { default as useFCMToken } from './useFCMToken';
 export { default as useNotifications } from './useNotifications';
+export { default as useAuthFetch } from './useAuthFetch';

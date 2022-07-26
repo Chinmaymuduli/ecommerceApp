@@ -25,10 +25,14 @@ import {
   SpecialProduct,
 } from 'components';
 import {useAuth, useStore} from 'app';
-import {useAccessToken, useFetch, useNotifications} from 'hooks';
+import {useAccessToken, useFetch, useIsMounted, useNotifications} from 'hooks';
+import {GET} from 'api';
+import {ProductType} from 'types';
 
 const Home = () => {
   const {products, spacialProduct} = useStore();
+  const [productsData, setProductsData] = useState<any>();
+  const [isLoading, setIsLoading] = useState<boolean>();
   const AYUSHPRODUCTS = products.filter(pd => pd.category === 'ayush products');
   const GOURMEET = products.filter(pd => pd.category === 'gourmet foods');
   const PERSONALCARE = products.filter(pd => pd.category === 'personal care');
@@ -38,11 +42,32 @@ const Home = () => {
   const [openAlert, setOpenAlert] = React.useState<boolean>(false);
   const [alertMessage, setAlertMessage] =
     React.useState<any>('Added Successfully');
-  // const {user} = useAuth();
-  const {data} = useFetch('category');
+  const {accessToken} = useAccessToken();
   const {notifications} = useNotifications();
-  // console.log(data);
 
+  const isMounted = useIsMounted();
+  const ProductRes = async () => {
+    try {
+      isMounted.current && setIsLoading(true);
+      const Res = await GET({
+        path: 'products',
+        token: accessToken,
+      });
+      setProductsData(Res?.data?.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      isMounted.current && setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    ProductRes();
+  }, []);
+  const CATEGORY_PRODUCT1 = productsData?.filter(
+    (item: {category: {name: string}}) =>
+      item?.category?.name === 'ayushProduct',
+  );
+  console.log('CATEGORY_PRODUCT1', productsData);
   return (
     <SafeAreaView
       style={{
@@ -121,7 +146,7 @@ const Home = () => {
         <Box mt={2}>
           <CategoryProducts
             title="Ayush Product"
-            data={AYUSHPRODUCTS}
+            data={CATEGORY_PRODUCT1}
             setOpenAlert={setOpenAlert}
             setAlertMessage={setAlertMessage}
           />

@@ -17,7 +17,7 @@ const useFCMToken = () => {
     try {
       const fcmToken = await messaging().getToken();
       if (!fcmToken) return console.log("user doesn't have a device token yet");
-      console.log('FCM Token:', fcmToken);
+      // console.log('FCM Token:', fcmToken);
       await post({
         path: "push-notification",
         body: JSON.stringify({

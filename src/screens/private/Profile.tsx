@@ -16,7 +16,13 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useAuth, useStore} from 'app';
-import {useAccessToken, useActions, useFetch, useIsMounted} from 'hooks';
+import {
+  useAccessToken,
+  useActions,
+  useAuthFetch,
+  useFetch,
+  useIsMounted,
+} from 'hooks';
 import {User} from 'types';
 import {put} from 'api';
 import {FetchLoader} from 'components/core';
@@ -48,6 +54,11 @@ const Profile = () => {
       isMounted.current && setLoading(false);
     }
   };
+
+  // const {data, isLoading} = useAuthFetch<User>({
+  //   path: 'user/my-account',
+  //   method: 'GET',
+  // });
   return (
     <>
       {!isLoading ? (
