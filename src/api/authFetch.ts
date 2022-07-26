@@ -1,14 +1,14 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { BASE_URL } from "api";
+import { BASE_URL, post } from "api";
 import { useAccessToken } from "hooks";
 import { APIOptsType } from "src/types/api";
 import { APIFunction } from "types";
 
-// const { accessToken } = useAccessToken()
 export const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
     const { setAccessToken } = useAccessToken()
     console.log("inside fetch")
     const GET_REFRESH_TOKEN = await AsyncStorage.getItem('tokenId')
+
     // const getResponse = await post({
     //   path: "auth/get-access-token",
     //   body: JSON.stringify({

@@ -67,7 +67,7 @@ const Home = () => {
     (item: {category: {name: string}}) =>
       item?.category?.name === 'ayushProduct',
   );
-  console.log('CATEGORY_PRODUCT1', productsData);
+  // console.log('CATEGORY_PRODUCT1', productsData);
   return (
     <SafeAreaView
       style={{

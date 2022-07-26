@@ -20,12 +20,15 @@ import {COLORS} from 'configs';
 import LottieView from 'lottie-react-native';
 import {SUPPORT} from 'assets';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {post} from 'api';
+import {useAccessToken} from 'hooks';
 
 type supportType = {
   Name?: string;
   Email?: string;
   Subject?: string;
   Message?: string;
+  phoneNumber?: string;
 };
 
 const SupportUs = () => {
@@ -37,8 +40,29 @@ const SupportUs = () => {
     formState: {errors},
   } = useForm();
 
-  const onSubmit = (data: supportType) => {
-    console.log('object', data);
+  const {accessToken} = useAccessToken();
+
+  const onSubmit = async (data: supportType) => {
+    try {
+      setLoader(true);
+      const supportData = await post({
+        path: 'support-form',
+        body: JSON.stringify({
+          name: data.Name,
+          email: data.Email,
+          phoneNumber: data.phoneNumber,
+          subject: data.Subject,
+          message: data.Message,
+        }),
+        token: accessToken,
+      });
+      console.log(supportData);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoader(false);
+      reset();
+    }
   };
   return (
     <SafeAreaView style={{flex: 1}}>
@@ -127,6 +151,40 @@ const SupportUs = () => {
               />
               <FormControl.ErrorMessage mb={2} mt={0}>
                 {errors.Email?.message}
+              </FormControl.ErrorMessage>
+            </FormControl>
+
+            <FormControl isRequired isInvalid={'phoneNumber' in errors}>
+              <FormControl.Label>Enter Number</FormControl.Label>
+              <Controller
+                control={control}
+                render={({field: {onChange, onBlur, value}}) => (
+                  <Input
+                    InputLeftElement={
+                      <Ionicons
+                        size={20}
+                        style={styles.supportIcons}
+                        name="phone-portrait-outline"
+                      />
+                    }
+                    placeholder="1234567890"
+                    fontSize={'14'}
+                    // mb={4}
+                    keyboardType="number-pad"
+                    autoCapitalize="none"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+                name="phoneNumber"
+                rules={{
+                  required: 'Phone Number is required',
+                }}
+                defaultValue=""
+              />
+              <FormControl.ErrorMessage mb={2} mt={0}>
+                {errors.phoneNumber?.message}
               </FormControl.ErrorMessage>
             </FormControl>
 
