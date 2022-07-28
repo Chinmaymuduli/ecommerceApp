@@ -1,31 +1,31 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { BASE_URL, post } from "api";
-import { useAccessToken } from "hooks";
+import { BASE_URL, post, put } from "api";
 import { APIOptsType } from "src/types/api";
 import { APIFunction } from "types";
 
 export const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
-    const { setAccessToken } = useAccessToken()
-    console.log("inside fetch")
+
     const GET_REFRESH_TOKEN = await AsyncStorage.getItem('tokenId')
 
-    // const getResponse = await post({
-    //   path: "auth/get-access-token",
-    //   body: JSON.stringify({
-    //     refresh_token: GET_REFRESH_TOKEN
-    //   })
-    // })
-    const getResponse = await fetch(`${BASE_URL}/auth/get-access-token`)
-    const data = await getResponse.json()
+    const getResponse = await post({
+        path: "auth/get-access-token",
+        body: JSON.stringify({
+            refresh_token: GET_REFRESH_TOKEN
+        })
+    })
     if (getResponse.status === 200) {
-        return data.ACCESS_TOKEN
-        if (data?.REFRESH_Token) {
-            await AsyncStorage.setItem('tokenId', data?.REFRESH_Token)
+
+        await AsyncStorage.setItem('access_token', getResponse?.ACCESS_TOKEN)
+        if (getResponse.REFRESH_Token) {
+            await AsyncStorage.setItem('tokenId', getResponse?.REFRESH_Token)
         }
         successFunction(params)
     }
     if (getResponse.status === 401) {
         console.log("logout")
+        await put({
+            path: "auth/logout"
+        })
     }
 }
 const authFetch: APIFunction = ({
@@ -45,14 +45,15 @@ const authFetch: APIFunction = ({
         };
         !API_OPTIONS.body && delete API_OPTIONS.body;
         const response = await fetch(`${BASE_URL}/${path}`, API_OPTIONS);
-        // if (response.status === 401) {
-        //     return GetToken(authFetch, {
-        //         path,
-        //         body,
-        //         method: 'POST',
-        //         options: {},
-        //     })
-        // }
+        if (response.status === 401) {
+
+            return GetToken(authFetch, {
+                path,
+                body,
+                method: 'POST',
+                options: {},
+            })
+        }
         const json = await response.json();
         console.log({ json })
 

@@ -69,6 +69,7 @@ const HomeCategoryItem = ({
     }
   };
 
+  // console.log({item});
   //   add to cart logic //
   // const increment = (id: number) => {
   //   setCount(count + 1);
@@ -122,7 +123,13 @@ const HomeCategoryItem = ({
           borderRadius={5}>
           <Image
             alt="image"
-            source={isBussiness ? item?.b2bImg : item?.img}
+            // source={isBussiness ? item?.b2bImg : item?.img}
+            source={{
+              uri:
+                item?.images?.length > 1
+                  ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1-r88R2pOX-lj1C6Zn3QO3I_Osu-G3viCm1fUWNVhiDn_mkszDqEn8qXAe3bR1sJo9Pg&usqp=CAU'
+                  : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1-r88R2pOX-lj1C6Zn3QO3I_Osu-G3viCm1fUWNVhiDn_mkszDqEn8qXAe3bR1sJo9Pg&usqp=CAU',
+            }}
             style={styles.image}
             resizeMode={'contain'}
           />

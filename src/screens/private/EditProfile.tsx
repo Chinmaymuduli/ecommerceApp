@@ -24,19 +24,26 @@ import {
   SuccessVerificationModal,
 } from 'components/core';
 import {Controller, useForm} from 'react-hook-form';
-import {useAccessToken, useActions, useFetch, useIsMounted} from 'hooks';
+import {
+  useAccessToken,
+  useActions,
+  useAuthFetch,
+  useFetch,
+  useIsMounted,
+} from 'hooks';
 import {User} from 'types';
 import {post, put} from 'api';
 import {useAuth} from 'app';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditProfile = () => {
-  const {data, isLoading} = useFetch<User>('user');
-  console.log({data});
+  // const {data, isLoading} = useFetch<User>('user');
+  // console.log({data});
   const navigation = useNavigation<NavigationProps>();
   const [visiable, setVisiable] = useState<boolean>(false);
   const [profileIimage, setprofileimage] = useState<any>('');
   const [gender, setGender] = useState<string>();
-  const {accessToken} = useAccessToken();
+  // const {accessToken} = useAccessToken();
   const isMounted = useIsMounted();
   const {setLoading} = useActions();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -48,12 +55,24 @@ const EditProfile = () => {
     setValue,
   } = useForm();
 
+  const {authData, isLoading} = useAuthFetch<User>({
+    path: 'user/my-account',
+    method: 'GET',
+  });
+
   useEffect(() => {
-    setValue('displayName', data?.results?.displayName);
-    setValue('phoneNumber', `${data?.results?.phoneNumber}`);
-    setValue3('email', data?.results?.email);
-    setGender(data?.results.gender);
-  }, [data?.results]);
+    // setValue('displayName', data?.results?.displayName);
+    // setValue('phoneNumber', `${data?.results?.phoneNumber}`);
+    // setValue3('email', data?.results?.email);
+    // setGender(data?.results.gender);
+    setValue('displayName', authData?.displayName);
+    setValue(
+      'phoneNumber',
+      `${authData?.phoneNumber ? authData?.phoneNumber : ''}`,
+    );
+    setValue3('email', authData?.email);
+    setGender(authData?.gender);
+  }, [authData]);
 
   const handleDismiss = () => {
     setVisiable(false);
@@ -69,6 +88,7 @@ const EditProfile = () => {
   const onSubmit = async (data: any) => {
     try {
       isMounted.current && setLoading(true);
+      const token = await AsyncStorage.getItem('access_token');
       const nameResponse = await put({
         path: 'user/account',
         body: JSON.stringify({
@@ -76,9 +96,9 @@ const EditProfile = () => {
           gender: gender,
           phoneNumber: data?.phoneNumber,
         }),
-        token: accessToken,
+        token: token,
       });
-      // console.log({nameResponse});
+      console.log({nameResponse});
       if (nameResponse.status === 200) {
         setShowSuccessModal(true);
         setSuccessMessage('Profile Updated Successfully');
@@ -103,7 +123,8 @@ const EditProfile = () => {
       const sendOtp = await post({
         path: 'auth/forgot-password',
         body: JSON.stringify({
-          email: data?.results.email,
+          // email: data?.results.email,
+          email: authData?.email,
         }),
       });
       console.log({sendOtp});
@@ -116,7 +137,7 @@ const EditProfile = () => {
     <>
       {!isLoading ? (
         <Box flex={1} bg={COLORS.textWhite}>
-          <ScrollView>
+          <ScrollView keyboardShouldPersistTaps="always">
             <Box bg={COLORS.cgcolor}>
               <HStack justifyContent={'space-between'} px={5} py={3}>
                 <HStack space={4} alignItems={'center'}>
@@ -148,9 +169,12 @@ const EditProfile = () => {
                 <Center mt={5}>
                   <Image
                     source={{
-                      uri: data?.results?.photoURL
-                        ? data?.results?.photoURL
+                      uri: authData?.photoURL
+                        ? authData?.photoURL
                         : 'https://www.w3schools.com/howto/img_avatar.png',
+                      // uri: data?.results?.photoURL
+                      //   ? data?.results?.photoURL
+                      //   : 'https://www.w3schools.com/howto/img_avatar.png',
                     }}
                     h={100}
                     w={100}

@@ -7,7 +7,8 @@ export const BASE_URL = `https://chhattisgarh-herbals-api.herokuapp.com/api`;
 
 
 const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
-  const { setAccessToken } = useAccessToken()
+  // const { setAccessToken, accessToken } = useAccessToken()
+  const Access_Token = await AsyncStorage.getItem('access_token')
   const GET_REFRESH_TOKEN = await AsyncStorage.getItem('tokenId')
   const getResponse = await post({
     path: "auth/get-access-token",
@@ -16,14 +17,18 @@ const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
     })
   })
   if (getResponse.status === 200) {
-    setAccessToken(getResponse.ACCESS_TOKEN)
+    // setAccessToken(getResponse.ACCESS_TOKEN)
+    await AsyncStorage.setItem('access_token', getResponse.ACCESS_TOKEN)
     if (getResponse?.REFRESH_Token) {
       await AsyncStorage.setItem('tokenId', getResponse?.REFRESH_Token)
     }
     successFunction(params)
   }
   if (getResponse.status === 401) {
-    console.log("logout")
+    await put({
+      path: "auth/logout",
+      token: Access_Token
+    })
   }
 }
 

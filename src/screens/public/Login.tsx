@@ -56,18 +56,25 @@ const Login = () => {
         }),
         token: accessToken,
       });
+      console.log({loginData});
       if (loginData.status === 500) {
         setShowErrorModal(true);
         setLabel(loginData.error);
         return;
       }
       if (loginData.status === 200) {
-        console.log({loginData});
-        setLoggedIn(true);
+        // navigation.navigate('Home');
         await AsyncStorage.setItem('tokenId', loginData.REFRESH_TOKEN);
+        await AsyncStorage.setItem('access_token', loginData.ACCESS_TOKEN);
         await AsyncStorage.setItem('isUserEnter', JSON.stringify(true));
-        setAccessToken(loginData.ACCESS_TOKEN);
-        setUser(loginData.data);
+
+        await AsyncStorage.setItem('isLoggedIn', 'true')
+          .then(() => {
+            console.log('Login Success');
+            setLoggedIn(true);
+          })
+          .catch(error => console.log(error));
+        // setUser(loginData.data);
         return;
       }
     } catch (error) {

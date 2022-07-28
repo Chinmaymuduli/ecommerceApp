@@ -25,6 +25,7 @@ const CategoryProducts = ({
   setAlertMessage,
 }: CategoryProductType) => {
   const navigation = useNavigation<NavigationProps>();
+  // console.log({data});
 
   return (
     <>

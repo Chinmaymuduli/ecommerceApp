@@ -143,6 +143,16 @@ type weightType = {
     inStock?: boolean
     discount?: number
 }
+
+export type ProductVariants = {
+    _id?: string,
+    measureType: string
+    measureUnit: number
+    mrp: number
+    review: any
+    salePrice: number
+    stock: number
+}
 export type ProductType = {
     id: number
     name?: string
@@ -160,12 +170,14 @@ export type ProductType = {
     isActive?: boolean
     measureType?: string
     measureUnit?: number
-    mrp?: number
-    salePrice?: number
+    mrp: number
+    salePrice: number
     shortDescription?: string
     stock?: number
     title?: string
     type?: string
+    images?: any
+    variants?: ProductVariants[]
 }
 export type CouponType = {
     id?: number

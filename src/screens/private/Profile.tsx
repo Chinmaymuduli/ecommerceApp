@@ -1,4 +1,3 @@
-import {Alert, StyleSheet} from 'react-native';
 import React from 'react';
 import {
   Badge,
@@ -16,49 +15,30 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useAuth, useStore} from 'app';
-import {
-  useAccessToken,
-  useActions,
-  useAuthFetch,
-  useFetch,
-  useIsMounted,
-} from 'hooks';
+import {useAccessToken, useActions, useAuthFetch} from 'hooks';
 import {User} from 'types';
-import {put} from 'api';
 import {FetchLoader} from 'components/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = () => {
   const navigation = useNavigation<NavigationProps>();
   const {cartItems} = useStore();
-  const {data, isLoading} = useFetch<User>('user');
-  const isMounted = useIsMounted();
-  const {accessToken} = useAccessToken();
-  const {setLoading} = useActions();
-  const {setLoggedIn, user} = useAuth();
+  const {setLoggedIn} = useAuth();
   const handelLogout = async () => {
-    try {
-      isMounted.current && setLoading(true);
-      const logoutRes = await put({
-        path: 'auth/logout',
-        token: accessToken,
-      });
-      console.log({logoutRes});
-      if (logoutRes.status === 200) {
-        // setUser({});
+    AsyncStorage.setItem('isLoggedIn', 'false')
+
+      .then(() => {
+        console.log('Logout Success');
         setLoggedIn(false);
-      }
-    } catch (error) {
-      if (error instanceof Error) return Alert.alert('Error', error.message);
-      return Alert.alert('Error', 'Something went wrong');
-    } finally {
-      isMounted.current && setLoading(false);
-    }
+      })
+      .catch(error => console.log(error));
   };
 
-  // const {data, isLoading} = useAuthFetch<User>({
-  //   path: 'user/my-account',
-  //   method: 'GET',
-  // });
+  const {authData, isLoading} = useAuthFetch<User>({
+    path: 'user/my-account',
+    method: 'GET',
+  });
+
   return (
     <>
       {!isLoading ? (
@@ -112,8 +92,8 @@ const Profile = () => {
               <Center mt={5}>
                 <Image
                   source={{
-                    uri: data?.data?.photoURL
-                      ? data?.data?.photoURL
+                    uri: authData?.photoURL
+                      ? authData?.photoURL
                       : 'https://www.w3schools.com/howto/img_avatar.png',
                   }}
                   h={70}
@@ -122,17 +102,22 @@ const Profile = () => {
                   borderRadius={50}
                 />
                 <Text color={COLORS.textWhite} mt={4} bold>
-                  {data?.data?.displayName}
+                  {/* {data?.data?.displayName} */}
+                  {authData?.displayName}
                 </Text>
 
                 <Box alignItems={'center'} mt={4}>
                   <Text color={COLORS.textWhite}>
-                    {data?.data?.phoneNumber
-                      ? data?.data?.phoneNumber
+                    {authData?.phoneNumber
+                      ? authData?.phoneNumber
                       : 'No Number Found'}
+                    {/* {data?.data?.phoneNumber
+                      ? data?.data?.phoneNumber
+                      : 'No Number Found'} */}
                   </Text>
                   <Text color={COLORS.textWhite}>
-                    {data?.data?.email ? data?.data?.email : 'No email found'}
+                    {authData?.email ? authData?.email : 'No email found'}
+                    {/* {data?.data?.email ? data?.data?.email : 'No email found'} */}
                   </Text>
                 </Box>
                 <Box position={'absolute'} right={4} bottom={3}>
@@ -279,5 +264,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-const styles = StyleSheet.create({});

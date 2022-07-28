@@ -1227,6 +1227,14 @@ const useStore = create<ProductStoreType>((set) => ({
             ),
         }))
     },
+
+    getCartItem: async () => {
+        const cartResponse = await fetch('https://chhattisgarh-herbals-api.herokuapp.com/api/cart/all', {
+            method: "GET"
+        })
+        const resData = cartResponse.json()
+
+    }
 }))
 
 export default useStore

@@ -6,7 +6,7 @@ export type APIOptsType = {
     [key: string]: string;
   };
   options?: RequestInit;
-  token?: string;
+  token?: string | null;
 
 };
 

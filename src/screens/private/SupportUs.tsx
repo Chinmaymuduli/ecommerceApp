@@ -170,7 +170,8 @@ const SupportUs = () => {
                     placeholder="1234567890"
                     fontSize={'14'}
                     // mb={4}
-                    keyboardType="number-pad"
+                    keyboardType="numeric"
+                    // type=''
                     autoCapitalize="none"
                     onBlur={onBlur}
                     onChangeText={onChange}

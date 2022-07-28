@@ -1,38 +1,35 @@
 import { useCallback, useEffect, useState } from 'react'
 import useIsMounted from './useIsMounted'
 import { authFetch } from 'api'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
-const useAuthFetch = <T>({
-    method,
-    path,
-    body,
-}: {
-    method: "POST" | "PUT" | "GET" | "DELETE"
-    path: string
+const useAuthFetch = <T>(props: {
+    method?: "POST" | "PUT" | "GET" | "DELETE"
+    path?: string
     body?: {}
-}) => {
+} | undefined) => {
     const [isLoading, setIsLoading] = useState(false)
-    const [data, setData] = useState<T>()
+    const [authData, setAuthData] = useState<T>()
     const [error, setError] = useState<string>()
     const isMounted = useIsMounted()
-    const GET_DATA = useCallback(
+    const FETCH_DATA = useCallback(
         async ({
             method,
             path,
-
             body,
+
         }: {
             method: "POST" | "PUT" | "GET" | "DELETE"
             path: string
-            body?: {}
+            body?: any
         }) => {
-            console.log("inside getdata", path)
             try {
                 isMounted.current && setIsLoading(true)
-                const response = await authFetch({ path, method })
+                const getAccessToken = await AsyncStorage.getItem('access_token')
+                const response = await authFetch({ path, method, body, token: getAccessToken })
                 console.log("response", response)
-                isMounted.current && setData(response.data)
+                isMounted.current && setAuthData(response.data)
             } catch (err) {
                 const error = err as Error
                 console.log(error)
@@ -44,16 +41,15 @@ const useAuthFetch = <T>({
         [],
     )
     useEffect(() => {
-        console.log(path)
-        if (path) {
-            GET_DATA({
-                method,
-                path,
-                body,
+        if (props?.path && props?.method) {
+            FETCH_DATA({
+                method: props.method,
+                path: props.path,
+                body: props.body,
             })
         }
     }, [])
-    return { data, isLoading, error, GET_DATA }
+    return { authData, isLoading, error, FETCH_DATA }
 
 }
 

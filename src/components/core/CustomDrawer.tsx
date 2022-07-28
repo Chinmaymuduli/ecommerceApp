@@ -18,9 +18,16 @@ import Materialicons from 'react-native-vector-icons/MaterialIcons';
 import {useAppContext} from 'contexts';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {useAuth} from 'app';
-import {useAccessToken, useActions, useFetch, useIsMounted} from 'hooks';
+import {
+  useAccessToken,
+  useActions,
+  useAuthFetch,
+  useFetch,
+  useIsMounted,
+} from 'hooks';
 import {post, put} from 'api';
 import {User} from 'types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const drawerArray = [
   {
@@ -117,10 +124,7 @@ const CustomDrawer = () => {
   const navigation = useNavigation<NavigationProps>();
   const [selectedButton, setSelectedButton] = React.useState(1);
   const {setUserData} = useAppContext();
-  const {setLoading} = useActions();
-  const {accessToken} = useAccessToken();
-  const isMounted = useIsMounted();
-  const {user, setUser, setLoggedIn} = useAuth(state => state);
+  const {user, setLoggedIn} = useAuth(state => state);
 
   const DrawerNaviagte = (item: any) => {
     setSelectedButton(item?.id);
@@ -151,25 +155,18 @@ const CustomDrawer = () => {
       {cancelable: true},
     );
   }, []);
-  const handelLogout = async () => {
-    try {
-      isMounted.current && setLoading(true);
-      const logoutRes = await put({
-        path: 'auth/logout',
-        token: accessToken,
-      });
-      console.log({logoutRes});
-      if (logoutRes.status === 200) {
-        // setUser({});
+
+  const handleLogout = () => {
+    AsyncStorage.setItem('isLoggedIn', 'false')
+
+      .then(() => {
+        console.log('Logout Success');
         setLoggedIn(false);
-      }
-    } catch (error) {
-      if (error instanceof Error) return Alert.alert('Error', error.message);
-      return Alert.alert('Error', 'Something went wrong');
-    } finally {
-      isMounted.current && setLoading(false);
-    }
+      })
+      .catch(error => console.log(error));
   };
+
+  // console.log('first', user);
   return (
     <Box flex={1}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -183,7 +180,9 @@ const CustomDrawer = () => {
             <Image
               alt="drawerImage"
               source={{
-                uri: 'https://t3.ftcdn.net/jpg/01/17/72/36/240_F_117723612_z7zQmUrrpG4IRGQLvgX5nwtwC18ke3qU.jpg',
+                uri: user?.photoURL
+                  ? user?.photoURL
+                  : 'https://t3.ftcdn.net/jpg/01/17/72/36/240_F_117723612_z7zQmUrrpG4IRGQLvgX5nwtwC18ke3qU.jpg',
               }}
               style={styles.drawerImage}
             />
@@ -242,7 +241,7 @@ const CustomDrawer = () => {
           <Divider />
         </Box>
         <Box px={5} mb={8} mt={2}>
-          <Pressable onPress={handelLogout}>
+          <Pressable onPress={handleLogout}>
             <HStack justifyContent={'space-between'}>
               <HStack space={3}>
                 <Materialicons
