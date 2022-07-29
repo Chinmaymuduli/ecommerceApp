@@ -25,7 +25,8 @@ import {NavigationProps, PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {AddressType} from 'types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {post} from 'api';
-import {useAccessToken, useActions, useIsMounted} from 'hooks';
+import {useActions, useIsMounted} from 'hooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Address'>;
 const Address = ({route, navigation}: Props) => {
@@ -41,16 +42,14 @@ const Address = ({route, navigation}: Props) => {
   const [selectedType, setSelectedType] = React.useState(1);
   const [state, setState] = React.useState<string>('Chhattisgarh');
   const [addressTypeText, setAddressTypeText] = useState('Home');
-  const {accessToken} = useAccessToken();
+
   const isMounted = useIsMounted();
   const {setLoading} = useActions();
   const onSubmit = async (data: AddressType) => {
     try {
       isMounted.current && setLoading(true);
+      const token = await AsyncStorage.getItem('access_token');
       const AddressData = JSON.stringify({
-        // ...data,
-        // addressType: addressTypeText,
-        // state: state,
         landmark: data.housenumber,
         email: 'demouser@gmail.com',
         phoneNumber: data.phoneNumber,
@@ -67,7 +66,7 @@ const Address = ({route, navigation}: Props) => {
       const postAddress = await post({
         path: 'address',
         body: AddressData,
-        token: accessToken,
+        token: token,
       });
       console.log({postAddress});
       if (postAddress.status === 200) {

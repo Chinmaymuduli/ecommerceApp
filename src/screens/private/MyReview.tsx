@@ -23,7 +23,7 @@ const MyReviewArr = [
     rating: 4,
     date: '12/05/2022',
     review:
-      ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. The product is so beautifull so i recommend you to buy it.',
+      ' Lorem ipsum dolor sit amer, consectetur advising elite. The product is so beautiful so i recommend you to buy it.',
   },
 
   {
@@ -32,7 +32,7 @@ const MyReviewArr = [
     rating: 4,
     date: '10/04/2022',
     review:
-      ' Lorem ipsum dolor sit amet, consectetur adipiscing elit. The product is so beautifull so i recommend you to buy it.',
+      ' Lorem ipsum dolor sit ames, consectetur advising elis. The product is so beautiful so i recommend you to buy it.',
   },
 ];
 

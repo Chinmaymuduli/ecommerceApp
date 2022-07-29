@@ -15,22 +15,22 @@ import {COLORS} from 'configs';
 import HomeCategoriesItem from './HomeCategoriesItem';
 import {useStore} from '../../src/app';
 import {GET} from 'api';
-import {useAccessToken, useIsMounted} from 'hooks';
+import {useIsMounted} from 'hooks';
 import {CategoryType} from 'types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeCategories = () => {
-  const {category} = useStore();
   const navigation = useNavigation<NavigationProps>();
-  const {accessToken} = useAccessToken();
   const isMounted = useIsMounted();
   const [isLoading, setIsLoading] = useState<boolean>();
   const [categoryData, setCategoryData] = useState<CategoryType[]>();
   const CategoryRes = async () => {
     try {
       isMounted.current && setIsLoading(true);
+      const token = await AsyncStorage.getItem('access_token');
       const Response = await GET({
         path: 'categories',
-        token: accessToken,
+        token: token,
       });
       // console.log(Response.data);
       setCategoryData(Response.data);
@@ -69,12 +69,3 @@ const HomeCategories = () => {
 };
 
 export default HomeCategories;
-
-const styles = StyleSheet.create({
-  imagestyle: {
-    width: 70,
-    height: 70,
-    // borderColor: COLORS.textWhite,
-    borderRadius: 40,
-  },
-});

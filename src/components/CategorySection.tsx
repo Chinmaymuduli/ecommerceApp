@@ -33,18 +33,17 @@ type CategoryProductType = {
   }[];
   setOpenAlert?: boolean | any;
   setAlertMessage?: string | any;
-  isBussiness?: boolean;
+  isBusiness?: boolean;
 };
 
 const CategorySection = ({
   data,
   setOpenAlert,
   setAlertMessage,
-  isBussiness,
+  isBusiness: isBusiness,
 }: CategoryProductType) => {
   const [filterSheetOpen, setFilterSheetOpen] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
-  // console.log('object558', isBussiness);
 
   return (
     <>
@@ -56,7 +55,7 @@ const CategorySection = ({
               item={item}
               setOpenAlert={setOpenAlert}
               setAlertMessage={setAlertMessage}
-              isBussiness={isBussiness}
+              isBusiness={isBusiness}
             />
           </Box>
         )}

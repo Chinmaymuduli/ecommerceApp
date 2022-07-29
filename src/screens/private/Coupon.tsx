@@ -27,12 +27,12 @@ const Coupon = ({route}: Props) => {
   // const couponProductData = route.params?.couponProduct;
   const navigation = useNavigation<NavigationProps>();
   const [couponCode, setCouponCode] = React.useState('');
-  const [termandcondition, setTermandcondition] = React.useState<any>();
+  const [termAndCondition, setTermAndCondition] = React.useState<any>();
   const [couponAlert, setCouponAlert] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
   const {CouponArr} = useStore();
   const Conditions = (item: ProductDetailsType) => {
-    setTermandcondition(item);
+    setTermAndCondition(item);
     onOpen();
   };
   const ApplyCoupon = (value: number) => {
@@ -179,7 +179,7 @@ const Coupon = ({route}: Props) => {
                   borderRadius: 20,
                   marginTop: 8,
                 }}></Box>
-              <Text pl={2}>{termandcondition?.term1}</Text>
+              <Text pl={2}>{termAndCondition?.term1}</Text>
             </Box>
             <Box mt={2} flexDirection={'row'}>
               <Box
@@ -190,7 +190,7 @@ const Coupon = ({route}: Props) => {
                   borderRadius: 20,
                   marginTop: 8,
                 }}></Box>
-              <Text pl={2}>{termandcondition?.term2}</Text>
+              <Text pl={2}>{termAndCondition?.term2}</Text>
             </Box>
           </Box>
         </Actionsheet.Content>

@@ -21,7 +21,8 @@ import LottieView from 'lottie-react-native';
 import {SUPPORT} from 'assets';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {post} from 'api';
-import {useAccessToken} from 'hooks';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type supportType = {
   Name?: string;
@@ -40,11 +41,10 @@ const SupportUs = () => {
     formState: {errors},
   } = useForm();
 
-  const {accessToken} = useAccessToken();
-
   const onSubmit = async (data: supportType) => {
     try {
       setLoader(true);
+      const token = await AsyncStorage.getItem('access_token');
       const supportData = await post({
         path: 'support-form',
         body: JSON.stringify({
@@ -54,7 +54,7 @@ const SupportUs = () => {
           subject: data.Subject,
           message: data.Message,
         }),
-        token: accessToken,
+        token: token,
       });
       console.log(supportData);
     } catch (error) {
@@ -249,9 +249,9 @@ const SupportUs = () => {
             </FormControl>
             <Box mt={2}>
               <TouchableOpacity
-                style={styles.sendusTouch}
+                style={styles.sends_Touch}
                 onPress={handleSubmit(onSubmit)}>
-                <Box style={styles.sendcontainer}>
+                <Box style={styles.send_container}>
                   {loader ? (
                     <ActivityIndicator
                       size="small"
@@ -286,12 +286,12 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
 
-  sendusTouch: {
+  sends_Touch: {
     marginTop: 7,
     borderRadius: 5,
     backgroundColor: COLORS.cgcolor,
   },
-  sendcontainer: {
+  send_container: {
     paddingVertical: 4,
   },
 });

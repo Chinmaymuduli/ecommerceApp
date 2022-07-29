@@ -17,7 +17,7 @@ import {ICONS, LoginBg, LOGO} from 'assets';
 import {useNavigation} from '@react-navigation/native';
 import {PublicNavigation} from 'src/routes/PublicRoutes';
 import {Controller, useForm} from 'react-hook-form';
-import {useAccessToken, useIsMounted} from 'hooks';
+import {useIsMounted} from 'hooks';
 import {post} from 'api';
 import {ErrorModal} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';

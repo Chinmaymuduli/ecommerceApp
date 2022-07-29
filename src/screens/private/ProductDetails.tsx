@@ -20,7 +20,7 @@ import {
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
-import {SPECIALPRODUCT} from '../../constants';
+import {SPECIAL_PRODUCT} from '../../constants';
 import {COLORS} from 'configs';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -247,14 +247,14 @@ const ProductDetails = ({route, navigation}: Props) => {
           <ScrollView showsVerticalScrollIndicator={false}>
             <Box>
               <Carousel
-                data={SPECIALPRODUCT}
+                data={SPECIAL_PRODUCT}
                 renderItem={renderItem}
                 sliderWidth={SLIDER_WIDTH}
                 itemWidth={300}
                 onSnapToItem={index => setIndex(index)}
               />
               <Pagination
-                dotsLength={SPECIALPRODUCT.length}
+                dotsLength={SPECIAL_PRODUCT.length}
                 activeDotIndex={index}
                 dotStyle={{
                   width: 10,
@@ -527,7 +527,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                 </HStack>
                 <Box mt={1} mb={20}>
                   <FlatList
-                    data={SPECIALPRODUCT}
+                    data={SPECIAL_PRODUCT}
                     renderItem={renderSimilarProduct}
                     keyExtractor={(item, index) => index.toString()}
                     horizontal={true}

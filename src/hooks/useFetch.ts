@@ -2,7 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { BASE_URL, END_POINTS } from 'api';
 import { useAuth } from 'app';
 import { useCallback, useEffect, useState } from 'react';
-import useAccessToken from './useAccessToken';
 import useIsMounted from './useIsMounted';
 
 type GetPaths = keyof ReturnType<typeof END_POINTS.get>;
@@ -28,7 +27,6 @@ export default <TResponse>(path?: GetPaths) => {
     }>();
     const [fetchAgain, setFetchAgain] = useState(true);
     const { user } = useAuth(state => state);
-    const { accessToken } = useAccessToken()
 
 
     const get = useCallback(
@@ -36,7 +34,7 @@ export default <TResponse>(path?: GetPaths) => {
             path,
             options = {},
             headers = { 'Content-Type': 'application/json' },
-            token = accessToken,
+            token = '',
         }: GetType) => {
             if (token) headers.Authorization = `Bearer ${token}`;
             try {

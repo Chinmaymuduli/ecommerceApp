@@ -15,7 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useAuth, useStore} from 'app';
-import {useAccessToken, useActions, useAuthFetch} from 'hooks';
+import {useActions, useAuthFetch} from 'hooks';
 import {User} from 'types';
 import {FetchLoader} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';

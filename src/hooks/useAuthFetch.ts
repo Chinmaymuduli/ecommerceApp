@@ -2,13 +2,17 @@ import { useCallback, useEffect, useState } from 'react'
 import useIsMounted from './useIsMounted'
 import { authFetch } from 'api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { APIOptsType } from 'src/types/api'
+import { ApiAuthType } from 'types'
 
 
-const useAuthFetch = <T>(props: {
-    method?: "POST" | "PUT" | "GET" | "DELETE"
-    path?: string
-    body?: {}
-} | undefined) => {
+const useAuthFetch = <T>(props: ApiAuthType
+    //     {
+    //     method?: "POST" | "PUT" | "GET" | "DELETE"
+    //     path?: string
+    //     body?: {}
+    // } | undefined
+) => {
     const [isLoading, setIsLoading] = useState(false)
     const [authData, setAuthData] = useState<T>()
     const [error, setError] = useState<string>()
@@ -19,11 +23,9 @@ const useAuthFetch = <T>(props: {
             path,
             body,
 
-        }: {
-            method: "POST" | "PUT" | "GET" | "DELETE"
-            path: string
-            body?: any
-        }) => {
+        }: ApiAuthType
+
+        ) => {
             try {
                 isMounted.current && setIsLoading(true)
                 const getAccessToken = await AsyncStorage.getItem('access_token')

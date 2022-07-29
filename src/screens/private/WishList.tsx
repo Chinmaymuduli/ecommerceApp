@@ -88,7 +88,7 @@ const WishList = ({navigation}: Props) => {
                 <Center h={400} w={'full'}>
                   <Image
                     source={wishlist}
-                    style={styles.wishListimage}
+                    style={styles.wishList_image}
                     alt={'wishlist image'}
                   />
                   <Text bold color={'black'} fontSize={18} mt={10}>
@@ -130,7 +130,7 @@ const WishList = ({navigation}: Props) => {
 export default WishList;
 
 const styles = StyleSheet.create({
-  wishListimage: {
+  wishList_image: {
     width: 300,
     height: 300,
   },

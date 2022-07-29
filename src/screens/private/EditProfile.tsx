@@ -24,26 +24,16 @@ import {
   SuccessVerificationModal,
 } from 'components/core';
 import {Controller, useForm} from 'react-hook-form';
-import {
-  useAccessToken,
-  useActions,
-  useAuthFetch,
-  useFetch,
-  useIsMounted,
-} from 'hooks';
+import {useActions, useAuthFetch, useIsMounted} from 'hooks';
 import {User} from 'types';
 import {post, put} from 'api';
-import {useAuth} from 'app';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EditProfile = () => {
-  // const {data, isLoading} = useFetch<User>('user');
-  // console.log({data});
   const navigation = useNavigation<NavigationProps>();
-  const [visiable, setVisiable] = useState<boolean>(false);
-  const [profileIimage, setprofileimage] = useState<any>('');
+  const [visible, setVisible] = useState<boolean>(false);
+  const [profileIImage, setProfileImage] = useState<any>('');
   const [gender, setGender] = useState<string>();
-  // const {accessToken} = useAccessToken();
   const isMounted = useIsMounted();
   const {setLoading} = useActions();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -61,10 +51,6 @@ const EditProfile = () => {
   });
 
   useEffect(() => {
-    // setValue('displayName', data?.results?.displayName);
-    // setValue('phoneNumber', `${data?.results?.phoneNumber}`);
-    // setValue3('email', data?.results?.email);
-    // setGender(data?.results.gender);
     setValue('displayName', authData?.displayName);
     setValue(
       'phoneNumber',
@@ -75,7 +61,7 @@ const EditProfile = () => {
   }, [authData]);
 
   const handleDismiss = () => {
-    setVisiable(false);
+    setVisible(false);
   };
 
   const {
@@ -110,9 +96,9 @@ const EditProfile = () => {
     }
   };
 
-  const emailSubmit = async (emaildata: any) => {
+  const emailSubmit = async (email_data: any) => {
     try {
-      console.log('data', emaildata);
+      console.log('data', email_data);
     } catch (error) {
       console.log(error);
     }
@@ -123,11 +109,10 @@ const EditProfile = () => {
       const sendOtp = await post({
         path: 'auth/forgot-password',
         body: JSON.stringify({
-          // email: data?.results.email,
           email: authData?.email,
         }),
       });
-      console.log({sendOtp});
+      // console.log({sendOtp});
       navigation.navigate('ChangePassword');
     } catch (error) {
       console.log(error);
@@ -165,7 +150,7 @@ const EditProfile = () => {
               </HStack>
             </Box>
             <Box bg={COLORS.cgcolor} h={150}>
-              <Pressable onPress={() => setVisiable(true)}>
+              <Pressable onPress={() => setVisible(true)}>
                 <Center mt={5}>
                   <Image
                     source={{
@@ -358,9 +343,9 @@ const EditProfile = () => {
           </ScrollView>
           {/* image */}
           <ImagePicker
-            visible={visiable}
+            visible={visible}
             onDismiss={handleDismiss}
-            setImageURI={setprofileimage}
+            setImageURI={setProfileImage}
             cropperCircleOverlay={true}
           />
           {/* success modal */}

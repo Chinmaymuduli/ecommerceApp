@@ -10,7 +10,7 @@ type categoryType = {
 };
 
 const CategoryButtom = ({
-  seletedId,
+  selectedId,
   selectionMode,
   onSelectSwitch,
   data,
@@ -25,11 +25,11 @@ const CategoryButtom = ({
     setCategoryName(value?.categoryName);
   };
   useEffect(() => {
-    if (!seletedId) {
+    if (!selectedId) {
       updateSwitchData(data[0]);
     }
-    updateSwitchData(data.find((item: categoryType) => item.id === seletedId));
-  }, [seletedId, data]);
+    updateSwitchData(data.find((item: categoryType) => item.id === selectedId));
+  }, [selectedId, data]);
 
   return (
     <Box>

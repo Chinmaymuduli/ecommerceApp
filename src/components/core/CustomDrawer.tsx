@@ -18,13 +18,7 @@ import Materialicons from 'react-native-vector-icons/MaterialIcons';
 import {useAppContext} from 'contexts';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {useAuth} from 'app';
-import {
-  useAccessToken,
-  useActions,
-  useAuthFetch,
-  useFetch,
-  useIsMounted,
-} from 'hooks';
+import {useActions, useAuthFetch, useFetch, useIsMounted} from 'hooks';
 import {post, put} from 'api';
 import {User} from 'types';
 import AsyncStorage from '@react-native-async-storage/async-storage';

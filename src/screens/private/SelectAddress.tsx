@@ -5,9 +5,10 @@ import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {useAccessToken, useFetch} from 'hooks';
+
 import {AddressType} from 'types';
 import {FetchLoader} from 'components/core';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const AddressArr = [
   {
     id: 1,
@@ -45,7 +46,7 @@ type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
 const SelectAddress = ({route, navigation}: Props) => {
   const [address, setAddress] = useState<any>();
   const [value, setValue] = React.useState(address ? address[0] : null);
-  const {accessToken} = useAccessToken();
+
   const [loading, setLoading] = useState(false);
   // console.log({value});
 
@@ -54,17 +55,19 @@ const SelectAddress = ({route, navigation}: Props) => {
   const fetchData = async () => {
     try {
       setLoading(true);
+      const token = await AsyncStorage.getItem('access_token');
       const resp = await fetch(
         'https://chhattisgarh-herbals-api.herokuapp.com/api/address/all/my-addresses',
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
       const response_data = await resp.json();
+
       setAddress(response_data?.data);
       setLoading(false);
     } catch (error) {

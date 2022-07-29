@@ -15,7 +15,7 @@ type Props = {
 
 const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
   const {cartItems, addToCart, removeFromCart, removeFromWishlist} = useStore();
-  const SelecetedWeight = item?.weightAvailability?.reduce((pV, cV) => {
+  const Selected_Weight = item?.weightAvailability?.reduce((pV, cV) => {
     if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
     return pV;
   }, {});
@@ -23,7 +23,7 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
     addToCart({
       product: item,
       quantity: 1,
-      weight: SelecetedWeight,
+      weight: Selected_Weight,
     });
     setShownAlert(true);
     setAlertMessage('Added to Cart');
@@ -69,13 +69,13 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
             </Text>
             <HStack space={2}>
               <Text fontFamily={'Nunito-Bold'}>
-                &#8377;{SelecetedWeight?.currentPrice}
+                &#8377;{Selected_Weight?.currentPrice}
               </Text>
               <Text textDecorationLine={'line-through'} color={'gray.400'}>
-                &#8377;{(SelecetedWeight?.currentPrice || 0) + 100}
+                &#8377;{(Selected_Weight?.currentPrice || 0) + 100}
               </Text>
               <Text color={'green.500'} bold>
-                {SelecetedWeight?.discount} % off
+                {Selected_Weight?.discount} % off
               </Text>
             </HStack>
             <HStack>

@@ -4,7 +4,7 @@ import React from 'react';
 import BottomSheet from './BottomSheet';
 import {Button} from 'native-base';
 import {BASE_URL} from 'api';
-import {useAccessToken} from 'hooks';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Props {
   visible?: boolean;
@@ -20,10 +20,9 @@ const ImagePicker = ({
   setImageURI,
   cropperCircleOverlay,
 }: Props) => {
-  const {accessToken} = useAccessToken();
-
   const postImg = async (img: string) => {
     try {
+      const token = await AsyncStorage.getItem('access_token');
       const imageData = new FormData();
       imageData.append('avatar', {
         uri: img,
@@ -36,7 +35,7 @@ const ImagePicker = ({
         body: imageData,
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       let response = await res.json();

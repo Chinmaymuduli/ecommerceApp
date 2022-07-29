@@ -22,7 +22,7 @@ import {post} from 'api';
 import {ErrorModal, SuccessModal} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type REGISTERDATA = {
+type REGISTER_DATA = {
   email?: string;
   password?: string;
   name?: string;
@@ -45,7 +45,7 @@ const Register = () => {
   } = useForm();
   const isMounted = useIsMounted();
 
-  const onSubmit = async (data: REGISTERDATA) => {
+  const onSubmit = async (data: REGISTER_DATA) => {
     try {
       isMounted.current && setLoading(true);
       const createData = await post({

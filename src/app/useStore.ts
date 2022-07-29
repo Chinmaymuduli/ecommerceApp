@@ -1,4 +1,4 @@
-import { ALOEVERARAW, AMLARAW, AYUSH, AYUSH_1, AYUSH_2, AYUSH_3, AYUSH_4, AYUSH_5, CHYAWANPRASHRAW, GFOOD, GOURMEET1, GOURMEET2, GOURMEET3, GOURMEET4, GOURMEET5, HOMECARE, JOILRAW, MAHUACOOKIESRAW, MAHUARAW, NIRGUNDIRAW, PCARE, PERSONAL1, PERSONAL2, PERSONAL3, PERSONAL4, PERSONAL5, RAGIRAW, SWEET1, SWEET2, SWEETS } from 'assets'
+import { ALOEVERARAW, AMLARAW, AYUSH, AYUSH_1, AYUSH_2, AYUSH_3, AYUSH_4, AYUSH_5, CHYAWANPRASHRAW, GFOOD, GOURMEET1, GOURMET2, GOURMET3, GOURMEET4, GOURMET5, HOMECARE, JOILRAW, MAHUACOOKIESRAW, MAHUARAW, NIRGUNDIRAW, PCARE, PERSONAL1, PERSONAL2, PERSONAL3, PERSONAL4, PERSONAL5, RAGIRAW, SWEET1, SWEET2, SWEETS } from 'assets'
 
 // import { b_1, b_2, b_3, b_4, b_5, b_6, b_8 } from 'assets/business'
 
@@ -229,7 +229,7 @@ const useStore = create<ProductStoreType>((set) => ({
             name: 'Chyawanprash',
             description:
                 'made with jungle harvest amla, honey and other ingredients (from the heart of chhattishgarh)',
-            img: GOURMEET2,
+            img: GOURMET2,
             quantity: 1,
             weightAvailability: [
                 {
@@ -262,7 +262,7 @@ const useStore = create<ProductStoreType>((set) => ({
             name: 'Chyawanprash',
             description:
                 'made with jungle harvest amla, honey and other ingredients (from the heart of chhattishgarh)',
-            img: GOURMEET3,
+            img: GOURMET3,
             quantity: 1,
             weightAvailability: [
                 {
@@ -328,7 +328,7 @@ const useStore = create<ProductStoreType>((set) => ({
             name: 'Chyawanprash',
             description:
                 'made with jungle harvest amla, honey and other ingredients (from the heart of chhattishgarh)',
-            img: GOURMEET5,
+            img: GOURMET5,
             quantity: 1,
             weightAvailability: [
                 {
@@ -626,7 +626,7 @@ const useStore = create<ProductStoreType>((set) => ({
             name: 'Mahua cookies',
             description:
                 'made with jungle harvest Mahua  (from the heart of chhattishgarh)',
-            img: GOURMEET5,
+            img: GOURMET5,
             quantity: 1,
             weightAvailability: [
                 {
@@ -924,7 +924,7 @@ const useStore = create<ProductStoreType>((set) => ({
             name: 'Chyawanprash',
             description:
                 'made with jungle harvest amla, honey and other ingredients (from the heart of chhattishgarh)',
-            img: GOURMEET5,
+            img: GOURMET5,
             quantity: 1,
             weightAvailability: [
                 {
@@ -1228,13 +1228,7 @@ const useStore = create<ProductStoreType>((set) => ({
         }))
     },
 
-    getCartItem: async () => {
-        const cartResponse = await fetch('https://chhattisgarh-herbals-api.herokuapp.com/api/cart/all', {
-            method: "GET"
-        })
-        const resData = cartResponse.json()
 
-    }
 }))
 
 export default useStore

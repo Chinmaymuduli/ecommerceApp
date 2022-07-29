@@ -3,21 +3,21 @@ import React, {useEffect} from 'react';
 import {Box, HStack, Image, Input, Pressable, Text} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS} from 'configs';
-import {AYUSH_2, GOURMEET2, GOURMEET3, GOURMEET5, NORESULT} from 'assets';
+import {AYUSH_2, GOURMET2, GOURMET3, GOURMET5, NO_RESULT} from 'assets';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {Empty} from 'components/core';
 
 const searchArr = [
-  {id: 1, label: 'chawanprash', img: GOURMEET5},
-  {id: 2, label: 'Ragi Cookies', img: GOURMEET2},
-  {id: 3, label: 'Aloe Vera Juice', img: GOURMEET3},
+  {id: 1, label: 'chawanprash', img: GOURMET5},
+  {id: 2, label: 'Ragi Cookies', img: GOURMET2},
+  {id: 3, label: 'Aloe Vera Juice', img: GOURMET3},
   {id: 4, label: 'Jyotismati Oil', img: AYUSH_2},
-  {id: 5, label: 'Mahua Laddu', img: GOURMEET2},
-  {id: 6, label: 'Jyotismati Oil', img: GOURMEET5},
+  {id: 5, label: 'Mahua Laddu', img: GOURMET2},
+  {id: 6, label: 'Jyotismati Oil', img: GOURMET5},
 ];
 
-type searchgArrType = {
+type searchArrType = {
   id: number;
   label: string;
   img: string | any;
@@ -33,7 +33,7 @@ const Search = () => {
       setSearchData(searchArr.slice(0, 3));
       return;
     }
-    const searching = searchArr.filter((item: searchgArrType) =>
+    const searching = searchArr.filter((item: searchArrType) =>
       item?.label?.toLowerCase().includes(search?.toLowerCase()),
     );
     setSearchData(searching);
@@ -64,10 +64,10 @@ const Search = () => {
           <Box>
             <Box mt={7}>
               <Text color={COLORS.fadeBlack} fontSize={13} bold>
-                Tranding Product
+                Trading Product
               </Text>
             </Box>
-            {searchData?.map((item: searchgArrType) => (
+            {searchData?.map((item: searchArrType) => (
               <Pressable
                 key={item.id}
                 mt={4}
@@ -95,7 +95,7 @@ const Search = () => {
             ))}
           </Box>
         ) : (
-          <Empty animation={NORESULT} title="No result found" />
+          <Empty animation={NO_RESULT} title="No result found" />
         )}
       </Box>
     </Box>

@@ -14,13 +14,12 @@ type Props = {
 const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
   const {addToCart, updateQuantity, removeFromCart, cartItems} = useStore();
 
-  const SelecetedWeight = item?.weightAvailability?.reduce((pV, cV) => {
+  const Selected_Weight = item?.weightAvailability?.reduce((pV, cV) => {
     if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
     return pV;
   }, {});
 
   const [count, setCount] = React.useState(0);
-  //   console.log('object', count);
 
   const isCartItem = useMemo(
     () => cartItems.some(i => i.product.id === item.id),
@@ -64,7 +63,7 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
     addToCart({
       product: item,
       quantity: 1,
-      weight: SelecetedWeight,
+      weight: Selected_Weight,
     });
 
     setOpenAlert(true),

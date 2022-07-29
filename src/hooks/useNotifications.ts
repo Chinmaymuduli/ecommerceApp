@@ -1,6 +1,5 @@
-import {put} from 'api';
-import {useAccessToken} from 'hooks';
-import {User} from 'types';
+import { put } from 'api';
+import { User } from 'types';
 import create from 'zustand';
 
 type AuthState = {
@@ -14,7 +13,7 @@ const useNotifications = create<AuthState>(set => ({
   setNotifications: async (notification: any) => {
     set(state => ({
       ...state,
-      notifications: {...state?.notifications, ...notification},
+      notifications: { ...state?.notifications, ...notification },
     }));
   },
 }));

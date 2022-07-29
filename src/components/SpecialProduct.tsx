@@ -62,10 +62,3 @@ const SpecialProduct = ({data}: Props) => {
 };
 
 export default SpecialProduct;
-
-const styles = StyleSheet.create({
-  // specialImg: {
-  //   width: 100,
-  //   height: 100,
-  // },
-});

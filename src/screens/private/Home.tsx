@@ -3,7 +3,6 @@ import React, {useEffect, useState} from 'react';
 import {
   Badge,
   Box,
-  FlatList,
   Heading,
   HStack,
   Image,
@@ -11,7 +10,7 @@ import {
   ScrollView,
   Text,
 } from 'native-base';
-import {GOURMEET5, LOGO, MENU2, WOMENEMP} from 'assets';
+import {GOURMET5, LOGO, MENU2, WOMEN_MP} from 'assets';
 import {COLORS} from 'configs';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,25 +23,17 @@ import {
   HomeSlider,
   SpecialProduct,
 } from 'components';
-import {useAuth, useStore} from 'app';
-import {
-  useAccessToken,
-  useAuthFetch,
-  useFetch,
-  useIsMounted,
-  useNotifications,
-} from 'hooks';
-import {GET} from 'api';
-import {HomeProductType, ProductType} from 'types';
+import {useStore} from 'app';
+import {useAuthFetch, useNotifications} from 'hooks';
 
 const Home = () => {
   const {products, spacialProduct} = useStore();
   // const [productsData, setProductsData] = useState<any>();
   // const [isLoading, setIsLoading] = useState<boolean>();
   // const AYUSHPRODUCTS = products.filter(pd => pd.category === 'ayush products');
-  const GOURMEET = products.filter(pd => pd.category === 'gourmet foods');
-  const PERSONALCARE = products.filter(pd => pd.category === 'personal care');
-  const HOMECARE = products.filter(pd => pd.category === 'home care');
+  const GOURMET = products.filter(pd => pd.category === 'gourmet foods');
+  const PERSONAL_CARE = products.filter(pd => pd.category === 'personal care');
+  const HOME_CARE = products.filter(pd => pd.category === 'home care');
   const SWEET = products.filter(pd => pd.category === 'sweets');
   const navigation = useNavigation<NavigationProps>();
   const [openAlert, setOpenAlert] = React.useState<boolean>(false);
@@ -91,7 +82,7 @@ const Home = () => {
                 <Image
                   source={LOGO}
                   alt={'lOgo'}
-                  style={styles.logoimg}
+                  style={styles.logo_img}
                   resizeMode={'contain'}
                 />
               </HStack>
@@ -158,7 +149,7 @@ const Home = () => {
             <Box bg={'#ECFFDC60'}>
               <CategoryProducts
                 title="Gourmet Foods"
-                data={GOURMEET}
+                data={GOURMET}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />
@@ -166,7 +157,7 @@ const Home = () => {
             <Box>
               <CategoryProducts
                 title="Personal Products"
-                data={PERSONALCARE}
+                data={PERSONAL_CARE}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />
@@ -174,7 +165,7 @@ const Home = () => {
             <Box bg={'#ECFFDC60'}>
               <CategoryProducts
                 title="Home Care"
-                data={HOMECARE}
+                data={HOME_CARE}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
               />
@@ -191,8 +182,8 @@ const Home = () => {
             {/* Women Empower */}
             <Pressable alignItems={'center'} my={3}>
               <ImageBackground
-                source={WOMENEMP}
-                style={styles.womenempower}
+                source={WOMEN_MP}
+                style={styles.women_empower}
                 borderRadius={5}
                 resizeMode={'cover'}>
                 <Box>
@@ -235,9 +226,9 @@ const Home = () => {
               borderRadius={5}>
               <HStack>
                 <Image
-                  source={GOURMEET5}
+                  source={GOURMET5}
                   style={styles.honeyImg}
-                  alt={'honeyimg'}
+                  alt={'honey_img'}
                   resizeMode={'contain'}
                 />
                 <Box justifyContent={'center'} alignItems={'center'}>
@@ -276,12 +267,12 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
-  logoimg: {
+  logo_img: {
     width: 70,
     height: 40,
   },
 
-  womenempower: {
+  women_empower: {
     width: 350,
     height: 160,
     justifyContent: 'center',

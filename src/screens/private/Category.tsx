@@ -2,16 +2,6 @@ import {SafeAreaView, StyleSheet} from 'react-native';
 import React, {useCallback, useState} from 'react';
 import {Box, Heading, HStack, Row, VStack} from 'native-base';
 import {AlertComponent, CategoryButtom} from 'components/core';
-import {
-  AYUSHPRODUCT,
-  AYUSHRAWPRODUCT,
-  GOURMETPRODUCT,
-  GOURMETRAWPRODUCT,
-  HOMEPRODUCT,
-  PERSONALPRODUCT,
-  SWEETPRODUCT,
-  SWEETRAW,
-} from '../../constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
@@ -24,19 +14,19 @@ import {useStore} from 'app';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route}: Props) => {
-  // console.log('objectRoute', route.params?.isBussiness);
   const {category, products} = useStore();
-  const AYUSHPRODUCTS = products.filter(pd => pd.category === 'ayush products');
-  const GOURMEET = products.filter(pd => pd.category === 'gourmet foods');
-  const PERSONALCARE = products.filter(pd => pd.category === 'personal care');
-  const HOMECARE = products.filter(pd => pd.category === 'home care');
+  const AYUSH_PRODUCTS = products.filter(
+    pd => pd.category === 'ayush products',
+  );
+  const GOURMET = products.filter(pd => pd.category === 'gourmet foods');
+  const PERSONAL_CARE = products.filter(pd => pd.category === 'personal care');
+  const HOME_CARE = products.filter(pd => pd.category === 'home care');
   const SWEET = products.filter(pd => pd.category === 'sweets');
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
   const [tabValue, setTabValue] = useState(1);
   const [openAlert, setOpenAlert] = useState<any>(false);
   const [alertMessage, setAlertMessage] = useState('Successfully added');
-  const {userData} = useAppContext();
 
   const onSelectSwitch = useCallback((value: React.SetStateAction<number>) => {
     setTabValue(value);
@@ -61,7 +51,7 @@ const Category = ({route}: Props) => {
       <Row>
         <Box w={'1/4'}>
           <CategoryButtom
-            seletedId={route.params?.id || 1}
+            selectedId={route.params?.id || 1}
             selectionMode={1}
             onSelectSwitch={onSelectSwitch}
             data={category}
@@ -74,10 +64,10 @@ const Category = ({route}: Props) => {
             {tabValue === 1 && (
               <CategorySection
                 // data={userData?.role === 'b2b' ? AYUSHRAWPRODUCT : AYUSHPRODUCT}
-                data={AYUSHPRODUCTS}
+                data={AYUSH_PRODUCTS}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
-                isBussiness={route.params?.isBussiness}
+                isBusiness={route.params?.isBussiness}
               />
             )}
           </Box>
@@ -87,10 +77,10 @@ const Category = ({route}: Props) => {
                 // data={
                 //   userData?.role === 'b2b' ? GOURMETRAWPRODUCT : GOURMETPRODUCT
                 // }
-                data={GOURMEET}
+                data={GOURMET}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
-                isBussiness={route.params?.isBussiness}
+                isBusiness={route.params?.isBussiness}
               />
             )}
           </Box>
@@ -100,10 +90,10 @@ const Category = ({route}: Props) => {
                 // data={
                 //   userData?.role === 'b2b' ? GOURMETRAWPRODUCT : PERSONALPRODUCT
                 // }
-                data={PERSONALCARE}
+                data={PERSONAL_CARE}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
-                isBussiness={route.params?.isBussiness}
+                isBusiness={route.params?.isBussiness}
               />
             )}
           </Box>
@@ -113,10 +103,10 @@ const Category = ({route}: Props) => {
                 // data={
                 //   userData?.role === 'b2b' ? GOURMETRAWPRODUCT : HOMEPRODUCT
                 // }
-                data={HOMECARE}
+                data={HOME_CARE}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
-                isBussiness={route.params?.isBussiness}
+                isBusiness={route.params?.isBussiness}
               />
             )}
           </Box>
@@ -127,7 +117,7 @@ const Category = ({route}: Props) => {
                 data={SWEET}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
-                isBussiness={route.params?.isBussiness}
+                isBusiness={route.params?.isBussiness}
               />
             )}
           </Box>

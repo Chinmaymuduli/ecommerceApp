@@ -20,7 +20,7 @@ const HomeCategoriesItem = ({item}: {item: CategoryType}) => {
                 ? item?.imageURL
                 : 'https://media.istockphoto.com/photos/collection-of-fresh-herbs-picture-id183808249?k=20&m=183808249&s=612x612&w=0&h=rLWcKD1D3FOG7C9tJ98DMzLOpfYA-WDkQC8sqeofvVY=',
             }}
-            style={styles.imagestyle}
+            style={styles.image_style}
             alt="category_img"
             resizeMode="contain"
           />
@@ -34,7 +34,7 @@ const HomeCategoriesItem = ({item}: {item: CategoryType}) => {
 export default HomeCategoriesItem;
 
 const styles = StyleSheet.create({
-  imagestyle: {
+  image_style: {
     width: 70,
     height: 70,
     borderRadius: 40,

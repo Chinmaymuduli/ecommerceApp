@@ -202,7 +202,7 @@ const ChangePassword = ({navigation}: Props) => {
                   value={value}
                   InputRightElement={
                     <>
-                      <Pressable onPress={() => console.log('touchaed')}>
+                      <Pressable onPress={() => console.log('touched')}>
                         <Text color={'green.600'} bold>
                           Resend
                         </Text>

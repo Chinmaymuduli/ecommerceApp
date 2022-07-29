@@ -6,7 +6,7 @@ export { default as deliveryman } from './animation/deliveryman.json'
 export { default as SUCCESS } from './animation/success.json'
 export { default as CART } from './animation/cart.json'
 export { default as FAVORITE } from './animation/fav.json'
-export { default as NORESULT } from './animation/noresult.json'
+export { default as NO_RESULT } from './animation/noresult.json'
 export { default as SUPPORT } from './animation/support.json'
 export { default as SUCCESSSQUANTITY } from './animation/successquantity.json'
 export { default as REVIEW } from './animation/review.json'
@@ -50,10 +50,10 @@ export const AYUSH_5 = require('./images/ayush_5.png');
 export const AYUSH_6 = require('./images/ayush_7.png');
 
 export const GOURMEET1 = require('./images/gourmet_1.png');
-export const GOURMEET2 = require('./images/gourmet_2.png');
-export const GOURMEET3 = require('./images/gourmet_3.png');
+export const GOURMET2 = require('./images/gourmet_2.png');
+export const GOURMET3 = require('./images/gourmet_3.png');
 export const GOURMEET4 = require('./images/gourmet_4.png');
-export const GOURMEET5 = require('./images/pure_honey.png');
+export const GOURMET5 = require('./images/pure_honey.png');
 
 export const PERSONAL1 = require('./images/personal_1.png');
 export const PERSONAL2 = require('./images/personal_2.png');
@@ -67,7 +67,7 @@ export const CHAWAN = require('./images/chawanprash.png');
 export const SWEET1 = require('./images/sweet_1.png');
 export const SWEET2 = require('./images/sweet_2.png');
 
-export const WOMENEMP = require('./images/women_empower.png');
+export const WOMEN_MP = require('./images/women_empower.png');
 
 export const forgotPassword = require('./images/forgotpassword.png')
 export const resetImg = require('./images/resetimg.png')

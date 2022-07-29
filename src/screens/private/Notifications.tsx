@@ -5,8 +5,6 @@ import {
   AlertDialog,
   Box,
   Button,
-  Center,
-  Heading,
   HStack,
   Pressable,
   Row,
@@ -18,61 +16,11 @@ import {
 import {COLORS} from 'configs';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Octicons from 'react-native-vector-icons/Octicons';
-import {useAccessToken, useFetch, useIsMounted, useNotifications} from 'hooks';
+import {useIsMounted, useNotifications} from 'hooks';
 import {Empty, FetchLoader} from 'components/core';
-import {NORESULT, NOTIFICATIONS} from 'assets';
-import LottieView from 'lottie-react-native';
-import {post, put, remove} from 'api';
-const notificationsArr = [
-  {
-    label: '50% off in Ayush Products',
-    time: '7:10 AM',
-    type: 'Product',
-    new: 'today',
-    isRead: false,
-    id: 1,
-  },
-  {
-    label: '50% off in Gurumet Products',
-    time: '5:05 AM',
-    type: 'Product',
-    new: 'today',
-    isRead: false,
-    id: 2,
-  },
-  {
-    label: 'Package from your order #CH123456 has arrived',
-    time: '10:20 AM',
-    type: 'shopping',
-    isRead: true,
-    new: 'today',
-    id: 3,
-  },
-];
-
-const notificationsEarlierArr = [
-  {
-    label: 'Package from your order #CH123456 has arrived',
-    time: 'yesterday',
-    type: 'shopping',
-    isRead: false,
-    new: 'today',
-  },
-  {
-    label: '70% off in Ayush Products',
-    time: 'june 19',
-    type: 'Product',
-    new: 'today',
-    isRead: false,
-  },
-  {
-    label: '55% off in Gurumet Products',
-    time: 'june 15',
-    type: 'Product',
-    new: 'today',
-    isRead: false,
-  },
-];
+import {NO_RESULT} from 'assets';
+import {put, remove} from 'api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Notifications = () => {
   const {isOpen, onOpen, onClose} = useDisclose();
@@ -82,25 +30,24 @@ const Notifications = () => {
   const [notificationDes, setNotificationDes] = useState<any>();
 
   const cancelRef = React.useRef(null);
-  const {accessToken} = useAccessToken();
   const {setNotifications, notifications} = useNotifications();
   const isMounted = useIsMounted();
 
   const AddressFetch = async () => {
     try {
       isMounted.current && setIsLoading(true);
+      const token = await AsyncStorage.getItem('access_token');
       const Response = await fetch(
         'https://chhattisgarh-herbals-api.herokuapp.com/api/notifications',
         {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${token}`,
           },
         },
       );
       const resData = await Response.json();
-      // setNotificationsData(resData?.data?.data);
       setNotifications(resData?.data?.data);
     } catch (error) {
       console.log(error);
@@ -115,9 +62,10 @@ const Notifications = () => {
 
   const handelMarkAll = async () => {
     try {
+      const token = await AsyncStorage.getItem('access_token');
       const markAll = await put({
         path: 'notifications/mark-as-read',
-        token: accessToken,
+        token: token,
       });
       console.log({markAll});
     } catch (error) {
@@ -127,9 +75,10 @@ const Notifications = () => {
 
   const handelAllDelete = async () => {
     try {
+      const token = await AsyncStorage.getItem('access_token');
       const deleteAll = await remove({
         path: 'notifications',
-        token: accessToken,
+        token: token,
       });
       console.log({deleteAll});
       setOpenAlert(false);
@@ -140,12 +89,13 @@ const Notifications = () => {
 
   const handelRead = async (data: any) => {
     try {
+      const token = await AsyncStorage.getItem('access_token');
       console.log({data});
       setNotificationDes(data);
       onOpen();
       const markAsRead = await put({
         path: `notification/mark-as-read/${data.id}`,
-        token: accessToken,
+        token: token,
       });
       console.log({markAsRead});
     } catch (error) {
@@ -155,9 +105,10 @@ const Notifications = () => {
 
   const handelDelete = async (id: any) => {
     try {
+      const token = await AsyncStorage.getItem('access_token');
       const singleDelete = await remove({
         path: `notification/${id}`,
-        token: accessToken,
+        token: token,
       });
       console.log({singleDelete});
       onClose();
@@ -331,7 +282,11 @@ const Notifications = () => {
             </AlertDialog>
           </Box>
         ) : (
-          <Empty animation={NORESULT} title={'No notifications found'} noLoop />
+          <Empty
+            animation={NO_RESULT}
+            title={'No notifications found'}
+            noLoop
+          />
         )
       ) : (
         <FetchLoader />

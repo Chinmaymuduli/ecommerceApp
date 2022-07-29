@@ -9,7 +9,7 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {HomeProductType, ProductType} from 'types';
 
 type Props = {
-  item: ProductType;
+  item: HomeProductType;
 };
 
 const SpecialProductCard = ({item}: Props) => {

@@ -51,6 +51,7 @@ export type ProductDetailsType = {
     chooseWeight?: ChooseWeight
 }
 export type HomeProductType = {
+    weightAvailability?: weightType[]
     id: number
     name?: string
     discount?: number | any
@@ -212,5 +213,12 @@ export type User = {
     isOnline?: boolean;
     place?: string;
 };
+
+export type ApiAuthType = {
+    path: string;
+    body?: RequestInit['body'];
+    method?: "POST" | "PUT" | "GET" | "DELETE";
+
+}
 
 export { APIFunction };

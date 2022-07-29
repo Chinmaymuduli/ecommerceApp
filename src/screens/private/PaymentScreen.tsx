@@ -40,36 +40,24 @@ const PaymentScreen = ({navigation, route}: Props) => {
   const [payment, setPayment] = useState<any>();
   const [gstValue, setGstValue] = useState<any>('noGst');
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [visiable, setVisiable] = useState<boolean>(false);
-  const [profileIimage, setprofileimage] = useState<any>('');
+  const [visible, setVisible] = useState<boolean>(false);
+  const [profileImage, setProfileImage] = useState<any>('');
   const [document, setDocument] = useState<any>('');
   const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
   const [GstNumber, setGstNumber] = useState<any>();
 
-  // const data = {
-  //   label: paymentProductData?.name,
-  //   discount: paymentProductData?.currentPrice + 100,
-  //   currentPrice: paymentProductData?.currentPrice,
-  //   offer: paymentProductData?.offer,
-  //   img: paymentProductData?.img,
-  //   discountCoupon: CoupondiscountPrice,
-  //   orderId: Math.floor(Math.random() * 100000000),
-  //   orderDate: new Date().toLocaleDateString(),
-  //   orderTime: new Date().toLocaleTimeString(),
-  // };
-
   const handleDismiss = () => {
-    setVisiable(false);
+    setVisible(false);
   };
 
   const handelCancel = () => {
     setShowModal(false);
     setDocument('');
-    setprofileimage('');
+    setProfileImage('');
   };
 
   const ConfirmOrder = () => {
-    if (profileIimage && document) {
+    if (profileImage && document) {
       navigation.navigate('ConfirmOrder', {
         confirmOrderData: paymentProductData,
       });
@@ -116,11 +104,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Coupon Discount</Text>
-                  <Text color={'green.500'}>
-                    - &#8377;
-                    {/* {paymentProductData?.couponValue ? CoupondiscountPrice : 0} */}
-                    0
-                  </Text>
+                  <Text color={'green.500'}>- &#8377; 0</Text>
                 </HStack>
                 <HStack
                   mb={2}
@@ -194,7 +178,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
                 borderBottomWidth={1}
                 borderBottomColor={COLORS.lightGrey}>
                 <Heading size={'sm'}>Upload Document</Heading>
-                <Text>Please provide one Document for varification</Text>
+                <Text>Please provide one Document for verification</Text>
               </Box>
               <Box py={2}>
                 <Radio.Group
@@ -254,7 +238,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
                           <Pressable
                             onPress={() =>
                               document
-                                ? setVisiable(true)
+                                ? setVisible(true)
                                 : setShowErrorModal(true)
                             }
                             borderWidth={1}
@@ -263,12 +247,12 @@ const PaymentScreen = ({navigation, route}: Props) => {
                             <Image
                               resizeMode="cover"
                               source={{
-                                uri: profileIimage
-                                  ? profileIimage
+                                uri: profileImage
+                                  ? profileImage
                                   : 'https://img.freepik.com/free-vector/illustration-camera-icon_53876-5563.jpg?w=740&t=st=1655533735~exp=1655534335~hmac=2da184f3baa2ffe8fe2ea4c96b42c91d5c26cb59023e2c80c4c5ba24fe7a9338',
                               }}
                               style={{width: 100, height: 100}}
-                              alt="GSTIMG"
+                              alt="GST_IMG"
                               borderTopRadius={5}
                             />
                             <Box
@@ -320,7 +304,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
                       />
                       <VStack w={300}>
                         <Text fontSize={11} bold color={'#ef4444'}>
-                          You must provide atleast one verification document or
+                          You must provide at least one verification document or
                           valid GST No. to successfully place the order.
                         </Text>
                         <Text fontSize={11} bold color={'#ef4444'}>
@@ -441,9 +425,9 @@ const PaymentScreen = ({navigation, route}: Props) => {
       </Center>
       {/* Image Picker */}
       <ImagePicker
-        visible={visiable}
+        visible={visible}
         onDismiss={handleDismiss}
-        setImageURI={setprofileimage}
+        setImageURI={setProfileImage}
         cropperCircleOverlay={true}
         postImages={false}
       />
@@ -451,7 +435,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
       <ErrorModal
         setShowErrorModal={setShowErrorModal}
         showErrorModal={showErrorModal}
-        label="Please select atleast one document."
+        label="Please select at least one document."
       />
     </Box>
   );

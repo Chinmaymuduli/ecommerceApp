@@ -22,11 +22,7 @@ import {getPrice} from 'utils';
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ConfirmOrder'>;
 const ConfirmOrder = ({route, navigation}: Props) => {
   const confirmData = route.params?.confirmOrderData;
-  // console.log('object', confirmData);
-  // const saving = confirmData?.discount - confirmData?.currentPrice;
-  // const DiscountPrice = confirmData?.discount;
-  // const discountCoupon = confirmData?.discountCoupon;
-  // const AmoutPayable = DiscountPrice - (saving + discountCoupon);
+
   const {
     TotalProductPriceWithoutDiscount,
     sumTotalPriceCustomerWillPay,
@@ -37,7 +33,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
       <ScrollView>
         <Center mb={3}>
           <Image
-            alt="confirmpic"
+            alt="confirm_pic"
             source={CONFIRM}
             style={{width: 300, height: 260}}
             resizeMode={'contain'}
@@ -101,7 +97,6 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   <Text>Price(1 items)</Text>
                   <Text>
                     &#8377;
-                    {/* {confirmData?.discount} */}
                     {TotalProductPriceWithoutDiscount}
                   </Text>
                 </HStack>
@@ -113,7 +108,6 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   <Text>Saving</Text>
                   <Text color={'green.500'}>
                     - &#8377;
-                    {/* {saving} */}
                     {totalDiscountAmount}
                   </Text>
                 </HStack>
@@ -122,10 +116,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Coupon Discount</Text>
-                  <Text color={'green.500'}>
-                    - &#8377;
-                    {/* {confirmData?.discountCoupon} */}0
-                  </Text>
+                  <Text color={'green.500'}>- &#8377; 0</Text>
                 </HStack>
                 <HStack
                   mb={2}
