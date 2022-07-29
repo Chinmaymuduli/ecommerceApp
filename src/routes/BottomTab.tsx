@@ -26,7 +26,7 @@ const CustomTabbarButton = ({children, onPress}: any) => (
       alignItems: 'center',
     }}>
     <Box borderRadius={35} bg={COLORS.lightGrey}>
-      <Box w={55} h={55} borderRadius={35} bg={COLORS.cgcolor}>
+      <Box w={55} h={55} borderRadius={35} bg={COLORS.cgColor}>
         {children}
       </Box>
     </Box>
@@ -52,10 +52,10 @@ export default function BottomTab() {
               <Icon
                 type={Icons.Ionicons}
                 name="home"
-                color={focused ? COLORS.cgcolor : '#748C94'}
+                color={focused ? COLORS.cgColor : '#748C94'}
               />
               <Text
-                color={focused ? COLORS.cgcolor : '#748C94'}
+                color={focused ? COLORS.cgColor : '#748C94'}
                 fontSize={12}
                 bold>
                 Home
@@ -73,10 +73,10 @@ export default function BottomTab() {
               <Icon
                 type={Icons.MaterialCommunityIcons}
                 name="dots-square"
-                color={focused ? COLORS.cgcolor : '#748C94'}
+                color={focused ? COLORS.cgColor : '#748C94'}
               />
               <Text
-                color={focused ? COLORS.cgcolor : '#748C94'}
+                color={focused ? COLORS.cgColor : '#748C94'}
                 fontSize={12}
                 bold>
                 Category
@@ -104,10 +104,10 @@ export default function BottomTab() {
               <Icon
                 type={Icons.FontAwesome5}
                 name="shopping-bag"
-                color={focused ? COLORS.cgcolor : '#748C94'}
+                color={focused ? COLORS.cgColor : '#748C94'}
               />
               <Text
-                color={focused ? COLORS.cgcolor : '#748C94'}
+                color={focused ? COLORS.cgColor : '#748C94'}
                 fontSize={12}
                 bold>
                 Order
@@ -139,10 +139,10 @@ export default function BottomTab() {
                 <Icon
                   type={Icons.Ionicons}
                   name="cart"
-                  color={focused ? COLORS.cgcolor : '#748C94'}
+                  color={focused ? COLORS.cgColor : '#748C94'}
                 />
                 <Text
-                  color={focused ? COLORS.cgcolor : '#748C94'}
+                  color={focused ? COLORS.cgColor : '#748C94'}
                   fontSize={12}
                   bold>
                   Cart
@@ -184,13 +184,13 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: COLORS.cgcolor,
+    backgroundColor: COLORS.cgColor,
     borderRadius: 25,
   },
   text: {
     fontSize: 10,
     textAlign: 'center',
-    color: COLORS.cgcolor,
+    color: COLORS.cgColor,
     fontFamily: 'Nunito-Bold',
   },
 });

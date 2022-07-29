@@ -38,7 +38,7 @@ const SuccessVerificationModal = ({
                   <Pressable
                     onPress={() => setShowSuccessModal(false)}
                     borderWidth={2}
-                    borderColor={COLORS.cgcolor}
+                    borderColor={COLORS.cgColor}
                     borderRadius={6}
                     mt={5}>
                     <Text px={10} bold py={1} color={'green.700'}>

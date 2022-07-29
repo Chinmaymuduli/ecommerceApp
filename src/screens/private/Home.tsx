@@ -28,9 +28,7 @@ import {useAuthFetch, useNotifications} from 'hooks';
 
 const Home = () => {
   const {products, spacialProduct} = useStore();
-  // const [productsData, setProductsData] = useState<any>();
-  // const [isLoading, setIsLoading] = useState<boolean>();
-  // const AYUSHPRODUCTS = products.filter(pd => pd.category === 'ayush products');
+
   const GOURMET = products.filter(pd => pd.category === 'gourmet foods');
   const PERSONAL_CARE = products.filter(pd => pd.category === 'personal care');
   const HOME_CARE = products.filter(pd => pd.category === 'home care');
@@ -57,7 +55,6 @@ const Home = () => {
       .slice(0, 4);
     setProduct1(CATEGORY_PRODUCT1);
   }, [authData]);
-  // console.log('first', product1);
   return (
     <>
       {!isLoading ? (
@@ -140,7 +137,6 @@ const Home = () => {
             <Box mt={2}>
               <CategoryProducts
                 title="Ayush Product"
-                // data={authData}
                 data={product1}
                 setOpenAlert={setOpenAlert}
                 setAlertMessage={setAlertMessage}
@@ -237,7 +233,7 @@ const Home = () => {
                     OUR BEST SELLING PRODUCT
                   </Heading>
                   <Text mt={1}>Super Offer Up TO 50% OFF</Text>
-                  <Box bg={COLORS.cgcolor} borderRadius={10} mt={1}>
+                  <Box bg={COLORS.cgColor} borderRadius={10} mt={1}>
                     <Text px={3} py={1} color={COLORS.textWhite}>
                       Shop Now
                     </Text>

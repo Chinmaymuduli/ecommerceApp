@@ -27,7 +27,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
 import LottieView from 'lottie-react-native';
-import {SUCCESSSQUANTITY} from 'assets';
+import {SUCCESS_QUANTITY} from 'assets';
 import {Rating} from 'react-native-ratings';
 import {ProductDetailsType, ProductType, ProductVariants} from 'types';
 import {Accordion, ManageReview, ProductComponent} from 'components';
@@ -59,7 +59,7 @@ const ProductDetails = ({route, navigation}: Props) => {
   const [index, setIndex] = useState(0);
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const [count, setCount] = useState<any>(1);
-  const [chooseWeight, setchooseWeight] = useState<any>({authData});
+  const [chooseWeight, setChooseWeight] = useState<any>({authData});
   const [showAlert, setShowAlert] = useState(false);
   const [addQuantity, setAddQuantity] = useState<any>();
   const [modalDialog, setModalDialog] = useState(false);
@@ -77,13 +77,13 @@ const ProductDetails = ({route, navigation}: Props) => {
   } = useStore();
 
   useEffect(() => {
-    setchooseWeight(authData);
+    setChooseWeight(authData);
   }, [authData]);
 
-  const {FETCH_DATA} = useAuthFetch({});
+  const {fetchData} = useAuthFetch({});
 
   const handleCart = async (data: ProductType) => {
-    await FETCH_DATA({
+    await fetchData({
       path: 'cart/add',
       method: 'PUT',
       body: JSON.stringify({
@@ -98,7 +98,7 @@ const ProductDetails = ({route, navigation}: Props) => {
     }, 4000);
   };
 
-  const cartDatametch = cartItems.some(
+  const cartDataMatch = cartItems.some(
     item => item?.product?.id === productdata?.id,
   );
 
@@ -132,7 +132,7 @@ const ProductDetails = ({route, navigation}: Props) => {
 
   const SelectQuantity = (item: ProductVariants) => {
     // border color
-    setchooseWeight(item);
+    setChooseWeight(item);
     setAddQuantity('');
   };
 
@@ -204,10 +204,10 @@ const ProductDetails = ({route, navigation}: Props) => {
   const changeQuantity = (text: string) => {
     if (text.length > 0) {
       setAddQuantity(text.replace(/[^0-9]/g, ''));
-      setchooseWeight({});
+      setChooseWeight({});
     } else {
       setAddQuantity('');
-      setchooseWeight({
+      setChooseWeight({
         label: '10 kg',
         value: 10000,
         price: 560,
@@ -303,7 +303,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                   h={5}
                   borderRightWidth={2}
                   mx={3}
-                  borderColor={COLORS.cgcolor}></Box>
+                  borderColor={COLORS.cgColor}></Box>
                 <HStack alignItems={'center'}>
                   <Text bold>ID :</Text>
                   <Text>
@@ -328,7 +328,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                       &#8377;{' '}
                       {chooseWeight?.mrp ? chooseWeight.mrp : authData?.mrp}
                     </Text>
-                    <Text color={COLORS.cgcolor} bold>
+                    <Text color={COLORS.cgColor} bold>
                       {chooseWeight
                         ? (
                             ((chooseWeight?.mrp - chooseWeight?.salePrice) /
@@ -354,11 +354,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                     justifyContent={'space-between'}>
                     {addQuantity?.length > 0 ? null : (
                       <Text bold fontSize={18}>
-                        &#8377;
-                        {/* {chooseWeight?.currentPrice
-                          ? chooseWeight?.currentPrice
-                          : SelecetedWeight?.currentPrice} */}
-                        100
+                        &#8377; 100
                       </Text>
                     )}
                     <HStack alignItems={'center'} pr={3}>
@@ -383,8 +379,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                             &#8377;{' '}
                             {chooseWeight?.currentPrice
                               ? chooseWeight?.currentPrice + 100
-                              : // (SelecetedWeight?.currentPrice || 0) + 100
-                                200}
+                              : 200}
                           </Text>
                         </HStack>
                         <HStack py={1} px={3} alignItems={'center'}>
@@ -395,8 +390,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                             {' '}
                             {chooseWeight?.discount
                               ? chooseWeight?.discount
-                              : // SelecetedWeight?.discount
-                                200}{' '}
+                              : 200}{' '}
                             %
                           </Text>
                         </HStack>
@@ -446,7 +440,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                     justifyContent={'center'}
                     borderRadius={6}>
                     <HStack space={5} px={2}>
-                      <Box bg={COLORS.cgcolor} borderRadius={15}>
+                      <Box bg={COLORS.cgColor} borderRadius={15}>
                         <AntDesign
                           name="minus"
                           size={20}
@@ -461,7 +455,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                         {/* <Text bold>1</Text> */}
                         <Text bold>{count}</Text>
                       </Box>
-                      <Box bg={COLORS.cgcolor} borderRadius={15}>
+                      <Box bg={COLORS.cgColor} borderRadius={15}>
                         <AntDesign
                           style={{
                             padding: 2,
@@ -520,7 +514,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                   </VStack>
                   <Pressable
                     onPress={() => navigation.navigate('Category', {})}>
-                    <Text color={COLORS.cgcolor} bold>
+                    <Text color={COLORS.cgColor} bold>
                       See All
                     </Text>
                   </Pressable>
@@ -540,7 +534,7 @@ const ProductDetails = ({route, navigation}: Props) => {
           {/* Buttom section */}
           <Box position={'absolute'} px={3} bottom={0} mb={3}>
             <Row>
-              {!cartDatametch ? (
+              {!cartDataMatch ? (
                 <Pressable
                   onPress={() => handleCart(productdata)}
                   bg={'#C1E1C1'}
@@ -548,7 +542,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                   alignItems={'center'}
                   borderTopLeftRadius={5}
                   borderBottomLeftRadius={5}>
-                  <Text py={4} color={COLORS.cgcolor} bold>
+                  <Text py={4} color={COLORS.cgColor} bold>
                     Add To Cart
                   </Text>
                 </Pressable>
@@ -560,14 +554,14 @@ const ProductDetails = ({route, navigation}: Props) => {
                   alignItems={'center'}
                   borderTopLeftRadius={5}
                   borderBottomLeftRadius={5}>
-                  <Text py={4} color={COLORS.cgcolor} bold>
+                  <Text py={4} color={COLORS.cgColor} bold>
                     Go To Cart
                   </Text>
                 </Pressable>
               )}
               <Pressable
                 onPress={() => BuyNow(productdata)}
-                bg={COLORS.cgcolor}
+                bg={COLORS.cgColor}
                 w={175}
                 borderTopRightRadius={5}
                 borderBottomRightRadius={5}
@@ -670,7 +664,7 @@ const ProductDetails = ({route, navigation}: Props) => {
               <Modal.Body>
                 <Center>
                   <LottieView
-                    source={SUCCESSSQUANTITY}
+                    source={SUCCESS_QUANTITY}
                     loop={false}
                     autoPlay
                     style={{

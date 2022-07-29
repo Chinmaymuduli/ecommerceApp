@@ -10,7 +10,7 @@ const COLORS = {
     lightGrey: '#E0E0E0',
     danger: '#F44336',
     success: '#4CAF50',
-    cgcolor: "#065934"
+    cgColor: "#065934"
 };
 
 export default COLORS;

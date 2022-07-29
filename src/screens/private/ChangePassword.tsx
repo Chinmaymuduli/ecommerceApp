@@ -82,7 +82,7 @@ const ChangePassword = ({navigation}: Props) => {
   };
   return (
     <Box flex={1} bg={COLORS.textWhite}>
-      <Box bg={COLORS.cgcolor}>
+      <Box bg={COLORS.cgColor}>
         <HStack justifyContent={'space-between'} px={5} py={3}>
           <HStack space={4} alignItems={'center'}>
             <Ionicons

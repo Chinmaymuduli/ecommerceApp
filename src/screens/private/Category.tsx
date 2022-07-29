@@ -8,7 +8,6 @@ import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {COLORS} from 'configs';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
-import {useAppContext} from 'contexts';
 import {CategorySection} from 'components';
 import {useStore} from 'app';
 

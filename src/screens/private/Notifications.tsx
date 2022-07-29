@@ -169,7 +169,7 @@ const Notifications = () => {
                         <FontAwesome
                           name="shopping-basket"
                           size={25}
-                          color={COLORS.cgcolor}
+                          color={COLORS.cgColor}
                         />
                         <Text flexWrap={'wrap'}>{item?.label}</Text>
                       </Row>
@@ -179,7 +179,7 @@ const Notifications = () => {
                           <Octicons
                             name="dot-fill"
                             size={15}
-                            color={COLORS.cgcolor}
+                            color={COLORS.cgColor}
                           />
                         )}
                       </VStack>
@@ -209,7 +209,7 @@ const Notifications = () => {
                       <FontAwesome
                         name="shopping-basket"
                         size={25}
-                        color={COLORS.cgcolor}
+                        color={COLORS.cgColor}
                       />
                       <Text flexWrap={'wrap'}>{item?.label}</Text>
                     </Row>
@@ -219,7 +219,7 @@ const Notifications = () => {
                         <Octicons
                           name="dot-fill"
                           size={15}
-                          color={COLORS.cgcolor}
+                          color={COLORS.cgColor}
                         />
                       )}
                     </VStack>

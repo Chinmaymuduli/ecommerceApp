@@ -43,7 +43,7 @@ const Login = () => {
     handleSubmit,
     formState: {errors},
   } = useForm();
-  const {setAccessToken, accessToken} = useAccessToken();
+
   // console.log({user});
   const onSubmit = async (data: DATATYPE) => {
     try {
@@ -54,7 +54,6 @@ const Login = () => {
           email: data.email,
           password: data.password,
         }),
-        token: accessToken,
       });
       console.log({loginData});
       if (loginData.status === 500) {
@@ -74,7 +73,6 @@ const Login = () => {
             setLoggedIn(true);
           })
           .catch(error => console.log(error));
-        // setUser(loginData.data);
         return;
       }
     } catch (error) {
@@ -111,7 +109,7 @@ const Login = () => {
                   render={({field: {onChange, onBlur, value}}) => (
                     <Box
                       borderWidth={1}
-                      borderColor={COLORS.cgcolor}
+                      borderColor={COLORS.cgColor}
                       borderRadius={10}
                       mt={3}>
                       <Input
@@ -121,12 +119,12 @@ const Login = () => {
                         onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
-                        borderColor={COLORS.cgcolor}
+                        borderColor={COLORS.cgColor}
                         keyboardType={'email-address'}
                         autoCapitalize={'none'}
                         InputRightElement={
                           <Box mr={2}>
-                            <ICONS.Email size={20} color={COLORS.cgcolor} />
+                            <ICONS.Email size={20} color={COLORS.cgColor} />
                           </Box>
                         }
                       />
@@ -153,7 +151,7 @@ const Login = () => {
                   render={({field: {onChange, onBlur, value}}) => (
                     <Box
                       borderWidth={1}
-                      borderColor={COLORS.cgcolor}
+                      borderColor={COLORS.cgColor}
                       borderRadius={10}
                       mt={4}>
                       <Input
@@ -170,13 +168,13 @@ const Login = () => {
                             {showPassword ? (
                               <ICONS.EyeClose
                                 size={22}
-                                color={COLORS.cgcolor}
+                                color={COLORS.cgColor}
                                 onPress={() => setShowPassword(!showPassword)}
                               />
                             ) : (
                               <ICONS.Eye
                                 size={22}
-                                color={COLORS.cgcolor}
+                                color={COLORS.cgColor}
                                 onPress={() => setShowPassword(!showPassword)}
                               />
                             )}
@@ -214,7 +212,7 @@ const Login = () => {
               </Row>
               <Pressable onPress={handleSubmit(onSubmit)} mt={2}>
                 <Row
-                  bg={!loader ? COLORS.cgcolor : COLORS.grey}
+                  bg={!loader ? COLORS.cgColor : COLORS.grey}
                   borderRadius={10}
                   justifyContent={'center'}
                   alignItems={'center'}
@@ -238,7 +236,7 @@ const Login = () => {
                 <Text bold fontSize={15}>
                   If you are new,{' '}
                 </Text>
-                <Text underline bold color={COLORS.cgcolor} fontSize={15}>
+                <Text underline bold color={COLORS.cgColor} fontSize={15}>
                   Create Now
                 </Text>
               </Row>

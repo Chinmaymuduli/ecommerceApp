@@ -17,28 +17,11 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AppContextProvider from './src/contexts/AppContextProvider';
 import {useAuth} from 'app';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {BASE_URL} from 'api';
+import useSWR from 'swr';
 
 const Stack = createNativeStackNavigator();
 const App = () => {
-  // const {setLoggedIn} = useAuth();
-
-  // useEffect(() => {
-  //   let mounted = true;
-
-  //   if (mounted) {
-  //     (async () => {
-  //       const Refresh_Token = await AsyncStorage.getItem('tokenId');
-  //       // console.log(Refresh_Token);
-  //       if (Refresh_Token) {
-  //         setLoggedIn(true);
-  //       }
-  //     })();
-  //   }
-  //   return () => {
-  //     mounted = false;
-  //   };
-  // }, []);
-
   return (
     <NavigationContainer>
       <NativeBaseProvider

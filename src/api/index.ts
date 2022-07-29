@@ -128,7 +128,6 @@ export const remove: APIFunction = async ({
 };
 export const GET: APIFunction = async ({
   path,
-  // body = JSON.stringify({}),
   method = 'GET',
   options = {},
   headers = { 'Content-Type': 'application/json' },

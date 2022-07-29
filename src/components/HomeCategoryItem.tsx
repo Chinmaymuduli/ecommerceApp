@@ -116,7 +116,7 @@ const HomeCategoryItem = ({
                 : 'heart-outline'
             }
             size={22}
-            color={COLORS.cgcolor}
+            color={COLORS.cgColor}
             style={{
               paddingHorizontal: 2,
               paddingVertical: 2,
@@ -151,7 +151,7 @@ const HomeCategoryItem = ({
           </HStack>
           {isBusiness ? (
             <HStack>
-              <Text fontSize={13} color={COLORS.cgcolor} bold>
+              <Text fontSize={13} color={COLORS.cgColor} bold>
                 MOQ: {item.b2bQuantity}
               </Text>
             </HStack>

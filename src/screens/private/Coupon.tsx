@@ -68,7 +68,7 @@ const Coupon = ({route}: Props) => {
             InputRightElement={
               couponCode.length > 0 ? (
                 <Pressable
-                  bg={COLORS.cgcolor}
+                  bg={COLORS.cgColor}
                   px={5}
                   py={1}
                   mr={1}
@@ -144,8 +144,8 @@ const Coupon = ({route}: Props) => {
                       onPress={() => ApplyCoupon(item?.discountValue || 0)}
                       borderWidth={1}
                       borderRadius={6}
-                      borderColor={COLORS.cgcolor}>
-                      <Text color={COLORS.cgcolor} px={2} py={1}>
+                      borderColor={COLORS.cgColor}>
+                      <Text color={COLORS.cgColor} px={2} py={1}>
                         Apply
                       </Text>
                     </Pressable>

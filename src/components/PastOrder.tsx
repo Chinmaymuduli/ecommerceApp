@@ -108,9 +108,9 @@ const PastOrder = ({item}: Props) => {
               bg={'green.100'}
               alignItems={'center'}
               borderWidth={1}
-              borderColor={COLORS.cgcolor}
+              borderColor={COLORS.cgColor}
               borderRadius={4}>
-              <Text bold py={1} color={COLORS.cgcolor}>
+              <Text bold py={1} color={COLORS.cgColor}>
                 Re-Order
               </Text>
             </Box>

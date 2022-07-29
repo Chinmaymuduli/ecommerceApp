@@ -86,7 +86,7 @@ const CartItem = ({item, setQuantity}: CartItemTypes) => {
           </HStack>
           <Text>{item.weight?.weight}</Text>
         </VStack>
-        <Box bg={COLORS.cgcolor} position={'absolute'} top={2} borderRadius={6}>
+        <Box bg={COLORS.cgColor} position={'absolute'} top={2} borderRadius={6}>
           <Text color={COLORS.textWhite} fontSize={8} px={1}>
             {item?.weight?.discount} % OFF
           </Text>

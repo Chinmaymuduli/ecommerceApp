@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
   sends_Touch: {
     marginTop: 7,
     borderRadius: 5,
-    backgroundColor: COLORS.cgcolor,
+    backgroundColor: COLORS.cgColor,
   },
   send_container: {
     paddingVertical: 4,

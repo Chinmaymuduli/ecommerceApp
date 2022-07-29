@@ -4,6 +4,8 @@ import { useAuth } from 'app';
 import { useCallback, useEffect, useState } from 'react';
 import useIsMounted from './useIsMounted';
 
+
+
 type GetPaths = keyof ReturnType<typeof END_POINTS.get>;
 
 type GetType = {
@@ -98,3 +100,5 @@ export default <TResponse>(path?: GetPaths) => {
 
     return { isLoading, get, data, refetch, increaseLimit };
 };
+
+

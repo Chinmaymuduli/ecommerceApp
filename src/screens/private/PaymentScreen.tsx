@@ -243,7 +243,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
                             }
                             borderWidth={1}
                             borderRadius={5}
-                            borderColor={COLORS.cgcolor}>
+                            borderColor={COLORS.cgColor}>
                             <Image
                               resizeMode="cover"
                               source={{
@@ -406,10 +406,10 @@ const PaymentScreen = ({navigation, route}: Props) => {
                   <Pressable
                     onPress={() => setShowModal(false)}
                     borderWidth={1}
-                    borderColor={COLORS.cgcolor}
+                    borderColor={COLORS.cgColor}
                     borderRadius={5}>
                     <Text
-                      color={COLORS.cgcolor}
+                      color={COLORS.cgColor}
                       bold
                       fontSize={16}
                       px={4}

@@ -101,7 +101,7 @@ const SelectAddress = ({route, navigation}: Props) => {
                   borderWidth={1}
                   justifyContent={'center'}
                   space={2}>
-                  <Entypo name="plus" size={30} color={COLORS.cgcolor} />
+                  <Entypo name="plus" size={30} color={COLORS.cgColor} />
                   <Text bold>Add a new address</Text>
                 </HStack>
               </Pressable>

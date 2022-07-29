@@ -127,7 +127,7 @@ const OnBoarding = () => {
                     height: 10,
                     borderRadius: 5,
                     backgroundColor:
-                      index == currentPage ? COLORS.cgcolor : '#0056d6' + '20',
+                      index == currentPage ? COLORS.cgColor : '#0056d6' + '20',
                     marginRight: 8,
                   }}
                 />
@@ -153,7 +153,7 @@ const OnBoarding = () => {
                 />
                 <Circle
                   ref={progressRef}
-                  stroke={COLORS.cgcolor}
+                  stroke={COLORS.cgColor}
                   cx={center}
                   cy={center}
                   r={radius}
@@ -165,7 +165,7 @@ const OnBoarding = () => {
             <Pressable
               alignItems={'center'}
               justifyContent={'center'}
-              bg={COLORS.cgcolor}
+              bg={COLORS.cgColor}
               borderRadius={40}
               p={2}
               position={'absolute'}>
@@ -225,7 +225,7 @@ const OnBoarding = () => {
           </Box>
         </Center>
         <Box alignItems={'center'} mt={3}>
-          <Text fontFamily={'Nunito-Bold'} fontSize={17} color={COLORS.cgcolor}>
+          <Text fontFamily={'Nunito-Bold'} fontSize={17} color={COLORS.cgColor}>
             {item?.title}
           </Text>
         </Box>

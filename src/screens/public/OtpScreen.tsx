@@ -25,7 +25,6 @@ const OtpScreen = ({route: {params}, navigation}: Props) => {
   let outInput = useRef(null);
   const Email = params.email;
   const [code, setCode] = React.useState<number>();
-  const [loader, setLoader] = React.useState(false);
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: COLORS.textWhite}}>
@@ -58,33 +57,20 @@ const OtpScreen = ({route: {params}, navigation}: Props) => {
         </Flex>
       </Center>
       <Box p={3}>
-        {loader ? (
-          <HStack
-            space={2}
-            style={styles.sendOtpButton}
-            justifyContent="center">
-            <Spinner accessibilityLabel="Loading posts" color={'white'} />
-            <Heading color="white" fontSize="md" mt={1}>
-              Verifying OTP
-            </Heading>
-          </HStack>
-        ) : (
-          <Button
-            // onPress={() => ConfirmOtp()}
-            onPress={() =>
-              navigation.navigate('ResetPassword', {
-                Email,
-                code,
-              })
-            }
-            style={styles.sendOtpButton}
-            fontSize={18}
-            color={COLORS.textWhite}
-            colorScheme="success"
-            endIcon={<ArrowForwardIcon size="5" color={COLORS.textWhite} />}>
-            Verify and Continue
-          </Button>
-        )}
+        <Button
+          onPress={() =>
+            navigation.navigate('ResetPassword', {
+              Email,
+              code,
+            })
+          }
+          style={styles.sendOtpButton}
+          fontSize={18}
+          color={COLORS.textWhite}
+          colorScheme="success"
+          endIcon={<ArrowForwardIcon size="5" color={COLORS.textWhite} />}>
+          Verify and Continue
+        </Button>
       </Box>
     </SafeAreaView>
   );
@@ -103,7 +89,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5, //IOS
     elevation: 5, // Android
     height: 55,
-    backgroundColor: COLORS.cgcolor,
+    backgroundColor: COLORS.cgColor,
     shadowColor: COLORS.fadeBlack,
   },
   otpTextInput: {

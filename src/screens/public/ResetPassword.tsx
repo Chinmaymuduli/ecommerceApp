@@ -23,7 +23,6 @@ import LottieView from 'lottie-react-native';
 
 type Props = NativeStackScreenProps<PublicRoutesType, 'ResetPassword'>;
 const ResetPassword = ({route: {params}, navigation}: Props) => {
-  console.log({params});
   const [showPassword, setShowPassword] = React.useState(false);
   const [confirmPassword, setConfirmPassword] = React.useState(false);
   const [password, setPassword] = useState<string>();
@@ -159,7 +158,7 @@ const ResetPassword = ({route: {params}, navigation}: Props) => {
                   <Pressable
                     onPress={handelReset}
                     borderWidth={2}
-                    borderColor={COLORS.cgcolor}
+                    borderColor={COLORS.cgColor}
                     borderRadius={6}
                     mt={5}>
                     <Text px={10} bold py={1} color={'green.700'}>

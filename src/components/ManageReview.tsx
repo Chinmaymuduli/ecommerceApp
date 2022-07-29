@@ -67,7 +67,7 @@ const ManageReview = () => {
           Product Review (5)
         </Heading>
         <Pressable onPress={onOpen}>
-          <Text bold color={COLORS.cgcolor}>
+          <Text bold color={COLORS.cgColor}>
             {' '}
             See All
           </Text>

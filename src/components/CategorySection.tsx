@@ -158,17 +158,17 @@ const CategorySection = ({
                       justifyContent={'center'}>
                       <Pressable
                         onPress={onClose}
-                        borderColor={COLORS.cgcolor}
+                        borderColor={COLORS.cgColor}
                         borderWidth={1}
                         borderRadius={5}>
-                        <Text px={8} py={1} color={COLORS.cgcolor} bold>
+                        <Text px={8} py={1} color={COLORS.cgColor} bold>
                           Cancel
                         </Text>
                       </Pressable>
                       <Pressable
                         // onPress={() => SortData()}
                         onPress={onClose}
-                        bg={COLORS.cgcolor}
+                        bg={COLORS.cgColor}
                         borderRadius={5}
                         alignItems={'center'}>
                         <Text color={COLORS.textWhite} px={8} py={1} bold>

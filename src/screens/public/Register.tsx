@@ -4,7 +4,6 @@ import {
   Box,
   FormControl,
   Heading,
-  HStack,
   Image,
   Input,
   Pressable,
@@ -99,7 +98,7 @@ const Register = () => {
                   render={({field: {onChange, onBlur, value}}) => (
                     <Box
                       borderWidth={1}
-                      borderColor={COLORS.cgcolor}
+                      borderColor={COLORS.cgColor}
                       borderRadius={10}
                       mt={3}>
                       <Input
@@ -135,7 +134,7 @@ const Register = () => {
                   render={({field: {onChange, onBlur, value}}) => (
                     <Box
                       borderWidth={1}
-                      borderColor={COLORS.cgcolor}
+                      borderColor={COLORS.cgColor}
                       borderRadius={10}
                       mt={5}>
                       <Input
@@ -177,7 +176,7 @@ const Register = () => {
                   render={({field: {onChange, onBlur, value}}) => (
                     <Box
                       borderWidth={1}
-                      borderColor={COLORS.cgcolor}
+                      borderColor={COLORS.cgColor}
                       borderRadius={10}
                       mt={5}>
                       <Input
@@ -227,7 +226,7 @@ const Register = () => {
                   render={({field: {onChange, onBlur, value}}) => (
                     <Box
                       borderWidth={1}
-                      borderColor={COLORS.cgcolor}
+                      borderColor={COLORS.cgColor}
                       borderRadius={10}
                       mt={5}>
                       <Input
@@ -281,7 +280,7 @@ const Register = () => {
               </FormControl>
               <Pressable onPress={handleSubmit(onSubmit)}>
                 <Box
-                  bg={COLORS.cgcolor}
+                  bg={COLORS.cgColor}
                   borderRadius={10}
                   alignItems={'center'}
                   mt={4}>
@@ -296,14 +295,14 @@ const Register = () => {
                 <Text bold fontSize={15}>
                   Already have an Account ?{' '}
                 </Text>
-                <Text underline bold color={COLORS.cgcolor} fontSize={15}>
+                <Text underline bold color={COLORS.cgColor} fontSize={15}>
                   Sign In
                 </Text>
               </Row>
             </Pressable>
 
             <Pressable mt={5} onPress={() => {}} alignItems={'center'}>
-              <Text underline color={COLORS.cgcolor} fontSize={15}>
+              <Text underline color={COLORS.cgColor} fontSize={15}>
                 Continue as guest
               </Text>
             </Pressable>

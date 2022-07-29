@@ -22,16 +22,7 @@ export default function SplashScreen() {
       useNativeDriver: true,
       duration: 1000,
       easing: Easing.ease,
-    }).start(() => {
-      // setTimeout(
-      //   () =>
-      //     navigation.reset({
-      //       index: 0,
-      //       routes: [{name: 'OnBoarding'}],
-      //     }),
-      //   800,
-      // );
-    });
+    }).start(() => {});
   }, [translation]);
   return (
     <SafeAreaView style={styles.container}>
