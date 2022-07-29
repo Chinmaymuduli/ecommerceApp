@@ -15,7 +15,7 @@ import {COLORS} from 'configs';
 import HomeCategoriesItem from './HomeCategoriesItem';
 import {useStore} from '../../src/app';
 import {GET} from 'api';
-import {useIsMounted} from 'hooks';
+import {useAuthFetch, useIsMounted} from 'hooks';
 import {CategoryType} from 'types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -32,7 +32,6 @@ const HomeCategories = () => {
         path: 'categories',
         token: token,
       });
-      // console.log(Response.data);
       setCategoryData(Response.data);
     } catch (error) {
       console.log(error);
@@ -43,14 +42,14 @@ const HomeCategories = () => {
   useEffect(() => {
     CategoryRes();
   }, []);
-  // console.log({categoryData});
+
   return (
     <>
       <Box mt={5} pl={3}>
         <HStack alignItems={'center'} justifyContent={'space-between'}>
           <Heading size={'md'}>Categories</Heading>
           <Pressable pr={3} onPress={() => navigation.navigate('Category', {})}>
-            <Text bold color={COLORS.cgcolor}>
+            <Text bold color={COLORS.cgColor}>
               View All
             </Text>
           </Pressable>
