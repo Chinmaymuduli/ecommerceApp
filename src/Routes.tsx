@@ -26,6 +26,7 @@ const Routes = () => {
 
   useFCMToken();
   useAppLoad();
+
   const getIdData = async () => {
     try {
       const value = await AsyncStorage.getItem('isLoggedIn');

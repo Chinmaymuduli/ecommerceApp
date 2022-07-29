@@ -166,7 +166,6 @@ const CustomDrawer = () => {
       .catch(error => console.log(error));
   };
 
-  // console.log('first', user);
   return (
     <Box flex={1}>
       <ScrollView showsVerticalScrollIndicator={false}>
