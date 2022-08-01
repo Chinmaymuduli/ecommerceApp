@@ -16,10 +16,11 @@ import {DrawerActions} from '@react-navigation/native';
 import {Empty} from 'components/core';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CartItemType, CartType} from 'types';
+import {CartItemType, CartType, ProductType} from 'types';
 import {CartItem} from 'components';
 import {useStore} from 'app';
 import {getPrice} from 'utils';
+import {useAuthFetch} from 'hooks';
 const CartArr = [
   {
     id: 1,
@@ -42,14 +43,21 @@ const CartArr = [
 ];
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Cart'>;
 const Cart = ({route, navigation}: Props) => {
+  const {authData} = useAuthFetch<any>({
+    path: 'cart/all',
+    method: 'GET',
+  });
+
   const [quantity, setQuantity] = React.useState(CartArr);
   const {cartItems, addToOrderItemFromCart} = useStore(state => state);
-  // console.log('object', cartItems.length);
+  // console.log('object', authData?.products);
   const {
     TotalProductPriceWithoutDiscount,
     sumTotalPriceCustomerWillPay,
     totalDiscountAmount,
-  } = getPrice(cartItems);
+  } =
+    // getPrice(cartItems);
+    getPrice(authData?.products);
 
   const handleProceed = () => {
     addToOrderItemFromCart();
@@ -84,7 +92,7 @@ const Cart = ({route, navigation}: Props) => {
         </Heading>
       </HStack>
 
-      {cartItems.length > 0 ? (
+      {authData?.products?.length > 0 ? (
         <ScrollView showsVerticalScrollIndicator={false}>
           <Box>
             <HStack
@@ -93,12 +101,15 @@ const Cart = ({route, navigation}: Props) => {
               bg={'#e4e4e460'}
               py={3}>
               <Text fontSize={13}>shipment 1 of 1</Text>
-              <Text fontSize={13}>{cartItems.length} items</Text>
+              {/* <Text fontSize={13}>{cartItems.length} items</Text> */}
+              <Text fontSize={13}>{authData?.products?.length} items</Text>
             </HStack>
 
             <Box>
-              {cartItems?.map((item: CartItemType, index: any) => (
-                <CartItem item={item} key={index} setQuantity={setQuantity} />
+              {authData?.products.map((item: CartItemType, index: any) => (
+                <>
+                  <CartItem item={item} key={index} setQuantity={setQuantity} />
+                </>
               ))}
             </Box>
             <Box px={4} py={4} borderBottomWidth={6} borderColor={'#e4e4e460'}>
@@ -108,7 +119,10 @@ const Cart = ({route, navigation}: Props) => {
                   <Text fontSize={12} bold>
                     MRP
                   </Text>
-                  <Text>&#8377; {TotalProductPriceWithoutDiscount}</Text>
+                  <Text>
+                    &#8377;
+                    {TotalProductPriceWithoutDiscount}
+                  </Text>
                 </HStack>
                 <HStack alignItems={'center'} justifyContent={'space-between'}>
                   <Text fontSize={12} bold>
@@ -136,25 +150,27 @@ const Cart = ({route, navigation}: Props) => {
             </Box>
             <Box pb={40} px={3}>
               <Pressable
-                bg={'#008000'}
+                bg={COLORS.textSecondary}
                 borderRadius={4}
                 mt={2}
                 onPress={() => handleProceed()}>
                 <HStack justifyContent={'space-between'} py={2}>
                   <HStack alignItems={'center'} space={2} pl={2}>
                     <Box>
-                      <Text bold color={'#fff'}>
+                      <Text bold color={COLORS.textWhite}>
                         {cartItems?.length} items
                       </Text>
                     </Box>
                     <HStack space={2}>
-                      <Text bold color={'#fff'}>
+                      <Text bold color={COLORS.textWhite}>
                         |
                       </Text>
-                      <Text bold color={'#fff'}>
+                      <Text bold color={COLORS.textWhite}>
                         &#8377; {sumTotalPriceCustomerWillPay}
                       </Text>
-                      <Text textDecorationLine={'line-through'} color={'#fff'}>
+                      <Text
+                        textDecorationLine={'line-through'}
+                        color={COLORS.textWhite}>
                         &#8377;
                         {totalDiscountAmount}
                       </Text>

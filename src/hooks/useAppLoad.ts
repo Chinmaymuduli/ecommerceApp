@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import useAuthFetch from './useAuthFetch';
 
 export default function useAppLoad() {
-  const { setUser } = useAuth(state => state);
+  const { setUser, user } = useAuth(state => state);
   useEffect(() => {
     (async () => {
       try {
@@ -23,7 +23,7 @@ export default function useAppLoad() {
         console.log(error);
       }
     })();
-  }, []);
+  }, [user]);
 
   return {};
 }

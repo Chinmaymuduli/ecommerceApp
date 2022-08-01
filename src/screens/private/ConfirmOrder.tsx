@@ -48,7 +48,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
           <Box borderTopWidth={1} borderColor={COLORS.lightGrey}>
             <HStack justifyContent={'space-between'} mt={3}>
               <HStack space={2}>
-                <Box bg={COLORS.cgColor} borderRadius={5}>
+                <Box bg={COLORS.primary} borderRadius={5}>
                   <AntDesign
                     name="calendar"
                     size={20}
@@ -64,7 +64,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                 </VStack>
               </HStack>
               <HStack space={2}>
-                <Box bg={COLORS.cgColor} borderRadius={5}>
+                <Box bg={COLORS.primary} borderRadius={5}>
                   <AntDesign
                     name="calendar"
                     size={20}
@@ -142,7 +142,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
             alignItems={'center'}
             mt={3}
             onPress={() => navigation.navigate('Order')}>
-            <Text bold color={COLORS.cgColor}>
+            <Text bold color={COLORS.primary}>
               See Order Details
             </Text>
           </Pressable>

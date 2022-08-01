@@ -90,7 +90,7 @@ const HomeCategoryItem = ({
         <Box
           width={8}
           position={'absolute'}
-          bg={'#4F7942'}
+          bg={COLORS.secondary}
           borderTopLeftRadius={5}
           borderBottomRightRadius={5}>
           <Text fontSize={10} flexWrap={'wrap'} px={1} color={COLORS.textWhite}>
@@ -100,12 +100,7 @@ const HomeCategoryItem = ({
             % OFF
           </Text>
         </Box>
-        <Box
-          // mt={1}
-
-          position={'absolute'}
-          right={4}
-          borderRadius={10}>
+        <Box position={'absolute'} right={4} borderRadius={10}>
           <Ionicons
             onPress={() => handleWishlist(item)}
             name={
@@ -116,7 +111,7 @@ const HomeCategoryItem = ({
                 : 'heart-outline'
             }
             size={22}
-            color={COLORS.cgColor}
+            color={COLORS.primary}
             style={{
               paddingHorizontal: 2,
               paddingVertical: 2,
@@ -151,7 +146,7 @@ const HomeCategoryItem = ({
           </HStack>
           {isBusiness ? (
             <HStack>
-              <Text fontSize={13} color={COLORS.cgColor} bold>
+              <Text fontSize={13} color={COLORS.primary} bold>
                 MOQ: {item.b2bQuantity}
               </Text>
             </HStack>

@@ -123,7 +123,7 @@ const EditProfile = () => {
       {!isLoading ? (
         <Box flex={1} bg={COLORS.textWhite}>
           <ScrollView keyboardShouldPersistTaps="always">
-            <Box bg={COLORS.cgColor}>
+            <Box bg={COLORS.primary}>
               <HStack justifyContent={'space-between'} px={5} py={3}>
                 <HStack space={4} alignItems={'center'}>
                   <Ionicons
@@ -149,7 +149,7 @@ const EditProfile = () => {
                 </HStack>
               </HStack>
             </Box>
-            <Box bg={COLORS.cgColor} h={150}>
+            <Box bg={COLORS.primary} h={150}>
               <Pressable onPress={() => setVisible(true)}>
                 <Center mt={5}>
                   <Image

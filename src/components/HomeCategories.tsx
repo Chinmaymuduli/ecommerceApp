@@ -49,7 +49,7 @@ const HomeCategories = () => {
         <HStack alignItems={'center'} justifyContent={'space-between'}>
           <Heading size={'md'}>Categories</Heading>
           <Pressable pr={3} onPress={() => navigation.navigate('Category', {})}>
-            <Text bold color={COLORS.cgColor}>
+            <Text bold color={COLORS.primary}>
               View All
             </Text>
           </Pressable>

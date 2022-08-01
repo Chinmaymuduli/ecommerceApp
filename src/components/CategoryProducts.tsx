@@ -38,7 +38,7 @@ const CategoryProducts = ({
           <Pressable onPress={() => navigation.navigate('Category', {})}>
             <HStack alignItems={'center'} pr={3} space={1}>
               <Text fontSize={13}>See All</Text>
-              <Box bg={'#4F7942'} borderRadius={20}>
+              <Box bg={'COLORS.secondary'} borderRadius={20}>
                 <Ionicons
                   name="chevron-forward"
                   size={16}

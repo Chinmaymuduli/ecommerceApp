@@ -36,7 +36,7 @@ const SuccessModal = ({showModal, setShowModal}: Props) => {
                   <Pressable
                     onPress={SignUpSuccess}
                     borderWidth={2}
-                    borderColor={COLORS.cgColor}
+                    borderColor={COLORS.primary}
                     borderRadius={6}
                     mt={3}>
                     <Text px={10} bold py={1} color={'green.700'}>

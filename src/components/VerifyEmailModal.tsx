@@ -88,7 +88,7 @@ export default function VerifyEmailModal({
                   </Heading>
                 </Pressable>
                 <Pressable
-                  bg={COLORS.cgColor}
+                  bg={COLORS.primary}
                   borderRadius={5}
                   onPress={handelVerifyEmail}>
                   <Heading fontSize={15} color={'white'} px={4} py={2}>

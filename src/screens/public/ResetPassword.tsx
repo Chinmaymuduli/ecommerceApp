@@ -158,7 +158,7 @@ const ResetPassword = ({route: {params}, navigation}: Props) => {
                   <Pressable
                     onPress={handelReset}
                     borderWidth={2}
-                    borderColor={COLORS.cgColor}
+                    borderColor={COLORS.primary}
                     borderRadius={6}
                     mt={5}>
                     <Text px={10} bold py={1} color={'green.700'}>

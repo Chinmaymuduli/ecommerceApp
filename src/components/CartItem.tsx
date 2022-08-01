@@ -16,6 +16,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {CartItemType, CartType} from 'types';
 import {useStore} from 'app';
 import OrderSummaryCounter from './OrderSummaryCounter';
+import {useAuthFetch} from 'hooks';
 
 type CartItemTypes = {
   item: CartItemType;
@@ -26,7 +27,7 @@ const CartItem = ({item, setQuantity}: CartItemTypes) => {
   const {updateQuantity, cartItems, removeFromCart} = useStore();
   const [isOpen, setIsOpen] = React.useState(false);
 
-  // console.log('first', item);
+  // console.log('second', item);
 
   const onClose = () => setIsOpen(false);
 
@@ -44,10 +45,24 @@ const CartItem = ({item, setQuantity}: CartItemTypes) => {
   };
 
   // console.log('CartItem', cartItems);
+  const {fetchData} = useAuthFetch({
+    path: '',
+  });
 
-  const handleDelete = (id: number) => {
-    removeFromCart(id);
-    onClose();
+  const handleDelete = async (id: any) => {
+    // removeFromCart(id);
+    console.log('object', id);
+    try {
+      const res = await fetchData({
+        path: `cart/${id}`,
+        method: 'DELETE',
+      });
+      console.log('object', res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      onClose();
+    }
   };
   return (
     <Box
@@ -59,7 +74,12 @@ const CartItem = ({item, setQuantity}: CartItemTypes) => {
         <Box alignItems={'center'} justifyContent={'center'}>
           <Image
             alt="cartImg"
-            source={item?.product?.img}
+            // source={item?.product?.img}
+            source={{
+              uri: item?.product.images.length
+                ? item?.product.images[0]
+                : 'https://cdn.shopify.com/s/files/1/0064/8907/9893/products/herbal-tea.jpg?v=1551108498',
+            }}
             style={{height: 110, width: 100}}
             resizeMode="contain"
           />
@@ -67,7 +87,7 @@ const CartItem = ({item, setQuantity}: CartItemTypes) => {
         <VStack px={3} space={3}>
           <HStack space={20}>
             <Text w={100} noOfLines={2}>
-              {item?.product?.name}
+              {item?.product?.title}
             </Text>
             <MaterialIcons
               name="delete"
@@ -78,17 +98,29 @@ const CartItem = ({item, setQuantity}: CartItemTypes) => {
           </HStack>
           <HStack space={2}>
             <Text color={'#000'} bold>
-              &#8377;{item?.weight?.currentPrice}
+              {/* &#8377;{item?.weight?.currentPrice} */}
+              &#8377;{item?.product.salePrice}
             </Text>
             <Text textDecorationLine={'line-through'}>
-              &#8377;{(item?.weight?.currentPrice || 0) + 100}
+              {/* &#8377;{(item?.weight?.currentPrice || 0) + 100} */}
+              &#8377;{item?.product?.mrp || 0}
             </Text>
           </HStack>
-          <Text>{item.weight?.weight}</Text>
+          {/* <Text>{item.weight?.weight}</Text> */}
+          <Text>
+            {item.product?.measureUnit}
+            {item.product?.measureType}
+          </Text>
         </VStack>
-        <Box bg={COLORS.cgColor} position={'absolute'} top={2} borderRadius={6}>
+        <Box bg={COLORS.primary} position={'absolute'} top={1} borderRadius={6}>
           <Text color={COLORS.textWhite} fontSize={8} px={1}>
-            {item?.weight?.discount} % OFF
+            {/* {item?.weight?.discount} % OFF */}
+            {(
+              ((item?.product.mrp - item?.product.salePrice) /
+                item?.product.mrp) *
+              100
+            ).toFixed(1)}{' '}
+            % OFF
           </Text>
         </Box>
         <Box
@@ -140,7 +172,7 @@ const CartItem = ({item, setQuantity}: CartItemTypes) => {
               </Button>
               <Button
                 colorScheme="danger"
-                onPress={() => handleDelete(item?.product?.id)}>
+                onPress={() => handleDelete(item?._id)}>
                 Delete
               </Button>
             </Button.Group>

@@ -30,12 +30,8 @@ const Routes = () => {
   const getIdData = async () => {
     try {
       const value = await AsyncStorage.getItem('isLoggedIn');
-      // console.log('value', value);
-      if (value === 'true') {
-        setLoggedIn(true);
-      } else {
-        setLoggedIn(false);
-      }
+      if (value === 'true') return setLoggedIn(true);
+      setLoggedIn(false);
     } catch (e) {
       console.log('error', e);
     }

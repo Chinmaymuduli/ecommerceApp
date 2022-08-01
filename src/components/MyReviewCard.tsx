@@ -83,7 +83,7 @@ const MyReviewCard = ({item}: Props) => {
                 <Box borderRightWidth={2} borderColor={COLORS.grey}></Box>
                 <Pressable onPress={() => openModal(item?.review)}>
                   <HStack space={2}>
-                    <AntDesign name="edit" size={22} color={COLORS.cgColor} />
+                    <AntDesign name="edit" size={22} color={COLORS.primary} />
                     <Text bold color={COLORS.fadeBlack}>
                       Edit
                     </Text>

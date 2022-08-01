@@ -4,6 +4,7 @@ import {Box, Image, Pressable, Text} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {CategoryType} from 'types';
+import {COLORS} from 'configs';
 
 const HomeCategoriesItem = ({item}: {item: CategoryType}) => {
   const navigation = useNavigation<NavigationProps>();
@@ -13,7 +14,11 @@ const HomeCategoriesItem = ({item}: {item: CategoryType}) => {
       <Pressable
         alignItems={'center'}
         onPress={() => navigation.navigate('Category', item)}>
-        <Box borderWidth={3} borderRadius={40} p={0.5} borderColor={'#4F7942'}>
+        <Box
+          borderWidth={3}
+          borderRadius={40}
+          p={0.5}
+          borderColor={COLORS.secondary}>
           <Image
             source={{
               uri: item?.imageURL

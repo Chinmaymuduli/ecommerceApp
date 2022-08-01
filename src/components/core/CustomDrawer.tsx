@@ -195,7 +195,7 @@ const CustomDrawer = () => {
               key={item.id}
               py={3}
               px={3}
-              bg={selectedButton === item.id ? '#4F7942' : '#fff'}
+              bg={selectedButton === item.id ? COLORS.secondary : '#fff'}
               mt={2}
               borderRadius={10}
               mx={2}>

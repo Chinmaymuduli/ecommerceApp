@@ -22,7 +22,7 @@ const SpecialProduct = ({data}: Props) => {
           <Text fontSize={15} bold>
             Our
           </Text>
-          <Text color={'#4F7942'} fontSize={15} bold>
+          <Text color={'COLORS.secondary'} fontSize={15} bold>
             {' '}
             Special
           </Text>
@@ -39,7 +39,7 @@ const SpecialProduct = ({data}: Props) => {
             <Text fontSize={13} bold>
               See All
             </Text>
-            <Box bg={'#4F7942'} borderRadius={20}>
+            <Box bg={'COLORS.secondary'} borderRadius={20}>
               <Ionicons
                 name="chevron-forward"
                 size={16}

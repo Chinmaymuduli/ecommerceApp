@@ -43,7 +43,7 @@ const Profile = () => {
     <>
       {!isLoading ? (
         <Box flex={1} bg={COLORS.textWhite}>
-          <Box bg={COLORS.cgColor}>
+          <Box bg={COLORS.primary}>
             <HStack justifyContent={'space-between'} px={5} py={3}>
               <HStack space={4} alignItems={'center'}>
                 <Ionicons
@@ -88,7 +88,7 @@ const Profile = () => {
             </HStack>
           </Box>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <Box bg={COLORS.cgColor} h={200}>
+            <Box bg={COLORS.primary} h={200}>
               <Center mt={5}>
                 <Image
                   source={{
@@ -144,7 +144,7 @@ const Profile = () => {
                   px={4}
                   py={3}
                   onPress={() => navigation.navigate('Order')}>
-                  <Text color={COLORS.cgColor} bold>
+                  <Text color={COLORS.primary} bold>
                     View All Orders
                   </Text>
                 </Pressable>
@@ -163,7 +163,7 @@ const Profile = () => {
                   px={4}
                   py={3}
                   onPress={() => navigation.navigate('WishList')}>
-                  <Text color={COLORS.cgColor} bold>
+                  <Text color={COLORS.primary} bold>
                     View Your Wishlist
                   </Text>
                 </Pressable>
@@ -182,7 +182,7 @@ const Profile = () => {
                   px={4}
                   py={3}
                   onPress={() => navigation.navigate('MyReview')}>
-                  <Text color={COLORS.cgColor} bold>
+                  <Text color={COLORS.primary} bold>
                     View Your Review
                   </Text>
                 </Pressable>
@@ -212,7 +212,7 @@ const Profile = () => {
                       {isProfile: true},
                     )
                   }>
-                  <Text color={COLORS.cgColor} bold>
+                  <Text color={COLORS.primary} bold>
                     View Your Address
                   </Text>
                 </Pressable>

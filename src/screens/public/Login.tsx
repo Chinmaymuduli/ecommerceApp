@@ -109,7 +109,7 @@ const Login = () => {
                   render={({field: {onChange, onBlur, value}}) => (
                     <Box
                       borderWidth={1}
-                      borderColor={COLORS.cgColor}
+                      borderColor={COLORS.primary}
                       borderRadius={10}
                       mt={3}>
                       <Input
@@ -119,12 +119,12 @@ const Login = () => {
                         onChangeText={onChange}
                         onBlur={onBlur}
                         value={value}
-                        borderColor={COLORS.cgColor}
+                        borderColor={COLORS.primary}
                         keyboardType={'email-address'}
                         autoCapitalize={'none'}
                         InputRightElement={
                           <Box mr={2}>
-                            <ICONS.Email size={20} color={COLORS.cgColor} />
+                            <ICONS.Email size={20} color={COLORS.primary} />
                           </Box>
                         }
                       />
@@ -151,7 +151,7 @@ const Login = () => {
                   render={({field: {onChange, onBlur, value}}) => (
                     <Box
                       borderWidth={1}
-                      borderColor={COLORS.cgColor}
+                      borderColor={COLORS.primary}
                       borderRadius={10}
                       mt={4}>
                       <Input
@@ -168,13 +168,13 @@ const Login = () => {
                             {showPassword ? (
                               <ICONS.EyeClose
                                 size={22}
-                                color={COLORS.cgColor}
+                                color={COLORS.primary}
                                 onPress={() => setShowPassword(!showPassword)}
                               />
                             ) : (
                               <ICONS.Eye
                                 size={22}
-                                color={COLORS.cgColor}
+                                color={COLORS.primary}
                                 onPress={() => setShowPassword(!showPassword)}
                               />
                             )}
@@ -212,7 +212,7 @@ const Login = () => {
               </Row>
               <Pressable onPress={handleSubmit(onSubmit)} mt={2}>
                 <Row
-                  bg={!loader ? COLORS.cgColor : COLORS.grey}
+                  bg={!loader ? COLORS.primary : COLORS.grey}
                   borderRadius={10}
                   justifyContent={'center'}
                   alignItems={'center'}

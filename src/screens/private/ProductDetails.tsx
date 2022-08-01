@@ -49,9 +49,9 @@ type productType = {
 };
 
 const ProductDetails = ({route, navigation}: Props) => {
-  const productdata = route.params.ProductDetailsType;
+  const productData = route.params.ProductDetailsType;
   const {authData, isLoading} = useAuthFetch<ProductType>({
-    path: `product/${productdata._id}/info`,
+    path: `product/${productData._id}/info`,
     method: 'GET',
   });
 
@@ -80,7 +80,9 @@ const ProductDetails = ({route, navigation}: Props) => {
     setChooseWeight(authData);
   }, [authData]);
 
-  const {fetchData} = useAuthFetch({});
+  const {fetchData} = useAuthFetch({
+    path: '',
+  });
 
   const handleCart = async (data: ProductType) => {
     await fetchData({
@@ -99,7 +101,7 @@ const ProductDetails = ({route, navigation}: Props) => {
   };
 
   const cartDataMatch = cartItems.some(
-    item => item?.product?.id === productdata?.id,
+    item => item?.product?.id === productData?.id,
   );
 
   const increaseItem = () => {
@@ -175,26 +177,26 @@ const ProductDetails = ({route, navigation}: Props) => {
       _item => _item.product.id === buyItem.id,
     );
 
-    if (!productCart) {
-      addToCart({
-        product: productdata,
-        quantity: count,
-        weight: chooseWeight,
-      });
-      addToOrderItems({
-        product: productdata,
-        quantity: count,
-        weight: chooseWeight,
-      });
-      navigation.navigate('OrderSummary');
-    } else {
-      addToOrderItems({
-        product: productdata,
-        quantity: count,
-        weight: chooseWeight,
-      });
-      navigation.navigate('OrderSummary');
-    }
+    // if (!productCart) {
+    //   addToCart({
+    //     product: productData,
+    //     quantity: count,
+    //     weight: chooseWeight,
+    //   });
+    //   addToOrderItems({
+    //     product: productData,
+    //     quantity: count,
+    //     weight: chooseWeight,
+    //   });
+    //   navigation.navigate('OrderSummary');
+    // } else {
+    //   addToOrderItems({
+    //     product: productData,
+    //     quantity: count,
+    //     weight: chooseWeight,
+    //   });
+    //   navigation.navigate('OrderSummary');
+    // }
 
     if (addQuantity) {
       return setModalDialog(true);
@@ -233,14 +235,14 @@ const ProductDetails = ({route, navigation}: Props) => {
               <Ionicons
                 name={
                   wishlistItems.some(data => {
-                    return data.id === productdata.id;
+                    return data.id === productData.id;
                   })
                     ? 'heart'
                     : 'heart-outline'
                 }
                 size={30}
                 color="green"
-                onPress={() => handleWishlist(productdata)}
+                onPress={() => handleWishlist(productData)}
               />
             </Box>
           </HStack>
@@ -303,13 +305,13 @@ const ProductDetails = ({route, navigation}: Props) => {
                   h={5}
                   borderRightWidth={2}
                   mx={3}
-                  borderColor={COLORS.cgColor}></Box>
+                  borderColor={COLORS.primary}></Box>
                 <HStack alignItems={'center'}>
                   <Text bold>ID :</Text>
                   <Text>
                     {' '}
-                    {productdata?.id
-                      ? productdata?.id
+                    {productData?.id
+                      ? productData?.id
                       : Math.floor(Math.random() * 1000000)}
                   </Text>
                 </HStack>
@@ -328,7 +330,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                       &#8377;{' '}
                       {chooseWeight?.mrp ? chooseWeight.mrp : authData?.mrp}
                     </Text>
-                    <Text color={COLORS.cgColor} bold>
+                    <Text color={COLORS.primary} bold>
                       {chooseWeight
                         ? (
                             ((chooseWeight?.mrp - chooseWeight?.salePrice) /
@@ -402,7 +404,7 @@ const ProductDetails = ({route, navigation}: Props) => {
 
               {/* lower section */}
               <Box mt={1}>
-                <Text color={'#4F7942'} bold>
+                <Text color={'COLORS.secondary'} bold>
                   {authData?.isActive ? 'Available' : 'Not Available'}
                 </Text>
               </Box>
@@ -440,7 +442,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                     justifyContent={'center'}
                     borderRadius={6}>
                     <HStack space={5} px={2}>
-                      <Box bg={COLORS.cgColor} borderRadius={15}>
+                      <Box bg={COLORS.primary} borderRadius={15}>
                         <AntDesign
                           name="minus"
                           size={20}
@@ -455,7 +457,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                         {/* <Text bold>1</Text> */}
                         <Text bold>{count}</Text>
                       </Box>
-                      <Box bg={COLORS.cgColor} borderRadius={15}>
+                      <Box bg={COLORS.primary} borderRadius={15}>
                         <AntDesign
                           style={{
                             padding: 2,
@@ -497,7 +499,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                 <Accordion
                   title="Product Details"
                   subtitle={authData?.description}
-                  key={productdata.id}
+                  key={productData.id}
                 />
               </Box>
               <Box>
@@ -514,7 +516,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                   </VStack>
                   <Pressable
                     onPress={() => navigation.navigate('Category', {})}>
-                    <Text color={COLORS.cgColor} bold>
+                    <Text color={COLORS.primary} bold>
                       See All
                     </Text>
                   </Pressable>
@@ -536,13 +538,13 @@ const ProductDetails = ({route, navigation}: Props) => {
             <Row>
               {!cartDataMatch ? (
                 <Pressable
-                  onPress={() => handleCart(productdata)}
+                  onPress={() => handleCart(productData)}
                   bg={'#C1E1C1'}
                   w={160}
                   alignItems={'center'}
                   borderTopLeftRadius={5}
                   borderBottomLeftRadius={5}>
-                  <Text py={4} color={COLORS.cgColor} bold>
+                  <Text py={4} color={COLORS.primary} bold>
                     Add To Cart
                   </Text>
                 </Pressable>
@@ -554,14 +556,14 @@ const ProductDetails = ({route, navigation}: Props) => {
                   alignItems={'center'}
                   borderTopLeftRadius={5}
                   borderBottomLeftRadius={5}>
-                  <Text py={4} color={COLORS.cgColor} bold>
+                  <Text py={4} color={COLORS.primary} bold>
                     Go To Cart
                   </Text>
                 </Pressable>
               )}
               <Pressable
-                onPress={() => BuyNow(productdata)}
-                bg={COLORS.cgColor}
+                onPress={() => BuyNow(productData)}
+                bg={COLORS.primary}
                 w={175}
                 borderTopRightRadius={5}
                 borderBottomRightRadius={5}

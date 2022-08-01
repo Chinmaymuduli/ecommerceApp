@@ -79,7 +79,7 @@ const Order = ({navigation}: Props) => {
           mr={3}
           onPress={() => setSelectionMode(1)}>
           <Box
-            bg={selectionMode === 1 ? COLORS.cgColor : COLORS.lightGrey}
+            bg={selectionMode === 1 ? COLORS.primary : COLORS.lightGrey}
             alignItems={'center'}
             borderRadius={6}>
             <HStack alignItems={'center'} space={1}>
@@ -100,7 +100,7 @@ const Order = ({navigation}: Props) => {
         </Pressable>
         <Pressable flex={1} onPress={() => setSelectionMode(2)}>
           <Box
-            bg={selectionMode === 2 ? COLORS.cgColor : COLORS.lightGrey}
+            bg={selectionMode === 2 ? COLORS.primary : COLORS.lightGrey}
             alignItems={'center'}
             borderRadius={6}>
             <HStack alignItems={'center'} space={1}>

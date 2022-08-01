@@ -13,7 +13,7 @@ export default function AppProvider({children}: {children: JSX.Element}) {
         <AlertDialog.Content>
           <AlertDialog.Header>Please wait...</AlertDialog.Header>
           <AlertDialog.Body>
-            <Spinner size="lg" color={COLORS.cgColor} />
+            <Spinner size="lg" color={COLORS.primary} />
           </AlertDialog.Body>
         </AlertDialog.Content>
       </AlertDialog>

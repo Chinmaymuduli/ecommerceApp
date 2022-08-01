@@ -84,10 +84,14 @@ export type CartType =
 
 
 export type CartItemType = {
+    _id: any;
+
     // product: ProductDetailsType
     product: ProductType
     quantity: number
     weight?: weightType
+
+    products?: ProductType[]
 }
 // *****
 export type changePasswordType = {
@@ -167,7 +171,7 @@ export type ProductType = {
     b2bImg?: ImageSourcePropType
     b2bQuantity?: string
     // Api type
-    _id?: string
+    _id?: string | any
     isActive?: boolean
     measureType?: string
     measureUnit?: number
@@ -179,6 +183,7 @@ export type ProductType = {
     type?: string
     images?: any
     variants?: ProductVariants[]
+    products?: ProductType[]
 }
 export type CouponType = {
     id?: number

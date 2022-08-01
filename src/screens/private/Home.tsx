@@ -85,7 +85,11 @@ const Home = () => {
               </HStack>
               <HStack alignItems={'center'} space={7}>
                 <Pressable onPress={() => navigation.navigate('WishList')}>
-                  <Ionicons name="heart-outline" size={25} color={'#4F7942'} />
+                  <Ionicons
+                    name="heart-outline"
+                    size={25}
+                    color={'COLORS.secondary'}
+                  />
                 </Pressable>
 
                 <Pressable onPress={() => navigation.navigate('Notifications')}>
@@ -199,9 +203,9 @@ const Home = () => {
                     bg={COLORS.textWhite}
                     alignSelf={'center'}
                     borderWidth={1}
-                    borderColor={'#4F7942'}
+                    borderColor={'COLORS.secondary'}
                     borderRadius={10}>
-                    <Text px={3} py={1} color={'#4F7942'}>
+                    <Text px={3} py={1} color={'COLORS.secondary'}>
                       Know More
                     </Text>
                   </Box>
@@ -233,7 +237,7 @@ const Home = () => {
                     OUR BEST SELLING PRODUCT
                   </Heading>
                   <Text mt={1}>Super Offer Up TO 50% OFF</Text>
-                  <Box bg={COLORS.cgColor} borderRadius={10} mt={1}>
+                  <Box bg={COLORS.primary} borderRadius={10} mt={1}>
                     <Text px={3} py={1} color={COLORS.textWhite}>
                       Shop Now
                     </Text>

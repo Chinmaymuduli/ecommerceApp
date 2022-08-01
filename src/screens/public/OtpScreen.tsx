@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5, //IOS
     elevation: 5, // Android
     height: 55,
-    backgroundColor: COLORS.cgColor,
+    backgroundColor: COLORS.primary,
     shadowColor: COLORS.fadeBlack,
   },
   otpTextInput: {

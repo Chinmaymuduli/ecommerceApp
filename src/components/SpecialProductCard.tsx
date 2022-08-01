@@ -73,7 +73,7 @@ const SpecialProductCard = ({item}: Props) => {
           <Text noOfLines={1}>{item?.name}</Text>
           <HStack space={3}>
             <Text>&#8377; {SelecetedWeight?.currentPrice}</Text>
-            <Text textDecorationLine={'line-through'} color={COLORS.cgColor}>
+            <Text textDecorationLine={'line-through'} color={COLORS.primary}>
               &#8377;{' '}
               {((SelecetedWeight?.currentPrice || 0) * 100) /
                 (100 - (SelecetedWeight?.discount || 0))}
@@ -84,7 +84,7 @@ const SpecialProductCard = ({item}: Props) => {
         <Box
           width={8}
           position={'absolute'}
-          bg={'#4F7942'}
+          bg={'COLORS.secondary'}
           borderTopLeftRadius={5}
           alignItems={'center'}
           borderBottomRightRadius={5}>

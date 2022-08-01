@@ -73,7 +73,7 @@ const ProductComponent = ({item}: productType) => {
                 : 'heart-outline'
             }
             size={22}
-            color={COLORS.cgColor}
+            color={COLORS.primary}
             style={{
               paddingHorizontal: 2,
               paddingVertical: 2,

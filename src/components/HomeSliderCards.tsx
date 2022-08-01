@@ -40,7 +40,7 @@ const HomeSliderCards = ({item}: Props) => {
               borderRadius={5}
               alignItems={'center'}
               w={'2/3'}>
-              <Text color={COLORS.cgColor} bold py={1}>
+              <Text color={COLORS.primary} bold py={1}>
                 Shop Now
               </Text>
             </Box>

@@ -171,7 +171,7 @@ const Address = ({route, navigation}: Props) => {
             </Box>
             <Pressable
               ml={5}
-              bg={COLORS.cgColor}
+              bg={COLORS.primary}
               mt={9}
               //   mb={4}
               borderRadius={5}
@@ -291,19 +291,19 @@ const Address = ({route, navigation}: Props) => {
                 borderRadius={15}
                 bg={selectedType === 1 ? '#98FB9860' : COLORS.textWhite}
                 borderColor={
-                  selectedType === 1 ? COLORS.cgColor : COLORS.lightGrey
+                  selectedType === 1 ? COLORS.primary : COLORS.lightGrey
                 }>
                 <HStack alignItems={'center'} px={3} py={1} space={3}>
                   <Ionicons
                     name="home-sharp"
                     size={17}
                     color={
-                      selectedType === 1 ? COLORS.cgColor : COLORS.fadeBlack
+                      selectedType === 1 ? COLORS.primary : COLORS.fadeBlack
                     }
                   />
                   <Text
                     color={
-                      selectedType === 1 ? COLORS.cgColor : COLORS.fadeBlack
+                      selectedType === 1 ? COLORS.primary : COLORS.fadeBlack
                     }>
                     Home
                   </Text>
@@ -316,19 +316,19 @@ const Address = ({route, navigation}: Props) => {
                 borderRadius={15}
                 bg={selectedType === 2 ? '#98FB9860' : COLORS.textWhite}
                 borderColor={
-                  selectedType === 2 ? COLORS.cgColor : COLORS.lightGrey
+                  selectedType === 2 ? COLORS.primary : COLORS.lightGrey
                 }>
                 <HStack alignItems={'center'} px={3} py={1} space={3}>
                   <FontAwesome5
                     name="building"
                     size={16}
                     color={
-                      selectedType === 2 ? COLORS.cgColor : COLORS.fadeBlack
+                      selectedType === 2 ? COLORS.primary : COLORS.fadeBlack
                     }
                   />
                   <Text
                     color={
-                      selectedType === 2 ? COLORS.cgColor : COLORS.fadeBlack
+                      selectedType === 2 ? COLORS.primary : COLORS.fadeBlack
                     }>
                     Work
                   </Text>
@@ -336,7 +336,7 @@ const Address = ({route, navigation}: Props) => {
               </Pressable>
             </HStack>
             <Pressable mt={7} onPress={handleSubmit(onSubmit)}>
-              <Box bg={COLORS.cgColor} borderRadius={5}>
+              <Box bg={COLORS.primary} borderRadius={5}>
                 <Text
                   color={COLORS.textWhite}
                   bold
