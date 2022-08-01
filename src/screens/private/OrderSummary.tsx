@@ -48,9 +48,9 @@ const OrderSummary = ({navigation, route}: Props) => {
               }>
               <Box
                 borderWidth={1}
-                borderColor={COLORS.cgColor}
+                borderColor={COLORS.primary}
                 borderRadius={5}>
-                <Text color={COLORS.cgColor} bold px={3} py={1}>
+                <Text color={COLORS.primary} bold px={3} py={1}>
                   Change
                 </Text>
               </Box>
