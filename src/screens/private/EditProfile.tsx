@@ -60,10 +60,6 @@ const EditProfile = () => {
     setGender(authData?.gender);
   }, [authData]);
 
-  const handleDismiss = () => {
-    setVisible(false);
-  };
-
   const {
     control: control3,
     formState: {errors: errors3},
@@ -344,7 +340,7 @@ const EditProfile = () => {
           {/* image */}
           <ImagePicker
             visible={visible}
-            onDismiss={handleDismiss}
+            onDismiss={() => setVisible(false)}
             setImageURI={setProfileImage}
             cropperCircleOverlay={true}
           />

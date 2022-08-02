@@ -10,15 +10,17 @@ import useAppLoad from './hooks/useAppLoad';
 import AppProvider from './layouts';
 import useFCMToken from './hooks/useFCMToken';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useIsMounted from './hooks/useIsMounted';
 
 const Drawer = createDrawerNavigator();
 const Routes = () => {
   const {user, loggedIn, setLoggedIn} = useAuth(state => state);
   const [userData, setUserData] = useState<string | null>();
+  const isMounted = useIsMounted();
   const getUser = async () => {
     try {
       const newUserData = await AsyncStorage.getItem('isUserEnter');
-      setUserData(newUserData);
+      isMounted.current && setUserData(newUserData);
     } catch (error) {
       console.log(error);
     }
@@ -31,7 +33,7 @@ const Routes = () => {
     try {
       const value = await AsyncStorage.getItem('isLoggedIn');
       if (value === 'true') return setLoggedIn(true);
-      setLoggedIn(false);
+      isMounted.current && setLoggedIn(false);
     } catch (e) {
       console.log('error', e);
     }
@@ -40,8 +42,6 @@ const Routes = () => {
     getUser();
     getIdData();
   }, [loggedIn]);
-
-  // console.log('object50', loggedIn);
 
   if (!user) return <SplashScreen />;
 

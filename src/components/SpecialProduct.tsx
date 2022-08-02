@@ -22,7 +22,7 @@ const SpecialProduct = ({data}: Props) => {
           <Text fontSize={15} bold>
             Our
           </Text>
-          <Text color={'COLORS.secondary'} fontSize={15} bold>
+          <Text color={COLORS.secondary} fontSize={15} bold>
             {' '}
             Special
           </Text>

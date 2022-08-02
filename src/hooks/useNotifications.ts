@@ -1,5 +1,4 @@
-import { put } from 'api';
-import { User } from 'types';
+
 import create from 'zustand';
 
 type AuthState = {

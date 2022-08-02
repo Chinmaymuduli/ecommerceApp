@@ -85,7 +85,18 @@ export const put: APIFunction = async ({
       ...options,
     };
     const response = await fetch(`${BASE_URL}/${path}`, API_OPTIONS);
+    if (response.status === 401) {
+      return GetToken(remove, {
+        path,
+        body: JSON.stringify({}),
+        method: 'POST',
+        options: {},
+        headers: { 'Content-Type': 'application/json' },
+        token: '',
+      })
+    }
     const json = await response.json();
+
 
     return {
       ...json,
@@ -112,8 +123,19 @@ export const remove: APIFunction = async ({
       headers,
       body,
       ...options,
+
     };
     const response = await fetch(`${BASE_URL}/${path}`, API_OPTIONS);
+    if (response.status === 401) {
+      return GetToken(remove, {
+        path,
+        body: JSON.stringify({}),
+        method: 'POST',
+        options: {},
+        headers: { 'Content-Type': 'application/json' },
+        token: '',
+      })
+    }
     const json = await response.json();
 
     return {

@@ -16,16 +16,23 @@ import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {OrderSummaryCard} from 'components';
 import {getPrice} from 'utils';
 import {useStore} from 'app';
+import {useAddress, useSwrApi} from 'hooks';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route}: Props) => {
   const {cartItems, orderItems} = useStore(state => state);
+  const {addresses} = useAddress();
+  // console.log('object', addresses);
+  const {data, isLoading, mutate} = useSwrApi('cart/all');
+
+  const cartData = data?.data?.data?.products;
 
   const {
     TotalProductPriceWithoutDiscount,
     totalDiscountAmount,
     sumTotalPriceCustomerWillPay,
-  } = getPrice(orderItems);
+  } = getPrice(cartData);
+  // getPrice(data);
 
   return (
     <Box flex={1} bg={COLORS.textWhite}>
@@ -41,6 +48,7 @@ const OrderSummary = ({navigation, route}: Props) => {
               onPress={() =>
                 navigation.navigate(
                   'SelectAddress',
+                  {},
                   // {
                   //   SelectProductData: ordersData,
                   // }
@@ -58,16 +66,21 @@ const OrderSummary = ({navigation, route}: Props) => {
           </HStack>
           <VStack mt={2} space={1} pb={4}>
             <HStack space={4}>
-              <Text bold>John Deo</Text>
+              <Text bold>{addresses?.name}</Text>
               <Box bg={'green.100'} borderRadius={5}>
-                <Text px={2}>Home</Text>
+                <Text px={2}>{addresses?.type}</Text>
               </Box>
             </HStack>
             <Text fontSize={13}>
-              Akshya Nagar 1st Block 1st Cross, Rammurthy nagar,
-              Bangalore-560016
+              {/* Akshya Nagar 1st Block 1st Cross, Rammurthy nagar,
+              Bangalore-560016 */}
+              {/* {addresses?.city}{addresses?.street}{addresses?.landmark}, {addresses?.state} */}
+              {addresses?.landmark} {addresses?.street} , {addresses?.city} ,{' '}
+              {addresses?.state} - {addresses?.zip}
             </Text>
-            <Text>1234567890</Text>
+            <Text>
+              +{addresses.countryCode} {addresses?.phoneNumber}
+            </Text>
           </VStack>
         </Box>
         {/* card */}
@@ -133,8 +146,8 @@ const OrderSummary = ({navigation, route}: Props) => {
             <HStack alignItems={'center'} space={2} pl={2}>
               <Box>
                 <Text bold color={'#fff'}>
-                  {/* {ordersData.length} items */}
-                  {orderItems.length} items
+                  {/* {orderItems.length} items */}
+                  {cartData.length} items
                 </Text>
               </Box>
               <HStack space={2}>

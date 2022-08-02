@@ -14,6 +14,7 @@ import {
   Pressable,
   Row,
   ScrollView,
+  Spinner,
   Text,
   useDisclose,
   VStack,
@@ -32,8 +33,10 @@ import {Rating} from 'react-native-ratings';
 import {ProductDetailsType, ProductType, ProductVariants} from 'types';
 import {Accordion, ManageReview, ProductComponent} from 'components';
 import {useStore} from 'app';
-import {useAuthFetch} from 'hooks';
+import {useAuthFetch, useIsMounted, useSwrApi} from 'hooks';
 import {FetchLoader} from 'components/core';
+import {put} from 'api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const B2bProduct = [
   {label: '10 kg', value: 10000, price: 560, discount: 1000, offer: '5%'},
@@ -50,10 +53,16 @@ type productType = {
 
 const ProductDetails = ({route, navigation}: Props) => {
   const productData = route.params.ProductDetailsType;
+
+  const [loader, setLoader] = useState(false);
+  const isMounted = useIsMounted();
   const {authData, isLoading} = useAuthFetch<ProductType>({
     path: `product/${productData._id}/info`,
     method: 'GET',
   });
+
+  const {data, mutate} = useSwrApi('cart/all');
+  const CartData = data?.data?.data?.products;
 
   const {userData} = useAppContext();
   const [index, setIndex] = useState(0);
@@ -67,6 +76,8 @@ const ProductDetails = ({route, navigation}: Props) => {
 
   const {isOpen, onOpen, onClose} = useDisclose();
 
+  // console.log('object_100', userData);
+
   const {
     addToCart,
     cartItems,
@@ -76,32 +87,40 @@ const ProductDetails = ({route, navigation}: Props) => {
     addToOrderItems,
   } = useStore();
 
-  useEffect(() => {
-    setChooseWeight(authData);
-  }, [authData]);
-
   const {fetchData} = useAuthFetch({
     path: '',
   });
 
   const handleCart = async (data: ProductType) => {
-    await fetchData({
-      path: 'cart/add',
-      method: 'PUT',
-      body: JSON.stringify({
-        product: data._id,
-        quantity: count,
-      }),
-    });
-    setShowAlert(true);
-    setAlertMessage('Added to Cart');
-    setTimeout(() => {
-      setShowAlert(false);
-    }, 4000);
+    try {
+      setLoader(true);
+      const access_token = await AsyncStorage.getItem('access_token');
+      await put({
+        path: 'cart/add',
+        body: JSON.stringify({
+          product: data._id,
+          quantity: count,
+        }),
+        token: access_token,
+      });
+      setShowAlert(true);
+      setAlertMessage('Added to Cart');
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 4000);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      mutate();
+      setLoader(false);
+    }
   };
 
-  const cartDataMatch = cartItems.some(
-    item => item?.product?.id === productData?.id,
+  const cartDataMatch = CartData?.some(
+    (
+      // item => item?.product?.id === productData?.id,
+      item: {product: {_id: string}},
+    ) => item?.product?._id === chooseWeight?._id,
   );
 
   const increaseItem = () => {
@@ -172,10 +191,27 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   }, []);
 
-  const BuyNow = (buyItem: ProductType) => {
-    const productCart = cartItems.some(
-      _item => _item.product.id === buyItem.id,
+  const BuyNow = async (buyItem: ProductType) => {
+    // console.log(buyItem._id);
+    const accessToken = await AsyncStorage.getItem('access_token');
+    const productCart = CartData.some(
+      (_item: {product: {_id: string}}) => _item.product._id === buyItem._id,
     );
+    console.log(productCart);
+
+    if (!productCart) {
+      await put({
+        path: 'cart/add',
+        body: JSON.stringify({
+          product: buyItem._id,
+          quantity: count,
+        }),
+        token: accessToken,
+      });
+      navigation.navigate('OrderSummary');
+    } else {
+      navigation.navigate('OrderSummary');
+    }
 
     // if (!productCart) {
     //   addToCart({
@@ -188,14 +224,14 @@ const ProductDetails = ({route, navigation}: Props) => {
     //     quantity: count,
     //     weight: chooseWeight,
     //   });
-    //   navigation.navigate('OrderSummary');
+    // navigation.navigate('OrderSummary');
     // } else {
     //   addToOrderItems({
     //     product: productData,
     //     quantity: count,
     //     weight: chooseWeight,
     //   });
-    //   navigation.navigate('OrderSummary');
+    // navigation.navigate('OrderSummary');
     // }
 
     if (addQuantity) {
@@ -218,6 +254,10 @@ const ProductDetails = ({route, navigation}: Props) => {
       });
     }
   };
+
+  useEffect(() => {
+    setChooseWeight(authData);
+  }, [authData]);
 
   return (
     <>
@@ -242,6 +282,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                 }
                 size={30}
                 color="green"
+                // onPress={() => handleWishlist(productData)}
                 onPress={() => handleWishlist(productData)}
               />
             </Box>
@@ -404,7 +445,7 @@ const ProductDetails = ({route, navigation}: Props) => {
 
               {/* lower section */}
               <Box mt={1}>
-                <Text color={'COLORS.secondary'} bold>
+                <Text color={COLORS.secondary} bold>
                   {authData?.isActive ? 'Available' : 'Not Available'}
                 </Text>
               </Box>
@@ -537,17 +578,30 @@ const ProductDetails = ({route, navigation}: Props) => {
           <Box position={'absolute'} px={3} bottom={0} mb={3}>
             <Row>
               {!cartDataMatch ? (
-                <Pressable
-                  onPress={() => handleCart(productData)}
-                  bg={'#C1E1C1'}
-                  w={160}
-                  alignItems={'center'}
-                  borderTopLeftRadius={5}
-                  borderBottomLeftRadius={5}>
-                  <Text py={4} color={COLORS.primary} bold>
-                    Add To Cart
-                  </Text>
-                </Pressable>
+                !loader ? (
+                  <Pressable
+                    // onPress={() => handleCart(productData)}
+                    onPress={() => handleCart(chooseWeight)}
+                    bg={'#C1E1C1'}
+                    w={160}
+                    alignItems={'center'}
+                    borderTopLeftRadius={5}
+                    borderBottomLeftRadius={5}>
+                    <Text py={4} color={COLORS.primary} bold>
+                      Add To Cart
+                    </Text>
+                  </Pressable>
+                ) : (
+                  <Box
+                    bg={'#C1E1C1'}
+                    w={160}
+                    alignItems={'center'}
+                    borderTopLeftRadius={5}
+                    justifyContent={'center'}
+                    borderBottomLeftRadius={5}>
+                    <Spinner color={COLORS.primary} size={'lg'} />
+                  </Box>
+                )
               ) : (
                 <Pressable
                   onPress={() => navigation.navigate('Cart', {isBack: true})}
@@ -562,7 +616,8 @@ const ProductDetails = ({route, navigation}: Props) => {
                 </Pressable>
               )}
               <Pressable
-                onPress={() => BuyNow(productData)}
+                // onPress={() => BuyNow(productData)}
+                onPress={() => BuyNow(chooseWeight)}
                 bg={COLORS.primary}
                 w={175}
                 borderTopRightRadius={5}

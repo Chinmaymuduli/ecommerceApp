@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {
   Box,
@@ -17,19 +17,27 @@ import {CartItemType, CartType} from 'types';
 import {useStore} from 'app';
 import OrderSummaryCounter from './OrderSummaryCounter';
 import {useAuthFetch} from 'hooks';
+import {remove} from 'api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type CartItemTypes = {
   item: CartItemType;
   setQuantity?: number | any;
+  handleDelete: (prev: any) => void;
+  isOpen?: boolean;
+  setIsOpen: (prev: boolean) => void;
+  onClose: () => void;
 };
 
-const CartItem = ({item, setQuantity}: CartItemTypes) => {
+const CartItem = ({
+  item,
+  setQuantity,
+  handleDelete,
+  onClose,
+  setIsOpen,
+  isOpen,
+}: CartItemTypes) => {
   const {updateQuantity, cartItems, removeFromCart} = useStore();
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  // console.log('second', item);
-
-  const onClose = () => setIsOpen(false);
 
   const cancelRef = React.useRef(null);
 
@@ -49,21 +57,34 @@ const CartItem = ({item, setQuantity}: CartItemTypes) => {
     path: '',
   });
 
-  const handleDelete = async (id: any) => {
-    // removeFromCart(id);
-    console.log('object', id);
-    try {
-      const res = await fetchData({
-        path: `cart/${id}`,
-        method: 'DELETE',
-      });
-      console.log('object', res);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      onClose();
-    }
-  };
+  // const handleDelete = async (id: any) => {
+  //   // removeFromCart(id);
+  //   // console.log('object', id);
+  //   // try {
+  //   //   const res = await fetchData({
+  //   //     path: `cart/${id}`,
+  //   //     method: 'DELETE',
+  //   //   });
+  //   //   console.log('object', res);
+  //   // } catch (error) {
+  //   //   console.log(error);
+  //   // } finally {
+  //   //   onClose();
+  //   // }
+  //   try {
+  //     const getAccessToken = await AsyncStorage.getItem('access_token');
+
+  //     await remove({
+  //       path: `cart/${id}`,
+  //       token: getAccessToken,
+  //     });
+  //   } catch (error: any) {
+  //     console.log(error);
+  //     Alert.alert('Error', error.message);
+  //   } finally {
+  //     onClose();
+  //   }
+  // };
   return (
     <Box
       px={3}

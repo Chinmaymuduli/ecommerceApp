@@ -46,10 +46,13 @@ const Home = () => {
     method: 'GET',
   });
 
+  console.log('first', authData);
+
   useEffect(() => {
     const CATEGORY_PRODUCT1 = authData?.data
       ?.filter(
         (item: {category: {name: string}; type: string}) =>
+          // item?.type === 'B2C',
           item?.category?.name === 'Ayush' && item?.type === 'B2C',
       )
       .slice(0, 4);
@@ -88,7 +91,7 @@ const Home = () => {
                   <Ionicons
                     name="heart-outline"
                     size={25}
-                    color={'COLORS.secondary'}
+                    color={COLORS.secondary}
                   />
                 </Pressable>
 

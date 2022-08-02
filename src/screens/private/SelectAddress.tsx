@@ -9,6 +9,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AddressType} from 'types';
 import {FetchLoader} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAddress} from 'hooks';
 const AddressArr = [
   {
     id: 1,
@@ -45,10 +46,14 @@ const AddressArr = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
 const SelectAddress = ({route, navigation}: Props) => {
   const [address, setAddress] = useState<any>();
-  const [value, setValue] = React.useState(address ? address[0] : null);
+  const [addressValue, setAddressValue] = React.useState(
+    address ? address[0] : null,
+  );
+
+  const {setAddresses, addresses} = useAddress();
 
   const [loading, setLoading] = useState(false);
-  // console.log({value});
+  console.log({addresses});
 
   const isProfile = route.params?.isProfile;
 
@@ -115,12 +120,17 @@ const SelectAddress = ({route, navigation}: Props) => {
                     borderBottomWidth={1}
                     borderColor={COLORS.lightGrey}>
                     <Radio.Group
-                      value={value}
+                      value={addresses}
+                      // value={addressValue}
                       onChange={nextValue => {
-                        setValue(nextValue);
+                        setAddresses(nextValue);
                       }}
+                      // onChange={nextValue => {
+                      //   setAddressValue(nextValue);
+                      // }}
                       name="myRadioGroup"
-                      defaultValue={value}
+                      // defaultValue={addressValue}
+                      defaultValue={addresses}
                       accessibilityLabel="Select address">
                       <Radio value={item} my={4} mx={2} colorScheme="green">
                         <Box pb={3}>
