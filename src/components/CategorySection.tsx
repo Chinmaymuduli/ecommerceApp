@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Actionsheet,
   Box,
+  Center,
   FlatList,
   Heading,
   HStack,
@@ -17,7 +18,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FilterSheet from './FilterSheet';
-import {Banner} from 'assets';
+import {Banner, wishlist} from 'assets';
 
 import HomeCategoryItem from './HomeCategoryItem';
 import {ProductType} from 'types';
@@ -189,7 +190,20 @@ const CategorySection = ({
             </HStack>
           </Box>
         )}
-        ListEmptyComponent={() => <Text>No Item Found</Text>}
+        ListEmptyComponent={() => (
+          <Box>
+            <Center h={350} w={'full'}>
+              <Image
+                source={wishlist}
+                style={styles.wishList_image}
+                alt={'wishlist image'}
+              />
+              <Text bold color={'black'} fontSize={18} mt={10}>
+                No Products Found
+              </Text>
+            </Center>
+          </Box>
+        )}
       />
     </>
   );
@@ -202,5 +216,9 @@ const styles = StyleSheet.create({
     height: 100,
     width: 100,
     marginTop: 20,
+  },
+  wishList_image: {
+    width: 150,
+    height: 150,
   },
 });

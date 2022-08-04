@@ -93,7 +93,6 @@ const HomeCategoryItem = ({
             borderRadius={5}>
             <Image
               alt="image"
-              // source={isBussiness ? item?.b2bImg : item?.img}
               source={{
                 uri:
                   item?.images?.length > 1
