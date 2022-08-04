@@ -17,12 +17,12 @@ import {OrderSummaryCard} from 'components';
 import {getPrice} from 'utils';
 import {useStore} from 'app';
 import {useAddress, useSwrApi} from 'hooks';
+import {CartItemType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route}: Props) => {
   const {cartItems, orderItems} = useStore(state => state);
   const {addresses} = useAddress();
-  // console.log('object', addresses);
   const {data, isLoading, mutate} = useSwrApi('cart/all');
 
   const cartData = data?.data?.data?.products;
@@ -72,21 +72,21 @@ const OrderSummary = ({navigation, route}: Props) => {
               </Box>
             </HStack>
             <Text fontSize={13}>
-              {/* Akshya Nagar 1st Block 1st Cross, Rammurthy nagar,
-              Bangalore-560016 */}
-              {/* {addresses?.city}{addresses?.street}{addresses?.landmark}, {addresses?.state} */}
               {addresses?.landmark} {addresses?.street} , {addresses?.city} ,{' '}
               {addresses?.state} - {addresses?.zip}
             </Text>
             <Text>
-              +{addresses.countryCode} {addresses?.phoneNumber}
+              +{addresses?.countryCode} {addresses?.phoneNumber}
             </Text>
           </VStack>
         </Box>
         {/* card */}
-        {orderItems.map(od => (
-          <OrderSummaryCard key={od.product?.id} orderData={od} />
+        {cartData.map((od: CartItemType) => (
+          <OrderSummaryCard key={od.product?._id} orderData={od} />
         ))}
+        {/* {orderItems.map(od => (
+          <OrderSummaryCard key={od.product?.id} orderData={od} />
+        ))} */}
         {/* Card End */}
         <Box>
           <Box py={4} mb={10}>

@@ -23,14 +23,15 @@ import HomeCategoryItem from './HomeCategoryItem';
 import {ProductType} from 'types';
 
 type CategoryProductType = {
-  data: {
-    id: number;
-    name?: string;
-    discount?: number;
-    img?: any;
-    currentPrice?: number;
-    offer?: string;
-  }[];
+  // data: {
+  //   id?: number;
+  //   name?: string;
+  //   discount?: number;
+  //   img?: any;
+  //   currentPrice?: number;
+  //   offer?: string;
+  // }[];
+  data: ProductType[];
   setOpenAlert?: boolean | any;
   setAlertMessage?: string | any;
   isBusiness?: boolean;
@@ -44,6 +45,7 @@ const CategorySection = ({
 }: CategoryProductType) => {
   const [filterSheetOpen, setFilterSheetOpen] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
+  // console.log('Bussiness', isBusiness);
 
   return (
     <>
@@ -64,7 +66,7 @@ const CategorySection = ({
         keyExtractor={(item, index) => index.toString()}
         contentContainerStyle={{paddingBottom: 200}}
         ListHeaderComponent={() => (
-          <Box py={1}>
+          <Box py={1} w={'270'}>
             <Box px={3}>
               <Text fontSize={15} py={2}>
                 {data?.length} products

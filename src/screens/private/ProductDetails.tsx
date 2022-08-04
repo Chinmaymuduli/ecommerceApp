@@ -54,6 +54,8 @@ type productType = {
 const ProductDetails = ({route, navigation}: Props) => {
   const productData = route.params.ProductDetailsType;
 
+  console.log(productData);
+
   const [loader, setLoader] = useState(false);
   const isMounted = useIsMounted();
   const {authData, isLoading} = useAuthFetch<ProductType>({
@@ -86,10 +88,6 @@ const ProductDetails = ({route, navigation}: Props) => {
     wishlistItems,
     addToOrderItems,
   } = useStore();
-
-  const {fetchData} = useAuthFetch({
-    path: '',
-  });
 
   const handleCart = async (data: ProductType) => {
     try {
@@ -197,45 +195,51 @@ const ProductDetails = ({route, navigation}: Props) => {
     const productCart = CartData.some(
       (_item: {product: {_id: string}}) => _item.product._id === buyItem._id,
     );
-    console.log(productCart);
+    // console.log(productCart);
 
-    if (!productCart) {
-      await put({
-        path: 'cart/add',
-        body: JSON.stringify({
-          product: buyItem._id,
-          quantity: count,
-        }),
-        token: accessToken,
-      });
-      navigation.navigate('OrderSummary');
-    } else {
-      navigation.navigate('OrderSummary');
-    }
+    try {
+      if (!productCart) {
+        await put({
+          path: 'cart/add',
+          body: JSON.stringify({
+            product: buyItem._id,
+            quantity: count,
+          }),
+          token: accessToken,
+        });
+        navigation.navigate('OrderSummary');
+      } else {
+        navigation.navigate('OrderSummary');
+      }
 
-    // if (!productCart) {
-    //   addToCart({
-    //     product: productData,
-    //     quantity: count,
-    //     weight: chooseWeight,
-    //   });
-    //   addToOrderItems({
-    //     product: productData,
-    //     quantity: count,
-    //     weight: chooseWeight,
-    //   });
-    // navigation.navigate('OrderSummary');
-    // } else {
-    //   addToOrderItems({
-    //     product: productData,
-    //     quantity: count,
-    //     weight: chooseWeight,
-    //   });
-    // navigation.navigate('OrderSummary');
-    // }
+      // if (!productCart) {
+      //   addToCart({
+      //     product: productData,
+      //     quantity: count,
+      //     weight: chooseWeight,
+      //   });
+      //   addToOrderItems({
+      //     product: productData,
+      //     quantity: count,
+      //     weight: chooseWeight,
+      //   });
+      // navigation.navigate('OrderSummary');
+      // } else {
+      //   addToOrderItems({
+      //     product: productData,
+      //     quantity: count,
+      //     weight: chooseWeight,
+      //   });
+      // navigation.navigate('OrderSummary');
+      // }
 
-    if (addQuantity) {
-      return setModalDialog(true);
+      if (addQuantity) {
+        return setModalDialog(true);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      mutate();
     }
   };
 

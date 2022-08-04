@@ -5,6 +5,9 @@ import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {ProductType} from 'types';
 import {useStore} from 'app';
+import {useSwrApi} from 'hooks';
+import {put, remove} from 'api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = {
   item: ProductType;
@@ -14,6 +17,11 @@ type Props = {
 const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
   const {addToCart, updateQuantity, removeFromCart, cartItems} = useStore();
 
+  // console.log('item', item);
+
+  const {data, mutate, isLoading} = useSwrApi('cart/all');
+  const CartData = data?.data?.data?.products;
+
   const Selected_Weight = item?.weightAvailability?.reduce((pV, cV) => {
     if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
     return pV;
@@ -22,55 +30,116 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
   const [count, setCount] = React.useState(0);
 
   const isCartItem = useMemo(
-    () => cartItems.some(i => i.product.id === item.id),
-    [cartItems],
+    () =>
+      CartData?.some((i: {product: {_id: any}}) => i.product._id === item._id),
+    [CartData],
   );
+  // const isCartItem = useMemo(
+  //   () => cartItems.some(i => i.product.id === item.id),
+  //   [cartItems],
+  // );
   const quantity = useCallback(
     (id: number) => {
-      const res = cartItems.filter(i => i.product.id === id)?.[0];
+      const res = CartData?.filter(
+        (i: {product: {_id: number}}) => i.product._id === id,
+      )?.[0];
       return res.quantity;
     },
-    [cartItems],
+    [CartData],
   );
+  // const quantity = useCallback(
+  //   (id: number) => {
+  //     const res = cartItems.filter(i => i.product.id === id)?.[0];
+  //     return res.quantity;
+  //   },
+  //   [cartItems],
+  // );
 
   //   console.log({isCartItem, item});
 
-  const increment = (id: number) => {
-    setCount(count + 1);
-    updateQuantity(id, count);
-  };
-
-  const decrement = (id: number) => {
-    if (count === 1) {
-      setCount(count - 1);
-      removeFromCart(id);
-      setOpenAlert(true);
-      setAlertMessage('Removed from cart');
-      setTimeout(() => {
-        setOpenAlert(false);
-      }, 2000);
-      return;
-    } else if (count > 1) {
-      setCount(count - 1);
-      updateQuantity(id, count);
-    } else {
-      setCount(0);
+  const increment = async (id: number) => {
+    try {
+      console.log('loading');
+      // updateQuantity(id, count);
+      const accessToken = await AsyncStorage.getItem('access_token');
+      const res = await put({
+        path: 'cart/add',
+        body: JSON.stringify({
+          product: id,
+          quantity: 10,
+        }),
+        // token: accessToken,
+      });
+      setCount(10);
+      console.log('Updated', res);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      mutate();
     }
   };
 
-  const addtoCartItem = () => {
-    increment(item?.id), setCount(count + 1);
-    addToCart({
-      product: item,
-      quantity: 1,
-      weight: Selected_Weight,
-    });
+  const decrement = async (id: number) => {
+    try {
+      const getAccessToken = await AsyncStorage.getItem('access_token');
+      if (count === 1) {
+        setCount(count - 1);
+        // removeFromCart(id);
+        await remove({
+          path: `cart/${id}`,
+          token: getAccessToken,
+        });
+        setOpenAlert(true);
+        setAlertMessage('Removed from cart');
+        setTimeout(() => {
+          setOpenAlert(false);
+        }, 2000);
+        return;
+      } else if (count > 1) {
+        setCount(count - 1);
+        // updateQuantity(id, count);
 
-    setOpenAlert(true),
-      setAlertMessage('Added to cart'),
-      setTimeout(() => {
-        setOpenAlert(false);
-      }, 4000);
+        await put({
+          path: 'cart/add',
+          body: JSON.stringify({
+            product: id,
+            quantity: count,
+          }),
+          token: getAccessToken,
+        });
+      } else {
+        setCount(0);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      mutate();
+    }
+  };
+
+  const addtoCartItem = async () => {
+    try {
+      increment(item?._id), setCount(count + 1);
+      const getAccessToken = await AsyncStorage.getItem('access_token');
+      await put({
+        path: 'cart/add',
+        token: getAccessToken,
+        body: JSON.stringify({
+          product: item?._id,
+          quantity: 1,
+        }),
+      });
+
+      setOpenAlert(true),
+        setAlertMessage('Added to cart'),
+        setTimeout(() => {
+          setOpenAlert(false);
+        }, 4000);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      mutate();
+    }
   };
   return (
     <Box
@@ -92,12 +161,12 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
               name="minus"
               size={20}
               color={COLORS.fadeBlack}
-              onPress={() => decrement(item.id)}
+              onPress={() => decrement(item._id)}
             />
           </Box>
 
           <Box>
-            <Text>{quantity(item.id)}</Text>
+            <Text>{quantity(item._id)}</Text>
           </Box>
           <Box>
             <Entypo
@@ -108,7 +177,7 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
                 paddingHorizontal: 3,
                 paddingVertical: 3,
               }}
-              onPress={() => increment(item.id)}
+              onPress={() => increment(item._id)}
             />
           </Box>
         </HStack>

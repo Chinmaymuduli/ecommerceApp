@@ -46,7 +46,7 @@ const Home = () => {
     method: 'GET',
   });
 
-  console.log('first', authData);
+  // console.log('first', authData);
 
   useEffect(() => {
     const CATEGORY_PRODUCT1 = authData?.data
