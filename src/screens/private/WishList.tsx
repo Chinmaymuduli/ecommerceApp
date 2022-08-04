@@ -19,10 +19,14 @@ import {COLORS} from 'configs';
 import {wishlist} from 'assets';
 import {WishListCard} from 'components';
 import {useStore} from 'app';
+import {useSwrApi} from 'hooks';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'WishList'>;
 const WishList = ({navigation}: Props) => {
   const {wishlistItems, cartItems} = useStore();
+  const {data, isLoading, mutate} = useSwrApi('wishlists');
+
+  const WishListItem = data?.data?.data?.data;
   const [alertMessage, setAlertMessage] = useState<string>('Item Added');
   const [shownAlert, setShownAlert] = useState<boolean>(false);
   const renderItem = ({item}: any) => {
@@ -31,6 +35,7 @@ const WishList = ({navigation}: Props) => {
         item={item}
         setAlertMessage={setAlertMessage}
         setShownAlert={setShownAlert}
+        mutate={mutate}
       />
     );
   };
@@ -79,7 +84,8 @@ const WishList = ({navigation}: Props) => {
         </HStack>
         <Box>
           <FlatList
-            data={wishlistItems.length > 0 ? wishlistItems : []}
+            // data={wishlistItems.length > 0 ? wishlistItems : []}
+            data={WishListItem.length > 0 ? WishListItem : []}
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
             numColumns={2}

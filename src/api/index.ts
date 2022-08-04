@@ -14,7 +14,7 @@ const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
     }),
   });
 
-  console.log('first50', getResponse);
+  // console.log('first50', getResponse);
   if (getResponse.status === 401)
     return await put({
       path: 'auth/logout',

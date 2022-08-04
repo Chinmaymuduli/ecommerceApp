@@ -4,36 +4,44 @@ import {Box, HStack, Image, Pressable, Stack, Text} from 'native-base';
 import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {ProductType, WishListCardType} from 'types';
+import {CartItemType, CategoryType, ProductType, WishListCardType} from 'types';
 import {useStore} from 'app';
+import {useSwrApi} from 'hooks';
+import {remove} from 'api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = {
-  item: ProductType;
+  item: CartItemType;
   setAlertMessage: (prev: string) => void;
   setShownAlert: (previous: boolean) => void;
+  mutate: () => void;
 };
 
-const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
+const WishListCard = ({
+  item,
+  setAlertMessage,
+  setShownAlert,
+  mutate,
+}: Props) => {
   const {cartItems, addToCart, removeFromCart, removeFromWishlist} = useStore();
-  const Selected_Weight = item?.weightAvailability?.reduce((pV, cV) => {
-    if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
-    return pV;
-  }, {});
-  const handleAddCart = () => {
-    addToCart({
-      product: item,
-      quantity: 1,
-      weight: Selected_Weight,
-    });
-    setShownAlert(true);
-    setAlertMessage('Added to Cart');
-    setTimeout(() => {
-      setShownAlert(false);
-    }, 4000);
-  };
+  const {data} = useSwrApi('cart/all');
+  const wishListCart = data?.data.data?.products;
+
+  // const handleAddCart = () => {
+  //   addToCart({
+  //     product: item,
+  //     quantity: 1,
+  //     weight: Selected_Weight,
+  //   });
+  //   setShownAlert(true);
+  //   setAlertMessage('Added to Cart');
+  //   setTimeout(() => {
+  //     setShownAlert(false);
+  //   }, 4000);
+  // };
 
   const removeCart = () => {
-    removeFromCart(item.id);
+    removeFromCart(item._id);
     setShownAlert(true);
     setAlertMessage('Remove from Cart');
     setTimeout(() => {
@@ -41,11 +49,24 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
     }, 4000);
   };
 
-  const removeWishlist = () => {
-    removeFromWishlist(item.id);
+  const removeWishlist = async () => {
+    try {
+      const accessToken = await AsyncStorage.getItem('access_token');
+      const res = await remove({
+        path: `wishlist/${item._id}`,
+        token: accessToken,
+      });
+      if (res.status === 200) return mutate();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const cartDatametch = cartItems.some(data => data?.product?.id === item?.id);
+  const cartDataMatch = wishListCart.some(
+    (data: {product: {_id: string}}) =>
+      data?.product?._id === item?.product?._id,
+  );
+  // console.log('item', item);
   return (
     <>
       <Box
@@ -56,7 +77,12 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
         borderRadius={5}>
         <Pressable>
           <Image
-            source={item?.img}
+            source={{
+              uri: item?.product?.images?.length
+                ? item?.product?.images[0]
+                : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1-r88R2pOX-lj1C6Zn3QO3I_Osu-G3viCm1fUWNVhiDn_mkszDqEn8qXAe3bR1sJo9Pg&usqp=CAU',
+            }}
+            // source={item?.img}
             style={styles.image}
             alt={'wishlistImg'}
             resizeMode={'contain'}
@@ -65,23 +91,24 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
           />
           <Stack px={2} space={1}>
             <Text bold color={'gray.400'} mt={2}>
-              {item?.name}
+              {item?.product?.title}
             </Text>
             <HStack space={2}>
               <Text fontFamily={'Nunito-Bold'}>
-                &#8377;{Selected_Weight?.currentPrice}
+                &#8377;{item?.product?.salePrice}
               </Text>
               <Text textDecorationLine={'line-through'} color={'gray.400'}>
-                &#8377;{(Selected_Weight?.currentPrice || 0) + 100}
+                &#8377;{item?.product?.mrp}
               </Text>
               <Text color={'green.500'} bold>
-                {Selected_Weight?.discount} % off
+                15 % off
               </Text>
             </HStack>
             <HStack>
               <Rating
                 type="custom"
-                startingValue={item.ratings}
+                // startingValue={item.ratings}
+                startingValue={4}
                 ratingColor={'green'}
                 tintColor={'#fff'}
                 ratingBackgroundColor={COLORS.grey}
@@ -106,8 +133,12 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
             />
           </Pressable>
         </Pressable>
-        {!cartDatametch ? (
-          <Pressable px={3} py={3} onPress={handleAddCart}>
+        {!cartDataMatch ? (
+          <Pressable
+            px={3}
+            py={3}
+            // onPress={handleAddCart}
+          >
             <Box
               borderWidth={1}
               borderRadius={4}

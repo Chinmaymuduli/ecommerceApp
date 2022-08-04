@@ -70,7 +70,8 @@ const ChangePassword = ({navigation}: Props) => {
       const RESEND_OTP = await post({
         path: 'auth/forgot-password',
         body: JSON.stringify({
-          email: data?.results?.email,
+          email: 'chinmaymuduli1996@gmail.com',
+          // email: data?.results?.email,
         }),
       });
       console.log({RESEND_OTP});
@@ -117,7 +118,8 @@ const ChangePassword = ({navigation}: Props) => {
             <Text bold color={COLORS.grey}>
               Email ID
             </Text>
-            <Text bold>{data?.results?.email}</Text>
+            {/* <Text bold>{data?.results?.email}</Text> */}
+            <Text bold>chinmay@gmail.com</Text>
           </Stack>
           <Stack mt={4}>
             <Text bold color={COLORS.grey}>

@@ -1,7 +1,9 @@
 import {Alert, StyleSheet} from 'react-native';
 import React from 'react';
 import {
+  AlertDialog,
   Box,
+  Button,
   Heading,
   HStack,
   Pressable,
@@ -48,12 +50,6 @@ const Cart = ({route, navigation}: Props) => {
   const {data, error, mutate, isLoading} = useSwrApi('cart/all');
 
   const CartItems = data?.data?.data?.products;
-  // console.log('cartItem', CartItems);
-
-  const [isOpen, setIsOpen] = React.useState(false);
-
-  const onClose = () => setIsOpen(false);
-
   const [quantity, setQuantity] = React.useState(CartArr);
   const {cartItems, addToOrderItemFromCart} = useStore(state => state);
   const {
@@ -74,35 +70,38 @@ const Cart = ({route, navigation}: Props) => {
     );
   };
 
-  const handleDelete = async (id: any) => {
-    // removeFromCart(id);
-    // console.log('object', id);
-    // try {
-    //   const res = await fetchData({
-    //     path: `cart/${id}`,
-    //     method: 'DELETE',
-    //   });
-    //   console.log('object', res);
-    // } catch (error) {
-    //   console.log(error);
-    // } finally {
-    //   onClose();
-    // }
-    try {
-      const getAccessToken = await AsyncStorage.getItem('access_token');
+  // const handleDelete = async (id: any) => {
+  //   console.log('cartItemId', id);
 
-      await remove({
-        path: `cart/${id}`,
-        token: getAccessToken,
-      });
-    } catch (error: any) {
-      console.log(error);
-      Alert.alert('Error', error.message);
-    } finally {
-      mutate();
-      onClose();
-    }
-  };
+  //   // removeFromCart(id);
+  //   // console.log('object', id);
+  //   // try {
+  //   //   const res = await fetchData({
+  //   //     path: `cart/${id}`,
+  //   //     method: 'DELETE',
+  //   //   });
+  //   //   console.log('object', res);
+  //   // } catch (error) {
+  //   //   console.log(error);
+  //   // } finally {
+  //   //   onClose();
+  //   // }
+
+  //   try {
+  //     const getAccessToken = await AsyncStorage.getItem('access_token');
+
+  //     await remove({
+  //       path: `cart/${id}`,
+  //       token: getAccessToken,
+  //     });
+  //   } catch (error: any) {
+  //     console.log(error);
+  //     Alert.alert('Error', error.message);
+  //   } finally {
+  //     mutate();
+  //     onClose();
+  //   }
+  // };
 
   return (
     <>
@@ -138,7 +137,6 @@ const Cart = ({route, navigation}: Props) => {
                   bg={'#e4e4e460'}
                   py={3}>
                   <Text fontSize={13}>shipment 1 of 1</Text>
-                  {/* <Text fontSize={13}>{cartItems.length} items</Text> */}
                   <Text fontSize={13}>{CartItems.length} items</Text>
                 </HStack>
 
@@ -149,10 +147,11 @@ const Cart = ({route, navigation}: Props) => {
                         item={item}
                         key={item?._id}
                         setQuantity={setQuantity}
-                        handleDelete={handleDelete}
-                        onClose={onClose}
-                        setIsOpen={setIsOpen}
-                        isOpen={isOpen}
+                        // handleDelete={handleDelete}
+                        // onClose={onClose}
+                        // setIsOpen={setIsOpen}
+                        // isOpen={isOpen}
+                        mutate={mutate}
                       />
                     </>
                   ))}
@@ -255,6 +254,38 @@ const Cart = ({route, navigation}: Props) => {
       ) : (
         <FetchLoader />
       )}
+
+      {/* Alert Dialog */}
+      {/* <AlertDialog
+        leastDestructiveRef={cancelRef}
+        isOpen={isOpen}
+        onClose={onClose}>
+        <AlertDialog.Content>
+          <AlertDialog.CloseButton />
+          <AlertDialog.Header>Delete Item</AlertDialog.Header>
+          <AlertDialog.Body>
+            This will remove cart item . This action cannot be reversed. Deleted
+            data can not be recovered.
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="unstyled"
+                colorScheme="coolGray"
+                onPress={onClose}
+                ref={cancelRef}>
+                Cancel
+              </Button>
+              <Button
+                colorScheme="danger"
+                // onPress={() => handleDelete(id)}
+                onPress={() => console.log('Deleted')}>
+                Delete
+              </Button>
+            </Button.Group>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog> */}
     </>
   );
 };

@@ -236,7 +236,7 @@ const Login = () => {
                 <Text bold fontSize={15}>
                   If you are new,{' '}
                 </Text>
-                <Text underline bold color={COLORS.cgColor} fontSize={15}>
+                <Text underline bold color={COLORS.primary} fontSize={15}>
                   Create Now
                 </Text>
               </Row>

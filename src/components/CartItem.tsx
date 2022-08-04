@@ -17,32 +17,47 @@ import {CartItemType, CartType} from 'types';
 import {useStore} from 'app';
 import OrderSummaryCounter from './OrderSummaryCounter';
 import {useAuthFetch} from 'hooks';
-import {remove} from 'api';
+import {put, remove} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {CartAlert} from './core';
 
 type CartItemTypes = {
   item: CartItemType;
   setQuantity?: number | any;
-  handleDelete: (prev: any) => void;
-  isOpen?: boolean;
-  setIsOpen: (prev: boolean) => void;
-  onClose: () => void;
+  // handleDelete: (prev: any) => void;
+  // isOpen?: boolean;
+  // setIsOpen: (prev: boolean) => void;
+  // onClose: () => void;
+  mutate: () => void;
 };
 
 const CartItem = ({
   item,
   setQuantity,
-  handleDelete,
-  onClose,
-  setIsOpen,
-  isOpen,
-}: CartItemTypes) => {
+  mutate,
+}: // handleDelete,
+// onClose,
+// setIsOpen,
+// isOpen,
+CartItemTypes) => {
   const {updateQuantity, cartItems, removeFromCart} = useStore();
 
+  const [deleteId, setDeleteId] = useState();
+
+  const [isOpen, setIsOpen] = React.useState(false);
+
+  const onClose = () => setIsOpen(false);
   const cancelRef = React.useRef(null);
 
-  const increment = (item: CartItemType) => {
-    updateQuantity(item?.product?.id, item?.quantity + 1);
+  const increment = async (item: CartItemType) => {
+    const res = await put({
+      path: 'cart/add',
+      body: JSON.stringify({
+        product: item.product._id,
+        quantity: 1,
+      }),
+    });
+    // console.log('objectRes', res);
   };
 
   const decrement = (item: CartItemType) => {
@@ -52,39 +67,12 @@ const CartItem = ({
     }
   };
 
-  // console.log('CartItem', cartItems);
-  const {fetchData} = useAuthFetch({
-    path: '',
-  });
+  const handleAlert = (id: any) => {
+    console.log({id});
+    setIsOpen(!isOpen);
+    setDeleteId(id);
+  };
 
-  // const handleDelete = async (id: any) => {
-  //   // removeFromCart(id);
-  //   // console.log('object', id);
-  //   // try {
-  //   //   const res = await fetchData({
-  //   //     path: `cart/${id}`,
-  //   //     method: 'DELETE',
-  //   //   });
-  //   //   console.log('object', res);
-  //   // } catch (error) {
-  //   //   console.log(error);
-  //   // } finally {
-  //   //   onClose();
-  //   // }
-  //   try {
-  //     const getAccessToken = await AsyncStorage.getItem('access_token');
-
-  //     await remove({
-  //       path: `cart/${id}`,
-  //       token: getAccessToken,
-  //     });
-  //   } catch (error: any) {
-  //     console.log(error);
-  //     Alert.alert('Error', error.message);
-  //   } finally {
-  //     onClose();
-  //   }
-  // };
   return (
     <Box
       px={3}
@@ -114,7 +102,9 @@ const CartItem = ({
               name="delete"
               size={25}
               color={COLORS.danger}
-              onPress={() => setIsOpen(!isOpen)}
+              // onPress={() => setIsOpen(!isOpen)}
+
+              onPress={() => handleAlert(item._id)}
             />
           </HStack>
           <HStack space={2}>
@@ -145,7 +135,7 @@ const CartItem = ({
           </Text>
         </Box>
         <Box
-          bg={'#F8D210'}
+          bg={'yellow.400'}
           position={'absolute'}
           borderRadius={3}
           bottom={6}
@@ -170,8 +160,16 @@ const CartItem = ({
         productID={item?.product.id}
       /> */}
 
+      <CartAlert
+        onClose={onClose}
+        isOpen={isOpen}
+        id={deleteId}
+        mutate={mutate}
+      />
+
       {/* alert dialog */}
-      <AlertDialog
+
+      {/* <AlertDialog
         leastDestructiveRef={cancelRef}
         isOpen={isOpen}
         onClose={onClose}>
@@ -193,13 +191,15 @@ const CartItem = ({
               </Button>
               <Button
                 colorScheme="danger"
-                onPress={() => handleDelete(item?._id)}>
+                onPress={() =>}
+                // onPress={() => console.log('Deleted')}
+              >
                 Delete
               </Button>
             </Button.Group>
           </AlertDialog.Footer>
         </AlertDialog.Content>
-      </AlertDialog>
+      </AlertDialog> */}
     </Box>
   );
 };

@@ -13,6 +13,7 @@ type categoryType = {
   imageURL?: string;
   isActive?: boolean;
   name?: string;
+  setCategoryId?: string;
 };
 
 const CategoryButtom = ({
@@ -21,6 +22,7 @@ const CategoryButtom = ({
   onSelectSwitch,
   data,
   setCategoryName,
+  setCategoryId,
 }: any) => {
   const [getSelectionMode, setSelectionMode] = useState(selectionMode);
 
@@ -31,6 +33,7 @@ const CategoryButtom = ({
     setSelectionMode(value?._id);
     onSelectSwitch(value?._id);
     setCategoryName(value?.name);
+    setCategoryId(value?._id);
   };
   // useEffect(() => {
   //   if (!selectedId) {

@@ -189,6 +189,7 @@ const CategorySection = ({
             </HStack>
           </Box>
         )}
+        ListEmptyComponent={() => <Text>No Item Found</Text>}
       />
     </>
   );

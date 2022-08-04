@@ -11,3 +11,4 @@ export {default as SuccessModal} from './SuccessModal';
 export {default as SuccessVerificationModal} from './SuccessVerificationModal';
 export {default as FetchLoader} from './FetchLoader';
 export {default as SkeletonComponent} from './SkeletonComponent';
+export {default as CartAlert} from './CartAlert';

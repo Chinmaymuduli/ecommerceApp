@@ -5,7 +5,7 @@ import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {ProductType} from 'types';
 import {useStore} from 'app';
-import {useSwrApi} from 'hooks';
+import {useIsMounted, useSwrApi} from 'hooks';
 import {put, remove} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -16,6 +16,7 @@ type Props = {
 };
 const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
   const {addToCart, updateQuantity, removeFromCart, cartItems} = useStore();
+  const isMounted = useIsMounted();
 
   // console.log('item', item);
 
@@ -29,11 +30,15 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
 
   const [count, setCount] = React.useState(0);
 
+  // console.log('first');
+
   const isCartItem = useMemo(
     () =>
       CartData?.some((i: {product: {_id: any}}) => i.product._id === item._id),
     [CartData],
   );
+  // console.log('isCartItem', isCartItem);
+  // console.log({isCartItem});
   // const isCartItem = useMemo(
   //   () => cartItems.some(i => i.product.id === item.id),
   //   [cartItems],
@@ -43,6 +48,7 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
       const res = CartData?.filter(
         (i: {product: {_id: number}}) => i.product._id === id,
       )?.[0];
+      // console.log({res});
       return res.quantity;
     },
     [CartData],
@@ -60,70 +66,63 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
   const increment = async (id: number) => {
     try {
       console.log('loading');
-      // updateQuantity(id, count);
-      const accessToken = await AsyncStorage.getItem('access_token');
+
       const res = await put({
         path: 'cart/add',
         body: JSON.stringify({
           product: id,
-          quantity: 10,
+          quantity: 1,
         }),
-        // token: accessToken,
       });
-      setCount(10);
-      console.log('Updated', res);
+      // mutate()
+      if (res.status === 200) return mutate();
+
+      isMounted.current && setCount(10);
+      // console.log('Updated', res.status);
     } catch (error) {
       console.log(error);
-    } finally {
-      mutate();
     }
   };
 
   const decrement = async (id: number) => {
+    console.log('object200', id);
     try {
-      const getAccessToken = await AsyncStorage.getItem('access_token');
-      if (count === 1) {
-        setCount(count - 1);
-        // removeFromCart(id);
-        await remove({
-          path: `cart/${id}`,
-          token: getAccessToken,
-        });
-        setOpenAlert(true);
-        setAlertMessage('Removed from cart');
-        setTimeout(() => {
-          setOpenAlert(false);
-        }, 2000);
-        return;
-      } else if (count > 1) {
-        setCount(count - 1);
-        // updateQuantity(id, count);
+      // if (count === 1) {
+      //   setCount(count - 1);
+      //   // removeFromCart(id);
+      //   await remove({
+      //     path: `cart/${id}`,
+      //   });
+      //   setOpenAlert(true);
+      //   setAlertMessage('Removed from cart');
+      //   setTimeout(() => {
+      //     setOpenAlert(false);
+      //   }, 2000);
+      //   return;
+      // } else if (count > 1) {
+      //   isMounted.current && setCount(count - 1);
+      // updateQuantity(id, count);
 
-        await put({
-          path: 'cart/add',
-          body: JSON.stringify({
-            product: id,
-            quantity: count,
-          }),
-          token: getAccessToken,
-        });
-      } else {
-        setCount(0);
-      }
+      const res = await put({
+        path: 'cart/remove',
+        body: JSON.stringify({
+          product: id,
+          quantity: -1,
+        }),
+      });
+      console.log({res});
+      if (res.status === 200) return mutate();
     } catch (error) {
       console.log(error);
-    } finally {
-      mutate();
     }
   };
 
   const addtoCartItem = async () => {
     try {
       increment(item?._id), setCount(count + 1);
-      const getAccessToken = await AsyncStorage.getItem('access_token');
       await put({
         path: 'cart/add',
-        token: getAccessToken,
+
         body: JSON.stringify({
           product: item?._id,
           quantity: 1,
@@ -137,8 +136,6 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
         }, 4000);
     } catch (error) {
       console.log(error);
-    } finally {
-      mutate();
     }
   };
   return (

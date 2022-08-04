@@ -31,14 +31,6 @@ const HomeCategoryItem = ({
     return pV;
   }, {});
 
-  // const {
-  //   cartItems,
-
-  //   addToWishlist,
-  //   removeFromWishlist,
-  //   wishlistItems,
-  // } = useStore();
-
   const navigation = useNavigation<NavigationProps>();
 
   //wishhlist
@@ -48,12 +40,14 @@ const HomeCategoryItem = ({
   const handleWishlist = async (wishlistItem: ProductType) => {
     try {
       const accessToken = await AsyncStorage.getItem('access_token');
-      const removeWishList = wishListItems?.some((data: {_id: string}) => {
-        return data._id === wishlistItem._id;
-      });
+      const removeWishList = wishListItems?.some(
+        (data: {product: {_id: string}}) => {
+          return data?.product._id === wishlistItem._id;
+        },
+      );
+      // console.log({removeWishList});
 
       if (removeWishList) {
-        // removeFromWishlist(wishlistItem?.id);
         await remove({
           path: `wishlist/${wishlistItem?._id}`,
           token: accessToken,
@@ -64,15 +58,13 @@ const HomeCategoryItem = ({
           setOpenAlert(false);
         }, 2000);
       } else {
-        // addToWishlist(wishlistItem);
         await put({
           path: 'wishlist',
-          token: accessToken,
           body: JSON.stringify({
-            product: wishlistItem?._id,
+            productId: wishlistItem?._id,
           }),
         });
-        setOpenAlert(true);
+        // console.log({res});      setOpenAlert(true);
         setAlertMessage('Added to wishlist');
         setTimeout(() => {
           setOpenAlert(false);
@@ -80,8 +72,6 @@ const HomeCategoryItem = ({
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      mutate();
     }
   };
 
@@ -99,6 +89,7 @@ const HomeCategoryItem = ({
             mr={3}
             alignItems={'center'}
             borderColor={COLORS.lightGrey}
+            overflow={'hidden'}
             borderRadius={5}>
             <Image
               alt="image"
@@ -107,7 +98,8 @@ const HomeCategoryItem = ({
                 uri:
                   item?.images?.length > 1
                     ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1-r88R2pOX-lj1C6Zn3QO3I_Osu-G3viCm1fUWNVhiDn_mkszDqEn8qXAe3bR1sJo9Pg&usqp=CAU'
-                    : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1-r88R2pOX-lj1C6Zn3QO3I_Osu-G3viCm1fUWNVhiDn_mkszDqEn8qXAe3bR1sJo9Pg&usqp=CAU',
+                    : 'https://meruherbs.com/wp-content/uploads/2017/07/no-product-image.png',
+                // : 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-product-1_large.png?format=jpg&quality=90&v=1530129292',
               }}
               style={styles.image}
               resizeMode={'contain'}
@@ -136,8 +128,8 @@ const HomeCategoryItem = ({
             <Ionicons
               onPress={() => handleWishlist(item)}
               name={
-                wishListItems?.some((data: {_id: string}) => {
-                  return data?._id === item._id;
+                wishListItems?.some((data: {product: {_id: string}}) => {
+                  return data?.product?._id === item._id;
                 })
                   ? 'heart'
                   : 'heart-outline'
