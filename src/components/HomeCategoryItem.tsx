@@ -33,12 +33,12 @@ const HomeCategoryItem = ({
   const handleWishlist = async (wishlistItem: ProductType) => {
     try {
       const accessToken = await AsyncStorage.getItem('access_token');
+
       const removeWishList = wishListItems?.some(
         (data: {product: {_id: string}}) => {
           return data?.product._id === wishlistItem._id;
         },
       );
-
       if (removeWishList) {
         await remove({
           path: `wishlist/${wishlistItem?._id}`,
@@ -65,6 +65,8 @@ const HomeCategoryItem = ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      mutate();
     }
   };
 

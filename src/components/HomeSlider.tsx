@@ -1,7 +1,6 @@
 import {StyleSheet} from 'react-native';
 import React from 'react';
 import {FlatList} from 'native-base';
-import {SLIDER_DATA} from '../constants';
 import HomeSliderCards from './HomeSliderCards';
 import {useSwrApi} from 'hooks';
 import {BannerType} from 'types';
@@ -12,7 +11,6 @@ const HomeSlider = () => {
   return (
     <>
       <FlatList
-        // data={SLIDER_DATA}
         data={BannerData}
         renderItem={({item}) => <HomeSliderCards item={item} />}
         keyExtractor={(item, index) => index.toString()}

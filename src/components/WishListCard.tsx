@@ -14,7 +14,6 @@ type Props = {
   item: CartItemType;
   setAlertMessage: (prev: string) => void;
   setShownAlert: (previous: boolean) => void;
-  // mutate: () => void;
 };
 
 const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
@@ -22,10 +21,10 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
   const {data, mutate} = useSwrApi('cart/all');
   const wishListCart = data?.data.data?.products;
 
+  const CategoryData = wishListCart?.find((item: {_id: string}) => item);
   const handleAddCart = async () => {
-    // console.log('first');
     try {
-      const response = await put({
+      await put({
         path: 'cart/add',
 
         body: JSON.stringify({
@@ -33,7 +32,6 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
           quantity: 1,
         }),
       });
-      console.log({response});
       setShownAlert(true);
       setAlertMessage('Added to Cart');
       setTimeout(() => {
@@ -48,10 +46,10 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
 
   const removeCart = async () => {
     try {
-      const res = await remove({
-        path: `cart/${item._id}`,
+      await remove({
+        path: `cart/${CategoryData._id}`,
       });
-      console.log({res});
+
       setShownAlert(true);
       setAlertMessage('Remove from Cart');
       setTimeout(() => {
@@ -121,7 +119,6 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
             <HStack>
               <Rating
                 type="custom"
-                // startingValue={item.ratings}
                 startingValue={4}
                 ratingColor={'green'}
                 tintColor={'#fff'}
