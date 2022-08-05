@@ -15,9 +15,6 @@ type Props = {
 };
 const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
   const isMounted = useIsMounted();
-  const [quanity, setQuantity] = useState();
-
-  // console.log('item', item);
 
   const {data, mutate, isLoading} = useSwrApi('cart/all');
   const CartData = data?.data?.data?.products;
@@ -29,32 +26,17 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
       CartData?.some((i: {product: {_id: any}}) => i.product._id === item._id),
     [CartData],
   );
-  // console.log('isCartItem', isCartItem);
-  // console.log({isCartItem});
-  // const isCartItem = useMemo(
-  //   () => cartItems.some(i => i.product.id === item.id),
-  //   [cartItems],
-  // );
+
   const quantity = useCallback(
     (id: number) => {
       const res = CartData?.filter(
         (i: {product: {_id: number}}) => i.product._id === id,
       )?.[0];
-      // console.log({res});
 
       return res.quantity;
     },
     [CartData],
   );
-  // const quantity = useCallback(
-  //   (id: number) => {
-  //     const res = cartItems.filter(i => i.product.id === id)?.[0];
-  //     return res.quantity;
-  //   },
-  //   [cartItems],
-  // );
-
-  //   console.log({isCartItem, item});
 
   const increment = async (id: number) => {
     try {
