@@ -4,14 +4,10 @@ import {Box, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {BannerType} from 'types';
 
 type Props = {
-  item: {
-    id: number;
-    name: string;
-    img: any;
-    offer: string;
-  };
+  item: BannerType;
 };
 
 const HomeSliderCards = ({item}: Props) => {
@@ -21,7 +17,11 @@ const HomeSliderCards = ({item}: Props) => {
       <Pressable mt={5} onPress={() => navigation.navigate('Category', {})}>
         <ImageBackground
           borderRadius={10}
-          source={item.img}
+          source={{
+            uri: item?.imageURL
+              ? item?.imageURL
+              : 'https://png.pngtree.com/thumb_back/fh260/background/20210630/pngtree-hexagon-international-health-day-green-banner-background-image_735377.jpg',
+          }}
           style={{
             height: 150,
             width: 300,
@@ -29,10 +29,10 @@ const HomeSliderCards = ({item}: Props) => {
           }}>
           <Box ml={150} mt={5}>
             <Text color={COLORS.textWhite} fontSize={12} bold>
-              {item?.name}
+              {item?.title}
             </Text>
             <Text bold color={COLORS.textWhite} flexWrap={'wrap'} mt={1}>
-              {item?.offer}
+              {item?.description}
             </Text>
             <Box
               mt={2}

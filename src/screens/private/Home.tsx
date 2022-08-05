@@ -23,41 +23,18 @@ import {
   HomeSlider,
   SpecialProduct,
 } from 'components';
-import {useStore} from 'app';
-import {useAuthFetch, useNotifications} from 'hooks';
+
+import {useNotifications, useSwrApi} from 'hooks';
 
 const Home = () => {
-  const {products, spacialProduct} = useStore();
-
-  const GOURMET = products.filter(pd => pd.category === 'gourmet foods');
-  const PERSONAL_CARE = products.filter(pd => pd.category === 'personal care');
-  const HOME_CARE = products.filter(pd => pd.category === 'home care');
-  const SWEET = products.filter(pd => pd.category === 'sweets');
   const navigation = useNavigation<NavigationProps>();
   const [openAlert, setOpenAlert] = React.useState<boolean>(false);
   const [alertMessage, setAlertMessage] =
     React.useState<any>('Added Successfully');
-
   const {notifications} = useNotifications();
-  const [product1, setProduct1] = useState();
+  const {data, mutate, isLoading} = useSwrApi('categories/featured');
+  const CategoryList = data?.data?.data;
 
-  const {authData, isLoading} = useAuthFetch<any>({
-    path: 'products',
-    method: 'GET',
-  });
-
-  // console.log('first', authData);
-
-  useEffect(() => {
-    const CATEGORY_PRODUCT1 = authData?.data
-      ?.filter(
-        (item: {category: {name: string}; type: string}) =>
-          // item?.type === 'B2C',
-          item?.category?.name === 'Ayush' && item?.type === 'B2C',
-      )
-      .slice(0, 4);
-    setProduct1(CATEGORY_PRODUCT1);
-  }, [authData]);
   return (
     <>
       {!isLoading ? (
@@ -141,46 +118,15 @@ const Home = () => {
             <HomeSlider />
 
             {/* Product Section */}
-            <Box mt={2}>
-              <CategoryProducts
-                title="Ayush Product"
-                data={product1}
-                setOpenAlert={setOpenAlert}
-                setAlertMessage={setAlertMessage}
-              />
-            </Box>
-            <Box bg={'#ECFFDC60'}>
-              <CategoryProducts
-                title="Gourmet Foods"
-                data={GOURMET}
-                setOpenAlert={setOpenAlert}
-                setAlertMessage={setAlertMessage}
-              />
-            </Box>
-            <Box>
-              <CategoryProducts
-                title="Personal Products"
-                data={PERSONAL_CARE}
-                setOpenAlert={setOpenAlert}
-                setAlertMessage={setAlertMessage}
-              />
-            </Box>
-            <Box bg={'#ECFFDC60'}>
-              <CategoryProducts
-                title="Home Care"
-                data={HOME_CARE}
-                setOpenAlert={setOpenAlert}
-                setAlertMessage={setAlertMessage}
-              />
-            </Box>
-            <Box>
-              <CategoryProducts
-                title="Sweets"
-                data={SWEET}
-                setOpenAlert={setOpenAlert}
-                setAlertMessage={setAlertMessage}
-              />
-            </Box>
+            {CategoryList?.map((item: any) => (
+              <Box mt={2} key={item._id}>
+                <CategoryProducts
+                  item={item}
+                  setOpenAlert={setOpenAlert}
+                  setAlertMessage={setAlertMessage}
+                />
+              </Box>
+            ))}
 
             {/* Women Empower */}
             <Pressable alignItems={'center'} my={3}>
@@ -208,7 +154,7 @@ const Home = () => {
                     borderWidth={1}
                     borderColor={'COLORS.secondary'}
                     borderRadius={10}>
-                    <Text px={3} py={1} color={'COLORS.secondary'}>
+                    <Text px={3} py={1} color={COLORS.secondary}>
                       Know More
                     </Text>
                   </Box>
@@ -218,7 +164,7 @@ const Home = () => {
 
             {/* Special Product Section */}
             <Box mt={4}>
-              <SpecialProduct data={spacialProduct} />
+              <SpecialProduct />
             </Box>
             {/* last section */}
             <Box

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {Box, HStack, Text} from 'native-base';
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -7,7 +7,6 @@ import {ProductType} from 'types';
 import {useStore} from 'app';
 import {useIsMounted, useSwrApi} from 'hooks';
 import {put, remove} from 'api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = {
   item: ProductType;
@@ -15,22 +14,15 @@ type Props = {
   setAlertMessage: (txt: string) => void;
 };
 const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
-  const {addToCart, updateQuantity, removeFromCart, cartItems} = useStore();
   const isMounted = useIsMounted();
+  const [quanity, setQuantity] = useState();
 
   // console.log('item', item);
 
   const {data, mutate, isLoading} = useSwrApi('cart/all');
   const CartData = data?.data?.data?.products;
 
-  const Selected_Weight = item?.weightAvailability?.reduce((pV, cV) => {
-    if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
-    return pV;
-  }, {});
-
   const [count, setCount] = React.useState(0);
-
-  // console.log('first');
 
   const isCartItem = useMemo(
     () =>
@@ -49,6 +41,7 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
         (i: {product: {_id: number}}) => i.product._id === id,
       )?.[0];
       // console.log({res});
+
       return res.quantity;
     },
     [CartData],
@@ -74,18 +67,16 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
           quantity: 1,
         }),
       });
-      // mutate()
+
       if (res.status === 200) return mutate();
 
       isMounted.current && setCount(10);
-      // console.log('Updated', res.status);
     } catch (error) {
       console.log(error);
     }
   };
 
   const decrement = async (id: number) => {
-    console.log('object200', id);
     try {
       // if (count === 1) {
       //   setCount(count - 1);
@@ -110,17 +101,16 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
           quantity: -1,
         }),
       });
-      console.log({res});
+
       if (res.status === 200) return mutate();
     } catch (error) {
       console.log(error);
     }
   };
 
-  const addtoCartItem = async () => {
+  const addToCartItem = async () => {
     try {
-      increment(item?._id), setCount(count + 1);
-      await put({
+      const response = await put({
         path: 'cart/add',
 
         body: JSON.stringify({
@@ -128,6 +118,8 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
           quantity: 1,
         }),
       });
+
+      if (response.status === 200) return mutate();
 
       setOpenAlert(true),
         setAlertMessage('Added to cart'),
@@ -188,7 +180,7 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
               paddingHorizontal: 3,
               paddingVertical: 3,
             }}
-            onPress={() => addtoCartItem()}
+            onPress={() => addToCartItem()}
           />
         </Box>
       )}

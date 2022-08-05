@@ -6,9 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {ProductType} from 'types';
-import {useStore} from 'app';
 import Counter from './Counter';
-import {SkeletonComponent} from './core';
 import {useSwrApi} from 'hooks';
 import {put, remove} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -26,11 +24,6 @@ const HomeCategoryItem = ({
   setAlertMessage,
   isBusiness: isBusiness,
 }: Props) => {
-  const Selected_Weight = item?.weightAvailability?.reduce((pV, cV) => {
-    if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
-    return pV;
-  }, {});
-
   const navigation = useNavigation<NavigationProps>();
 
   //wishhlist
@@ -45,7 +38,6 @@ const HomeCategoryItem = ({
           return data?.product._id === wishlistItem._id;
         },
       );
-      // console.log({removeWishList});
 
       if (removeWishList) {
         await remove({
@@ -64,7 +56,8 @@ const HomeCategoryItem = ({
             productId: wishlistItem?._id,
           }),
         });
-        // console.log({res});      setOpenAlert(true);
+        // console.log({res});
+        setOpenAlert(true);
         setAlertMessage('Added to wishlist');
         setTimeout(() => {
           setOpenAlert(false);
@@ -98,7 +91,6 @@ const HomeCategoryItem = ({
                   item?.images?.length > 1
                     ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1-r88R2pOX-lj1C6Zn3QO3I_Osu-G3viCm1fUWNVhiDn_mkszDqEn8qXAe3bR1sJo9Pg&usqp=CAU'
                     : 'https://meruherbs.com/wp-content/uploads/2017/07/no-product-image.png',
-                // : 'https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-product-1_large.png?format=jpg&quality=90&v=1530129292',
               }}
               style={styles.image}
               resizeMode={'contain'}
@@ -115,12 +107,8 @@ const HomeCategoryItem = ({
               flexWrap={'wrap'}
               px={1}
               color={COLORS.textWhite}>
-              {Selected_Weight?.discount
-                ? Selected_Weight?.discount
-                : (+((item?.mrp - item?.salePrice) / item?.mrp) * 100).toFixed(
-                    0,
-                  )}
-              % OFF
+              {(+((item?.mrp - item?.salePrice) / item?.mrp) * 100).toFixed(0)}%
+              OFF
             </Text>
           </Box>
           <Box position={'absolute'} right={4} borderRadius={10}>
@@ -155,16 +143,11 @@ const HomeCategoryItem = ({
             <HStack space={2}>
               <Text fontSize={13}>
                 &#8377;
-                {Selected_Weight?.currentPrice
-                  ? Selected_Weight?.currentPrice
-                  : item?.salePrice}
+                {item?.salePrice}
               </Text>
               <Text fontSize={13} textDecorationLine={'line-through'}>
                 &#8377;
-                {Selected_Weight?.currentPrice
-                  ? ((Selected_Weight?.currentPrice || 0) * 100) /
-                    (100 - (Selected_Weight?.discount || 0))
-                  : item?.mrp}
+                {item?.mrp}
               </Text>
             </HStack>
             {isBusiness ? (

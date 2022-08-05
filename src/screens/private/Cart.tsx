@@ -1,9 +1,7 @@
-import {Alert, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 import {
-  AlertDialog,
   Box,
-  Button,
   Heading,
   HStack,
   Pressable,
@@ -18,13 +16,12 @@ import {DrawerActions} from '@react-navigation/native';
 import {Empty, FetchLoader} from 'components/core';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
-import {CartItemType, CartType, ProductType} from 'types';
+import {CartItemType} from 'types';
 import {CartItem} from 'components';
 import {useStore} from 'app';
 import {getPrice} from 'utils';
-import {useAuthFetch, useSwrApi} from 'hooks';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {remove} from 'api';
+import {useSwrApi} from 'hooks';
+
 const CartArr = [
   {
     id: 1,
@@ -70,38 +67,7 @@ const Cart = ({route, navigation}: Props) => {
     );
   };
 
-  // const handleDelete = async (id: any) => {
-  //   console.log('cartItemId', id);
-
-  //   // removeFromCart(id);
-  //   // console.log('object', id);
-  //   // try {
-  //   //   const res = await fetchData({
-  //   //     path: `cart/${id}`,
-  //   //     method: 'DELETE',
-  //   //   });
-  //   //   console.log('object', res);
-  //   // } catch (error) {
-  //   //   console.log(error);
-  //   // } finally {
-  //   //   onClose();
-  //   // }
-
-  //   try {
-  //     const getAccessToken = await AsyncStorage.getItem('access_token');
-
-  //     await remove({
-  //       path: `cart/${id}`,
-  //       token: getAccessToken,
-  //     });
-  //   } catch (error: any) {
-  //     console.log(error);
-  //     Alert.alert('Error', error.message);
-  //   } finally {
-  //     mutate();
-  //     onClose();
-  //   }
-  // };
+  console.log('cartItem', CartItems);
 
   return (
     <>
@@ -142,18 +108,12 @@ const Cart = ({route, navigation}: Props) => {
 
                 <Box>
                   {CartItems.map((item: CartItemType) => (
-                    <>
-                      <CartItem
-                        item={item}
-                        key={item?._id}
-                        setQuantity={setQuantity}
-                        // handleDelete={handleDelete}
-                        // onClose={onClose}
-                        // setIsOpen={setIsOpen}
-                        // isOpen={isOpen}
-                        mutate={mutate}
-                      />
-                    </>
+                    <CartItem
+                      item={item}
+                      key={item?._id}
+                      setQuantity={setQuantity}
+                      mutate={mutate}
+                    />
                   ))}
                 </Box>
                 <Box
@@ -254,38 +214,6 @@ const Cart = ({route, navigation}: Props) => {
       ) : (
         <FetchLoader />
       )}
-
-      {/* Alert Dialog */}
-      {/* <AlertDialog
-        leastDestructiveRef={cancelRef}
-        isOpen={isOpen}
-        onClose={onClose}>
-        <AlertDialog.Content>
-          <AlertDialog.CloseButton />
-          <AlertDialog.Header>Delete Item</AlertDialog.Header>
-          <AlertDialog.Body>
-            This will remove cart item . This action cannot be reversed. Deleted
-            data can not be recovered.
-          </AlertDialog.Body>
-          <AlertDialog.Footer>
-            <Button.Group space={2}>
-              <Button
-                variant="unstyled"
-                colorScheme="coolGray"
-                onPress={onClose}
-                ref={cancelRef}>
-                Cancel
-              </Button>
-              <Button
-                colorScheme="danger"
-                // onPress={() => handleDelete(id)}
-                onPress={() => console.log('Deleted')}>
-                Delete
-              </Button>
-            </Button.Group>
-          </AlertDialog.Footer>
-        </AlertDialog.Content>
-      </AlertDialog> */}
     </>
   );
 };

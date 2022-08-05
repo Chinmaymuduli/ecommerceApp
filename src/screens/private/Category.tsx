@@ -1,5 +1,5 @@
 import {SafeAreaView, StyleSheet} from 'react-native';
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Heading, HStack, Row, VStack} from 'native-base';
 import {AlertComponent, CategoryButtom, FetchLoader} from 'components/core';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,8 +9,7 @@ import {COLORS} from 'configs';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {CategorySection} from 'components';
-import {useStore} from 'app';
-import {useSwrApi} from 'hooks';
+import {useIsMounted, useSwrApi} from 'hooks';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route}: Props) => {
@@ -20,16 +19,15 @@ const Category = ({route}: Props) => {
 
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
-  const [tabValue, setTabValue] = useState<string>('62dfbef7eb6710078e1a6e5d');
   const [openAlert, setOpenAlert] = useState<any>(false);
   const [alertMessage, setAlertMessage] = useState('Successfully added');
   const [categoryId, setCategoryId] = useState();
+  const isMounted = useIsMounted();
 
-  console.log({categoryId});
-
-  const onSelectSwitch = useCallback((value: string) => {
-    setTabValue(value);
-  }, []);
+  useEffect(() => {
+    isMounted.current &&
+      setCategoryId(CategoryData ? CategoryData[0]?._id : '');
+  }, [CategoryData]);
 
   const {data, isLoading, mutate} = useSwrApi(
     `category/${categoryId}/products`,
@@ -63,8 +61,7 @@ const Category = ({route}: Props) => {
             <Box w={'1/4'}>
               <CategoryButtom
                 // selectedId={route.params?.id || 1}
-                selectionMode={'62dfbef7eb6710078e1a6e5d'}
-                onSelectSwitch={onSelectSwitch}
+                selectionMode={categoryId}
                 data={CategoryData}
                 setCategoryName={setCategoryName}
                 setCategoryId={setCategoryId}

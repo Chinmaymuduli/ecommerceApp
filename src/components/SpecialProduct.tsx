@@ -7,13 +7,17 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import SpecialProductCard from './SpecialProductCard';
 import {HomeProductType, ProductDetailsType} from 'types';
+import {useSwrApi} from 'hooks';
 
 type Props = {
   data: HomeProductType[];
 };
 
-const SpecialProduct = ({data}: Props) => {
+const SpecialProduct = () => {
   const navigation = useNavigation<NavigationProps>();
+
+  const {data} = useSwrApi('products/featured');
+  const SpecialProductData = data?.data?.data?.data;
   return (
     <Box mb={3} px={4}>
       <HStack alignItems={'center'} space={3}>
@@ -51,7 +55,7 @@ const SpecialProduct = ({data}: Props) => {
       </Box>
       <Box mt={2}>
         <FlatList
-          data={data}
+          data={SpecialProductData}
           renderItem={({item}) => <SpecialProductCard item={item} />}
           keyExtractor={(item: any) => item.id}
           numColumns={2}

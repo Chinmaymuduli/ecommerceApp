@@ -24,7 +24,7 @@ import {useSwrApi} from 'hooks';
 type Props = NativeStackScreenProps<PrivateRoutesType, 'WishList'>;
 const WishList = ({navigation}: Props) => {
   const {wishlistItems, cartItems} = useStore();
-  const {data, isLoading, mutate} = useSwrApi('wishlists');
+  const {data, isLoading} = useSwrApi('wishlists');
 
   const WishListItem = data?.data?.data?.data;
   const [alertMessage, setAlertMessage] = useState<string>('Item Added');
@@ -35,7 +35,7 @@ const WishList = ({navigation}: Props) => {
         item={item}
         setAlertMessage={setAlertMessage}
         setShownAlert={setShownAlert}
-        mutate={mutate}
+        // mutate={mutate}
       />
     );
   };

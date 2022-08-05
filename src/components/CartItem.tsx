@@ -166,40 +166,6 @@ CartItemTypes) => {
         id={deleteId}
         mutate={mutate}
       />
-
-      {/* alert dialog */}
-
-      {/* <AlertDialog
-        leastDestructiveRef={cancelRef}
-        isOpen={isOpen}
-        onClose={onClose}>
-        <AlertDialog.Content>
-          <AlertDialog.CloseButton />
-          <AlertDialog.Header>Delete Item</AlertDialog.Header>
-          <AlertDialog.Body>
-            This will remove cart item . This action cannot be reversed. Deleted
-            data can not be recovered.
-          </AlertDialog.Body>
-          <AlertDialog.Footer>
-            <Button.Group space={2}>
-              <Button
-                variant="unstyled"
-                colorScheme="coolGray"
-                onPress={onClose}
-                ref={cancelRef}>
-                Cancel
-              </Button>
-              <Button
-                colorScheme="danger"
-                onPress={() =>}
-                // onPress={() => console.log('Deleted')}
-              >
-                Delete
-              </Button>
-            </Button.Group>
-          </AlertDialog.Footer>
-        </AlertDialog.Content>
-      </AlertDialog> */}
     </Box>
   );
 };

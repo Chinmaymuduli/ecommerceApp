@@ -19,19 +19,15 @@ type categoryType = {
 const CategoryButtom = ({
   selectedId,
   selectionMode,
-  onSelectSwitch,
   data,
   setCategoryName,
   setCategoryId,
 }: any) => {
   const [getSelectionMode, setSelectionMode] = useState(selectionMode);
 
-  // console.log(data[0]);
-
   //for switch the button
   const updateSwitchData = (value: categoryType) => {
     setSelectionMode(value?._id);
-    onSelectSwitch(value?._id);
     setCategoryName(value?.name);
     setCategoryId(value?._id);
   };
@@ -68,7 +64,6 @@ const CategoryButtom = ({
                   borderRadius={5}>
                   <Image
                     alt="categoryImg"
-                    // source={item?.img}
                     source={{
                       uri: item?.imageURL
                         ? item?.imageURL
@@ -92,7 +87,6 @@ const CategoryButtom = ({
                       ? 'Nunito-Bold'
                       : 'Nunito-Regular'
                   }>
-                  {/* {item?.categoryName} */}
                   {item?.name}
                 </Text>
               </VStack>

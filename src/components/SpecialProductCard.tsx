@@ -9,19 +9,13 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {HomeProductType, ProductType} from 'types';
 
 type Props = {
-  item: HomeProductType;
+  item: ProductType;
 };
 
 const SpecialProductCard = ({item}: Props) => {
-  // console.log('object', item);
   const navigation = useNavigation<NavigationProps>();
   const [count, setCount] = useState(0);
   const {setCartItems, cartItems} = useAppContext();
-
-  const SelecetedWeight = item?.weightAvailability?.reduce((pV, cV) => {
-    if ((cV?.currentPrice || 0) > (pV?.currentPrice || 0)) return cV;
-    return pV;
-  }, {});
 
   const decrement = () => {
     if (count > 1) {
@@ -62,7 +56,11 @@ const SpecialProductCard = ({item}: Props) => {
           alignItems={'center'}
           justifyContent={'center'}>
           <Image
-            source={item?.img}
+            source={{
+              uri: item?.images?.length
+                ? item.images[0]
+                : 'https://boltagency.ca/content/images/2020/03/placeholder-images-product-1_large.png',
+            }}
             style={styles.specialImg}
             alt={'image'}
             resizeMode={'contain'}
@@ -70,13 +68,11 @@ const SpecialProductCard = ({item}: Props) => {
         </Box>
 
         <Box pl={2}>
-          <Text noOfLines={1}>{item?.name}</Text>
+          <Text noOfLines={1}>{item?.title}</Text>
           <HStack space={3}>
-            <Text>&#8377; {SelecetedWeight?.currentPrice}</Text>
+            <Text>&#8377; {item?.salePrice}</Text>
             <Text textDecorationLine={'line-through'} color={COLORS.primary}>
-              &#8377;{' '}
-              {((SelecetedWeight?.currentPrice || 0) * 100) /
-                (100 - (SelecetedWeight?.discount || 0))}
+              &#8377; {item?.mrp}
             </Text>
           </HStack>
         </Box>
@@ -89,7 +85,8 @@ const SpecialProductCard = ({item}: Props) => {
           alignItems={'center'}
           borderBottomRightRadius={5}>
           <Text fontSize={10} flexWrap={'wrap'} color={COLORS.textWhite}>
-            {SelecetedWeight?.discount} % OFF
+            {(((item?.mrp - item?.salePrice) / item?.mrp) * 100).toFixed(2)} %
+            OFF
           </Text>
         </Box>
       </Pressable>

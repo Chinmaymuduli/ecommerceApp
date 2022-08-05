@@ -15,6 +15,7 @@ const CartAlert = ({isOpen, onClose, id, mutate}: Props) => {
   const cancelRef = React.useRef(null);
 
   const handleDelete = async (id: any) => {
+    console.log('iddd', id);
     try {
       const getAccessToken = await AsyncStorage.getItem('access_token');
 

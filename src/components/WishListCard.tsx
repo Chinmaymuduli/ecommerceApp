@@ -6,67 +6,82 @@ import {Rating} from 'react-native-ratings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {CartItemType, CategoryType, ProductType, WishListCardType} from 'types';
 import {useStore} from 'app';
-import {useSwrApi} from 'hooks';
-import {remove} from 'api';
+import {useIsMounted, useSwrApi} from 'hooks';
+import {put, remove} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = {
   item: CartItemType;
   setAlertMessage: (prev: string) => void;
   setShownAlert: (previous: boolean) => void;
-  mutate: () => void;
+  // mutate: () => void;
 };
 
-const WishListCard = ({
-  item,
-  setAlertMessage,
-  setShownAlert,
-  mutate,
-}: Props) => {
-  const {cartItems, addToCart, removeFromCart, removeFromWishlist} = useStore();
-  const {data} = useSwrApi('cart/all');
+const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
+  const isMounted = useIsMounted();
+  const {data, mutate} = useSwrApi('cart/all');
   const wishListCart = data?.data.data?.products;
 
-  // const handleAddCart = () => {
-  //   addToCart({
-  //     product: item,
-  //     quantity: 1,
-  //     weight: Selected_Weight,
-  //   });
-  //   setShownAlert(true);
-  //   setAlertMessage('Added to Cart');
-  //   setTimeout(() => {
-  //     setShownAlert(false);
-  //   }, 4000);
-  // };
+  const handleAddCart = async () => {
+    // console.log('first');
+    try {
+      const response = await put({
+        path: 'cart/add',
 
-  const removeCart = () => {
-    removeFromCart(item._id);
-    setShownAlert(true);
-    setAlertMessage('Remove from Cart');
-    setTimeout(() => {
-      setShownAlert(false);
-    }, 4000);
+        body: JSON.stringify({
+          product: item?.product._id,
+          quantity: 1,
+        }),
+      });
+      console.log({response});
+      setShownAlert(true);
+      setAlertMessage('Added to Cart');
+      setTimeout(() => {
+        isMounted.current && setShownAlert(false);
+      }, 4000);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      mutate();
+    }
+  };
+
+  const removeCart = async () => {
+    try {
+      const res = await remove({
+        path: `cart/${item._id}`,
+      });
+      console.log({res});
+      setShownAlert(true);
+      setAlertMessage('Remove from Cart');
+      setTimeout(() => {
+        isMounted.current && setShownAlert(false);
+      }, 4000);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      mutate();
+    }
   };
 
   const removeWishlist = async () => {
     try {
-      const accessToken = await AsyncStorage.getItem('access_token');
       const res = await remove({
         path: `wishlist/${item._id}`,
-        token: accessToken,
       });
       if (res.status === 200) return mutate();
     } catch (error) {
       console.log(error);
+    } finally {
+      mutate();
     }
   };
 
-  const cartDataMatch = wishListCart.some(
+  const cartDataMatch = wishListCart?.some(
     (data: {product: {_id: string}}) =>
       data?.product?._id === item?.product?._id,
   );
-  // console.log('item', item);
+
   return (
     <>
       <Box
@@ -82,7 +97,6 @@ const WishListCard = ({
                 ? item?.product?.images[0]
                 : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1-r88R2pOX-lj1C6Zn3QO3I_Osu-G3viCm1fUWNVhiDn_mkszDqEn8qXAe3bR1sJo9Pg&usqp=CAU',
             }}
-            // source={item?.img}
             style={styles.image}
             alt={'wishlistImg'}
             resizeMode={'contain'}
@@ -134,11 +148,7 @@ const WishListCard = ({
           </Pressable>
         </Pressable>
         {!cartDataMatch ? (
-          <Pressable
-            px={3}
-            py={3}
-            // onPress={handleAddCart}
-          >
+          <Pressable px={3} py={3} onPress={handleAddCart}>
             <Box
               borderWidth={1}
               borderRadius={4}
