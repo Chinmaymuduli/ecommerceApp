@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import React from 'react';
+import {RefreshControl, StyleSheet} from 'react-native';
+import React, {useEffect} from 'react';
 import {
   Box,
   Heading,
@@ -67,7 +67,9 @@ const Cart = ({route, navigation}: Props) => {
     );
   };
 
-  console.log('cartItem', CartItems);
+  useEffect(() => {
+    mutate();
+  }, [CartItems]);
 
   return (
     <>
@@ -95,7 +97,14 @@ const Cart = ({route, navigation}: Props) => {
           </HStack>
 
           {CartItems?.length > 0 ? (
-            <ScrollView showsVerticalScrollIndicator={false}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isLoading}
+                  onRefresh={() => mutate()}
+                />
+              }>
               <Box>
                 <HStack
                   justifyContent={'space-between'}

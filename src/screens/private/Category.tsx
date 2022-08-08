@@ -10,12 +10,15 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {CategorySection} from 'components';
 import {useIsMounted, useSwrApi} from 'hooks';
+import {useAuth} from 'app';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route}: Props) => {
   const categoryItem = useSwrApi('categories');
 
   const CategoryData = categoryItem?.data?.data?.data;
+
+  const {loggedIn, user} = useAuth();
 
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
@@ -30,7 +33,9 @@ const Category = ({route}: Props) => {
   }, [CategoryData]);
 
   const {data, isLoading, mutate} = useSwrApi(
-    `category/${categoryId}/products`,
+    user?._id
+      ? `category/${categoryId}/products?userId=${user?._id}`
+      : `category/${categoryId}/products`,
   );
 
   const CategoryProducts = data?.data?.data?.data;
@@ -74,7 +79,9 @@ const Category = ({route}: Props) => {
                   data={CategoryProducts}
                   setOpenAlert={setOpenAlert}
                   setAlertMessage={setAlertMessage}
-                  isBusiness={route.params?.isBussiness}
+                  // isBusiness={route.params?.isBussiness}
+                  // businessType={userType}
+                  mutate={mutate}
                 />
               </Box>
             </VStack>

@@ -32,7 +32,7 @@ import {SUCCESS_QUANTITY} from 'assets';
 import {Rating} from 'react-native-ratings';
 import {ProductDetailsType, ProductType, ProductVariants} from 'types';
 import {Accordion, ManageReview, ProductComponent} from 'components';
-import {useStore} from 'app';
+import {useAuth, useStore} from 'app';
 import {useAuthFetch, useIsMounted, useSwrApi} from 'hooks';
 import {FetchLoader} from 'components/core';
 import {put} from 'api';
@@ -54,7 +54,7 @@ type productType = {
 const ProductDetails = ({route, navigation}: Props) => {
   const productData = route.params.ProductDetailsType;
 
-  console.log(productData);
+  // console.log(productData);
 
   const [loader, setLoader] = useState(false);
   const isMounted = useIsMounted();
@@ -67,6 +67,7 @@ const ProductDetails = ({route, navigation}: Props) => {
   const CartData = data?.data?.data?.products;
 
   const {userData} = useAppContext();
+  // const {userData} = useAuth();
   const [index, setIndex] = useState(0);
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const [count, setCount] = useState<any>(1);
@@ -80,14 +81,7 @@ const ProductDetails = ({route, navigation}: Props) => {
 
   // console.log('object_100', userData);
 
-  const {
-    addToCart,
-    cartItems,
-    addToWishlist,
-    removeFromWishlist,
-    wishlistItems,
-    addToOrderItems,
-  } = useStore();
+  const {addToWishlist, removeFromWishlist, wishlistItems} = useStore();
 
   const handleCart = async (data: ProductType) => {
     try {
@@ -188,6 +182,8 @@ const ProductDetails = ({route, navigation}: Props) => {
       console.log(error);
     }
   }, []);
+
+  // console.log({authData});
 
   const BuyNow = async (buyItem: ProductType) => {
     // console.log(buyItem._id);

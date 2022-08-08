@@ -184,6 +184,10 @@ export type ProductType = {
   images?: any;
   variants?: ProductVariants[];
   products?: ProductType[];
+  isInCart?: boolean;
+  isInWishList?: boolean;
+  isFeatured?: boolean;
+  cartQuantity?: number;
 };
 export type CouponType = {
   id?: number;

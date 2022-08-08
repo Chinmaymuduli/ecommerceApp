@@ -30,6 +30,15 @@ const useSwrApi = (url: string, options?: any) => {
           }),
         });
         const getResponseData = await getResponse.json();
+        await AsyncStorage.setItem(
+          'access_token',
+          getResponseData?.ACCESS_TOKEN,
+        );
+        if (getResponseData?.REFRESH_TOKEN)
+          return await AsyncStorage.setItem(
+            'tokenId',
+            getResponseData?.REFRESH_TOKEN,
+          );
         console.log(getResponseData);
         const res = await fetch(`${url}`, {
           method: 'GET',

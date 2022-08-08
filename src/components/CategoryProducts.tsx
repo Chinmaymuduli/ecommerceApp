@@ -1,20 +1,13 @@
-import React from 'react';
-import {
-  Box,
-  Center,
-  FlatList,
-  Heading,
-  HStack,
-  Pressable,
-  Text,
-} from 'native-base';
-import {COLORS} from 'configs';
+import {Box, FlatList, Heading, HStack, Pressable, Text} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
+import {useNavigation} from '@react-navigation/native';
 import HomeCategoryItem from './HomeCategoryItem';
-import {HomeProductType, ProductType} from 'types';
+import {ProductType} from 'types';
 import {useSwrApi} from 'hooks';
+import {COLORS} from 'configs';
+import React from 'react';
+import {useAuth} from 'app';
 
 type CategoryProductType = {
   title?: string;
@@ -36,10 +29,19 @@ const CategoryProducts = ({
   item,
 }: CategoryProductType) => {
   const navigation = useNavigation<NavigationProps>();
+  const {user} = useAuth(state => state);
 
-  const {data} = useSwrApi(`category/${item?._id}/products`);
+  // console.log(user);
+
+  const {data, mutate, isLoading} = useSwrApi(
+    user?._id
+      ? `category/${item?._id}/products?userId=${user?._id}`
+      : `category/${item?._id}/products`,
+  );
 
   const CategoryProductData: ProductType[] = data?.data?.data?.data;
+
+  // console.log({CategoryProductData2555: data?.data?.data?.data});
 
   return (
     <>
@@ -69,6 +71,7 @@ const CategoryProducts = ({
               item={item}
               setOpenAlert={setOpenAlert}
               setAlertMessage={setAlertMessage}
+              mutate={mutate}
             />
           )}
           keyExtractor={(item, index) => index.toString()}

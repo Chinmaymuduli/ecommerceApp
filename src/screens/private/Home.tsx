@@ -35,6 +35,8 @@ const Home = () => {
   const {data, mutate, isLoading} = useSwrApi('categories/featured');
   const CategoryList = data?.data?.data;
 
+  // console.log({CategoryList});
+
   return (
     <>
       {!isLoading ? (

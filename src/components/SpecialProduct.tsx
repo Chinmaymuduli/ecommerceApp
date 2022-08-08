@@ -8,6 +8,7 @@ import {NavigationProps} from 'src/routes/PrivateRoutes';
 import SpecialProductCard from './SpecialProductCard';
 import {HomeProductType, ProductDetailsType} from 'types';
 import {useSwrApi} from 'hooks';
+import {useAuth} from 'app';
 
 type Props = {
   data: HomeProductType[];
@@ -15,9 +16,13 @@ type Props = {
 
 const SpecialProduct = () => {
   const navigation = useNavigation<NavigationProps>();
+  const {user} = useAuth();
 
-  const {data} = useSwrApi('products/featured');
+  // console.log({user});
+
+  const {data} = useSwrApi(`products/featured?userId=${user?._id}`);
   const SpecialProductData = data?.data?.data?.data;
+
   return (
     <Box mb={3} px={4}>
       <HStack alignItems={'center'} space={3}>
@@ -57,7 +62,7 @@ const SpecialProduct = () => {
         <FlatList
           data={SpecialProductData}
           renderItem={({item}) => <SpecialProductCard item={item} />}
-          keyExtractor={(item: any) => item.id}
+          keyExtractor={(item: any) => item._id}
           numColumns={2}
         />
       </Box>

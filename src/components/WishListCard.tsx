@@ -5,7 +5,7 @@ import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {CartItemType, CategoryType, ProductType, WishListCardType} from 'types';
-import {useStore} from 'app';
+import {useAuth, useStore} from 'app';
 import {useIsMounted, useSwrApi} from 'hooks';
 import {put, remove} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,24 +14,30 @@ type Props = {
   item: CartItemType;
   setAlertMessage: (prev: string) => void;
   setShownAlert: (previous: boolean) => void;
+  mutateWishlist: () => void;
 };
 
-const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
+const WishListCard = ({
+  item,
+  setAlertMessage,
+  setShownAlert,
+  mutateWishlist,
+}: Props) => {
   const isMounted = useIsMounted();
+  // console.log({item});
   const {data, mutate} = useSwrApi('cart/all');
   const wishListCart = data?.data.data?.products;
-
   const CategoryData = wishListCart?.find((item: {_id: string}) => item);
   const handleAddCart = async () => {
     try {
       await put({
         path: 'cart/add',
-
         body: JSON.stringify({
           product: item?.product._id,
           quantity: 1,
         }),
       });
+      mutate();
       setShownAlert(true);
       setAlertMessage('Added to Cart');
       setTimeout(() => {
@@ -39,8 +45,6 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
       }, 4000);
     } catch (error) {
       console.log(error);
-    } finally {
-      mutate();
     }
   };
 
@@ -49,7 +53,7 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
       await remove({
         path: `cart/${CategoryData._id}`,
       });
-
+      mutate();
       setShownAlert(true);
       setAlertMessage('Remove from Cart');
       setTimeout(() => {
@@ -57,21 +61,21 @@ const WishListCard = ({item, setAlertMessage, setShownAlert}: Props) => {
       }, 4000);
     } catch (error) {
       console.log(error);
-    } finally {
-      mutate();
     }
   };
 
   const removeWishlist = async () => {
     try {
       const res = await remove({
-        path: `wishlist/${item._id}`,
+        path: `wishlist/${item?.product?._id}`,
       });
-      if (res.status === 200) return mutate();
+
+      console.log({res});
+      // if (res.status === 200) return mutate();
     } catch (error) {
       console.log(error);
     } finally {
-      mutate();
+      mutateWishlist();
     }
   };
 

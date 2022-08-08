@@ -12,31 +12,31 @@ type Props = {
   item: ProductType;
   setOpenAlert: (previousValue: boolean) => void;
   setAlertMessage: (txt: string) => void;
+  mutate: () => void;
 };
-const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
-  const isMounted = useIsMounted();
+const Counter = ({item, setAlertMessage, setOpenAlert, mutate}: Props) => {
+  // console.log({item});
+  // const {data} = useSwrApi('cart/all');
+  // const CartData = data?.data?.data?.products;
 
-  const {data, mutate, isLoading} = useSwrApi('cart/all');
-  const CartData = data?.data?.data?.products;
+  // console.log({item});
 
-  const [count, setCount] = React.useState(0);
+  // const isCartItem = useMemo(
+  //   () =>
+  //     CartData?.some((i: {product: {_id: any}}) => i.product._id === item._id),
+  //   [CartData],
+  // );
 
-  const isCartItem = useMemo(
-    () =>
-      CartData?.some((i: {product: {_id: any}}) => i.product._id === item._id),
-    [CartData],
-  );
+  // const quantity = useCallback(
+  //   (id: number) => {
+  //     const res = CartData?.filter(
+  //       (i: {product: {_id: number}}) => i.product._id === id,
+  //     )?.[0];
 
-  const quantity = useCallback(
-    (id: number) => {
-      const res = CartData?.filter(
-        (i: {product: {_id: number}}) => i.product._id === id,
-      )?.[0];
-
-      return res.quantity;
-    },
-    [CartData],
-  );
+  //     return res?.quantity;
+  //   },
+  //   [CartData],
+  // );
 
   const increment = async (id: number) => {
     try {
@@ -51,8 +51,6 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
       });
 
       if (res.status === 200) return mutate();
-
-      isMounted.current && setCount(10);
     } catch (error) {
       console.log(error);
     }
@@ -60,22 +58,6 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
 
   const decrement = async (id: number) => {
     try {
-      // if (count === 1) {
-      //   setCount(count - 1);
-      //   // removeFromCart(id);
-      //   await remove({
-      //     path: `cart/${id}`,
-      //   });
-      //   setOpenAlert(true);
-      //   setAlertMessage('Removed from cart');
-      //   setTimeout(() => {
-      //     setOpenAlert(false);
-      //   }, 2000);
-      //   return;
-      // } else if (count > 1) {
-      //   isMounted.current && setCount(count - 1);
-      // updateQuantity(id, count);
-
       const res = await put({
         path: 'cart/remove',
         body: JSON.stringify({
@@ -83,7 +65,7 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
           quantity: -1,
         }),
       });
-
+      console.log({res});
       if (res.status === 200) return mutate();
     } catch (error) {
       console.log(error);
@@ -100,16 +82,17 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
           quantity: 1,
         }),
       });
-
-      if (response.status === 200) return mutate();
-
+      console.log({response});
       setOpenAlert(true),
         setAlertMessage('Added to cart'),
         setTimeout(() => {
           setOpenAlert(false);
         }, 4000);
+      // if (response.status === 200) return mutate();
     } catch (error) {
       console.log(error);
+    } finally {
+      mutate();
     }
   };
   return (
@@ -121,7 +104,7 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
       shadow={1}
       borderRadius={5}
       borderColor={COLORS.lightGrey}>
-      {isCartItem ? (
+      {item.isInCart ? (
         <HStack
           bg={'#FFFF0060'}
           w={'125'}
@@ -137,7 +120,8 @@ const Counter = ({item, setAlertMessage, setOpenAlert}: Props) => {
           </Box>
 
           <Box>
-            <Text>{quantity(item._id)}</Text>
+            {/* <Text>{quantity(item._id)}</Text> */}
+            <Text>{item?.cartQuantity}</Text>
           </Box>
           <Box>
             <Entypo
