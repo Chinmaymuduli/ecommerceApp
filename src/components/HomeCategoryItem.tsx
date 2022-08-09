@@ -8,14 +8,18 @@ import Counter from './Counter';
 import {useSwrApi} from 'hooks';
 import {COLORS} from 'configs';
 import {put, remove} from 'api';
-import React from 'react';
+import React, {useEffect} from 'react';
+import {FetchLoader} from './core';
+import {ProductSkeleton} from '../../src/skeleton';
+import {PRODUCT_PLACEHOLDER, Special1} from 'assets';
 
 type Props = {
   item: ProductType;
   setOpenAlert: (previousValue: boolean) => void;
   setAlertMessage: (txt: string) => void;
   businessType?: string;
-  mutate: () => void;
+  ProductMutate: () => void;
+  isValidating?: boolean;
 };
 
 const HomeCategoryItem = ({
@@ -23,25 +27,22 @@ const HomeCategoryItem = ({
   setOpenAlert,
   setAlertMessage,
   businessType,
-  mutate,
+  ProductMutate,
+  isValidating,
 }: Props) => {
   const navigation = useNavigation<NavigationProps>();
 
   //wishhlist
-  const {data} = useSwrApi('wishlists');
+  const {data, isLoading, mutate} = useSwrApi('wishlists');
   const wishListItems = data?.data?.data?.data;
 
   const handleWishlist = async (wishlistItem: ProductType) => {
     try {
-      const removeWishList = wishListItems?.some(
-        (data: {product: {_id: string}}) => {
-          return data?.product._id === wishlistItem._id;
-        },
-      );
-      if (removeWishList) {
+      if (item?.isInWishList) {
         const responseWish = await remove({
           path: `wishlist/${wishlistItem?._id}`,
         });
+        ProductMutate();
         console.log({responseWish});
         setOpenAlert(true);
         setAlertMessage('Remove from wishlist');
@@ -49,12 +50,13 @@ const HomeCategoryItem = ({
           setOpenAlert(false);
         }, 2000);
       } else {
-        await put({
+        const res = await put({
           path: 'wishlist',
           body: JSON.stringify({
             productId: wishlistItem?._id,
           }),
         });
+        ProductMutate();
         setOpenAlert(true);
         setAlertMessage('Added to wishlist');
         setTimeout(() => {
@@ -63,99 +65,104 @@ const HomeCategoryItem = ({
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      mutate();
     }
   };
 
   return (
     <>
-      <Box mt={3} overflow={'hidden'} mb={5}>
-        <Pressable
-          onPress={() =>
-            navigation.navigate('ProductDetails', {ProductDetailsType: item})
-          }>
-          <Box
-            h={120}
-            w={120}
-            borderWidth={1}
-            mr={3}
-            alignItems={'center'}
-            borderColor={COLORS.lightGrey}
-            overflow={'hidden'}
-            borderRadius={5}>
-            <Image
-              alt="image"
-              source={{
-                uri:
+      {isValidating ? (
+        <ProductSkeleton />
+      ) : (
+        <Box mt={3} overflow={'hidden'} mb={5}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate('ProductDetails', {ProductDetailsType: item})
+            }>
+            <Box
+              h={120}
+              w={120}
+              borderWidth={1}
+              mr={3}
+              alignItems={'center'}
+              borderColor={COLORS.lightGrey}
+              overflow={'hidden'}
+              borderRadius={5}>
+              <Image
+                alt="image"
+                source={
                   item?.images?.length > 1
-                    ? 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1-r88R2pOX-lj1C6Zn3QO3I_Osu-G3viCm1fUWNVhiDn_mkszDqEn8qXAe3bR1sJo9Pg&usqp=CAU'
-                    : 'https://meruherbs.com/wp-content/uploads/2017/07/no-product-image.png',
-              }}
-              style={styles.image}
-              resizeMode={'contain'}
+                    ? {
+                        uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1-r88R2pOX-lj1C6Zn3QO3I_Osu-G3viCm1fUWNVhiDn_mkszDqEn8qXAe3bR1sJo9Pg&usqp=CAU',
+                      }
+                    : PRODUCT_PLACEHOLDER
+                }
+                style={styles.image}
+                resizeMode={'contain'}
+              />
+            </Box>
+            <Box
+              width={8}
+              position={'absolute'}
+              bg={COLORS.secondary}
+              borderTopLeftRadius={5}
+              borderBottomRightRadius={5}>
+              <Text
+                fontSize={10}
+                flexWrap={'wrap'}
+                px={1}
+                color={COLORS.textWhite}>
+                {(+((item?.mrp - item?.salePrice) / item?.mrp) * 100).toFixed(
+                  0,
+                )}
+                % OFF
+              </Text>
+            </Box>
+            <Box position={'absolute'} right={4} borderRadius={10}>
+              <Ionicons
+                onPress={() => handleWishlist(item)}
+                name={item?.isInWishList ? 'heart' : 'heart-outline'}
+                size={22}
+                color={COLORS.primary}
+                style={{
+                  paddingHorizontal: 2,
+                  paddingVertical: 2,
+                }}
+              />
+            </Box>
+            {/* Add to cart */}
+            <Counter
+              item={item}
+              setOpenAlert={setOpenAlert}
+              setAlertMessage={setAlertMessage}
+              ProductMutate={ProductMutate}
             />
-          </Box>
-          <Box
-            width={8}
-            position={'absolute'}
-            bg={COLORS.secondary}
-            borderTopLeftRadius={5}
-            borderBottomRightRadius={5}>
-            <Text
-              fontSize={10}
-              flexWrap={'wrap'}
-              px={1}
-              color={COLORS.textWhite}>
-              {(+((item?.mrp - item?.salePrice) / item?.mrp) * 100).toFixed(0)}%
-              OFF
-            </Text>
-          </Box>
-          <Box position={'absolute'} right={4} borderRadius={10}>
-            <Ionicons
-              onPress={() => handleWishlist(item)}
-              name={item?.isInWishList ? 'heart' : 'heart-outline'}
-              size={22}
-              color={COLORS.primary}
-              style={{
-                paddingHorizontal: 2,
-                paddingVertical: 2,
-              }}
-            />
-          </Box>
-          {/* Add to cart */}
-          <Counter
-            item={item}
-            setOpenAlert={setOpenAlert}
-            setAlertMessage={setAlertMessage}
-            mutate={mutate}
-          />
 
-          <Box w={120}>
-            <Text bold fontSize={12} numberOfLines={1}>
-              {item?.title ? item?.title : item?.name}
-            </Text>
-            <HStack space={2}>
-              <Text fontSize={13}>
-                &#8377;
-                {item?.salePrice}
+            <Box w={120}>
+              <Text bold fontSize={12} numberOfLines={1}>
+                {item?.title ? item?.title : item?.name}
               </Text>
-              <Text fontSize={13} textDecorationLine={'line-through'}>
-                &#8377;
-                {item?.mrp}
-              </Text>
-            </HStack>
-            {businessType === 'b2b' ? (
-              <HStack>
-                <Text fontSize={13} color={COLORS.primary} bold>
-                  MOQ: 10 kg
-                  {/* MOQ: {item.b2bQuantity} */}
+              <HStack space={2}>
+                <Text fontSize={13}>
+                  &#8377;
+                  {item?.salePrice}
+                </Text>
+                <Text fontSize={13} textDecorationLine={'line-through'}>
+                  &#8377;
+                  {item?.mrp}
                 </Text>
               </HStack>
-            ) : null}
-          </Box>
-        </Pressable>
-      </Box>
+              {businessType === 'b2b' ? (
+                <HStack>
+                  <Text fontSize={13} color={COLORS.primary} bold>
+                    MOQ: {item?.moq} kg
+                    {/* MOQ: {item.b2bQuantity} */}
+                  </Text>
+                </HStack>
+              ) : null}
+            </Box>
+          </Pressable>
+        </Box>
+      )}
     </>
   );
 };

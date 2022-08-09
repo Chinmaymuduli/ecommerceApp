@@ -54,7 +54,7 @@ type productType = {
 const ProductDetails = ({route, navigation}: Props) => {
   const productData = route.params.ProductDetailsType;
 
-  // console.log(productData);
+  // console.log(productData._id);
 
   const [loader, setLoader] = useState(false);
   const isMounted = useIsMounted();
@@ -66,8 +66,8 @@ const ProductDetails = ({route, navigation}: Props) => {
   const {data, mutate} = useSwrApi('cart/all');
   const CartData = data?.data?.data?.products;
 
-  const {userData} = useAppContext();
-  // const {userData} = useAuth();
+  // const {userData} = useAppContext();
+  const {userType} = useAuth();
   const [index, setIndex] = useState(0);
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const [count, setCount] = useState<any>(1);
@@ -78,8 +78,6 @@ const ProductDetails = ({route, navigation}: Props) => {
   const [alertMessage, setAlertMessage] = useState('Successfully added!');
 
   const {isOpen, onOpen, onClose} = useDisclose();
-
-  // console.log('object_100', userData);
 
   const {addToWishlist, removeFromWishlist, wishlistItems} = useStore();
 
@@ -194,6 +192,9 @@ const ProductDetails = ({route, navigation}: Props) => {
     // console.log(productCart);
 
     try {
+      if (addQuantity) {
+        return setModalDialog(true);
+      }
       if (!productCart) {
         await put({
           path: 'cart/add',
@@ -204,9 +205,8 @@ const ProductDetails = ({route, navigation}: Props) => {
           token: accessToken,
         });
         navigation.navigate('OrderSummary');
-      } else {
-        navigation.navigate('OrderSummary');
       }
+      navigation.navigate('OrderSummary');
 
       // if (!productCart) {
       //   addToCart({
@@ -228,10 +228,6 @@ const ProductDetails = ({route, navigation}: Props) => {
       //   });
       // navigation.navigate('OrderSummary');
       // }
-
-      if (addQuantity) {
-        return setModalDialog(true);
-      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -258,6 +254,8 @@ const ProductDetails = ({route, navigation}: Props) => {
   useEffect(() => {
     setChooseWeight(authData);
   }, [authData]);
+
+  // console.log(authData.variants);
 
   return (
     <>
@@ -342,7 +340,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                     readonly={true}
                   />
                 </HStack>
-                <Box
+                {/* <Box
                   h={5}
                   borderRightWidth={2}
                   mx={3}
@@ -355,10 +353,11 @@ const ProductDetails = ({route, navigation}: Props) => {
                       ? productData?.id
                       : Math.floor(Math.random() * 1000000)}
                   </Text>
-                </HStack>
+                </HStack> */}
               </HStack>
 
-              {userData?.role === 'b2c' ? (
+              {/* {userData?.role === 'b2c' ? ( */}
+              {userType === 'b2c' ? (
                 <HStack alignItems={'center'} mt={1}>
                   <HStack space={3} alignItems={'center'}>
                     <Text bold>
@@ -397,12 +396,12 @@ const ProductDetails = ({route, navigation}: Props) => {
                     justifyContent={'space-between'}>
                     {addQuantity?.length > 0 ? null : (
                       <Text bold fontSize={18}>
-                        &#8377; 100
+                        &#8377; {authData?.salePrice}
                       </Text>
                     )}
                     <HStack alignItems={'center'} pr={3}>
                       <Text bold>MOQ :</Text>
-                      <Text bold>10kg</Text>
+                      <Text bold> {authData?.moq}kg</Text>
                     </HStack>
                   </HStack>
                   {addQuantity?.length > 0 ? null : (
@@ -420,9 +419,10 @@ const ProductDetails = ({route, navigation}: Props) => {
                           <Text bold color={COLORS.textWhite}>
                             {' '}
                             &#8377;{' '}
-                            {chooseWeight?.currentPrice
+                            {/* {chooseWeight?.currentPrice
                               ? chooseWeight?.currentPrice + 100
-                              : 200}
+                              : 200} */}
+                            {authData?.mrp}
                           </Text>
                         </HStack>
                         <HStack py={1} px={3} alignItems={'center'}>
@@ -433,7 +433,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                             {' '}
                             {chooseWeight?.discount
                               ? chooseWeight?.discount
-                              : 200}{' '}
+                              : 20}{' '}
                             %
                           </Text>
                         </HStack>
@@ -450,6 +450,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                 </Text>
               </Box>
               <HStack space={5} mt={3}>
+                {/* dropdown */}
                 <Pressable
                   bg={'#e4e4e460'}
                   borderWidth={1}
@@ -477,7 +478,8 @@ const ProductDetails = ({route, navigation}: Props) => {
                   </HStack>
                 </Pressable>
                 {/* Counter Section */}
-                {userData?.role === 'b2c' ? (
+                {userType === 'b2c' ? (
+                  // {userData?.role === 'b2c' ? (
                   <Box
                     bg={'#e4e4e460'}
                     justifyContent={'center'}
@@ -580,7 +582,6 @@ const ProductDetails = ({route, navigation}: Props) => {
               {!cartDataMatch ? (
                 !loader ? (
                   <Pressable
-                    // onPress={() => handleCart(productData)}
                     onPress={() => handleCart(chooseWeight)}
                     bg={'#C1E1C1'}
                     w={160}

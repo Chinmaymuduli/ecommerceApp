@@ -1,17 +1,17 @@
 import {Box, FlatList, Heading, HStack, Pressable, Text} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import HomeCategoryItem from './HomeCategoryItem';
 import {ProductType} from 'types';
-import {useSwrApi} from 'hooks';
+import {useIsMounted, useSwrApi} from 'hooks';
 import {COLORS} from 'configs';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useAuth} from 'app';
+import {FetchLoader} from './core';
 
 type CategoryProductType = {
   title?: string;
-  // data?: HomeProductType[];
   image?: string | any;
   label?: string;
   discount?: string;
@@ -22,18 +22,15 @@ type CategoryProductType = {
 };
 
 const CategoryProducts = ({
-  // title,
-  // data,
   setOpenAlert,
   setAlertMessage,
   item,
 }: CategoryProductType) => {
   const navigation = useNavigation<NavigationProps>();
   const {user} = useAuth(state => state);
+  const isMounted = useIsMounted();
 
-  // console.log(user);
-
-  const {data, mutate, isLoading} = useSwrApi(
+  const {data, mutate, isLoading, isValidating} = useSwrApi(
     user?._id
       ? `category/${item?._id}/products?userId=${user?._id}`
       : `category/${item?._id}/products`,
@@ -41,10 +38,17 @@ const CategoryProducts = ({
 
   const CategoryProductData: ProductType[] = data?.data?.data?.data;
 
-  // console.log({CategoryProductData2555: data?.data?.data?.data});
+  const isFocused = useIsFocused();
+
+  useEffect(() => {
+    isMounted.current && mutate();
+  }, [isFocused]);
 
   return (
     <>
+      {/* {ProductLoading ? (
+        <FetchLoader />
+      ) : ( */}
       <Box mt={4} pl={3}>
         <HStack alignItems={'center'} justifyContent={'space-between'}>
           <Box>
@@ -71,7 +75,8 @@ const CategoryProducts = ({
               item={item}
               setOpenAlert={setOpenAlert}
               setAlertMessage={setAlertMessage}
-              mutate={mutate}
+              ProductMutate={mutate}
+              isValidating={isValidating}
             />
           )}
           keyExtractor={(item, index) => index.toString()}
@@ -86,6 +91,7 @@ const CategoryProducts = ({
           }
         />
       </Box>
+      {/* )} */}
     </>
   );
 };

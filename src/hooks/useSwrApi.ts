@@ -39,7 +39,7 @@ const useSwrApi = (url: string, options?: any) => {
             'tokenId',
             getResponseData?.REFRESH_TOKEN,
           );
-        console.log(getResponseData);
+        // console.log(getResponseData);
         const res = await fetch(`${url}`, {
           method: 'GET',
           headers: {
@@ -47,9 +47,9 @@ const useSwrApi = (url: string, options?: any) => {
             Authorization: `Bearer ${getResponseData?.ACCESS_TOKEN}`,
           },
         });
-        console.log(res);
+        // console.log(res);
         const data = await res.json();
-        console.log(data);
+        // console.log(data);
         return {data, res};
       }
       const data = await res.json();
@@ -57,17 +57,22 @@ const useSwrApi = (url: string, options?: any) => {
     } catch (error) {
       console.log(error);
     } finally {
-      setLoading(false);
+      isMounted.current && setLoading(false);
     }
   };
 
-  const {data, error, mutate} = useSWR(`${BASE_URL}/${url}`, fetcher, options);
+  const {data, error, mutate, isValidating} = useSWR(
+    `${BASE_URL}/${url}`,
+    fetcher,
+    options,
+  );
 
   return {
     data,
     error,
     mutate,
     isLoading,
+    isValidating,
   };
 };
 export default useSwrApi;

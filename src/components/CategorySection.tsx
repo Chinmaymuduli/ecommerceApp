@@ -61,7 +61,7 @@ const CategorySection = ({
               setOpenAlert={setOpenAlert}
               setAlertMessage={setAlertMessage}
               businessType={businessType}
-              mutate={mutate}
+              ProductMutate={mutate}
             />
           </Box>
         )}

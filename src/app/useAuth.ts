@@ -6,14 +6,14 @@ type AuthState = {
   setUser: (user: Partial<User>) => Promise<void>;
   loggedIn?: boolean;
   setLoggedIn: (prev: boolean) => void;
-  // userType?: string;
-  // setUserType: (prev: string) => void;
+  userType?: string;
+  setUserType: (prev: string) => void;
 };
 
 const useAuth = create<AuthState>(set => ({
   user: undefined,
   loggedIn: false,
-  // userType: 'b2c',
+  userType: 'b2c',
   setLoggedIn: bool =>
     set(() => ({
       loggedIn: bool,
@@ -25,10 +25,10 @@ const useAuth = create<AuthState>(set => ({
     }));
   },
 
-  // setUserType: type =>
-  //   set(() => ({
-  //     userType: type,
-  //   })),
+  setUserType: type =>
+    set(() => ({
+      userType: type,
+    })),
 }));
 
 export default useAuth;

@@ -6,13 +6,15 @@ import {useSwrApi} from 'hooks';
 import {BannerType} from 'types';
 
 const HomeSlider = () => {
-  const {data, mutate} = useSwrApi('banners');
+  const {data, mutate, isLoading, isValidating} = useSwrApi('banners');
   const BannerData: BannerType[] = data?.data?.data;
   return (
     <>
       <FlatList
         data={BannerData}
-        renderItem={({item}) => <HomeSliderCards item={item} />}
+        renderItem={({item}) => (
+          <HomeSliderCards item={item} isLoading={isValidating} />
+        )}
         keyExtractor={(item, index) => index.toString()}
         horizontal={true}
         showsHorizontalScrollIndicator={false}

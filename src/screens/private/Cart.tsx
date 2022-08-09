@@ -1,5 +1,5 @@
 import {RefreshControl, StyleSheet} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Box,
   Heading,
@@ -12,7 +12,7 @@ import {
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {AYUSH_1, AYUSH_2, CART} from 'assets';
-import {DrawerActions} from '@react-navigation/native';
+import {DrawerActions, useFocusEffect} from '@react-navigation/native';
 import {Empty, FetchLoader} from 'components/core';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -21,6 +21,7 @@ import {CartItem} from 'components';
 import {useStore} from 'app';
 import {getPrice} from 'utils';
 import {useSwrApi} from 'hooks';
+import {useIsFocused} from '@react-navigation/native';
 
 const CartArr = [
   {
@@ -44,9 +45,10 @@ const CartArr = [
 ];
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Cart'>;
 const Cart = ({route, navigation}: Props) => {
-  const {data, error, mutate, isLoading} = useSwrApi('cart/all');
+  const {data, error, mutate, isLoading, isValidating} = useSwrApi('cart/all');
 
   const CartItems = data?.data?.data?.products;
+  const isFocused = useIsFocused();
   const [quantity, setQuantity] = React.useState(CartArr);
   const {cartItems, addToOrderItemFromCart} = useStore(state => state);
   const {
@@ -67,13 +69,15 @@ const Cart = ({route, navigation}: Props) => {
     );
   };
 
-  useEffect(() => {
-    mutate();
-  }, [CartItems]);
+  React.useEffect(() => {
+    if (isFocused) {
+      mutate();
+    }
+  }, [isFocused]);
 
   return (
     <>
-      {!isLoading ? (
+      {!isValidating && isFocused ? (
         <Box flex={1} bg={COLORS.textWhite}>
           <HStack alignItems={'center'} space={4} px={3} py={2}>
             {route.params?.isBack ? (

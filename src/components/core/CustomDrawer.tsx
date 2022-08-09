@@ -118,7 +118,7 @@ const CustomDrawer = () => {
   const navigation = useNavigation<NavigationProps>();
   const [selectedButton, setSelectedButton] = React.useState(1);
   const {setUserData} = useAppContext();
-  const {user, setLoggedIn} = useAuth(state => state);
+  const {user, setLoggedIn, setUserType} = useAuth(state => state);
 
   // console.log({user});
 
@@ -127,10 +127,10 @@ const CustomDrawer = () => {
     if (item?.route === 'ExitApp') return handelCloseApp();
     if (item?.label === 'Business')
       // return setUserType('b2b'), navigation.navigate(item?.route);
-      return navigation.navigate(item?.route);
+      return setUserType('b2b'), navigation.navigate(item?.route);
     if (item?.label === 'Category')
       // return setUserType('b2c'),
-      return navigation.navigate(item?.route);
+      return setUserType('b2c'), navigation.navigate(item?.route);
     navigation.navigate(item?.route);
   };
 

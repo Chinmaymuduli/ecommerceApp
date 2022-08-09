@@ -18,7 +18,7 @@ const Category = ({route}: Props) => {
 
   const CategoryData = categoryItem?.data?.data?.data;
 
-  const {loggedIn, user} = useAuth();
+  const {loggedIn, user, userType} = useAuth();
 
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
@@ -34,11 +34,12 @@ const Category = ({route}: Props) => {
 
   const {data, isLoading, mutate} = useSwrApi(
     user?._id
-      ? `category/${categoryId}/products?userId=${user?._id}`
+      ? `category/${categoryId}/products?userId=${user?._id}&type=${userType}`
       : `category/${categoryId}/products`,
   );
 
   const CategoryProducts = data?.data?.data?.data;
+  // console.log({categoryId});
 
   return (
     <>
@@ -80,7 +81,7 @@ const Category = ({route}: Props) => {
                   setOpenAlert={setOpenAlert}
                   setAlertMessage={setAlertMessage}
                   // isBusiness={route.params?.isBussiness}
-                  // businessType={userType}
+                  businessType={userType}
                   mutate={mutate}
                 />
               </Box>

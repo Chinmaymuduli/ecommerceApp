@@ -12,9 +12,14 @@ type Props = {
   item: ProductType;
   setOpenAlert: (previousValue: boolean) => void;
   setAlertMessage: (txt: string) => void;
-  mutate: () => void;
+  ProductMutate: () => void;
 };
-const Counter = ({item, setAlertMessage, setOpenAlert, mutate}: Props) => {
+const Counter = ({
+  item,
+  setAlertMessage,
+  setOpenAlert,
+  ProductMutate,
+}: Props) => {
   // console.log({item});
   // const {data} = useSwrApi('cart/all');
   // const CartData = data?.data?.data?.products;
@@ -50,7 +55,7 @@ const Counter = ({item, setAlertMessage, setOpenAlert, mutate}: Props) => {
         }),
       });
 
-      if (res.status === 200) return mutate();
+      if (res.status === 200) return ProductMutate();
     } catch (error) {
       console.log(error);
     }
@@ -66,9 +71,11 @@ const Counter = ({item, setAlertMessage, setOpenAlert, mutate}: Props) => {
         }),
       });
       console.log({res});
-      if (res.status === 200) return mutate();
+      if (res.status === 200) return ProductMutate();
     } catch (error) {
       console.log(error);
+    } finally {
+      ProductMutate();
     }
   };
 
@@ -92,7 +99,7 @@ const Counter = ({item, setAlertMessage, setOpenAlert, mutate}: Props) => {
     } catch (error) {
       console.log(error);
     } finally {
-      mutate();
+      ProductMutate();
     }
   };
   return (

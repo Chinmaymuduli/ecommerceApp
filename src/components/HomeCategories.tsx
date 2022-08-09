@@ -15,33 +15,16 @@ import {COLORS} from 'configs';
 import HomeCategoriesItem from './HomeCategoriesItem';
 import {useStore} from '../../src/app';
 import {GET} from 'api';
-import {useAuthFetch, useIsMounted} from 'hooks';
+import {useAuthFetch, useIsMounted, useSwrApi} from 'hooks';
 import {CategoryType} from 'types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {CategorySkeleton} from 'src/skeleton';
 
 const HomeCategories = () => {
   const navigation = useNavigation<NavigationProps>();
   const isMounted = useIsMounted();
-  const [isLoading, setIsLoading] = useState<boolean>();
-  const [categoryData, setCategoryData] = useState<CategoryType[]>();
-  const CategoryRes = async () => {
-    try {
-      isMounted.current && setIsLoading(true);
-      const token = await AsyncStorage.getItem('access_token');
-      const Response = await GET({
-        path: 'categories',
-        token: token,
-      });
-      setCategoryData(Response.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      isMounted.current && setIsLoading(false);
-    }
-  };
-  useEffect(() => {
-    CategoryRes();
-  }, []);
+  const {data, isLoading, isValidating} = useSwrApi('categories');
+  const CategoryData: CategoryType[] = data?.data?.data;
 
   return (
     <>
@@ -56,8 +39,10 @@ const HomeCategories = () => {
         </HStack>
         <FlatList
           // data={category}
-          data={categoryData}
-          renderItem={({item}) => <HomeCategoriesItem item={item} />}
+          data={CategoryData}
+          renderItem={({item}) => (
+            <HomeCategoriesItem item={item} isLoading={isValidating} />
+          )}
           keyExtractor={(item, index) => index.toString()}
           horizontal={true}
           showsHorizontalScrollIndicator={false}

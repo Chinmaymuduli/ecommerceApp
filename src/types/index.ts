@@ -188,6 +188,7 @@ export type ProductType = {
   isInWishList?: boolean;
   isFeatured?: boolean;
   cartQuantity?: number;
+  moq?: number;
 };
 export type CouponType = {
   id?: number;

@@ -20,6 +20,7 @@ import {wishlist} from 'assets';
 import {WishListCard} from 'components';
 import {useStore} from 'app';
 import {useSwrApi} from 'hooks';
+import {FetchLoader} from 'components/core';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'WishList'>;
 const WishList = ({navigation}: Props) => {
@@ -42,72 +43,76 @@ const WishList = ({navigation}: Props) => {
   };
   return (
     <>
-      <Box flex={1} bg={COLORS.textWhite}>
-        <HStack
-          justifyContent={'space-between'}
-          px={4}
-          py={3}
-          borderBottomWidth={8}
-          borderColor={COLORS.lightGrey}>
-          <HStack space={4} alignItems={'center'}>
-            <Pressable
-              borderWidth={1}
-              borderRadius={9}
-              justifyContent={'center'}
-              onPress={() => navigation.goBack()}>
-              <Ionicons name="arrow-back" size={24} color="black" />
-            </Pressable>
-            <Text bold fontSize={16}>
-              My Wishlist
-            </Text>
+      {!isLoading ? (
+        <Box flex={1} bg={COLORS.textWhite}>
+          <HStack
+            justifyContent={'space-between'}
+            px={4}
+            py={3}
+            borderBottomWidth={8}
+            borderColor={COLORS.lightGrey}>
+            <HStack space={4} alignItems={'center'}>
+              <Pressable
+                borderWidth={1}
+                borderRadius={9}
+                justifyContent={'center'}
+                onPress={() => navigation.goBack()}>
+                <Ionicons name="arrow-back" size={24} color="black" />
+              </Pressable>
+              <Text bold fontSize={16}>
+                My Wishlist
+              </Text>
+            </HStack>
+            <Box>
+              <Badge
+                colorScheme="danger"
+                rounded="full"
+                mb={-4}
+                mr={-2}
+                zIndex={1}
+                variant="solid"
+                alignSelf="flex-end"
+                _text={{
+                  fontSize: 8,
+                }}>
+                {cartItems.length ? cartItems.length : 0}
+              </Badge>
+              <Ionicons
+                name={'cart'}
+                size={30}
+                color="green"
+                onPress={() => navigation.navigate('Cart', {})}
+              />
+            </Box>
           </HStack>
           <Box>
-            <Badge
-              colorScheme="danger"
-              rounded="full"
-              mb={-4}
-              mr={-2}
-              zIndex={1}
-              variant="solid"
-              alignSelf="flex-end"
-              _text={{
-                fontSize: 8,
-              }}>
-              {cartItems.length ? cartItems.length : 0}
-            </Badge>
-            <Ionicons
-              name={'cart'}
-              size={30}
-              color="green"
-              onPress={() => navigation.navigate('Cart', {})}
+            <FlatList
+              // data={wishlistItems.length > 0 ? wishlistItems : []}
+              data={WishListItem.length > 0 ? WishListItem : []}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => index.toString()}
+              numColumns={2}
+              ListEmptyComponent={() => (
+                <Box mt={20}>
+                  <Center h={400} w={'full'}>
+                    <Image
+                      source={wishlist}
+                      style={styles.wishList_image}
+                      alt={'wishlist image'}
+                    />
+                    <Text bold color={'black'} fontSize={18} mt={10}>
+                      No Items in Wishlist
+                    </Text>
+                  </Center>
+                </Box>
+              )}
             />
           </Box>
-        </HStack>
-        <Box>
-          <FlatList
-            // data={wishlistItems.length > 0 ? wishlistItems : []}
-            data={WishListItem.length > 0 ? WishListItem : []}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-            numColumns={2}
-            ListEmptyComponent={() => (
-              <Box mt={20}>
-                <Center h={400} w={'full'}>
-                  <Image
-                    source={wishlist}
-                    style={styles.wishList_image}
-                    alt={'wishlist image'}
-                  />
-                  <Text bold color={'black'} fontSize={18} mt={10}>
-                    No Items in Wishlist
-                  </Text>
-                </Center>
-              </Box>
-            )}
-          />
+          {/* Alert */}
         </Box>
-        {/* Alert */}
-      </Box>
+      ) : (
+        <FetchLoader />
+      )}
       {shownAlert ? (
         <Center mx={3}>
           <Alert
