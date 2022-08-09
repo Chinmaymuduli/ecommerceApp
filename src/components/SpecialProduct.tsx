@@ -1,4 +1,3 @@
-import {StyleSheet} from 'react-native';
 import React from 'react';
 import {Box, FlatList, HStack, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
@@ -6,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import SpecialProductCard from './SpecialProductCard';
-import {HomeProductType, ProductDetailsType} from 'types';
+import {HomeProductType} from 'types';
 import {useSwrApi} from 'hooks';
 import {useAuth} from 'app';
 
