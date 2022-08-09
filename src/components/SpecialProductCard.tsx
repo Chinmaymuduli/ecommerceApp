@@ -9,12 +9,14 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {HomeProductType, ProductType} from 'types';
 import {put, remove} from 'api';
 import {useSwrApi} from 'hooks';
+import {SpecialProductSkeleton} from '../../src/skeleton';
 
 type Props = {
   item: ProductType;
+  isValidating?: boolean;
 };
 
-const SpecialProductCard = ({item}: Props) => {
+const SpecialProductCard = ({item, isValidating}: Props) => {
   const navigation = useNavigation<NavigationProps>();
   const [count, setCount] = useState(0);
   const {setCartItems, cartItems} = useAppContext();
@@ -88,112 +90,120 @@ const SpecialProductCard = ({item}: Props) => {
     }
   };
   return (
-    <Box mb={5} justifyContent={'center'}>
-      <Pressable
-        onPress={() =>
-          navigation.navigate('ProductDetails', {ProductDetailsType: item})
-        }
-        borderWidth={1}
-        mr={5}
-        borderRadius={6}
-        borderColor={COLORS.lightGrey}>
-        <Box
-          h={110}
-          w={Dimensions.get('window').width / 2.4}
-          alignItems={'center'}
-          justifyContent={'center'}>
-          <Image
-            source={{
-              uri: item?.images?.length
-                ? item.images[0]
-                : 'https://boltagency.ca/content/images/2020/03/placeholder-images-product-1_large.png',
-            }}
-            style={styles.specialImg}
-            alt={'image'}
-            resizeMode={'contain'}
-          />
-        </Box>
-
-        <Box pl={2}>
-          <Text noOfLines={1}>{item?.title}</Text>
-          <HStack space={3}>
-            <Text>&#8377; {item?.salePrice}</Text>
-            <Text textDecorationLine={'line-through'} color={COLORS.primary}>
-              &#8377; {item?.mrp}
-            </Text>
-          </HStack>
-        </Box>
-
-        <Box
-          width={8}
-          position={'absolute'}
-          bg={'COLORS.secondary'}
-          borderTopLeftRadius={5}
-          alignItems={'center'}
-          borderBottomRightRadius={5}>
-          <Text fontSize={10} flexWrap={'wrap'} color={COLORS.textWhite}>
-            {(((item?.mrp - item?.salePrice) / item?.mrp) * 100).toFixed(2)} %
-            OFF
-          </Text>
-        </Box>
-      </Pressable>
-
-      <Box
-        alignSelf={'flex-end'}
-        right={5}
-        bg={COLORS.textWhite}
-        mt={-5}
-        shadow={1}
-        borderRadius={5}
-        borderColor={COLORS.lightGrey}>
-        {/* {cartItems?.some((data: any) => data?.id === item?.id) && count > 0 ? ( */}
-        {isCartItem ? (
-          <HStack
-            bg={'#FFFF0060'}
-            w={'152'}
-            justifyContent="space-between"
-            alignItems={'center'}>
-            <Box>
-              <Entypo
-                name="minus"
-                size={20}
-                color={COLORS.fadeBlack}
-                onPress={() => decrement()}
-              />
-            </Box>
-            <Box>
-              {/* <Text>{count}</Text> */}
-              <Text>{quantity(item._id)}</Text>
-            </Box>
-            <Box>
-              <Entypo
-                name="plus"
-                size={18}
-                color={COLORS.fadeBlack}
-                style={{
-                  paddingHorizontal: 3,
-                  paddingVertical: 3,
+    <>
+      {isValidating ? (
+        <SpecialProductSkeleton />
+      ) : (
+        <Box mb={5} justifyContent={'center'}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate('ProductDetails', {ProductDetailsType: item})
+            }
+            borderWidth={1}
+            mr={5}
+            borderRadius={6}
+            borderColor={COLORS.lightGrey}>
+            <Box
+              h={110}
+              w={Dimensions.get('window').width / 2.4}
+              alignItems={'center'}
+              justifyContent={'center'}>
+              <Image
+                source={{
+                  uri: item?.images?.length
+                    ? item.images[0]
+                    : 'https://boltagency.ca/content/images/2020/03/placeholder-images-product-1_large.png',
                 }}
-                onPress={increment}
+                style={styles.specialImg}
+                alt={'image'}
+                resizeMode={'contain'}
               />
             </Box>
-          </HStack>
-        ) : (
-          <Box>
-            <Entypo
-              name="plus"
-              size={18}
-              color={COLORS.fadeBlack}
-              style={{
-                paddingHorizontal: 3,
-                paddingVertical: 3,
-              }}
-              onPress={() => AddSpecialCart(item)}
-            />
+
+            <Box pl={2}>
+              <Text noOfLines={1}>{item?.title}</Text>
+              <HStack space={3}>
+                <Text>&#8377; {item?.salePrice}</Text>
+                <Text
+                  textDecorationLine={'line-through'}
+                  color={COLORS.primary}>
+                  &#8377; {item?.mrp}
+                </Text>
+              </HStack>
+            </Box>
+
+            <Box
+              width={8}
+              position={'absolute'}
+              bg={'COLORS.secondary'}
+              borderTopLeftRadius={5}
+              alignItems={'center'}
+              borderBottomRightRadius={5}>
+              <Text fontSize={10} flexWrap={'wrap'} color={COLORS.textWhite}>
+                {(((item?.mrp - item?.salePrice) / item?.mrp) * 100).toFixed(2)}{' '}
+                % OFF
+              </Text>
+            </Box>
+          </Pressable>
+
+          <Box
+            alignSelf={'flex-end'}
+            right={5}
+            bg={COLORS.textWhite}
+            mt={-5}
+            shadow={1}
+            borderRadius={5}
+            borderColor={COLORS.lightGrey}>
+            {/* {cartItems?.some((data: any) => data?.id === item?.id) && count > 0 ? ( */}
+            {isCartItem ? (
+              <HStack
+                bg={'#FFFF0060'}
+                w={'152'}
+                justifyContent="space-between"
+                alignItems={'center'}>
+                <Box>
+                  <Entypo
+                    name="minus"
+                    size={20}
+                    color={COLORS.fadeBlack}
+                    onPress={() => decrement()}
+                  />
+                </Box>
+                <Box>
+                  {/* <Text>{count}</Text> */}
+                  <Text>{quantity(item._id)}</Text>
+                </Box>
+                <Box>
+                  <Entypo
+                    name="plus"
+                    size={18}
+                    color={COLORS.fadeBlack}
+                    style={{
+                      paddingHorizontal: 3,
+                      paddingVertical: 3,
+                    }}
+                    onPress={increment}
+                  />
+                </Box>
+              </HStack>
+            ) : (
+              <Box>
+                <Entypo
+                  name="plus"
+                  size={18}
+                  color={COLORS.fadeBlack}
+                  style={{
+                    paddingHorizontal: 3,
+                    paddingVertical: 3,
+                  }}
+                  onPress={() => AddSpecialCart(item)}
+                />
+              </Box>
+            )}
           </Box>
-        )}
-      </Box>
-    </Box>
+        </Box>
+      )}
+    </>
   );
 };
 

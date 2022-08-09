@@ -20,7 +20,9 @@ const SpecialProduct = () => {
 
   // console.log({user});
 
-  const {data} = useSwrApi(`products/featured?userId=${user?._id}`);
+  const {data, isValidating} = useSwrApi(
+    `products/featured?userId=${user?._id}`,
+  );
   const SpecialProductData = data?.data?.data?.data;
 
   return (
@@ -61,7 +63,9 @@ const SpecialProduct = () => {
       <Box mt={2}>
         <FlatList
           data={SpecialProductData}
-          renderItem={({item}) => <SpecialProductCard item={item} />}
+          renderItem={({item}) => (
+            <SpecialProductCard item={item} isValidating={isValidating} />
+          )}
           keyExtractor={(item: any) => item._id}
           numColumns={2}
         />
