@@ -20,6 +20,7 @@ import {useAuthFetch} from 'hooks';
 import {put, remove} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CartAlert} from './core';
+import {PRODUCT_PLACEHOLDER} from 'assets';
 
 type CartItemTypes = {
   item: CartItemType;
@@ -84,11 +85,13 @@ CartItemTypes) => {
           <Image
             alt="cartImg"
             // source={item?.product?.img}
-            source={{
-              uri: item?.product.images.length
-                ? item?.product.images[0]
-                : 'https://cdn.shopify.com/s/files/1/0064/8907/9893/products/herbal-tea.jpg?v=1551108498',
-            }}
+            source={
+              item?.displayImage?.url
+                ? {
+                    uri: item?.displayImage?.url,
+                  }
+                : PRODUCT_PLACEHOLDER
+            }
             style={{height: 110, width: 100}}
             resizeMode="contain"
           />

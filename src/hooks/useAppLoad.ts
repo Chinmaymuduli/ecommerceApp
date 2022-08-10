@@ -26,7 +26,7 @@ export default function useAppLoad() {
         console.log(error);
       }
     })();
-  }, [user]);
+  }, []);
 
   return {};
 }

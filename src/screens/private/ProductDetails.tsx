@@ -48,25 +48,21 @@ const B2bProduct = [
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 
 type productType = {
-  item: ProductDetailsType;
+  item: {
+    url?: string;
+    img?: any;
+  };
 };
 
 const ProductDetails = ({route, navigation}: Props) => {
   const productData = route.params.ProductDetailsType;
-
-  // console.log(productData._id);
-
   const [loader, setLoader] = useState(false);
-  const isMounted = useIsMounted();
   const {authData, isLoading} = useAuthFetch<ProductType>({
     path: `product/${productData._id}/info`,
     method: 'GET',
   });
-
   const {data, mutate} = useSwrApi('cart/all');
   const CartData = data?.data?.data?.products;
-
-  // const {userData} = useAppContext();
   const {userType} = useAuth();
   const [index, setIndex] = useState(0);
   const SLIDER_WIDTH = Dimensions.get('window').width;
@@ -106,6 +102,8 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   };
 
+  // console.log(authData?.images);
+
   const cartDataMatch = CartData?.some(
     (
       // item => item?.product?.id === productData?.id,
@@ -130,14 +128,20 @@ const ProductDetails = ({route, navigation}: Props) => {
         <Image
           alt="image"
           resizeMode="contain"
-          source={item.img}
+          source={
+            item?.url
+              ? {
+                  uri: item?.url,
+                }
+              : item?.img
+          }
           style={{height: 170, width: 150}}
         />
       </Box>
     );
   };
 
-  const renderSimilarProduct = ({item}: productType) => {
+  const renderSimilarProduct = ({item}: any) => {
     return <ProductComponent item={item} />;
   };
 
@@ -204,9 +208,13 @@ const ProductDetails = ({route, navigation}: Props) => {
           }),
           token: accessToken,
         });
-        navigation.navigate('OrderSummary');
+        // navigation.navigate('OrderSummary');
       }
-      navigation.navigate('OrderSummary');
+      navigation.navigate('OrderSummary', {
+        productId: chooseWeight._id,
+        type: 'product',
+        quantity: count,
+      });
 
       // if (!productCart) {
       //   addToCart({
@@ -288,14 +296,20 @@ const ProductDetails = ({route, navigation}: Props) => {
           <ScrollView showsVerticalScrollIndicator={false}>
             <Box>
               <Carousel
-                data={SPECIAL_PRODUCT}
+                data={
+                  authData?.images?.length ? authData?.images : SPECIAL_PRODUCT
+                }
                 renderItem={renderItem}
                 sliderWidth={SLIDER_WIDTH}
                 itemWidth={300}
                 onSnapToItem={index => setIndex(index)}
               />
               <Pagination
-                dotsLength={SPECIAL_PRODUCT.length}
+                dotsLength={
+                  authData?.images?.length
+                    ? authData?.images?.length
+                    : SPECIAL_PRODUCT.length
+                }
                 activeDotIndex={index}
                 dotStyle={{
                   width: 10,
@@ -546,7 +560,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                 />
               </Box>
               <Box>
-                <ManageReview />
+                <ManageReview productId={productData._id} />
               </Box>
               {/* Similar Product */}
               <Box mt={5}>

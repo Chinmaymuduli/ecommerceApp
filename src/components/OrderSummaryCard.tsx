@@ -10,7 +10,7 @@ type Props = {
 };
 
 const OrderSummaryCard = ({orderData}: Props) => {
-  // console.log(orderData);
+  console.log(orderData);
   return (
     <Box px={4} borderBottomWidth={10} borderColor={COLORS.lightGrey}>
       <Box pb={5} pt={5}>
@@ -19,9 +19,7 @@ const OrderSummaryCard = ({orderData}: Props) => {
             <Image
               alt="orderimg"
               source={{
-                uri: orderData?.product?.images.length
-                  ? orderData?.product?.images[0]
-                  : 'https://cdn.shopify.com/s/files/1/0064/8907/9893/products/herbal-tea.jpg?v=1551108498',
+                uri: 'https://cdn.shopify.com/s/files/1/0064/8907/9893/products/herbal-tea.jpg?v=1551108498',
               }}
               // source={orderData?.product?.img}
               resizeMode={'contain'}
@@ -50,7 +48,10 @@ const OrderSummaryCard = ({orderData}: Props) => {
             <HStack>
               <Rating
                 type="custom"
-                startingValue={orderData.product.ratings}
+                startingValue={4}
+                // startingValue={
+                //   orderData?.reviews?.stars ? orderData?.reviews?.stars : 2
+                // }
                 ratingColor={'green'}
                 tintColor={'#fff'}
                 ratingBackgroundColor={COLORS.grey}

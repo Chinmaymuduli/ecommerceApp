@@ -47,12 +47,13 @@ const useSwrApi = (url: string, options?: any) => {
             Authorization: `Bearer ${getResponseData?.ACCESS_TOKEN}`,
           },
         });
-        // console.log(res);
+
         const data = await res.json();
-        // console.log(data);
+
         return {data, res};
       }
       const data = await res.json();
+      // console.log({dataRes: data});
       return {data, res};
     } catch (error) {
       console.log(error);

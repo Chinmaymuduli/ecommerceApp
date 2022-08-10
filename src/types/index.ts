@@ -94,6 +94,9 @@ export type CartItemType = {
   weight?: weightType;
 
   products?: ProductType[];
+  displayImage?: {
+    url?: string;
+  };
 };
 // *****
 export type changePasswordType = {
@@ -189,6 +192,9 @@ export type ProductType = {
   isFeatured?: boolean;
   cartQuantity?: number;
   moq?: number;
+  displayImage?: {
+    url?: string;
+  };
 };
 export type CouponType = {
   id?: number;
@@ -245,6 +251,15 @@ export type ApiProductType = {
     total: number;
     stars: number;
   };
+};
+export type ReviewType = {
+  product: ProductType;
+  // user: UserType;
+  user: User;
+  rating: number;
+  title: string;
+  comment: string;
+  // order: OrderType;
 };
 
 export type BannerType = {

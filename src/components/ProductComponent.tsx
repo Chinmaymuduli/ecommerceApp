@@ -4,10 +4,10 @@ import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Box, HStack, Image, Pressable, Text} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {ProductDetailsType, ProductType} from 'types';
+import {ProductType} from 'types';
 import {useStore} from 'app';
 type productType = {
-  item: ProductDetailsType;
+  item: any;
 };
 
 const ProductComponent = ({item}: productType) => {

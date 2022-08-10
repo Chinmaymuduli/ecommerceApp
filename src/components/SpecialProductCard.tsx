@@ -10,6 +10,7 @@ import {HomeProductType, ProductType} from 'types';
 import {put, remove} from 'api';
 import {useSwrApi} from 'hooks';
 import {SpecialProductSkeleton} from '../../src/skeleton';
+import {PRODUCT_PLACEHOLDER} from 'assets';
 
 type Props = {
   item: ProductType;
@@ -109,11 +110,18 @@ const SpecialProductCard = ({item, isValidating}: Props) => {
               alignItems={'center'}
               justifyContent={'center'}>
               <Image
-                source={{
-                  uri: item?.images?.length
-                    ? item.images[0]
-                    : 'https://boltagency.ca/content/images/2020/03/placeholder-images-product-1_large.png',
-                }}
+                // source={{
+                //   uri: item?.images?.length
+                //     ? item.images[0]
+                //     : 'https://boltagency.ca/content/images/2020/03/placeholder-images-product-1_large.png',
+                // }}
+                source={
+                  item?.displayImage?.url
+                    ? {
+                        uri: item?.displayImage?.url,
+                      }
+                    : PRODUCT_PLACEHOLDER
+                }
                 style={styles.specialImg}
                 alt={'image'}
                 resizeMode={'contain'}
@@ -154,7 +162,6 @@ const SpecialProductCard = ({item, isValidating}: Props) => {
             shadow={1}
             borderRadius={5}
             borderColor={COLORS.lightGrey}>
-            {/* {cartItems?.some((data: any) => data?.id === item?.id) && count > 0 ? ( */}
             {isCartItem ? (
               <HStack
                 bg={'#FFFF0060'}
@@ -170,7 +177,6 @@ const SpecialProductCard = ({item, isValidating}: Props) => {
                   />
                 </Box>
                 <Box>
-                  {/* <Text>{count}</Text> */}
                   <Text>{quantity(item._id)}</Text>
                 </Box>
                 <Box>

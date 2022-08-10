@@ -90,9 +90,9 @@ const HomeCategoryItem = ({
               <Image
                 alt="image"
                 source={
-                  item?.images?.length > 1
+                  item?.displayImage?.url
                     ? {
-                        uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1-r88R2pOX-lj1C6Zn3QO3I_Osu-G3viCm1fUWNVhiDn_mkszDqEn8qXAe3bR1sJo9Pg&usqp=CAU',
+                        uri: item?.displayImage?.url,
                       }
                     : PRODUCT_PLACEHOLDER
                 }

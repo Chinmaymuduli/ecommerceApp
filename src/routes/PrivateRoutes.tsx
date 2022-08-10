@@ -60,7 +60,11 @@ export type PrivateRoutesType = {
   ConfirmOrder: {
     confirmOrderData: CartItemType[];
   };
-  OrderSummary: undefined;
+  OrderSummary: {
+    productId?: string;
+    type?: string;
+    quantity?: number;
+  };
   //  {
   //   CartItems: CartItemType[];
   // };

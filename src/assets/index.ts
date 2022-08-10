@@ -101,3 +101,4 @@ export const ReviewImg = require('./images/review.jpg');
 
 export const PRODUCT_PLACEHOLDER = require('./images/product1.png');
 export const CATEGORY_PLACEHOLDER = require('./images/catagories.png');
+export const REVIEW_IMAGE = require('./images/reviewImg.png');

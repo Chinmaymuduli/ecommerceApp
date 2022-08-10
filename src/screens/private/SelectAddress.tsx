@@ -9,57 +9,24 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AddressType} from 'types';
 import {FetchLoader} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useAddress} from 'hooks';
-const AddressArr = [
-  {
-    id: 1,
-    name: 'Sai Kiran',
-    address:
-      '#12, 1st Cross, 1st Main, 1st Block, Koramangala, Bengaluru, Karnataka 560034',
-    phone: '+91 9876543210',
-    default: true,
-    addressType: 'Home',
-    value: '1',
-  },
-  {
-    id: 2,
-    name: 'Sai Satya',
-    address:
-      '#12, 1st Cross, 2nd Main, 2nd Block, Koramangala, Bengaluru, Karnataka 560032',
-    phone: '+91 1234567890',
-    default: false,
-    addressType: 'Home',
-    value: '2',
-  },
-  {
-    id: 3,
-    name: 'John Deo',
-    address:
-      '#15, 3rd Cross, 1st Main, 3rd Block, Koramangala, Bengaluru, Karnataka 560031',
-    phone: '+91 8794562310',
-    default: false,
-    addressType: 'Work',
-    value: '3',
-  },
-];
+import {useAddress, useIsMounted} from 'hooks';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
 const SelectAddress = ({route, navigation}: Props) => {
   const [address, setAddress] = useState<any>();
-  const [addressValue, setAddressValue] = React.useState(
-    address ? address[0] : null,
-  );
 
-  const {setAddresses, addresses} = useAddress();
+  const [addressId, setAddressId] = useState<string | null>();
+  const [addressValue, setAddressValue] = React.useState<any>();
 
   const [loading, setLoading] = useState(false);
-  console.log({addresses});
+
+  const isMounted = useIsMounted();
 
   const isProfile = route.params?.isProfile;
 
   const fetchData = async () => {
     try {
-      setLoading(true);
+      isMounted.current && setLoading(true);
       const token = await AsyncStorage.getItem('access_token');
       const resp = await fetch(
         'https://chhattisgarh-herbals-api.herokuapp.com/api/address/all/my-addresses',
@@ -73,8 +40,8 @@ const SelectAddress = ({route, navigation}: Props) => {
       );
       const response_data = await resp.json();
 
-      setAddress(response_data?.data);
-      setLoading(false);
+      isMounted.current && setAddress(response_data?.data);
+      isMounted.current && setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -82,6 +49,21 @@ const SelectAddress = ({route, navigation}: Props) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handelDeliver = async () => {
+    await AsyncStorage.setItem('address_id', addressValue);
+    navigation.navigate('OrderSummary', {});
+  };
+
+  useEffect(() => {
+    (async () => {
+      const addressValue = await AsyncStorage.getItem('address_id');
+      isMounted.current && setAddressId(addressValue);
+      isMounted.current && setAddressValue(addressValue);
+    })();
+  }, []);
+
+  console.log({addressValue});
 
   return (
     <>
@@ -120,19 +102,18 @@ const SelectAddress = ({route, navigation}: Props) => {
                     borderBottomWidth={1}
                     borderColor={COLORS.lightGrey}>
                     <Radio.Group
-                      value={addresses}
-                      // value={addressValue}
+                      value={addressValue}
                       onChange={nextValue => {
-                        setAddresses(nextValue);
+                        setAddressValue(nextValue);
                       }}
-                      // onChange={nextValue => {
-                      //   setAddressValue(nextValue);
-                      // }}
                       name="myRadioGroup"
-                      // defaultValue={addressValue}
-                      defaultValue={addresses}
+                      defaultValue={addressId ? addressId : address[0]._id}
                       accessibilityLabel="Select address">
-                      <Radio value={item} my={4} mx={2} colorScheme="green">
+                      <Radio
+                        value={item?._id}
+                        my={4}
+                        mx={2}
+                        colorScheme="green">
                         <Box pb={3}>
                           <HStack space={2}>
                             <Text bold>{item?.name}</Text>
@@ -165,14 +146,7 @@ const SelectAddress = ({route, navigation}: Props) => {
                 bg={'#008000'}
                 borderRadius={4}
                 mx={3}
-                onPress={() =>
-                  navigation.navigate(
-                    'OrderSummary',
-                    //  {
-                    //   CartItems: summaryData,
-                    // }
-                  )
-                }>
+                onPress={() => handelDeliver()}>
                 <Text
                   color={COLORS.textWhite}
                   bold

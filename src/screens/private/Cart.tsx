@@ -47,26 +47,21 @@ type Props = NativeStackScreenProps<PrivateRoutesType, 'Cart'>;
 const Cart = ({route, navigation}: Props) => {
   const {data, error, mutate, isLoading, isValidating} = useSwrApi('cart/all');
 
-  const CartItems = data?.data?.data?.products;
+  const CartItems = data?.data?.data;
   const isFocused = useIsFocused();
   const [quantity, setQuantity] = React.useState(CartArr);
-  const {cartItems, addToOrderItemFromCart} = useStore(state => state);
-  const {
-    TotalProductPriceWithoutDiscount,
-    sumTotalPriceCustomerWillPay,
-    totalDiscountAmount,
-  } =
-    // getPrice(cartItems);
-    getPrice(CartItems);
+  const {addToOrderItemFromCart} = useStore(state => state);
+  // const {
+  //   TotalProductPriceWithoutDiscount,
+  //   sumTotalPriceCustomerWillPay,
+  //   totalDiscountAmount,
+  // } =
+  //   // getPrice(cartItems);
+  //   getPrice(CartItems);
 
   const handleProceed = () => {
     addToOrderItemFromCart();
-    navigation.navigate(
-      'OrderSummary',
-      // {
-      //   CartItems: cartItems,
-      // }
-    );
+    navigation.navigate('OrderSummary', {});
   };
 
   React.useEffect(() => {
@@ -74,6 +69,8 @@ const Cart = ({route, navigation}: Props) => {
       mutate();
     }
   }, [isFocused]);
+
+  // console.log({CartItems});
 
   return (
     <>
@@ -100,7 +97,7 @@ const Cart = ({route, navigation}: Props) => {
             </Heading>
           </HStack>
 
-          {CartItems?.length > 0 ? (
+          {CartItems?.products?.length > 0 ? (
             <ScrollView
               showsVerticalScrollIndicator={false}
               refreshControl={
@@ -116,11 +113,10 @@ const Cart = ({route, navigation}: Props) => {
                   bg={'#e4e4e460'}
                   py={3}>
                   <Text fontSize={13}>shipment 1 of 1</Text>
-                  <Text fontSize={13}>{CartItems.length} items</Text>
                 </HStack>
 
                 <Box>
-                  {CartItems.map((item: CartItemType) => (
+                  {CartItems?.products?.map((item: CartItemType) => (
                     <CartItem
                       item={item}
                       key={item?._id}
@@ -144,7 +140,7 @@ const Cart = ({route, navigation}: Props) => {
                       </Text>
                       <Text>
                         &#8377;
-                        {TotalProductPriceWithoutDiscount}
+                        {CartItems?.mrp}
                       </Text>
                     </HStack>
                     <HStack
@@ -155,7 +151,7 @@ const Cart = ({route, navigation}: Props) => {
                       </Text>
                       <Text color={'green.500'}>
                         - &#8377;
-                        {totalDiscountAmount}
+                        {CartItems?.mrp - CartItems?.subTotal}
                       </Text>
                     </HStack>
                     <HStack
@@ -172,7 +168,7 @@ const Cart = ({route, navigation}: Props) => {
                     justifyContent={'space-between'}
                     mt={1}>
                     <Heading size={'sm'}>Bill total</Heading>
-                    <Text bold>&#8377; {sumTotalPriceCustomerWillPay}</Text>
+                    <Text bold>&#8377;{CartItems?.subTotal}</Text>
                   </HStack>
                 </Box>
                 <Box pb={40} px={3}>
@@ -185,7 +181,7 @@ const Cart = ({route, navigation}: Props) => {
                       <HStack alignItems={'center'} space={2} pl={2}>
                         <Box>
                           <Text bold color={COLORS.textWhite}>
-                            {CartItems.length} items
+                            {CartItems.totalItem} items
                           </Text>
                         </Box>
                         <HStack space={2}>
@@ -193,13 +189,13 @@ const Cart = ({route, navigation}: Props) => {
                             |
                           </Text>
                           <Text bold color={COLORS.textWhite}>
-                            &#8377; {sumTotalPriceCustomerWillPay}
+                            &#8377; {CartItems?.subTotal}
                           </Text>
                           <Text
                             textDecorationLine={'line-through'}
                             color={COLORS.textWhite}>
                             &#8377;
-                            {totalDiscountAmount}
+                            {CartItems?.mrp - CartItems?.subTotal}
                           </Text>
                         </HStack>
                       </HStack>
