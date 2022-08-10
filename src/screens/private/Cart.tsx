@@ -1,5 +1,5 @@
-import {RefreshControl, StyleSheet} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import {RefreshControl} from 'react-native';
+import React from 'react';
 import {
   Box,
   Heading,
@@ -11,53 +11,25 @@ import {
 } from 'native-base';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {AYUSH_1, AYUSH_2, CART} from 'assets';
-import {DrawerActions, useFocusEffect} from '@react-navigation/native';
+import {CART} from 'assets';
+import {DrawerActions} from '@react-navigation/native';
 import {Empty, FetchLoader} from 'components/core';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CartItemType} from 'types';
 import {CartItem} from 'components';
 import {useStore} from 'app';
-import {getPrice} from 'utils';
 import {useSwrApi} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
 
-const CartArr = [
-  {
-    id: 1,
-    name: 'Mahua Laddu',
-    discount: 300,
-    img: AYUSH_1,
-    currentPrice: 250,
-    offer: '20% OFF',
-    quantity: 1,
-  },
-  {
-    id: 2,
-    name: 'Jyotishmati Oil',
-    discount: 599,
-    img: AYUSH_2,
-    currentPrice: 499,
-    offer: '20% OFF',
-    quantity: 1,
-  },
-];
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Cart'>;
 const Cart = ({route, navigation}: Props) => {
-  const {data, error, mutate, isLoading, isValidating} = useSwrApi('cart/all');
+  const {data, mutate, isLoading, isValidating} = useSwrApi('cart/all');
 
   const CartItems = data?.data?.data;
   const isFocused = useIsFocused();
-  const [quantity, setQuantity] = React.useState(CartArr);
+  const [quantity, setQuantity] = React.useState();
   const {addToOrderItemFromCart} = useStore(state => state);
-  // const {
-  //   TotalProductPriceWithoutDiscount,
-  //   sumTotalPriceCustomerWillPay,
-  //   totalDiscountAmount,
-  // } =
-  //   // getPrice(cartItems);
-  //   getPrice(CartItems);
 
   const handleProceed = () => {
     addToOrderItemFromCart();
@@ -69,8 +41,6 @@ const Cart = ({route, navigation}: Props) => {
       mutate();
     }
   }, [isFocused]);
-
-  // console.log({CartItems});
 
   return (
     <>
@@ -228,5 +198,3 @@ const Cart = ({route, navigation}: Props) => {
 };
 
 export default Cart;
-
-const styles = StyleSheet.create({});
