@@ -5,24 +5,20 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import SpecialProductCard from './SpecialProductCard';
-import {HomeProductType} from 'types';
 import {useSwrApi} from 'hooks';
 import {useAuth} from 'app';
-
-type Props = {
-  data: HomeProductType[];
-};
+import {ProductType} from 'types';
+import {Dimensions} from 'react-native';
 
 const SpecialProduct = () => {
   const navigation = useNavigation<NavigationProps>();
   const {user} = useAuth();
 
-  // console.log({user});
-
   const {data, isValidating} = useSwrApi(
     `products/featured?userId=${user?._id}`,
   );
-  const SpecialProductData = data?.data?.data?.data;
+  const SpecialProductData: ProductType[] = data?.data?.data?.data;
+  // console.log(SpecialProductData.length);
 
   return (
     <Box mb={3} px={4}>
@@ -59,15 +55,27 @@ const SpecialProduct = () => {
           </HStack>
         </Pressable>
       </Box>
-      <Box mt={2}>
-        <FlatList
+      <Box
+        mt={2}
+        // ml={1}
+        flexDirection={'row'}
+        flexWrap={'wrap'}
+        justifyContent={'space-between'}>
+        {/* <FlatList
           data={SpecialProductData}
           renderItem={({item}) => (
             <SpecialProductCard item={item} isValidating={isValidating} />
           )}
           keyExtractor={(item: any) => item._id}
           numColumns={2}
-        />
+        /> */}
+        {SpecialProductData?.map((item, index) => (
+          <SpecialProductCard
+            item={item}
+            isValidating={isValidating}
+            key={index}
+          />
+        ))}
       </Box>
     </Box>
   );

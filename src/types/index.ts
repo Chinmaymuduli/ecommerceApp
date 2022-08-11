@@ -113,11 +113,18 @@ export type reviewType = {
 };
 export type activeOrderType = {
   name: string;
-  OrderID: string;
-  status: string;
-  currentPrice: number;
-  img: any;
-  total: string | number;
+  // OrderID: string;
+  // status: string;
+  // currentPrice: number;
+  // img: any;
+  // total: string | number;
+  product: ProductType;
+  quantity: number;
+  _id: string;
+  status?: string;
+  displayImage?: {
+    url?: string;
+  };
 };
 
 export type SelectQuantityType = {

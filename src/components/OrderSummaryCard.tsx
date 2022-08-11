@@ -10,7 +10,7 @@ type Props = {
 };
 
 const OrderSummaryCard = ({orderData}: Props) => {
-  console.log(orderData);
+  // console.log(orderData);
   return (
     <Box px={4} borderBottomWidth={10} borderColor={COLORS.lightGrey}>
       <Box pb={5} pt={5}>
@@ -37,11 +37,9 @@ const OrderSummaryCard = ({orderData}: Props) => {
           </VStack>
           <VStack pl={5}>
             <Text bold fontSize={16}>
-              {/* {orderData?.product?.name} */}
               {orderData?.product?.title}
             </Text>
             <Text mt={1}>
-              {/* {orderData?.weight?.weight} */}
               {orderData?.product?.measureUnit}{' '}
               {orderData?.product?.measureType}
             </Text>

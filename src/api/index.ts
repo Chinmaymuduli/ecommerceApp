@@ -35,11 +35,15 @@ export const post: APIFunction = async ({
   headers = {'Content-Type': 'application/json'},
   token = '',
 }) => {
-  if (token) headers.Authorization = `Bearer ${token}`;
+  // if (token) headers.Authorization = `Bearer ${token}`;
+  const accessToken = await AsyncStorage.getItem('access_token');
   try {
     const API_OPTIONS = {
       method,
-      headers,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
       body,
       ...options,
     };

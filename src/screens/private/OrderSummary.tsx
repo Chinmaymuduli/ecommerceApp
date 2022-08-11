@@ -32,6 +32,8 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
   );
   const OrderSummaryData = productData?.data?.data?.data;
 
+  // console.log({OrderSummaryData});
+
   useEffect(() => {
     (async () => {
       const addressID = await AsyncStorage.getItem('address_id');
@@ -45,7 +47,10 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
 
   const SelectedAddress = data?.data?.data;
 
-  // console.log(OrderSummaryData?.products);
+  // console.log(params?.quantity);
+  const quantityData = OrderSummaryData?.products?.find(
+    (item: {quantity: number}) => item?.quantity,
+  );
 
   return (
     <>
@@ -62,15 +67,7 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
               <HStack justifyContent={'space-between'} alignItems={'center'}>
                 <Heading size={'sm'}>Deliver to:</Heading>
                 <Pressable
-                  onPress={() =>
-                    navigation.navigate(
-                      'SelectAddress',
-                      {},
-                      // {
-                      //   SelectProductData: ordersData,
-                      // }
-                    )
-                  }>
+                  onPress={() => navigation.navigate('SelectAddress', {})}>
                   <Box
                     borderWidth={1}
                     borderColor={COLORS.primary}
@@ -160,7 +157,16 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
               bg={'#008000'}
               borderRadius={4}
               onPress={() =>
-                navigation.navigate('PaymentScreen', {PaymentData: orderItems})
+                navigation.navigate('PaymentScreen', {
+                  // PaymentData: OrderSummaryData,
+                  type: params?.type,
+                  quantity: quantityData.quantity,
+                  productId: params?.productId,
+                  addressId: selectedAddressId,
+                  totalMrp: OrderSummaryData?.totalMrp,
+                  totalSalePrice: OrderSummaryData?.totalSalePrice,
+                  discount: OrderSummaryData?.discount,
+                })
               }>
               <HStack
                 justifyContent={'space-between'}

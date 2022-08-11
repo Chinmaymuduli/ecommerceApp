@@ -21,13 +21,13 @@ import {getPrice} from 'utils';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ConfirmOrder'>;
 const ConfirmOrder = ({route, navigation}: Props) => {
-  const confirmData = route.params?.confirmOrderData;
+  // const confirmData = route.params?.confirmOrderData;
 
-  const {
-    TotalProductPriceWithoutDiscount,
-    sumTotalPriceCustomerWillPay,
-    totalDiscountAmount,
-  } = getPrice(confirmData);
+  // const {
+  //   TotalProductPriceWithoutDiscount,
+  //   sumTotalPriceCustomerWillPay,
+  //   totalDiscountAmount,
+  // } = getPrice(confirmData);
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <ScrollView>
@@ -97,7 +97,8 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   <Text>Price(1 items)</Text>
                   <Text>
                     &#8377;
-                    {TotalProductPriceWithoutDiscount}
+                    {/* {TotalProductPriceWithoutDiscount} */}
+                    100
                   </Text>
                 </HStack>
 
@@ -108,7 +109,8 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   <Text>Saving</Text>
                   <Text color={'green.500'}>
                     - &#8377;
-                    {totalDiscountAmount}
+                    {/* {totalDiscountAmount} */}
+                    50
                   </Text>
                 </HStack>
                 <HStack
@@ -132,7 +134,8 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                 alignItems={'center'}
                 mt={2}>
                 <Text>Amount Payable</Text>
-                <Text bold>&#8377;{sumTotalPriceCustomerWillPay}</Text>
+                <Text bold>&#8377;70</Text>
+                {/* <Text bold>&#8377;{sumTotalPriceCustomerWillPay}</Text> */}
               </HStack>
             </Box>
           </Box>

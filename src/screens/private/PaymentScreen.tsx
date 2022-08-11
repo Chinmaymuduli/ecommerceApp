@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {
   Box,
@@ -24,20 +24,20 @@ import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
 import {ErrorModal, ImagePicker} from 'components/core';
 import {getPrice} from 'utils';
+import {useSwrApi} from 'hooks';
+import RazorpayCheckout from 'react-native-razorpay';
+import {useAuth} from 'app';
+import {post} from 'api';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'PaymentScreen'>;
-const PaymentScreen = ({navigation, route}: Props) => {
-  const paymentProductData = route.params?.PaymentData;
-
-  // console.log('object', paymentProductData);
-  const {
-    TotalProductPriceWithoutDiscount,
-    totalDiscountAmount,
-    sumTotalPriceCustomerWillPay,
-  } = getPrice(paymentProductData);
+const PaymentScreen = ({navigation, route: {params}}: Props) => {
+  // const paymentProductData = route.params?.PaymentData;
+  // const paymentProductData = params;
+  // console.log(params?.quantity);
 
   const {userData} = useAppContext();
-  const [payment, setPayment] = useState<any>();
+  const {user} = useAuth();
+  const [payment, setPayment] = useState<any>('payOnline');
   const [gstValue, setGstValue] = useState<any>('noGst');
   const [showModal, setShowModal] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
@@ -45,6 +45,8 @@ const PaymentScreen = ({navigation, route}: Props) => {
   const [document, setDocument] = useState<any>('');
   const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
   const [GstNumber, setGstNumber] = useState<any>();
+
+  // console.log({user});
 
   const handleDismiss = () => {
     setVisible(false);
@@ -56,17 +58,85 @@ const PaymentScreen = ({navigation, route}: Props) => {
     setProfileImage('');
   };
 
-  const ConfirmOrder = () => {
+  const confirmOrder = () => {
     if (profileImage && document) {
-      navigation.navigate('ConfirmOrder', {
-        confirmOrderData: paymentProductData,
-      });
+      navigation.navigate('ConfirmOrder');
     } else if (GstNumber) {
-      navigation.navigate('ConfirmOrder', {
-        confirmOrderData: paymentProductData,
-      });
+      navigation.navigate('ConfirmOrder');
     } else {
       setShowErrorModal(true);
+    }
+  };
+
+  const handlePayment = async () => {
+    if (payment === 'payOnline') {
+      console.log('online');
+      let response: {
+        [x: string]: any;
+        amount?: number;
+        data: any;
+        status?: number;
+        error?: string;
+      };
+      if (params?.type === 'product') {
+        response = await post({
+          path: 'checkout/payment/product',
+          body: JSON.stringify({
+            productId: params.productId,
+            quantity: params?.quantity,
+            addressId: params?.addressId,
+          }),
+        });
+        console.log({response});
+      } else {
+        response = await post({
+          path: 'checkout/payment/cart',
+          body: JSON.stringify({
+            shippedTo: params?.addressId,
+          }),
+        });
+      }
+      console.log('first', response?.amount);
+      const options = {
+        description: 'Chhattisgarh Herbals',
+        currency: 'INR',
+        key: 'rzp_test_LVpIWeJeXjNeF2', // Your api key
+        amount: response?.data?.amount,
+        name: user?.displayName,
+        order_id: response?.data?.paymentOrderId,
+        prefill: {
+          email: user?.email || 'chinmaymuduli1996@gmail.com',
+          contact: user?.phoneNumber,
+          name: user?.displayName,
+        },
+      };
+      RazorpayCheckout.open(options)
+        .then(async (data: any) => {
+          const res = await post({
+            path: `checkout/payment-verify`,
+            body: JSON.stringify({
+              razorpay_payment_id: data?.razorpay_payment_id,
+              razorpay_order_id: data?.razorpay_order_id,
+              razorpay_signature: data?.razorpay_signature,
+              payment_order_id: response?.data?.paymentOrderId,
+            }),
+          });
+          console.log({res});
+          navigation.navigate('ConfirmOrder');
+        })
+        .catch((error: any) => {
+          console.log(error);
+          Alert.alert('Error', 'Transaction Failed');
+        });
+    } else {
+      console.log('offline');
+      const res = await post({
+        path: 'order/cash-on-delivery',
+        body: JSON.stringify({
+          type: params.type,
+        }),
+      });
+      console.log({res});
     }
   };
   return (
@@ -87,7 +157,8 @@ const PaymentScreen = ({navigation, route}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Price(1 items)</Text>
-                  <Text>&#8377;{TotalProductPriceWithoutDiscount}</Text>
+                  <Text>&#8377;{params?.totalMrp}</Text>
+                  {/* <Text>&#8377;{TotalProductPriceWithoutDiscount}</Text> */}
                 </HStack>
 
                 <HStack
@@ -96,7 +167,8 @@ const PaymentScreen = ({navigation, route}: Props) => {
                   alignItems={'center'}>
                   <Text>Saving</Text>
                   <Text color={'green.500'}>
-                    - &#8377;{totalDiscountAmount}
+                    - &#8377;{params?.discount}
+                    {/* - &#8377;{totalDiscountAmount} */}
                   </Text>
                 </HStack>
                 <HStack
@@ -119,7 +191,8 @@ const PaymentScreen = ({navigation, route}: Props) => {
             <Box px={4} mt={2} mb={2}>
               <HStack justifyContent={'space-between'} alignItems={'center'}>
                 <Text>Amount Payable</Text>
-                <Text bold>&#8377;{sumTotalPriceCustomerWillPay}</Text>
+                <Text bold>&#8377;{params?.totalSalePrice}</Text>
+                {/* <Text bold>&#8377;{sumTotalPriceCustomerWillPay}</Text> */}
               </HStack>
             </Box>
           </Box>
@@ -164,7 +237,7 @@ const PaymentScreen = ({navigation, route}: Props) => {
               <Radio value="payOnline" my={1} colorScheme={'green'}>
                 Pay Online
               </Radio>
-              <Radio value="cod" my={3} colorScheme={'green'}>
+              <Radio value="CashOnDelivery" my={3} colorScheme={'green'}>
                 Cash On Delivery
               </Radio>
             </Radio.Group>
@@ -325,33 +398,25 @@ const PaymentScreen = ({navigation, route}: Props) => {
           bg={'#008000'}
           borderRadius={4}
           onPress={() => {
-            if (userData?.role === 'b2b') {
-              return ConfirmOrder();
-            }
-            navigation.navigate('ConfirmOrder', {
-              confirmOrderData: paymentProductData,
-            });
+            if (userData?.role === 'b2b') return confirmOrder();
+            handlePayment();
           }}>
           <HStack justifyContent={'space-between'} py={2} alignItems={'center'}>
             <HStack alignItems={'center'} space={2} pl={2}>
-              <Box>
-                <Text bold color={'#fff'}>
-                  1 items
-                </Text>
-              </Box>
+              <Text bold color={'#fff'}>
+                1 items
+              </Text>
               <HStack space={2}>
                 <Text bold color={'#fff'}>
                   |
                 </Text>
                 <Text bold color={'#fff'}>
                   &#8377;
-                  {/* {DiscountPrice - saving} */}
-                  {sumTotalPriceCustomerWillPay}
+                  {params?.totalSalePrice}
                 </Text>
                 <Text textDecorationLine={'line-through'} color={'#fff'}>
                   &#8377;
-                  {/* {DiscountPrice} */}
-                  {TotalProductPriceWithoutDiscount}
+                  {params?.discount}
                 </Text>
               </HStack>
             </HStack>

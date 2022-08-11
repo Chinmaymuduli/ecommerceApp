@@ -1,13 +1,12 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import {Box, HStack, Image, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
-import {useAppContext} from 'contexts';
 import Entypo from 'react-native-vector-icons/Entypo';
-import {HomeProductType, ProductType} from 'types';
-import {put, remove} from 'api';
+import {ProductType} from 'types';
+import {put} from 'api';
 import {useSwrApi} from 'hooks';
 import {SpecialProductSkeleton} from '../../src/skeleton';
 import {PRODUCT_PLACEHOLDER} from 'assets';
@@ -19,16 +18,9 @@ type Props = {
 
 const SpecialProductCard = ({item, isValidating}: Props) => {
   const navigation = useNavigation<NavigationProps>();
-  const [count, setCount] = useState(0);
-  const {setCartItems, cartItems} = useAppContext();
 
-  const {data, mutate, isLoading} = useSwrApi('cart/all');
+  const {data, mutate} = useSwrApi('cart/all');
   const CartData = data?.data?.data?.products;
-
-  // const CartCount = CartData?.filter(
-  //   (cartId: {product: {_id: string}}) => cartId?.product?._id === item._id,
-  // );
-  // console.log({CartData});
 
   const isCartItem = useMemo(
     () =>
@@ -95,26 +87,20 @@ const SpecialProductCard = ({item, isValidating}: Props) => {
       {isValidating ? (
         <SpecialProductSkeleton />
       ) : (
-        <Box mb={5} justifyContent={'center'}>
+        <Box
+          mb={5}
+          justifyContent={'space-between'}
+          w={Dimensions.get('window').width / 2.2}>
           <Pressable
             onPress={() =>
               navigation.navigate('ProductDetails', {ProductDetailsType: item})
             }
             borderWidth={1}
-            mr={5}
+            mr={3}
             borderRadius={6}
             borderColor={COLORS.lightGrey}>
-            <Box
-              h={110}
-              w={Dimensions.get('window').width / 2.4}
-              alignItems={'center'}
-              justifyContent={'center'}>
+            <Box h={110} alignItems={'center'} justifyContent={'center'}>
               <Image
-                // source={{
-                //   uri: item?.images?.length
-                //     ? item.images[0]
-                //     : 'https://boltagency.ca/content/images/2020/03/placeholder-images-product-1_large.png',
-                // }}
                 source={
                   item?.displayImage?.url
                     ? {
@@ -156,7 +142,7 @@ const SpecialProductCard = ({item, isValidating}: Props) => {
 
           <Box
             alignSelf={'flex-end'}
-            right={5}
+            right={3}
             bg={COLORS.textWhite}
             mt={-5}
             shadow={1}

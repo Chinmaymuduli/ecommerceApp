@@ -117,12 +117,15 @@ const Home = () => {
               </Pressable>
             </Box>
             {/* Category Section */}
+
             <HomeCategories />
 
             {/* Slider Section */}
+
             <HomeSlider />
 
             {/* Product Section */}
+
             {CategoryList?.map((item: any) => (
               <Box mt={2} key={item._id}>
                 <CategoryProducts
@@ -168,9 +171,11 @@ const Home = () => {
             </Pressable>
 
             {/* Special Product Section */}
+
             <Box mt={4}>
               <SpecialProduct />
             </Box>
+
             {/* last section */}
             <Box
               mb={100}
