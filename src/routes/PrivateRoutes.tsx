@@ -77,7 +77,9 @@ export type PrivateRoutesType = {
   //   SelectProductData: CartItemType[];
   // };
   WishList: undefined;
-  OrderDetails: undefined;
+  OrderDetails: {
+    orderId?: string;
+  };
   Notifications: undefined;
   Profile: undefined;
   SupportUs: undefined;

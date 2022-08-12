@@ -29,10 +29,8 @@ const Cart = ({route, navigation}: Props) => {
   const CartItems = data?.data?.data;
   const isFocused = useIsFocused();
   const [quantity, setQuantity] = React.useState();
-  const {addToOrderItemFromCart} = useStore(state => state);
 
   const handleProceed = () => {
-    addToOrderItemFromCart();
     navigation.navigate('OrderSummary', {});
   };
 

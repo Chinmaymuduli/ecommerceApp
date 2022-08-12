@@ -21,6 +21,7 @@ import {NavigationProps, PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ProductDetailsType} from 'types';
 import {useStore} from 'app';
+import {useSwrApi} from 'hooks';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Coupon'>;
 const Coupon = ({route}: Props) => {
@@ -47,6 +48,18 @@ const Coupon = ({route}: Props) => {
       // });
     }, 1000);
   };
+
+  const {data, isValidating, mutate} = useSwrApi('coupons/active');
+  // console.log(data?.data?.data);
+  const CouponData: {
+    _id?: string;
+    code?: string;
+    discount?: number;
+    endDate?: string;
+    maxDiscount?: number;
+    maxUses?: number;
+    startDate?: string;
+  }[] = data?.data?.data;
   return (
     <Box bg={COLORS.textWhite} flex={1}>
       <ScrollView>
@@ -109,16 +122,20 @@ const Coupon = ({route}: Props) => {
         <Box px={5} mt={6}>
           <Heading size={'sm'}>Available coupons</Heading>
           <Box mt={4}>
-            {CouponArr?.map(item => (
+            {/* {CouponArr?.map(item => ( */}
+            {CouponData?.map(item => (
               <Box
-                key={item.id}
+                key={item._id}
                 py={2}
                 borderWidth={1}
                 mb={4}
                 borderRadius={7}
                 borderColor={COLORS.lightGrey}>
                 <VStack px={3}>
-                  <Text>{item?.description}</Text>
+                  <Text>
+                    Use code {item?.code} to get maximum Rs.{item?.maxDiscount}{' '}
+                    discount
+                  </Text>
                 </VStack>
                 <HStack px={3} justifyContent={'space-between'} mt={4}>
                   <Pressable onPress={() => Conditions(item)}>
@@ -138,10 +155,11 @@ const Coupon = ({route}: Props) => {
                         px={1}
                         py={1}>
                         {item?.code}
+                        {/* {item?.} */}
                       </Text>
                     </Box>
                     <Pressable
-                      onPress={() => ApplyCoupon(item?.discountValue || 0)}
+                      onPress={() => ApplyCoupon(item?.discount || 0)}
                       borderWidth={1}
                       borderRadius={6}
                       borderColor={COLORS.primary}>
@@ -179,7 +197,13 @@ const Coupon = ({route}: Props) => {
                   borderRadius: 20,
                   marginTop: 8,
                 }}></Box>
-              <Text pl={2}>{termAndCondition?.term1}</Text>
+              <Text pl={2}>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime
+                mollitia, molestiae quas vel sint commodi repudiandae
+                consequuntur voluptatum laborum numquam blanditiis harum
+                quisquam
+              </Text>
+              {/* <Text pl={2}>{termAndCondition?.term1}</Text> */}
             </Box>
             <Box mt={2} flexDirection={'row'}>
               <Box

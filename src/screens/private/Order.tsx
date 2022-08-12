@@ -21,17 +21,6 @@ import {PastOrder} from 'components';
 import {useSwrApi} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
 
-const activeOrder = [
-  {
-    name: 'Jyotishmati Oil',
-    OrderID: '#12345',
-    status: 'Shipping',
-    currentPrice: 599,
-    img: AYUSH_1,
-    total: '3 Items',
-  },
-];
-
 const pastOrders = [
   {
     name: 'Jyotishmati Oil',
@@ -48,6 +37,8 @@ const Order = ({navigation}: Props) => {
 
   const {data, isValidating, mutate} = useSwrApi('order/orders/my');
   const myOrder = data?.data?.data;
+
+  // console.log({myOrder});
 
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -183,7 +174,11 @@ const Order = ({navigation}: Props) => {
                         <HStack px={3} py={2}>
                           <Pressable
                             w={'full'}
-                            onPress={() => navigation.navigate('OrderDetails')}>
+                            onPress={() =>
+                              navigation.navigate('OrderDetails', {
+                                orderId: item?._id,
+                              })
+                            }>
                             <Box
                               mr={2}
                               bg={'green.100'}

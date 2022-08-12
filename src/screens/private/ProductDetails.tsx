@@ -188,28 +188,28 @@ const ProductDetails = ({route, navigation}: Props) => {
   // console.log({authData});
 
   const BuyNow = async (buyItem: ProductType) => {
-    // console.log(buyItem._id);
+    console.log(buyItem);
     const accessToken = await AsyncStorage.getItem('access_token');
-    const productCart = CartData.some(
+    const productCart = CartData?.some(
       (_item: {product: {_id: string}}) => _item.product._id === buyItem._id,
     );
-    // console.log(productCart);
 
     try {
       if (addQuantity) {
         return setModalDialog(true);
       }
-      if (!productCart) {
-        await put({
-          path: 'cart/add',
-          body: JSON.stringify({
-            product: buyItem._id,
-            quantity: count,
-          }),
-          token: accessToken,
-        });
-        // navigation.navigate('OrderSummary');
-      }
+      // if (!productCart) {
+      //   const res = await put({
+      //     path: 'cart/add',
+      //     body: JSON.stringify({
+      //       product: buyItem._id,
+      //       quantity: count,
+      //     }),
+      //     token: accessToken,
+      //   });
+
+      //   // console.log({res});
+      // }
       navigation.navigate('OrderSummary', {
         productId: chooseWeight._id,
         type: 'product',
