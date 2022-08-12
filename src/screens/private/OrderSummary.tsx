@@ -23,6 +23,8 @@ import {FetchLoader} from 'components/core';
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route: {params}}: Props) => {
   const isMounted = useIsMounted();
+
+  // console.log(params?.type);
   const {cartItems, orderItems} = useStore(state => state);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>();
   const productData = useSwrApi(
