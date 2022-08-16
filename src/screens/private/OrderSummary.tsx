@@ -16,7 +16,6 @@ import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {OrderSummaryCard} from 'components';
 import {useStore} from 'app';
 import {useAddress, useIsMounted, useSwrApi} from 'hooks';
-import {CartItemType} from 'types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FetchLoader} from 'components/core';
 
@@ -24,8 +23,6 @@ type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route: {params}}: Props) => {
   const isMounted = useIsMounted();
 
-  // console.log(params?.type);
-  const {cartItems, orderItems} = useStore(state => state);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>();
   const productData = useSwrApi(
     params?.type === 'product'
@@ -33,8 +30,6 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
       : `orders/summary?type=cart`,
   );
   const OrderSummaryData = productData?.data?.data?.data;
-
-  // console.log({OrderSummaryData});
 
   useEffect(() => {
     (async () => {

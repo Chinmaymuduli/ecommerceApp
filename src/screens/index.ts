@@ -1,29 +1,29 @@
-export { default as Login } from './public/Login'
-export { default as Register } from './public/Register'
-export { default as OnBoarding } from './public/OnBoarding'
-export { default as ForgotPassword } from './public/ForgotPassword'
-export { default as OtpScreen } from './public/OtpScreen'
-export { default as ResetPassword } from './public/ResetPassword'
-export { default as SplashScreen } from './common/SplashScreen'
+export {default as Login} from './public/Login';
+export {default as Register} from './public/Register';
+export {default as OnBoarding} from './public/OnBoarding';
+export {default as ForgotPassword} from './public/ForgotPassword';
+export {default as OtpScreen} from './public/OtpScreen';
+export {default as ResetPassword} from './public/ResetPassword';
+export {default as SplashScreen} from './common/SplashScreen';
 
-
-export { default as Home } from './private/Home'
-export { default as Cart } from './private/Cart'
-export { default as Category } from './private/Category'
-export { default as Order } from './private/Order'
-export { default as Search } from './private/Search'
-export { default as ProductDetails } from './private/ProductDetails'
-export { default as Coupon } from './private/Coupon'
-export { default as Address } from './private/Address'
-export { default as PaymentScreen } from './private/PaymentScreen'
-export { default as ConfirmOrder } from './private/ConfirmOrder'
-export { default as OrderSummary } from './private/OrderSummary'
-export { default as SelectAddress } from './private/SelectAddress'
-export { default as WishList } from './private/WishList'
-export { default as OrderDetails } from './private/OrderDetails'
-export { default as Notifications } from './private/Notifications'
-export { default as Profile } from './private/Profile'
-export { default as SupportUs } from './private/SupportUs'
-export { default as EditProfile } from './private/EditProfile'
-export { default as MyReview } from './private/MyReview'
-export { default as ChangePassword } from './private/ChangePassword'
+export {default as Home} from './private/Home';
+export {default as Cart} from './private/Cart';
+export {default as Category} from './private/Category';
+export {default as Order} from './private/Order';
+export {default as Search} from './private/Search';
+export {default as ProductDetails} from './private/ProductDetails';
+export {default as Coupon} from './private/Coupon';
+export {default as Address} from './private/Address';
+export {default as PaymentScreen} from './private/PaymentScreen';
+export {default as ConfirmOrder} from './private/ConfirmOrder';
+export {default as OrderSummary} from './private/OrderSummary';
+export {default as SelectAddress} from './private/SelectAddress';
+export {default as WishList} from './private/WishList';
+export {default as OrderDetails} from './private/OrderDetails';
+export {default as Notifications} from './private/Notifications';
+export {default as Profile} from './private/Profile';
+export {default as SupportUs} from './private/SupportUs';
+export {default as EditProfile} from './private/EditProfile';
+export {default as MyReview} from './private/MyReview';
+export {default as ChangePassword} from './private/ChangePassword';
+export {default as B2BAccount} from './private/B2BAccount';

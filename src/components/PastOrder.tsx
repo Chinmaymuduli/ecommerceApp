@@ -9,15 +9,18 @@ import {
   Input,
   Modal,
   Pressable,
+  ScrollView,
   Text,
   VStack,
 } from 'native-base';
 import {COLORS} from 'configs';
-import {AYUSH_1} from 'assets';
+import {AYUSH_1, PRODUCT_PLACEHOLDER} from 'assets';
 import {Rating} from 'react-native-ratings';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {PastOrderType} from 'types';
+import {useSwrApi} from 'hooks';
+import {post} from 'api';
 
 type Props = {
   item: PastOrderType;
@@ -26,14 +29,45 @@ type Props = {
 const PastOrder = ({item}: Props) => {
   const [showModal, setShowModal] = useState(false);
   const [ratings, setRatings] = useState(0);
+  const [reviewTitle, setReviewTitle] = useState<string>();
+  const [reviewText, setReviewText] = useState<string>();
   const navigation = useNavigation<NavigationProps>();
+  const {data, isValidating, mutate} = useSwrApi(
+    `review/product/${item?.product?._id}`,
+  );
+
+  const ReviewData = data?.data?.data;
+
+  const handelRatting = async () => {
+    try {
+      await post({
+        path: 'review',
+        body: JSON.stringify({
+          orderId: item?._id,
+          rating: ratings,
+          title: reviewTitle,
+          comment: reviewText,
+        }),
+      });
+      setShowModal(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      mutate();
+    }
+  };
+
   return (
     <Box px={4} py={4}>
       <Box borderWidth={1} borderRadius={5} borderColor={COLORS.lightGrey}>
         <Pressable>
           <HStack alignItems={'center'} space={3} py={3} px={3}>
             <Image
-              source={AYUSH_1}
+              source={
+                item?.product?.displayImage?.url
+                  ? {uri: item?.product?.displayImage?.url}
+                  : PRODUCT_PLACEHOLDER
+              }
               style={styles.image}
               alt={'activeImg'}
               resizeMode="contain"
@@ -42,7 +76,7 @@ const PastOrder = ({item}: Props) => {
             />
             <VStack>
               <Text bold fontSize={14}>
-                {item.name}
+                {item?.product?.title}
               </Text>
               <Text fontSize={13}>{item.total}</Text>
             </VStack>
@@ -50,11 +84,11 @@ const PastOrder = ({item}: Props) => {
           <VStack px={3} space={1} pb={3}>
             <HStack justifyContent={'space-between'}>
               <Text bold>ID Order :</Text>
-              <Text fontSize={15}>{item?.OrderID}</Text>
+              <Text fontSize={15}>{item?._id}</Text>
             </HStack>
             <HStack justifyContent={'space-between'}>
               <Text bold>Total Price :</Text>
-              <Text fontSize={15}>&#8377; {item?.currentPrice}</Text>
+              <Text fontSize={15}>&#8377; {item?.totalPrice}</Text>
             </HStack>
             <HStack justifyContent={'space-between'}>
               <Text bold>Status :</Text>
@@ -65,16 +99,18 @@ const PastOrder = ({item}: Props) => {
           </VStack>
         </Pressable>
         <HStack px={3} py={2} alignItems={'center'} space={4}>
-          {ratings > 0 ? (
+          {data?.data?.status === 'SUCCESS' ? (
             <HStack mb={2} mt={1} width={Dimensions.get('window').width / 2.3}>
-              <Pressable onPress={() => setShowModal(true)}>
+              <Pressable
+              // onPress={() => setShowModal(true)}
+              >
                 <Text bold color={'amber.400'}>
                   Ratings :
                 </Text>
               </Pressable>
               <Rating
                 type="custom"
-                startingValue={ratings}
+                startingValue={ReviewData?.rating}
                 ratingColor={'green'}
                 tintColor={'#fff'}
                 ratingBackgroundColor={COLORS.grey}
@@ -83,6 +119,7 @@ const PastOrder = ({item}: Props) => {
                 onFinishRating={(rating: React.SetStateAction<number>) => {
                   setRatings(rating);
                 }}
+                readonly={true}
               />
             </HStack>
           ) : (
@@ -100,7 +137,9 @@ const PastOrder = ({item}: Props) => {
             flex={1}
             onPress={() =>
               navigation.navigate('OrderSummary', {
-                ProductDetailsType: {...item, discount: 799, offer: '20% OFF'},
+                // ProductDetailsType: {...item, discount: 799, offer: '20% OFF'},
+                // type:"product",
+                // productId:"",
               })
             }>
             <Box
@@ -142,16 +181,30 @@ const PastOrder = ({item}: Props) => {
                 </HStack>
               </Box>
 
-              <Box>
+              <Box
+                borderBottomWidth={1}
+                borderColor={COLORS.lightGrey}
+                borderStyle={'dashed'}>
                 <Input
-                  placeholder="Write your review here..."
+                  placeholder="Review title"
                   multiline
-                  numberOfLines={8}
-                  textAlignVertical="top"
                   fontSize={15}
                   variant="unstyled"
+                  value={reviewTitle}
+                  onChangeText={title => setReviewTitle(title)}
                 />
               </Box>
+
+              <Input
+                placeholder="Write your review here..."
+                multiline
+                numberOfLines={8}
+                textAlignVertical="top"
+                fontSize={15}
+                variant="unstyled"
+                value={reviewText}
+                onChangeText={rt => setReviewText(rt)}
+              />
             </Modal.Body>
             <Modal.Footer>
               <Button.Group space={2}>
@@ -163,11 +216,7 @@ const PastOrder = ({item}: Props) => {
                   }}>
                   Cancel
                 </Button>
-                <Button
-                  colorScheme={'green'}
-                  onPress={() => {
-                    setShowModal(false);
-                  }}>
+                <Button colorScheme={'green'} onPress={() => handelRatting()}>
                   Save
                 </Button>
               </Button.Group>

@@ -1,5 +1,12 @@
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {Rating} from 'react-native-ratings';
+import {PRODUCT_PLACEHOLDER} from 'assets';
 import {StyleSheet} from 'react-native';
+import ReviewModal from './ReviewModal';
 import React, {useState} from 'react';
+import {reviewType} from 'types';
+import {COLORS} from 'configs';
+import moment from 'moment';
 import {
   AlertDialog,
   Box,
@@ -10,30 +17,38 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import {COLORS} from 'configs';
-import {Rating} from 'react-native-ratings';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import ReviewModal from './ReviewModal';
-import {reviewType} from 'types';
+import {remove} from 'api';
+
 type Props = {
   item: reviewType;
+  reviewMutate: () => void;
 };
 
-const MyReviewCard = ({item}: Props) => {
+const MyReviewCard = ({item, reviewMutate}: Props) => {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [ratings, setRatings] = useState<number>(item?.rating);
   const [review, setReview] = useState<string>();
-  const [reviewText, setReviewText] = useState();
   const [isOpen, setIsOpen] = React.useState(false);
-  // console.log(item);
-  const openModal = (reviewTxt: string) => {
+  const openModal = () => {
     setShowModal(true);
-    setReview(reviewTxt);
+    setReview(item?._id);
   };
 
   const onClose = () => setIsOpen(false);
 
   const cancelRef = React.useRef(null);
+  const handelDelete = async () => {
+    try {
+      const res = await remove({
+        path: `review/${item?._id}`,
+      });
+      onClose();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      reviewMutate();
+    }
+  };
+
   return (
     <>
       <Box bg={COLORS.lightGrey}>
@@ -42,7 +57,11 @@ const MyReviewCard = ({item}: Props) => {
             <HStack space={4} alignItems={'center'}>
               <Box h={100} alignItems={'center'} justifyContent={'center'}>
                 <Image
-                  source={item?.img}
+                  source={
+                    item?.order?.product?.displayImage
+                      ? {uri: item?.order?.product?.displayImage}
+                      : PRODUCT_PLACEHOLDER
+                  }
                   style={styles.image}
                   alt={'reviewImg'}
                   resizeMode="contain"
@@ -50,7 +69,7 @@ const MyReviewCard = ({item}: Props) => {
               </Box>
               <VStack space={1}>
                 <Text bold fontSize={15}>
-                  {item?.name}
+                  {item?.order?.product?.title}
                 </Text>
                 <HStack alignItems={'center'}>
                   <Rating
@@ -64,12 +83,12 @@ const MyReviewCard = ({item}: Props) => {
                     readonly={true}
                   />
                 </HStack>
-                <Text>{item?.date}</Text>
+                <Text>{moment(item?.updatedAt).format('l')}</Text>
+                {/* <Text>{item?.updatedAt}</Text> */}
               </VStack>
             </HStack>
-            <Box>
-              <Text>{item?.review}</Text>
-            </Box>
+            <Text bold>{item?.title}</Text>
+            <Text>{item?.comment}</Text>
             <Box my={4}>
               <HStack justifyContent={'space-evenly'}>
                 <Pressable onPress={() => setIsOpen(!isOpen)}>
@@ -81,7 +100,7 @@ const MyReviewCard = ({item}: Props) => {
                   </HStack>
                 </Pressable>
                 <Box borderRightWidth={2} borderColor={COLORS.grey}></Box>
-                <Pressable onPress={() => openModal(item?.review)}>
+                <Pressable onPress={() => openModal()}>
                   <HStack space={2}>
                     <AntDesign name="edit" size={22} color={COLORS.primary} />
                     <Text bold color={COLORS.fadeBlack}>
@@ -98,9 +117,8 @@ const MyReviewCard = ({item}: Props) => {
       <ReviewModal
         setShowModal={setShowModal}
         showModal={showModal}
-        ratings={ratings}
-        setRatings={setRatings}
-        reviewData={review}
+        reviewMutate={reviewMutate}
+        reviewId={review}
         setReview={setReview}
       />
       {/* Delete Alert */}
@@ -124,7 +142,7 @@ const MyReviewCard = ({item}: Props) => {
                 ref={cancelRef}>
                 Cancel
               </Button>
-              <Button colorScheme="danger" onPress={onClose}>
+              <Button colorScheme="danger" onPress={() => handelDelete()}>
                 Delete
               </Button>
             </Button.Group>

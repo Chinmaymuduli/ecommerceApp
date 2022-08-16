@@ -64,7 +64,7 @@ const ChangePassword = ({navigation}: Props) => {
   };
 
   const resendOTP = async () => {
-    console.log('object');
+    // console.log('object');
     try {
       isMounted.current && setLoading(true);
       const RESEND_OTP = await post({

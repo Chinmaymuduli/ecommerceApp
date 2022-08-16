@@ -9,7 +9,7 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import {AYUSH_1, ORDER} from 'assets';
+import {AYUSH_1, ORDER, PRODUCT_PLACEHOLDER} from 'assets';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -21,24 +21,20 @@ import {PastOrder} from 'components';
 import {useSwrApi} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
 
-const pastOrders = [
-  {
-    name: 'Jyotishmati Oil',
-    OrderID: '#12345',
-    status: 'Shipped',
-    currentPrice: 599,
-    img: AYUSH_1,
-    total: '1 Items',
-  },
-];
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Order'>;
 const Order = ({navigation}: Props) => {
   const [selectionMode, setSelectionMode] = React.useState<any>(1);
 
   const {data, isValidating, mutate} = useSwrApi('order/orders/my');
-  const myOrder = data?.data?.data;
+  const myOrders = data?.data?.data;
 
-  // console.log({myOrder});
+  const myOrder = myOrders?.filter(
+    (item: {status: string}) => item?.status !== 'DELIVERED',
+  );
+
+  const PastOrderData = myOrders?.filter(
+    (item: {status: string}) => item?.status === 'DELIVERED',
+  );
 
   const isFocused = useIsFocused();
   useEffect(() => {
@@ -108,7 +104,7 @@ const Order = ({navigation}: Props) => {
                     Past Order
                   </Text>
                   <Text color={selectionMode === 2 ? COLORS.textWhite : '#000'}>
-                    (1)
+                    ({PastOrderData ? PastOrderData?.length : 0})
                   </Text>
                 </HStack>
               </Box>
@@ -136,7 +132,7 @@ const Order = ({navigation}: Props) => {
                                   ? {
                                       uri: item?.displayImage?.url,
                                     }
-                                  : AYUSH_1
+                                  : PRODUCT_PLACEHOLDER
                               }
                               style={styles.image}
                               alt={'activeImg'}
@@ -204,9 +200,9 @@ const Order = ({navigation}: Props) => {
                   />
                 </>
               )
-            ) : pastOrders.length > 0 ? (
-              pastOrders.map((item: PastOrderType) => (
-                <PastOrder item={item} key={item.name} />
+            ) : PastOrderData.length > 0 ? (
+              PastOrderData.map((item: PastOrderType) => (
+                <PastOrder item={item} key={item._id} />
               ))
             ) : (
               <>

@@ -1,26 +1,57 @@
 import {StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Box, Button, Center, HStack, Input, Modal, Text} from 'native-base';
 import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
+import {useIsMounted, useSwrApi} from 'hooks';
+import {put} from 'api';
 
 type ReviewModalType = {
   setShowModal: (previousValue: boolean) => void;
   showModal: boolean;
-  ratings?: number;
-  reviewData?: string;
+  reviewMutate: () => void;
+  reviewId?: string;
   setReview: (txt: string) => void;
-  setRatings: number | any;
 };
 
 const ReviewModal = ({
   setShowModal,
   showModal,
-  ratings,
-  setRatings,
-  reviewData,
+  reviewMutate,
+  reviewId,
   setReview,
 }: ReviewModalType) => {
+  const isMounted = useIsMounted();
+  const {data, isValidating} = useSwrApi(`review/${reviewId}`);
+  const review = data?.data?.data;
+
+  const [ratings, setRatings] = useState<any>();
+  const [reviewTitle, setReviewTitle] = useState<string>();
+  const [reviewComment, setReviewComment] = useState<string>();
+  useEffect(() => {
+    isMounted.current && setReviewTitle(review?.title);
+    isMounted.current && setReviewComment(review?.comment);
+    isMounted.current && setRatings(review?.rating);
+  }, [review]);
+
+  const updateReview = async () => {
+    try {
+      const res = await put({
+        path: `review/${reviewId}`,
+        body: JSON.stringify({
+          rating: ratings,
+          comment: reviewComment,
+          title: reviewTitle,
+        }),
+      });
+
+      setShowModal(false);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      reviewMutate();
+    }
+  };
   return (
     <Center>
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
@@ -42,10 +73,22 @@ const ReviewModal = ({
                     setRatings(rating);
                   }}
                 />
-                <Text ml={3}>({ratings} / 5)</Text>
+                <Text ml={3}>({review?.rating} / 5)</Text>
               </HStack>
             </Box>
-
+            <Box
+              borderBottomWidth={1}
+              borderStyle={'dashed'}
+              borderColor={COLORS.lightGrey}>
+              <Input
+                placeholder="Title here..."
+                multiline
+                fontSize={15}
+                variant="unstyled"
+                value={reviewTitle}
+                onChangeText={rt => setReviewTitle(rt)}
+              />
+            </Box>
             <Input
               placeholder="Write your review here..."
               multiline
@@ -53,8 +96,8 @@ const ReviewModal = ({
               textAlignVertical="top"
               fontSize={15}
               variant="unstyled"
-              value={reviewData}
-              onChangeText={txt => setReview(txt)}
+              value={reviewComment}
+              onChangeText={rc => setReviewComment(rc)}
             />
           </Modal.Body>
           <Modal.Footer>
@@ -67,11 +110,7 @@ const ReviewModal = ({
                 }}>
                 Cancel
               </Button>
-              <Button
-                colorScheme={'green'}
-                onPress={() => {
-                  setShowModal(false);
-                }}>
+              <Button colorScheme={'green'} onPress={() => updateReview()}>
                 Save
               </Button>
             </Button.Group>

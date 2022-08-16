@@ -70,7 +70,7 @@ const Counter = ({
           quantity: -1,
         }),
       });
-      console.log({res});
+      // console.log({res});
       if (res.status === 200) return ProductMutate();
     } catch (error) {
       console.log(error);

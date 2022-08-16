@@ -7,6 +7,7 @@ import {
 // import BottomTab from './BottomTab';
 import {
   Address,
+  B2BAccount,
   Cart,
   Category,
   ChangePassword,
@@ -86,6 +87,7 @@ export type PrivateRoutesType = {
   EditProfile: undefined;
   MyReview: undefined;
   ChangePassword: undefined;
+  B2BAccount: undefined;
 };
 export type NavigationProps = NativeStackNavigationProp<PrivateRoutesType>;
 const Stack = createNativeStackNavigator<PrivateRoutesType>();
@@ -211,6 +213,16 @@ const PrivateRoutes = () => {
         }}
       />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen
+        name="B2BAccount"
+        component={B2BAccount}
+        // options={{
+        //   title: 'Account',
+        //   headerShown: true,
+        //   headerBackTitleVisible: false,
+        //   headerTintColor: '#000',
+        // }}
+      />
     </Stack.Navigator>
   );
 };

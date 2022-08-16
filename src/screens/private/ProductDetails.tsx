@@ -185,7 +185,7 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   }, []);
 
-  // console.log({authData});
+  // console.log({count});
 
   const BuyNow = async (buyItem: ProductType) => {
     console.log(buyItem);

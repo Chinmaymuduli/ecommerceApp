@@ -4,6 +4,7 @@ import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
 import {CartItemType} from 'types';
 import OrderSummaryCounter from './OrderSummaryCounter';
+import {PRODUCT_PLACEHOLDER} from 'assets';
 
 type Props = {
   orderData: CartItemType;
@@ -18,10 +19,11 @@ const OrderSummaryCard = ({orderData}: Props) => {
           <VStack alignItems={'center'}>
             <Image
               alt="orderimg"
-              source={{
-                uri: 'https://cdn.shopify.com/s/files/1/0064/8907/9893/products/herbal-tea.jpg?v=1551108498',
-              }}
-              // source={orderData?.product?.img}
+              source={
+                orderData?.product?.displayImage?.url
+                  ? {uri: orderData?.product?.displayImage?.url}
+                  : PRODUCT_PLACEHOLDER
+              }
               resizeMode={'contain'}
               style={{
                 width: 100,

@@ -50,7 +50,6 @@ const Coupon = ({route}: Props) => {
   };
 
   const {data, isValidating, mutate} = useSwrApi('coupons/active');
-  // console.log(data?.data?.data);
   const CouponData: {
     _id?: string;
     code?: string;

@@ -105,11 +105,15 @@ export type changePasswordType = {
   OTP?: number;
 };
 export type reviewType = {
-  img: ImageSourcePropType;
   name: string;
   rating: number;
   date: string;
   review: string;
+  order: {product?: ProductType};
+  updatedAt?: string;
+  comment?: string;
+  title?: string;
+  _id?: string;
 };
 export type activeOrderType = {
   name: string;
@@ -143,12 +147,13 @@ export type WishListCardType = {
 };
 
 export type PastOrderType = {
-  name: string;
   OrderID: string;
   status: string;
-  currentPrice: number;
   img: string | any;
   total: string;
+  _id?: string;
+  product?: ProductType;
+  totalPrice?: number;
 };
 
 // Zustand

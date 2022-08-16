@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Box,
   Center,
@@ -15,6 +15,9 @@ import {AYUSH_1, AYUSH_2, REVIEW, ReviewImg} from 'assets';
 import {Rating} from 'react-native-ratings';
 import {MyReviewCard} from 'components';
 import {reviewType} from 'types';
+import {useSwrApi} from 'hooks';
+import {useIsFocused} from '@react-navigation/native';
+import {FetchLoader} from 'components/core';
 
 const MyReviewArr = [
   {
@@ -37,31 +40,47 @@ const MyReviewArr = [
 ];
 
 const MyReview = () => {
+  const {data, isValidating, mutate} = useSwrApi('my-reviews');
+  const MyReviewData: reviewType[] = data?.data?.data?.data;
+
+  const isFocused = useIsFocused();
+  useEffect(() => {
+    mutate();
+  }, [isFocused]);
+
   return (
-    <Box flex={1} bg={COLORS.textWhite}>
-      <Box>
-        <FlatList
-          data={MyReviewArr.length > 0 ? MyReviewArr : []}
-          renderItem={({item}) => <MyReviewCard item={item} />}
-          keyExtractor={(item, index) => index.toString()}
-          showsVerticalScrollIndicator={false}
-          ListEmptyComponent={() => (
-            <>
-              <Box mt={100}>
-                <Center>
-                  <Image
-                    source={ReviewImg}
-                    style={styles.ReviewImg}
-                    alt={'ReviewImg'}
-                  />
-                  <Heading mt={2}>No Review Found</Heading>
-                </Center>
-              </Box>
-            </>
-          )}
-        />
-      </Box>
-    </Box>
+    <>
+      {isValidating ? (
+        <FetchLoader />
+      ) : (
+        <Box flex={1} bg={COLORS.textWhite}>
+          <Box>
+            <FlatList
+              data={MyReviewData?.length > 0 ? MyReviewData : []}
+              renderItem={({item}) => (
+                <MyReviewCard item={item} reviewMutate={mutate} />
+              )}
+              keyExtractor={(item, index) => index.toString()}
+              showsVerticalScrollIndicator={false}
+              ListEmptyComponent={() => (
+                <>
+                  <Box mt={100}>
+                    <Center>
+                      <Image
+                        source={ReviewImg}
+                        style={styles.ReviewImg}
+                        alt={'ReviewImg'}
+                      />
+                      <Heading mt={2}>No Review Found</Heading>
+                    </Center>
+                  </Box>
+                </>
+              )}
+            />
+          </Box>
+        </Box>
+      )}
+    </>
   );
 };
 

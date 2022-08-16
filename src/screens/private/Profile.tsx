@@ -15,7 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useAuth, useStore} from 'app';
-import {useActions, useAuthFetch} from 'hooks';
+import {useAuthFetch} from 'hooks';
 import {User} from 'types';
 import {FetchLoader} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -117,7 +117,6 @@ const Profile = () => {
                   </Text>
                   <Text color={COLORS.textWhite}>
                     {authData?.email ? authData?.email : 'No email found'}
-                    {/* {data?.data?.email ? data?.data?.email : 'No email found'} */}
                   </Text>
                 </Box>
                 <Box position={'absolute'} right={4} bottom={3}>
@@ -244,6 +243,23 @@ const Profile = () => {
                 <Text bold>Account Settings</Text>
               </HStack>
             </Pressable>
+            {/* B2B Account data */}
+            <Pressable
+              borderBottomWidth={1}
+              px={4}
+              borderColor={COLORS.lightGrey}
+              onPress={() => navigation.navigate('B2BAccount')}>
+              <HStack space={2} py={3} alignItems={'center'}>
+                <Ionicons
+                  name="settings-sharp"
+                  size={24}
+                  color={COLORS.grey}
+                  onPress={() => navigation.navigate('B2BAccount')}
+                />
+                <Text bold>B2B Account</Text>
+              </HStack>
+            </Pressable>
+
             <Pressable
               borderBottomWidth={1}
               px={4}

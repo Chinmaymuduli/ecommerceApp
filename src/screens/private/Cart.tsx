@@ -18,7 +18,6 @@ import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {CartItemType} from 'types';
 import {CartItem} from 'components';
-import {useStore} from 'app';
 import {useSwrApi} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
 

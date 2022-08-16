@@ -1,90 +1,70 @@
-import {Alert, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
-import {
-  Box,
-  HStack,
-  Image,
-  VStack,
-  Text,
-  Pressable,
-  AlertDialog,
-  Button,
-} from 'native-base';
+import {Box, HStack, Image, VStack, Text, Pressable} from 'native-base';
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import {CartItemType, CartType} from 'types';
-import {useStore} from 'app';
-import OrderSummaryCounter from './OrderSummaryCounter';
-import {useAuthFetch} from 'hooks';
-import {put, remove} from 'api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {CartItemType} from 'types';
+import {put} from 'api';
+
 import {CartAlert} from './core';
 import {PRODUCT_PLACEHOLDER} from 'assets';
 
 type CartItemTypes = {
   item: CartItemType;
   setQuantity?: number | any;
-  // handleDelete: (prev: any) => void;
-  // isOpen?: boolean;
-  // setIsOpen: (prev: boolean) => void;
-  // onClose: () => void;
   mutate: () => void;
 };
 
-const CartItem = ({
-  item,
-  setQuantity,
-  mutate,
-}: // handleDelete,
-// onClose,
-// setIsOpen,
-// isOpen,
-CartItemTypes) => {
-  const {updateQuantity, cartItems, removeFromCart} = useStore();
-
+const CartItem = ({item, setQuantity, mutate}: CartItemTypes) => {
   const [deleteId, setDeleteId] = useState();
 
   const [isOpen, setIsOpen] = React.useState(false);
 
   const onClose = () => setIsOpen(false);
-  const cancelRef = React.useRef(null);
 
   const increment = async (item: CartItemType) => {
-    const res = await put({
-      path: 'cart/add',
-      body: JSON.stringify({
-        product: item.product._id,
-        quantity: 1,
-      }),
-    });
-    // console.log('objectRes', res);
+    try {
+      await put({
+        path: 'cart/add',
+        body: JSON.stringify({
+          product: item.product._id,
+          quantity: 1,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      mutate();
+    }
   };
 
-  const decrement = (item: CartItemType) => {
-    updateQuantity(item?.product?.id, item?.quantity - 1);
-    if (item?.quantity < 2) {
-      removeFromCart(item?.product?.id);
+  const decrement = async (item: CartItemType) => {
+    try {
+      await put({
+        path: 'cart/remove',
+        body: JSON.stringify({
+          product: item?.product?._id,
+          quantity: -1,
+        }),
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      mutate();
     }
   };
 
   const handleAlert = (id: any) => {
-    console.log({id});
     setIsOpen(!isOpen);
     setDeleteId(id);
   };
 
   return (
-    <Box
-      px={3}
-      // py={1}
-      borderBottomWidth={1}
-      borderBottomColor={COLORS.lightGrey}>
+    <Box px={3} borderBottomWidth={1} borderBottomColor={COLORS.lightGrey}>
       <HStack py={3}>
         <Box alignItems={'center'} justifyContent={'center'}>
           <Image
             alt="cartImg"
-            // source={item?.product?.img}
             source={
               item?.displayImage?.url
                 ? {
@@ -105,22 +85,17 @@ CartItemTypes) => {
               name="delete"
               size={25}
               color={COLORS.danger}
-              // onPress={() => setIsOpen(!isOpen)}
-
               onPress={() => handleAlert(item._id)}
             />
           </HStack>
           <HStack space={2}>
             <Text color={'#000'} bold>
-              {/* &#8377;{item?.weight?.currentPrice} */}
               &#8377;{item?.product.salePrice}
             </Text>
             <Text textDecorationLine={'line-through'}>
-              {/* &#8377;{(item?.weight?.currentPrice || 0) + 100} */}
               &#8377;{item?.product?.mrp || 0}
             </Text>
           </HStack>
-          {/* <Text>{item.weight?.weight}</Text> */}
           <Text>
             {item.product?.measureUnit}
             {item.product?.measureType}
@@ -128,7 +103,6 @@ CartItemTypes) => {
         </VStack>
         <Box bg={COLORS.primary} position={'absolute'} top={1} borderRadius={6}>
           <Text color={COLORS.textWhite} fontSize={8} px={1}>
-            {/* {item?.weight?.discount} % OFF */}
             {(
               ((item?.product.mrp - item?.product.salePrice) /
                 item?.product.mrp) *
@@ -174,5 +148,3 @@ CartItemTypes) => {
 };
 
 export default CartItem;
-
-const styles = StyleSheet.create({});
