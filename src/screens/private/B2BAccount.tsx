@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import React from 'react';
 import {Box, HStack, Text} from 'native-base';
 import {COLORS} from 'configs';
-import {GstComponent} from 'components';
+import {B2bDocument, GstComponent} from 'components';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const B2BAccount = () => {
@@ -18,6 +18,7 @@ const B2BAccount = () => {
         </HStack>
       </Box>
       <GstComponent />
+      <B2bDocument />
     </Box>
   );
 };

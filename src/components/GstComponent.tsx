@@ -1,9 +1,12 @@
 import {StyleSheet} from 'react-native';
 import React from 'react';
-import {Box, Heading, Input, Text} from 'native-base';
+import {Box, Heading, Input, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
 
 const GstComponent = () => {
+  const handelGst = () => {
+    console.log('pressed');
+  };
   return (
     <Box px={5} py={5}>
       <Text fontSize={15} bold>
@@ -15,11 +18,13 @@ const GstComponent = () => {
         above.
       </Text>
 
-      <Box bg={COLORS.primary} borderRadius={5} mt={6}>
-        <Text textAlign={'center'} color={COLORS.textWhite} bold py={1.5}>
-          SAVE GST NUMBER
-        </Text>
-      </Box>
+      <Pressable onPress={() => handelGst()}>
+        <Box bg={COLORS.primary} borderRadius={5} mt={6}>
+          <Text textAlign={'center'} color={COLORS.textWhite} bold py={1.5}>
+            SAVE GST NUMBER
+          </Text>
+        </Box>
+      </Pressable>
     </Box>
   );
 };
