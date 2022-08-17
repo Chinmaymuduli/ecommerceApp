@@ -240,6 +240,9 @@ export type User = {
   stallId?: string;
   isOnline?: boolean;
   place?: string;
+  GSTDoc?: string;
+  GSTNumber?: string;
+  avatar?: string;
 };
 // Api Types
 export type ApiProductType = {

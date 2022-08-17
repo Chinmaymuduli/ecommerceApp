@@ -84,7 +84,6 @@ const MyReviewCard = ({item, reviewMutate}: Props) => {
                   />
                 </HStack>
                 <Text>{moment(item?.updatedAt).format('l')}</Text>
-                {/* <Text>{item?.updatedAt}</Text> */}
               </VStack>
             </HStack>
             <Text bold>{item?.title}</Text>

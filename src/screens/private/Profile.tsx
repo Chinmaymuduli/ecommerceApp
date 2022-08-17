@@ -15,18 +15,19 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useAuth, useStore} from 'app';
-import {useAuthFetch} from 'hooks';
+import {useAuthFetch, useSwrApi} from 'hooks';
 import {User} from 'types';
 import {FetchLoader} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = () => {
   const navigation = useNavigation<NavigationProps>();
-  const {cartItems} = useStore();
-  const {setLoggedIn} = useAuth();
+  const {setLoggedIn, userType} = useAuth();
+
+  // console.log({userType});
+
   const handelLogout = async () => {
     AsyncStorage.setItem('isLoggedIn', 'false')
-
       .then(() => {
         console.log('Logout Success');
         setLoggedIn(false);
@@ -34,14 +35,13 @@ const Profile = () => {
       .catch(error => console.log(error));
   };
 
-  const {authData, isLoading} = useAuthFetch<User>({
-    path: 'user/my-account',
-    method: 'GET',
-  });
+  const {data, isValidating} = useSwrApi('user/my-account');
+  const authData = data?.data?.data;
 
   return (
     <>
-      {!isLoading ? (
+      {/* {!isLoading ? ( */}
+      {!isValidating ? (
         <Box flex={1} bg={COLORS.textWhite}>
           <Box bg={COLORS.primary}>
             <HStack justifyContent={'space-between'} px={5} py={3}>
@@ -75,7 +75,7 @@ const Profile = () => {
                     _text={{
                       fontSize: 7,
                     }}>
-                    {cartItems.length ? cartItems.length : 0}
+                    {0}
                   </Badge>
                   <Ionicons
                     name="cart"
@@ -194,7 +194,6 @@ const Profile = () => {
                       <Text mt={2} bold fontSize={15}>
                         My Addresses
                       </Text>
-                      {/* <Text mt={1}>k-20 , Bhubaneswar , Odisha - 750127</Text> */}
                     </Box>
                   </Box>
                 </Box>
@@ -244,21 +243,24 @@ const Profile = () => {
               </HStack>
             </Pressable>
             {/* B2B Account data */}
-            <Pressable
-              borderBottomWidth={1}
-              px={4}
-              borderColor={COLORS.lightGrey}
-              onPress={() => navigation.navigate('B2BAccount')}>
-              <HStack space={2} py={3} alignItems={'center'}>
-                <Ionicons
-                  name="settings-sharp"
-                  size={24}
-                  color={COLORS.grey}
-                  onPress={() => navigation.navigate('B2BAccount')}
-                />
-                <Text bold>B2B Account</Text>
-              </HStack>
-            </Pressable>
+            {/* {userType !== 'b2c' ? ( */}
+            {userType === 'b2c' ? (
+              <Pressable
+                borderBottomWidth={1}
+                px={4}
+                borderColor={COLORS.lightGrey}
+                onPress={() => navigation.navigate('B2BAccount')}>
+                <HStack space={2} py={3} alignItems={'center'}>
+                  <Ionicons
+                    name="settings-sharp"
+                    size={24}
+                    color={COLORS.grey}
+                    onPress={() => navigation.navigate('B2BAccount')}
+                  />
+                  <Text bold>B2B Account</Text>
+                </HStack>
+              </Pressable>
+            ) : null}
 
             <Pressable
               borderBottomWidth={1}

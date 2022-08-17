@@ -1,5 +1,5 @@
 import React from 'react';
-import {Box, FlatList, HStack, Pressable, Text} from 'native-base';
+import {Box, HStack, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useNavigation} from '@react-navigation/native';
@@ -8,7 +8,6 @@ import SpecialProductCard from './SpecialProductCard';
 import {useSwrApi} from 'hooks';
 import {useAuth} from 'app';
 import {ProductType} from 'types';
-import {Dimensions} from 'react-native';
 
 const SpecialProduct = () => {
   const navigation = useNavigation<NavigationProps>();
@@ -18,7 +17,6 @@ const SpecialProduct = () => {
     `products/featured?userId=${user?._id}`,
   );
   const SpecialProductData: ProductType[] = data?.data?.data?.data;
-  // console.log(SpecialProductData.length);
 
   return (
     <Box mb={3} px={4}>
@@ -61,14 +59,6 @@ const SpecialProduct = () => {
         flexDirection={'row'}
         flexWrap={'wrap'}
         justifyContent={'space-between'}>
-        {/* <FlatList
-          data={SpecialProductData}
-          renderItem={({item}) => (
-            <SpecialProductCard item={item} isValidating={isValidating} />
-          )}
-          keyExtractor={(item: any) => item._id}
-          numColumns={2}
-        /> */}
         {SpecialProductData?.map((item, index) => (
           <SpecialProductCard
             item={item}

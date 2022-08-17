@@ -23,18 +23,12 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {useAppContext} from 'contexts';
 import {ErrorModal, ImagePicker} from 'components/core';
-import {getPrice} from 'utils';
-import {useSwrApi} from 'hooks';
 import RazorpayCheckout from 'react-native-razorpay';
 import {useAuth} from 'app';
 import {post} from 'api';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'PaymentScreen'>;
 const PaymentScreen = ({navigation, route: {params}}: Props) => {
-  // const paymentProductData = route.params?.PaymentData;
-  // const paymentProductData = params;
-  // console.log(params?.quantity);
-
   const {userData} = useAppContext();
   const {user} = useAuth();
   const [payment, setPayment] = useState<any>('payOnline');
@@ -45,8 +39,6 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
   const [document, setDocument] = useState<any>('');
   const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
   const [GstNumber, setGstNumber] = useState<any>();
-
-  // console.log({user});
 
   const handleDismiss = () => {
     setVisible(false);
@@ -70,7 +62,6 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
 
   const handlePayment = async () => {
     if (payment === 'payOnline') {
-      console.log('online');
       let response: {
         [x: string]: any;
         amount?: number;
@@ -87,7 +78,6 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
             addressId: params?.addressId,
           }),
         });
-        console.log({response});
       } else {
         response = await post({
           path: 'checkout/payment/cart',
@@ -96,7 +86,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
           }),
         });
       }
-      console.log('first', response?.amount);
+
       const options = {
         description: 'Chhattisgarh Herbals',
         currency: 'INR',
@@ -129,7 +119,6 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
           Alert.alert('Error', 'Transaction Failed');
         });
     } else {
-      console.log('offline');
       const res = await post({
         path: 'order/cash-on-delivery',
         body: JSON.stringify({
@@ -158,7 +147,6 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                   alignItems={'center'}>
                   <Text>Price(1 items)</Text>
                   <Text>&#8377;{params?.totalMrp}</Text>
-                  {/* <Text>&#8377;{TotalProductPriceWithoutDiscount}</Text> */}
                 </HStack>
 
                 <HStack
@@ -166,10 +154,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Saving</Text>
-                  <Text color={'green.500'}>
-                    - &#8377;{params?.discount}
-                    {/* - &#8377;{totalDiscountAmount} */}
-                  </Text>
+                  <Text color={'green.500'}>- &#8377;{params?.discount}</Text>
                 </HStack>
                 <HStack
                   pt={2}
@@ -192,7 +177,6 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
               <HStack justifyContent={'space-between'} alignItems={'center'}>
                 <Text>Amount Payable</Text>
                 <Text bold>&#8377;{params?.totalSalePrice}</Text>
-                {/* <Text bold>&#8377;{sumTotalPriceCustomerWillPay}</Text> */}
               </HStack>
             </Box>
           </Box>

@@ -22,10 +22,10 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ProductDetailsType} from 'types';
 import {useStore} from 'app';
 import {useSwrApi} from 'hooks';
+import {FetchLoader} from 'components/core';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Coupon'>;
 const Coupon = ({route}: Props) => {
-  // const couponProductData = route.params?.couponProduct;
   const navigation = useNavigation<NavigationProps>();
   const [couponCode, setCouponCode] = React.useState('');
   const [termAndCondition, setTermAndCondition] = React.useState<any>();
@@ -36,7 +36,7 @@ const Coupon = ({route}: Props) => {
     setTermAndCondition(item);
     onOpen();
   };
-  const ApplyCoupon = (value: number) => {
+  const ApplyCoupon = (value: any) => {
     console.log('object', value);
     setCouponAlert(true);
     setTimeout(() => {
@@ -46,6 +46,7 @@ const Coupon = ({route}: Props) => {
       // navigation.navigate('PaymentScreen', {
       //   PaymentData: {...couponProductData, couponValue: value},
       // });
+      // navigation.navigate('PaymentScreen', {});
     }, 1000);
   };
 
@@ -59,189 +60,205 @@ const Coupon = ({route}: Props) => {
     maxUses?: number;
     startDate?: string;
   }[] = data?.data?.data;
+
   return (
-    <Box bg={COLORS.textWhite} flex={1}>
-      <ScrollView>
-        <Box
-          borderWidth={1}
-          mx={5}
-          borderRadius={5}
-          mt={4}
-          borderColor={COLORS.lightGrey}>
-          <Input
-            placeholder="Enter Coupon Code"
-            variant={'unstyled'}
-            fontWeight={'bold'}
-            fontSize={15}
-            onChangeText={text => {
-              setCouponCode(text);
-            }}
-            value={couponCode}
-            InputRightElement={
-              couponCode.length > 0 ? (
-                <Pressable
-                  bg={COLORS.primary}
-                  px={5}
-                  py={1}
-                  mr={1}
-                  borderRadius={4}>
-                  <Text bold color={COLORS.textWhite}>
-                    apply
-                  </Text>
-                </Pressable>
-              ) : (
-                <Box
-                  bg={COLORS.lightGrey}
-                  px={5}
-                  py={1}
-                  mr={1}
-                  borderRadius={4}>
-                  <Text bold color={COLORS.textWhite}>
-                    apply
-                  </Text>
-                </Box>
-              )
-            }
-          />
-        </Box>
-        <Box flexDirection={'row'} px={5} mt={2}>
-          <Box
-            style={{
-              height: 5,
-              width: 5,
-              backgroundColor: '#e4e4e4',
-              borderRadius: 20,
-              marginTop: 6,
-            }}></Box>
-          <Text fontSize={11} pl={2} color={COLORS.grey}>
-            some coupon codes are not valid on purchase of sweets, chawanprash
-            products
-          </Text>
-        </Box>
-        <Box px={5} mt={6}>
-          <Heading size={'sm'}>Available coupons</Heading>
-          <Box mt={4}>
-            {/* {CouponArr?.map(item => ( */}
-            {CouponData?.map(item => (
-              <Box
-                key={item._id}
-                py={2}
-                borderWidth={1}
-                mb={4}
-                borderRadius={7}
-                borderColor={COLORS.lightGrey}>
-                <VStack px={3}>
-                  <Text>
-                    Use code {item?.code} to get maximum Rs.{item?.maxDiscount}{' '}
-                    discount
-                  </Text>
-                </VStack>
-                <HStack px={3} justifyContent={'space-between'} mt={4}>
-                  <Pressable onPress={() => Conditions(item)}>
-                    <Text fontSize={13} py={2} color={'green.600'} bold>
-                      View Details
-                    </Text>
-                  </Pressable>
-                  <HStack space={5}>
-                    <Box
-                      bg={'blue.100'}
-                      borderWidth={1}
-                      borderStyle={'dashed'}
-                      borderColor={'blue.400'}>
-                      <Text
-                        fontWeight={'bold'}
-                        color={COLORS.grey}
-                        px={1}
-                        py={1}>
-                        {item?.code}
-                        {/* {item?.} */}
-                      </Text>
-                    </Box>
+    <>
+      {isValidating ? (
+        <FetchLoader />
+      ) : (
+        <Box bg={COLORS.textWhite} flex={1}>
+          <ScrollView>
+            <Box
+              borderWidth={1}
+              mx={5}
+              borderRadius={5}
+              mt={4}
+              borderColor={COLORS.lightGrey}>
+              <Input
+                placeholder="Enter Coupon Code"
+                variant={'unstyled'}
+                fontWeight={'bold'}
+                fontSize={15}
+                onChangeText={text => {
+                  setCouponCode(text);
+                }}
+                value={couponCode}
+                InputRightElement={
+                  couponCode.length > 0 ? (
                     <Pressable
-                      onPress={() => ApplyCoupon(item?.discount || 0)}
-                      borderWidth={1}
-                      borderRadius={6}
-                      borderColor={COLORS.primary}>
-                      <Text color={COLORS.primary} px={2} py={1}>
-                        Apply
+                      bg={COLORS.primary}
+                      px={5}
+                      py={1}
+                      mr={1}
+                      borderRadius={4}>
+                      <Text bold color={COLORS.textWhite}>
+                        apply
                       </Text>
                     </Pressable>
-                  </HStack>
-                </HStack>
-              </Box>
-            ))}
-          </Box>
-        </Box>
-      </ScrollView>
-      {/* Action Sheet */}
-      <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
-        <Actionsheet.Content>
-          <Box w={'100%'} px={2}>
-            <Box borderBottomWidth={1} borderColor={COLORS.lightGrey}>
-              <HStack alignItems={'center'} justifyContent={'space-between'}>
-                <Text bold py={3}>
-                  Terms & Conditions
-                </Text>
-                <Pressable onPress={onClose}>
-                  <AntDesign name="close" size={20} color={COLORS.fadeBlack} />
-                </Pressable>
-              </HStack>
+                  ) : (
+                    <Box
+                      bg={COLORS.lightGrey}
+                      px={5}
+                      py={1}
+                      mr={1}
+                      borderRadius={4}>
+                      <Text bold color={COLORS.textWhite}>
+                        apply
+                      </Text>
+                    </Box>
+                  )
+                }
+              />
             </Box>
-            <Box mt={3} flexDirection={'row'}>
+            <Box flexDirection={'row'} px={5} mt={2}>
               <Box
                 style={{
                   height: 5,
                   width: 5,
-                  backgroundColor: '#000',
+                  backgroundColor: '#e4e4e4',
                   borderRadius: 20,
-                  marginTop: 8,
+                  marginTop: 6,
                 }}></Box>
-              <Text pl={2}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime
-                mollitia, molestiae quas vel sint commodi repudiandae
-                consequuntur voluptatum laborum numquam blanditiis harum
-                quisquam
+              <Text fontSize={11} pl={2} color={COLORS.grey}>
+                some coupon codes are not valid on purchase of sweets,
+                chawanprash products
               </Text>
-              {/* <Text pl={2}>{termAndCondition?.term1}</Text> */}
             </Box>
-            <Box mt={2} flexDirection={'row'}>
-              <Box
-                style={{
-                  height: 5,
-                  width: 5,
-                  backgroundColor: '#000',
-                  borderRadius: 20,
-                  marginTop: 8,
-                }}></Box>
-              <Text pl={2}>{termAndCondition?.term2}</Text>
+            <Box px={5} mt={6}>
+              <Heading size={'sm'}>Available coupons</Heading>
+              <Box mt={4}>
+                {/* {CouponArr?.map(item => ( */}
+                {CouponData?.map(item => (
+                  <>
+                    {console.log(item)}
+                    <Box
+                      key={item._id}
+                      py={2}
+                      borderWidth={1}
+                      mb={4}
+                      borderRadius={7}
+                      borderColor={COLORS.lightGrey}>
+                      <VStack px={3}>
+                        <Text>
+                          Use code <Text bold>{item?.code}</Text> to get maximum
+                          Rs.
+                          {item?.maxDiscount} discount
+                        </Text>
+                      </VStack>
+                      <HStack px={3} justifyContent={'space-between'} mt={4}>
+                        <Pressable onPress={() => Conditions(item)}>
+                          <Text fontSize={13} py={2} color={'green.600'} bold>
+                            View Details
+                          </Text>
+                        </Pressable>
+                        <HStack space={5}>
+                          <Box
+                            bg={'blue.100'}
+                            borderWidth={1}
+                            borderStyle={'dashed'}
+                            borderColor={'blue.400'}>
+                            <Text
+                              fontWeight={'bold'}
+                              color={COLORS.grey}
+                              px={1}
+                              py={1}>
+                              {item?.code}
+                            </Text>
+                          </Box>
+                          <Pressable
+                            onPress={() => ApplyCoupon(item?._id)}
+                            borderWidth={1}
+                            borderRadius={6}
+                            borderColor={COLORS.primary}>
+                            <Text color={COLORS.primary} px={2} py={1}>
+                              Apply
+                            </Text>
+                          </Pressable>
+                        </HStack>
+                      </HStack>
+                    </Box>
+                  </>
+                ))}
+              </Box>
             </Box>
-          </Box>
-        </Actionsheet.Content>
-      </Actionsheet>
-      {/* Coupon alert */}
-      {couponAlert && (
-        <Center mx={3} mb={3}>
-          <Alert
-            w="100%"
-            variant={'subtle'}
-            colorScheme="success"
-            status="success">
-            <VStack space={2} flexShrink={1} w="100%">
-              <HStack
-                flexShrink={1}
-                space={2}
-                alignItems="center"
-                justifyContent="space-between">
-                <HStack space={2} flexShrink={1} alignItems="center">
-                  <Alert.Icon />
-                  <Text color={'coolGray.800'}>Successfully applied!</Text>
-                </HStack>
-              </HStack>
-            </VStack>
-          </Alert>
-        </Center>
+          </ScrollView>
+          {/* Action Sheet */}
+          <Actionsheet isOpen={isOpen} onClose={onClose} hideDragIndicator>
+            <Actionsheet.Content>
+              <Box w={'100%'} px={2}>
+                <Box borderBottomWidth={1} borderColor={COLORS.lightGrey}>
+                  <HStack
+                    alignItems={'center'}
+                    justifyContent={'space-between'}>
+                    <Text bold py={3}>
+                      Terms & Conditions
+                    </Text>
+                    <Pressable onPress={onClose}>
+                      <AntDesign
+                        name="close"
+                        size={20}
+                        color={COLORS.fadeBlack}
+                      />
+                    </Pressable>
+                  </HStack>
+                </Box>
+                <Box mt={3} flexDirection={'row'}>
+                  <Box
+                    style={{
+                      height: 5,
+                      width: 5,
+                      backgroundColor: '#000',
+                      borderRadius: 20,
+                      marginTop: 8,
+                    }}></Box>
+                  <Text pl={2}>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Maxime mollitia, molestiae quas vel sint commodi repudiandae
+                    consequuntur voluptatum laborum numquam blanditiis harum
+                    quisquam
+                  </Text>
+                  {/* <Text pl={2}>{termAndCondition?.term1}</Text> */}
+                </Box>
+                <Box mt={2} flexDirection={'row'}>
+                  <Box
+                    style={{
+                      height: 5,
+                      width: 5,
+                      backgroundColor: '#000',
+                      borderRadius: 20,
+                      marginTop: 8,
+                    }}></Box>
+                  <Text pl={2}>{termAndCondition?.term2}</Text>
+                </Box>
+              </Box>
+            </Actionsheet.Content>
+          </Actionsheet>
+          {/* Coupon alert */}
+          {couponAlert && (
+            <Center mx={3} mb={3}>
+              <Alert
+                w="100%"
+                variant={'subtle'}
+                colorScheme="success"
+                status="success">
+                <VStack space={2} flexShrink={1} w="100%">
+                  <HStack
+                    flexShrink={1}
+                    space={2}
+                    alignItems="center"
+                    justifyContent="space-between">
+                    <HStack space={2} flexShrink={1} alignItems="center">
+                      <Alert.Icon />
+                      <Text color={'coolGray.800'}>Successfully applied!</Text>
+                    </HStack>
+                  </HStack>
+                </VStack>
+              </Alert>
+            </Center>
+          )}
+        </Box>
       )}
-    </Box>
+    </>
   );
 };
 

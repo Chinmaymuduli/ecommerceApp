@@ -44,7 +44,7 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
 
   const SelectedAddress = data?.data?.data;
 
-  // console.log(params?.quantity);
+  // console.log(OrderSummaryData);
   const quantityData = OrderSummaryData?.products?.find(
     (item: {quantity: number}) => item?.quantity,
   );

@@ -21,29 +21,27 @@ import {
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Carousel, {Pagination} from 'react-native-snap-carousel';
-import {SPECIAL_PRODUCT} from '../../constants';
 import {COLORS} from 'configs';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
-import {useAppContext} from 'contexts';
 import LottieView from 'lottie-react-native';
 import {SUCCESS_QUANTITY} from 'assets';
 import {Rating} from 'react-native-ratings';
-import {ProductDetailsType, ProductType, ProductVariants} from 'types';
+import {ProductType, ProductVariants} from 'types';
 import {Accordion, ManageReview, ProductComponent} from 'components';
-import {useAuth, useStore} from 'app';
+import {useAuth} from 'app';
 import {useAuthFetch, useIsMounted, useSwrApi} from 'hooks';
 import {FetchLoader} from 'components/core';
-import {put} from 'api';
+import {put, remove} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const B2bProduct = [
-  {label: '10 kg', value: 10000, price: 560, discount: 1000, offer: '5%'},
-  {label: '20 kg', value: 20000, price: 639, discount: 860, offer: '10%'},
-  {label: '30 kg', value: 30000, price: 859, discount: 1200, offer: '15%'},
-  {label: '50 kg', value: 50000, price: 999, discount: 1500, offer: '20%'},
-];
+// const B2bProduct = [
+//   {label: '10 kg', value: 10000, price: 560, discount: 1000, offer: '5%'},
+//   {label: '20 kg', value: 20000, price: 639, discount: 860, offer: '10%'},
+//   {label: '30 kg', value: 30000, price: 859, discount: 1200, offer: '15%'},
+//   {label: '50 kg', value: 50000, price: 999, discount: 1500, offer: '20%'},
+// ];
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 
@@ -57,13 +55,13 @@ type productType = {
 const ProductDetails = ({route, navigation}: Props) => {
   const productData = route.params.ProductDetailsType;
   const [loader, setLoader] = useState(false);
-  const {authData, isLoading} = useAuthFetch<ProductType>({
-    path: `product/${productData._id}/info`,
-    method: 'GET',
-  });
-  const {data, mutate} = useSwrApi('cart/all');
-  const CartData = data?.data?.data?.products;
-  const {userType} = useAuth();
+  const {userType, user} = useAuth();
+
+  const {data, isValidating, mutate} = useSwrApi(
+    `product/${productData._id}/info?userId=${user?._id}`,
+  );
+  const authData: ProductType = data?.data?.data;
+
   const [index, setIndex] = useState(0);
   const SLIDER_WIDTH = Dimensions.get('window').width;
   const [count, setCount] = useState<any>(1);
@@ -72,10 +70,9 @@ const ProductDetails = ({route, navigation}: Props) => {
   const [addQuantity, setAddQuantity] = useState<any>();
   const [modalDialog, setModalDialog] = useState(false);
   const [alertMessage, setAlertMessage] = useState('Successfully added!');
+  const isMounted = useIsMounted();
 
   const {isOpen, onOpen, onClose} = useDisclose();
-
-  const {addToWishlist, removeFromWishlist, wishlistItems} = useStore();
 
   const handleCart = async (data: ProductType) => {
     try {
@@ -102,14 +99,8 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   };
 
-  // console.log(authData?.images);
-
-  const cartDataMatch = CartData?.some(
-    (
-      // item => item?.product?.id === productData?.id,
-      item: {product: {_id: string}},
-    ) => item?.product?._id === chooseWeight?._id,
-  );
+  const similarProduct = useSwrApi(`products/featured?userId=${user?._id}`);
+  const SPECIAL_PRODUCT = similarProduct?.data?.data?.data?.data;
 
   const increaseItem = () => {
     setCount(count + 1);
@@ -151,25 +142,35 @@ const ProductDetails = ({route, navigation}: Props) => {
     setAddQuantity('');
   };
 
-  const handleWishlist = (wishlistItem: ProductType) => {
-    const removeWishList = wishlistItems.some(data => {
-      return data.id === wishlistItem.id;
-    });
-
-    if (removeWishList) {
-      removeFromWishlist(wishlistItem?.id);
-      setShowAlert(true);
-      setAlertMessage('Remove from wishlist');
-      setTimeout(() => {
-        setShowAlert(false);
-      }, 2000);
-    } else {
-      addToWishlist(wishlistItem);
-      setShowAlert(true);
-      setAlertMessage('Added to wishlist');
-      setTimeout(() => {
-        setShowAlert(false);
-      }, 2000);
+  const handleWishlist = async (wishlistItem: any) => {
+    try {
+      if (authData?.isInWishList) {
+        const responseWish = await remove({
+          path: `wishlist/${wishlistItem?._id}`,
+        });
+        mutate();
+        console.log({responseWish});
+        setShowAlert(true);
+        setAlertMessage('Remove from wishlist');
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 2000);
+      } else {
+        const res = await put({
+          path: 'wishlist',
+          body: JSON.stringify({
+            productId: wishlistItem?._id,
+          }),
+        });
+        mutate();
+        setShowAlert(true);
+        setAlertMessage('Added to wishlist');
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 2000);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -185,57 +186,18 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   }, []);
 
-  // console.log({count});
+  // console.log(authData);
 
   const BuyNow = async (buyItem: ProductType) => {
-    console.log(buyItem);
-    const accessToken = await AsyncStorage.getItem('access_token');
-    const productCart = CartData?.some(
-      (_item: {product: {_id: string}}) => _item.product._id === buyItem._id,
-    );
-
     try {
       if (addQuantity) {
         return setModalDialog(true);
       }
-      // if (!productCart) {
-      //   const res = await put({
-      //     path: 'cart/add',
-      //     body: JSON.stringify({
-      //       product: buyItem._id,
-      //       quantity: count,
-      //     }),
-      //     token: accessToken,
-      //   });
-
-      //   // console.log({res});
-      // }
       navigation.navigate('OrderSummary', {
         productId: chooseWeight._id,
         type: 'product',
         quantity: count,
       });
-
-      // if (!productCart) {
-      //   addToCart({
-      //     product: productData,
-      //     quantity: count,
-      //     weight: chooseWeight,
-      //   });
-      //   addToOrderItems({
-      //     product: productData,
-      //     quantity: count,
-      //     weight: chooseWeight,
-      //   });
-      // navigation.navigate('OrderSummary');
-      // } else {
-      //   addToOrderItems({
-      //     product: productData,
-      //     quantity: count,
-      //     weight: chooseWeight,
-      //   });
-      // navigation.navigate('OrderSummary');
-      // }
     } catch (error) {
       console.log(error);
     } finally {
@@ -260,14 +222,12 @@ const ProductDetails = ({route, navigation}: Props) => {
   };
 
   useEffect(() => {
-    setChooseWeight(authData);
+    isMounted.current && setChooseWeight(authData);
   }, [authData]);
-
-  // console.log(authData.variants);
 
   return (
     <>
-      {!isLoading ? (
+      {!isValidating ? (
         <SafeAreaView style={{flex: 1}}>
           <HStack justifyContent={'space-between'} px={3} py={3}>
             <Pressable
@@ -279,17 +239,10 @@ const ProductDetails = ({route, navigation}: Props) => {
             </Pressable>
             <Box>
               <Ionicons
-                name={
-                  wishlistItems.some(data => {
-                    return data.id === productData.id;
-                  })
-                    ? 'heart'
-                    : 'heart-outline'
-                }
+                name={authData?.isInWishList ? 'heart' : 'heart-outline'}
                 size={30}
                 color="green"
-                // onPress={() => handleWishlist(productData)}
-                onPress={() => handleWishlist(productData)}
+                onPress={() => handleWishlist(authData)}
               />
             </Box>
           </HStack>
@@ -341,33 +294,18 @@ const ProductDetails = ({route, navigation}: Props) => {
                   />
                 </Box>
               </HStack>
+
               <HStack mt={1}>
-                <HStack>
-                  <Rating
-                    type="custom"
-                    startingValue={3}
-                    ratingColor={'#F5B21E'}
-                    tintColor={'#fff'}
-                    ratingBackgroundColor={COLORS.grey}
-                    ratingCount={5}
-                    imageSize={20}
-                    readonly={true}
-                  />
-                </HStack>
-                {/* <Box
-                  h={5}
-                  borderRightWidth={2}
-                  mx={3}
-                  borderColor={COLORS.primary}></Box>
-                <HStack alignItems={'center'}>
-                  <Text bold>ID :</Text>
-                  <Text>
-                    {' '}
-                    {productData?.id
-                      ? productData?.id
-                      : Math.floor(Math.random() * 1000000)}
-                  </Text>
-                </HStack> */}
+                <Rating
+                  type="custom"
+                  startingValue={3}
+                  ratingColor={'#F5B21E'}
+                  tintColor={'#fff'}
+                  ratingBackgroundColor={COLORS.grey}
+                  ratingCount={5}
+                  imageSize={20}
+                  readonly={true}
+                />
               </HStack>
 
               {/* {userData?.role === 'b2c' ? ( */}
@@ -593,7 +531,7 @@ const ProductDetails = ({route, navigation}: Props) => {
           {/* Buttom section */}
           <Box position={'absolute'} px={3} bottom={0} mb={3}>
             <Row>
-              {!cartDataMatch ? (
+              {!authData?.isInCart ? (
                 !loader ? (
                   <Pressable
                     onPress={() => handleCart(chooseWeight)}
