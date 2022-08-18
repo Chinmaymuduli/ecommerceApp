@@ -22,3 +22,4 @@ export {default as Counter} from './Counter';
 export {default as VerifyEmailModal} from './VerifyEmailModal';
 export {default as B2bDocument} from './B2bDocument';
 export {default as GstComponent} from './GstComponent';
+export {default as AddressModal} from './AddressModal';

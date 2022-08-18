@@ -20,33 +20,32 @@ import {useNavigation} from '@react-navigation/native';
 import {NavigationProps, PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {ProductDetailsType} from 'types';
-import {useStore} from 'app';
 import {useSwrApi} from 'hooks';
 import {FetchLoader} from 'components/core';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Coupon'>;
-const Coupon = ({route}: Props) => {
+const Coupon = ({route: {params}}: Props) => {
   const navigation = useNavigation<NavigationProps>();
   const [couponCode, setCouponCode] = React.useState('');
   const [termAndCondition, setTermAndCondition] = React.useState<any>();
   const [couponAlert, setCouponAlert] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
-  const {CouponArr} = useStore();
+
   const Conditions = (item: ProductDetailsType) => {
     setTermAndCondition(item);
     onOpen();
   };
   const ApplyCoupon = (value: any) => {
-    console.log('object', value);
     setCouponAlert(true);
     setTimeout(() => {
       setCouponAlert(false);
-
-      navigation.goBack();
-      // navigation.navigate('PaymentScreen', {
-      //   PaymentData: {...couponProductData, couponValue: value},
-      // });
-      // navigation.navigate('PaymentScreen', {});
+      navigation.navigate('PaymentScreen', {
+        couponId: value,
+        addressId: params?.addressId,
+        productId: params?.productId,
+        quantity: params?.quantity,
+        type: params?.type,
+      });
     }, 1000);
   };
 
@@ -59,6 +58,7 @@ const Coupon = ({route}: Props) => {
     maxDiscount?: number;
     maxUses?: number;
     startDate?: string;
+    minOrderAmount?: number;
   }[] = data?.data?.data;
 
   return (
@@ -127,57 +127,71 @@ const Coupon = ({route}: Props) => {
             <Box px={5} mt={6}>
               <Heading size={'sm'}>Available coupons</Heading>
               <Box mt={4}>
-                {/* {CouponArr?.map(item => ( */}
                 {CouponData?.map(item => (
-                  <>
-                    {console.log(item)}
-                    <Box
-                      key={item._id}
-                      py={2}
-                      borderWidth={1}
-                      mb={4}
-                      borderRadius={7}
-                      borderColor={COLORS.lightGrey}>
-                      <VStack px={3}>
-                        <Text>
-                          Use code <Text bold>{item?.code}</Text> to get maximum
-                          Rs.
-                          {item?.maxDiscount} discount
+                  <Box
+                    key={item._id}
+                    py={2}
+                    borderWidth={1}
+                    mb={4}
+                    borderRadius={7}
+                    borderColor={COLORS.lightGrey}>
+                    <VStack px={3}>
+                      <Text>
+                        Use code{' '}
+                        <Text bold color={COLORS.primary} underline>
+                          {item?.code}
+                        </Text>{' '}
+                        to get maximum Rs.
+                        {item?.maxDiscount} discount
+                      </Text>
+                    </VStack>
+                    <HStack px={3} justifyContent={'space-between'} mt={4}>
+                      <Pressable onPress={() => Conditions(item)}>
+                        <Text fontSize={13} py={2} color={'green.600'} bold>
+                          View Details
                         </Text>
-                      </VStack>
-                      <HStack px={3} justifyContent={'space-between'} mt={4}>
-                        <Pressable onPress={() => Conditions(item)}>
-                          <Text fontSize={13} py={2} color={'green.600'} bold>
-                            View Details
+                      </Pressable>
+                      <HStack space={5}>
+                        <Box
+                          bg={'blue.100'}
+                          borderWidth={1}
+                          borderStyle={'dashed'}
+                          borderColor={'blue.400'}>
+                          <Text
+                            fontWeight={'bold'}
+                            color={COLORS.grey}
+                            px={1}
+                            py={1}>
+                            {item?.code}
                           </Text>
-                        </Pressable>
-                        <HStack space={5}>
-                          <Box
-                            bg={'blue.100'}
-                            borderWidth={1}
-                            borderStyle={'dashed'}
-                            borderColor={'blue.400'}>
-                            <Text
-                              fontWeight={'bold'}
-                              color={COLORS.grey}
-                              px={1}
-                              py={1}>
-                              {item?.code}
-                            </Text>
-                          </Box>
+                        </Box>
+                        {params?.couponId !== item?._id &&
+                        (params?.totalPrice || 0) >
+                          (item?.minOrderAmount || 0) ? (
                           <Pressable
                             onPress={() => ApplyCoupon(item?._id)}
                             borderWidth={1}
                             borderRadius={6}
                             borderColor={COLORS.primary}>
-                            <Text color={COLORS.primary} px={2} py={1}>
+                            <Text color={COLORS.primary} px={2} py={1} bold>
                               Apply
                             </Text>
                           </Pressable>
-                        </HStack>
+                        ) : (
+                          <Box bg={COLORS.lightGrey} borderRadius={6}>
+                            <Text color={COLORS.danger} px={2} py={1} bold>
+                              Apply
+                            </Text>
+                          </Box>
+                        )}
                       </HStack>
-                    </Box>
-                  </>
+                    </HStack>
+                    {item?.minOrderAmount && (
+                      <Text pl={2} pt={1} fontSize={13} color={COLORS.primary}>
+                        *Minimum Order Amount Will be {item?.minOrderAmount}
+                      </Text>
+                    )}
+                  </Box>
                 ))}
               </Box>
             </Box>
@@ -212,23 +226,10 @@ const Coupon = ({route}: Props) => {
                       marginTop: 8,
                     }}></Box>
                   <Text pl={2}>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Maxime mollitia, molestiae quas vel sint commodi repudiandae
-                    consequuntur voluptatum laborum numquam blanditiis harum
-                    quisquam
+                    Use code <Text bold>{termAndCondition?.code}</Text> to get
+                    maximum Rs.
+                    {termAndCondition?.maxDiscount} discount
                   </Text>
-                  {/* <Text pl={2}>{termAndCondition?.term1}</Text> */}
-                </Box>
-                <Box mt={2} flexDirection={'row'}>
-                  <Box
-                    style={{
-                      height: 5,
-                      width: 5,
-                      backgroundColor: '#000',
-                      borderRadius: 20,
-                      marginTop: 8,
-                    }}></Box>
-                  <Text pl={2}>{termAndCondition?.term2}</Text>
                 </Box>
               </Box>
             </Actionsheet.Content>

@@ -48,6 +48,7 @@ const Search = () => {
             variant={'unstyled'}
             value={search}
             onChangeText={text => setSearch(text)}
+            autoFocus={true}
             InputLeftElement={
               <Pressable pl={2}>
                 <Ionicons

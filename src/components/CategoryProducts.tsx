@@ -27,13 +27,13 @@ const CategoryProducts = ({
   item,
 }: CategoryProductType) => {
   const navigation = useNavigation<NavigationProps>();
-  const {user} = useAuth(state => state);
+  const {user, userType} = useAuth(state => state);
   const isMounted = useIsMounted();
 
-  const {data, mutate, isLoading, isValidating} = useSwrApi(
+  const {data, mutate, isValidating} = useSwrApi(
     user?._id
-      ? `category/${item?._id}/products?userId=${user?._id}`
-      : `category/${item?._id}/products`,
+      ? `category/${item?._id}/products?userId=${user?._id}&type=${userType}`
+      : `category/${item?._id}/products?type=${userType}`,
   );
 
   const CategoryProductData: ProductType[] = data?.data?.data?.data;
@@ -46,9 +46,6 @@ const CategoryProducts = ({
 
   return (
     <>
-      {/* {ProductLoading ? (
-        <FetchLoader />
-      ) : ( */}
       <Box mt={4} pl={3}>
         <HStack alignItems={'center'} justifyContent={'space-between'}>
           <Box>
@@ -91,7 +88,6 @@ const CategoryProducts = ({
           }
         />
       </Box>
-      {/* )} */}
     </>
   );
 };

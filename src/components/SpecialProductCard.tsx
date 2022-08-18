@@ -1,5 +1,5 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import React, {useCallback, useMemo} from 'react';
+import React from 'react';
 import {Box, HStack, Image, Pressable, Text} from 'native-base';
 import {COLORS} from 'configs';
 import {useNavigation} from '@react-navigation/native';
@@ -7,36 +7,18 @@ import {NavigationProps} from 'src/routes/PrivateRoutes';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {ProductType} from 'types';
 import {put} from 'api';
-import {useSwrApi} from 'hooks';
 import {SpecialProductSkeleton} from '../../src/skeleton';
 import {PRODUCT_PLACEHOLDER} from 'assets';
 
 type Props = {
   item: ProductType;
   isValidating?: boolean;
+  mutate: () => void;
 };
 
-const SpecialProductCard = ({item, isValidating}: Props) => {
+const SpecialProductCard = ({item, isValidating, mutate}: Props) => {
   const navigation = useNavigation<NavigationProps>();
 
-  const {data, mutate} = useSwrApi('cart/all');
-  const CartData = data?.data?.data?.products;
-
-  const isCartItem = useMemo(
-    () =>
-      CartData?.some((i: {product: {_id: any}}) => i.product._id === item._id),
-    [CartData],
-  );
-  const quantity = useCallback(
-    (id: number) => {
-      const res = CartData?.filter(
-        (i: {product: {_id: number}}) => i.product._id === id,
-      )?.[0];
-
-      return res.quantity;
-    },
-    [CartData],
-  );
   const decrement = async () => {
     try {
       const res = await put({
@@ -148,7 +130,7 @@ const SpecialProductCard = ({item, isValidating}: Props) => {
             shadow={1}
             borderRadius={5}
             borderColor={COLORS.lightGrey}>
-            {isCartItem ? (
+            {item?.isInCart ? (
               <HStack
                 bg={'#FFFF0060'}
                 w={'152'}
@@ -163,7 +145,7 @@ const SpecialProductCard = ({item, isValidating}: Props) => {
                   />
                 </Box>
                 <Box>
-                  <Text>{quantity(item._id)}</Text>
+                  <Text>{item.cartQuantity}</Text>
                 </Box>
                 <Box>
                   <Entypo

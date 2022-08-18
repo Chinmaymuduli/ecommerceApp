@@ -11,11 +11,14 @@ import {ProductType} from 'types';
 
 const SpecialProduct = () => {
   const navigation = useNavigation<NavigationProps>();
-  const {user} = useAuth();
+  const {user, userType} = useAuth();
 
-  const {data, isValidating} = useSwrApi(
-    `products/featured?userId=${user?._id}`,
+  const {data, isValidating, mutate} = useSwrApi(
+    `products/featured?${
+      user?._id ? `userId=${user?._id}` : ''
+    }&type=${userType}`,
   );
+
   const SpecialProductData: ProductType[] = data?.data?.data?.data;
 
   return (
@@ -63,6 +66,7 @@ const SpecialProduct = () => {
           <SpecialProductCard
             item={item}
             isValidating={isValidating}
+            mutate={mutate}
             key={index}
           />
         ))}

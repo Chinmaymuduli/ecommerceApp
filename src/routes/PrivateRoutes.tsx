@@ -47,10 +47,16 @@ export type PrivateRoutesType = {
   ProductDetails: {
     ProductDetailsType: ProductType;
   };
-  Coupon: undefined;
+  Coupon: {
+    couponId?: string;
+    type?: string;
+    quantity?: number;
+    productId?: string;
+    addressId?: string | null;
+    totalPrice?: number;
+  };
   Address: undefined;
   PaymentScreen: {
-    // PaymentData: CartItemType[];
     type?: string;
     quantity?: number;
     productId?: string;
@@ -58,6 +64,7 @@ export type PrivateRoutesType = {
     totalMrp?: number;
     totalSalePrice?: number;
     discount?: number;
+    couponId?: string;
   };
   ConfirmOrder: undefined;
   // {
@@ -68,15 +75,12 @@ export type PrivateRoutesType = {
     type?: string;
     quantity?: number;
   };
-  //  {
-  //   CartItems: CartItemType[];
-  // };
   SelectAddress: {
     isProfile?: boolean;
+    type?: string;
+    quantity?: number;
+    productId?: string;
   };
-  //  {
-  //   SelectProductData: CartItemType[];
-  // };
   WishList: undefined;
   OrderDetails: {
     orderId?: string;

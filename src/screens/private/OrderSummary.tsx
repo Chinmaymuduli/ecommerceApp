@@ -64,7 +64,13 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
               <HStack justifyContent={'space-between'} alignItems={'center'}>
                 <Heading size={'sm'}>Deliver to:</Heading>
                 <Pressable
-                  onPress={() => navigation.navigate('SelectAddress', {})}>
+                  onPress={() =>
+                    navigation.navigate('SelectAddress', {
+                      type: params?.type,
+                      quantity: params?.quantity,
+                      productId: params?.productId,
+                    })
+                  }>
                   <Box
                     borderWidth={1}
                     borderColor={COLORS.primary}
@@ -155,14 +161,10 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
               borderRadius={4}
               onPress={() =>
                 navigation.navigate('PaymentScreen', {
-                  // PaymentData: OrderSummaryData,
                   type: params?.type,
                   quantity: quantityData.quantity,
                   productId: params?.productId,
                   addressId: selectedAddressId,
-                  totalMrp: OrderSummaryData?.totalMrp,
-                  totalSalePrice: OrderSummaryData?.totalSalePrice,
-                  discount: OrderSummaryData?.discount,
                 })
               }>
               <HStack

@@ -12,6 +12,7 @@ import {
   Input,
   Modal,
   Pressable,
+  Radio,
   Row,
   ScrollView,
   Spinner,
@@ -29,19 +30,17 @@ import LottieView from 'lottie-react-native';
 import {SUCCESS_QUANTITY} from 'assets';
 import {Rating} from 'react-native-ratings';
 import {ProductType, ProductVariants} from 'types';
-import {Accordion, ManageReview, ProductComponent} from 'components';
+import {
+  Accordion,
+  AddressModal,
+  ManageReview,
+  ProductComponent,
+} from 'components';
 import {useAuth} from 'app';
 import {useAuthFetch, useIsMounted, useSwrApi} from 'hooks';
 import {FetchLoader} from 'components/core';
 import {put, remove} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// const B2bProduct = [
-//   {label: '10 kg', value: 10000, price: 560, discount: 1000, offer: '5%'},
-//   {label: '20 kg', value: 20000, price: 639, discount: 860, offer: '10%'},
-//   {label: '30 kg', value: 30000, price: 859, discount: 1200, offer: '15%'},
-//   {label: '50 kg', value: 50000, price: 999, discount: 1500, offer: '20%'},
-// ];
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 
@@ -71,6 +70,8 @@ const ProductDetails = ({route, navigation}: Props) => {
   const [modalDialog, setModalDialog] = useState(false);
   const [alertMessage, setAlertMessage] = useState('Successfully added!');
   const isMounted = useIsMounted();
+  const [addressModal, setAddressModal] = useState(false);
+  const [addressValue, setAddressValue] = useState<any>();
 
   const {isOpen, onOpen, onClose} = useDisclose();
 
@@ -99,7 +100,9 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   };
 
-  const similarProduct = useSwrApi(`products/featured?userId=${user?._id}`);
+  const similarProduct = useSwrApi(
+    `category/${authData?.category}/products?type=${userType}&limit=6&chunk=0`,
+  );
   const SPECIAL_PRODUCT = similarProduct?.data?.data?.data?.data;
 
   const increaseItem = () => {
@@ -188,10 +191,11 @@ const ProductDetails = ({route, navigation}: Props) => {
 
   // console.log(authData);
 
-  const BuyNow = async (buyItem: ProductType) => {
+  const BuyNow = async () => {
     try {
       if (addQuantity) {
-        return setModalDialog(true);
+        return setAddressModal(true);
+        // return setModalDialog(true);
       }
       navigation.navigate('OrderSummary', {
         productId: chooseWeight._id,
@@ -261,7 +265,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                 dotsLength={
                   authData?.images?.length
                     ? authData?.images?.length
-                    : SPECIAL_PRODUCT.length
+                    : SPECIAL_PRODUCT?.length
                 }
                 activeDotIndex={index}
                 dotStyle={{
@@ -570,7 +574,7 @@ const ProductDetails = ({route, navigation}: Props) => {
               )}
               <Pressable
                 // onPress={() => BuyNow(productData)}
-                onPress={() => BuyNow(chooseWeight)}
+                onPress={() => BuyNow()}
                 bg={COLORS.primary}
                 w={175}
                 borderTopRightRadius={5}
@@ -666,10 +670,14 @@ const ProductDetails = ({route, navigation}: Props) => {
             </Center>
           ) : null}
           {/* Modal */}
-          <Modal
-            isOpen={modalDialog}
-            // onClose={() => setModalDialog(false)}
-            safeAreaTop={true}>
+
+          <AddressModal
+            addressModal={addressModal}
+            setAddressModal={setAddressModal}
+            setModalDialog={setModalDialog}
+          />
+
+          <Modal isOpen={modalDialog} safeAreaTop={true}>
             <Modal.Content maxWidth="350">
               <Modal.Body>
                 <Center>

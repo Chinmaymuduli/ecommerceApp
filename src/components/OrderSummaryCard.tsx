@@ -5,13 +5,14 @@ import {Rating} from 'react-native-ratings';
 import {CartItemType} from 'types';
 import OrderSummaryCounter from './OrderSummaryCounter';
 import {PRODUCT_PLACEHOLDER} from 'assets';
+import {useAuth} from 'app';
 
 type Props = {
   orderData: CartItemType;
 };
 
 const OrderSummaryCard = ({orderData}: Props) => {
-  // console.log(orderData);
+  const {userType} = useAuth();
   return (
     <Box px={4} borderBottomWidth={10} borderColor={COLORS.lightGrey}>
       <Box pb={5} pt={5}>
@@ -31,10 +32,12 @@ const OrderSummaryCard = ({orderData}: Props) => {
               }}
             />
             {/* Counter start */}
-            <OrderSummaryCounter
-              orderQuantity={orderData?.quantity}
-              productID={orderData?.product?.id}
-            />
+            {userType !== 'b2b' && (
+              <OrderSummaryCounter
+                orderQuantity={orderData?.quantity}
+                productID={orderData?.product?.id}
+              />
+            )}
             {/* Counter End */}
           </VStack>
           <VStack pl={5}>

@@ -9,12 +9,11 @@ import {
   Input,
   Modal,
   Pressable,
-  ScrollView,
   Text,
   VStack,
 } from 'native-base';
 import {COLORS} from 'configs';
-import {AYUSH_1, PRODUCT_PLACEHOLDER} from 'assets';
+import {PRODUCT_PLACEHOLDER} from 'assets';
 import {Rating} from 'react-native-ratings';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
@@ -32,9 +31,7 @@ const PastOrder = ({item}: Props) => {
   const [reviewTitle, setReviewTitle] = useState<string>();
   const [reviewText, setReviewText] = useState<string>();
   const navigation = useNavigation<NavigationProps>();
-  const {data, isValidating, mutate} = useSwrApi(
-    `review/product/${item?.product?._id}`,
-  );
+  const {data, mutate} = useSwrApi(`review/product/${item?.product?._id}`);
 
   const ReviewData = data?.data?.data;
 
@@ -101,9 +98,7 @@ const PastOrder = ({item}: Props) => {
         <HStack px={3} py={2} alignItems={'center'} space={4}>
           {data?.data?.status === 'SUCCESS' ? (
             <HStack mb={2} mt={1} width={Dimensions.get('window').width / 2.3}>
-              <Pressable
-              // onPress={() => setShowModal(true)}
-              >
+              <Pressable>
                 <Text bold color={'amber.400'}>
                   Ratings :
                 </Text>
@@ -137,13 +132,12 @@ const PastOrder = ({item}: Props) => {
             flex={1}
             onPress={() =>
               navigation.navigate('OrderSummary', {
-                // ProductDetailsType: {...item, discount: 799, offer: '20% OFF'},
-                // type:"product",
-                // productId:"",
+                type: 'product',
+                productId: item?.product?._id,
+                quantity: item?.quantity,
               })
             }>
             <Box
-              //   mr={2}
               bg={'green.100'}
               alignItems={'center'}
               borderWidth={1}

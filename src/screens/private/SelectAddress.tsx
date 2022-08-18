@@ -52,7 +52,11 @@ const SelectAddress = ({route, navigation}: Props) => {
 
   const handelDeliver = async () => {
     await AsyncStorage.setItem('address_id', addressValue);
-    navigation.navigate('OrderSummary', {});
+    navigation.navigate('OrderSummary', {
+      type: route.params?.type,
+      productId: route.params?.productId,
+      quantity: route.params?.quantity,
+    });
   };
 
   useEffect(() => {

@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Box, HStack, Image, Pressable, Text} from 'native-base';
@@ -35,7 +35,6 @@ const ProductComponent = ({item}: productType) => {
       // }, 2000);
     }
   };
-  // console.log({item});
   return (
     <Box mt={3} overflow={'hidden'} mb={5}>
       <Pressable>
@@ -89,25 +88,6 @@ const ProductComponent = ({item}: productType) => {
           />
         </Box>
 
-        {/* <Box
-          alignSelf={'flex-end'}
-          right={2}
-          bg={COLORS.textWhite}
-          mt={-5}
-          shadow={1}
-          borderRadius={5}
-          borderColor={COLORS.lightGrey}>
-          <Entypo
-            name="plus"
-            size={18}
-            color={COLORS.fadeBlack}
-            style={{
-              paddingHorizontal: 3,
-              paddingVertical: 3,
-            }}
-            onPress={() => console.log('Add Cart', item)}
-          />
-        </Box> */}
         <Box
           alignSelf={'flex-end'}
           right={3}

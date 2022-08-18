@@ -147,6 +147,7 @@ export type WishListCardType = {
 };
 
 export type PastOrderType = {
+  quantity: number | undefined;
   OrderID: string;
   status: string;
   img: string | any;
