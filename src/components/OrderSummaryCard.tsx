@@ -13,6 +13,11 @@ type Props = {
 
 const OrderSummaryCard = ({orderData}: Props) => {
   const {userType} = useAuth();
+  // console.log({orderData});
+  const review =
+    orderData?.product?.reviews?.stars === 0
+      ? 0
+      : orderData?.product?.reviews?.stars / orderData?.product?.reviews?.total;
   return (
     <Box px={4} borderBottomWidth={10} borderColor={COLORS.lightGrey}>
       <Box pb={5} pt={5}>
@@ -51,10 +56,7 @@ const OrderSummaryCard = ({orderData}: Props) => {
             <HStack>
               <Rating
                 type="custom"
-                startingValue={4}
-                // startingValue={
-                //   orderData?.reviews?.stars ? orderData?.reviews?.stars : 2
-                // }
+                startingValue={review}
                 ratingColor={'green'}
                 tintColor={'#fff'}
                 ratingBackgroundColor={COLORS.grey}
@@ -70,14 +72,7 @@ const OrderSummaryCard = ({orderData}: Props) => {
                 {/* ₹{orderData?.weight?.currentPrice} */}
               </Text>
               <Text textDecorationLine={'line-through'} fontSize={16}>
-                ₹{' '}
-                {/* {
-                  +(
-                    ((orderData?.weight?.currentPrice || 0) * 100) /
-                    (100 - (orderData?.weight?.discount || 0))
-                  ).toFixed(2)
-                } */}
-                {orderData?.product?.mrp}
+                ₹ {orderData?.product?.mrp}
               </Text>
               <Text color={'green.600'} bold fontSize={16}>
                 {(

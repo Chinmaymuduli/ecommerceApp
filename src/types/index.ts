@@ -175,6 +175,10 @@ export type ProductVariants = {
   stock: number;
 };
 export type ProductType = {
+  reviews: {
+    stars: number;
+    total: number;
+  };
   id: number;
   name?: string;
   description?: string;
@@ -244,6 +248,7 @@ export type User = {
   GSTDoc?: string;
   GSTNumber?: string;
   avatar?: string;
+  cartCount?: number;
 };
 // Api Types
 export type ApiProductType = {

@@ -38,8 +38,8 @@ import {
 } from 'components';
 import {useAuth} from 'app';
 import {useAuthFetch, useIsMounted, useSwrApi} from 'hooks';
-import {FetchLoader} from 'components/core';
-import {put, remove} from 'api';
+import {ErrorModal, FetchLoader} from 'components/core';
+import {post, put, remove} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
@@ -53,6 +53,7 @@ type productType = {
 
 const ProductDetails = ({route, navigation}: Props) => {
   const productData = route.params.ProductDetailsType;
+
   const [loader, setLoader] = useState(false);
   const {userType, user} = useAuth();
 
@@ -72,6 +73,8 @@ const ProductDetails = ({route, navigation}: Props) => {
   const isMounted = useIsMounted();
   const [addressModal, setAddressModal] = useState(false);
   const [addressValue, setAddressValue] = useState<any>();
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [label, setLabel] = useState('');
 
   const {isOpen, onOpen, onClose} = useDisclose();
 
@@ -225,10 +228,38 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   };
 
+  const handelB2bQuantity = async () => {
+    setModalDialog(false);
+    setAddQuantity('');
+    // try {
+    //   const res = await post({
+    //     path: 'order/bulk',
+    //     body: JSON.stringify({
+    //       productId: productData._id,
+    //       quantity: addQuantity,
+    //       shippedTo: addressValue,
+    //     }),
+    //   });
+    //   console.log({res});
+    //   setModalDialog(false);
+    //   if (res.status === 500)
+    //     return setShowErrorModal(true), setLabel(res.error);
+    // } catch (error) {
+    //   console.log(error);
+    // } finally {
+    //   setAddQuantity('');
+    // }
+  };
+
   useEffect(() => {
     isMounted.current && setChooseWeight(authData);
   }, [authData]);
+  const rating =
+    authData?.reviews?.stars === 0
+      ? 0
+      : authData?.reviews?.stars / authData?.reviews?.total;
 
+  // console.log({rating});
   return (
     <>
       {!isValidating ? (
@@ -302,7 +333,7 @@ const ProductDetails = ({route, navigation}: Props) => {
               <HStack mt={1}>
                 <Rating
                   type="custom"
-                  startingValue={3}
+                  startingValue={2}
                   ratingColor={'#F5B21E'}
                   tintColor={'#fff'}
                   ratingBackgroundColor={COLORS.grey}
@@ -524,7 +555,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                   <FlatList
                     data={SPECIAL_PRODUCT}
                     renderItem={renderSimilarProduct}
-                    keyExtractor={(item, index) => index.toString()}
+                    keyExtractor={(item: any, index) => item._id}
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                   />
@@ -675,6 +706,12 @@ const ProductDetails = ({route, navigation}: Props) => {
             addressModal={addressModal}
             setAddressModal={setAddressModal}
             setModalDialog={setModalDialog}
+            // setAddressValue={setAddressValue}
+            // addressValue={addressValue}
+            productId={productData?._id}
+            quantity={addQuantity}
+            setShowErrorModal={setShowErrorModal}
+            setLabel={setLabel}
           />
 
           <Modal isOpen={modalDialog} safeAreaTop={true}>
@@ -696,7 +733,7 @@ const ProductDetails = ({route, navigation}: Props) => {
                 </Center>
                 <Pressable
                   alignItems={'center'}
-                  onPress={() => setModalDialog(false)}>
+                  onPress={() => handelB2bQuantity()}>
                   <Box
                     mt={5}
                     borderWidth={2}
@@ -715,6 +752,11 @@ const ProductDetails = ({route, navigation}: Props) => {
               </Modal.Body>
             </Modal.Content>
           </Modal>
+          <ErrorModal
+            setShowErrorModal={setShowErrorModal}
+            label={label}
+            showErrorModal={showErrorModal}
+          />
         </SafeAreaView>
       ) : (
         <FetchLoader />

@@ -26,16 +26,11 @@ const Order = ({navigation}: Props) => {
   const [selectionMode, setSelectionMode] = React.useState<any>(1);
 
   const {data, isValidating, mutate} = useSwrApi('order/orders/my');
-  const myOrders = data?.data?.data;
+  const myOrders = data?.data?.data?.data;
 
-  const myOrder = myOrders?.filter(
-    (item: {status: string}) => item?.status !== 'DELIVERED',
-  );
-
-  const PastOrderData = myOrders?.filter(
-    (item: {status: string}) => item?.status === 'DELIVERED',
-  );
-
+  const deliveredData = useSwrApi('order/orders/my?status=DELIVERED');
+  const deliveredOrder = deliveredData?.data?.data?.data?.data;
+  // console.log({deliveredOrder});
   const isFocused = useIsFocused();
   useEffect(() => {
     mutate();
@@ -85,7 +80,7 @@ const Order = ({navigation}: Props) => {
                   <Text
                     color={selectionMode === 1 ? COLORS.textWhite : '#000'}
                     bold>
-                    ({myOrder?.length})
+                    ({myOrders?.length}){/* ({myOrder?.length}) */}
                   </Text>
                 </HStack>
               </Box>
@@ -104,7 +99,7 @@ const Order = ({navigation}: Props) => {
                     Past Order
                   </Text>
                   <Text color={selectionMode === 2 ? COLORS.textWhite : '#000'}>
-                    ({PastOrderData ? PastOrderData?.length : 0})
+                    ({deliveredOrder ? deliveredOrder?.length : 0})
                   </Text>
                 </HStack>
               </Box>
@@ -116,8 +111,8 @@ const Order = ({navigation}: Props) => {
               paddingBottom: 100,
             }}>
             {selectionMode === 1 ? (
-              myOrder?.length > 0 ? (
-                myOrder?.map((item: activeOrderType, index: any) => (
+              myOrders?.length > 0 ? (
+                myOrders?.map((item: activeOrderType, index: any) => (
                   <Box key={item?._id} px={4} py={4}>
                     <ScrollView>
                       <Box
@@ -200,8 +195,8 @@ const Order = ({navigation}: Props) => {
                   />
                 </>
               )
-            ) : PastOrderData.length > 0 ? (
-              PastOrderData.map((item: PastOrderType) => (
+            ) : deliveredOrder.length > 0 ? (
+              deliveredOrder.map((item: PastOrderType) => (
                 <PastOrder item={item} key={item._id} />
               ))
             ) : (

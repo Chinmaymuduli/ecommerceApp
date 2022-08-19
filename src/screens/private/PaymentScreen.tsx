@@ -40,7 +40,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
 
   const checkoutData = data?.data?.data;
 
-  // console.log({params});
+  // console.log({checkoutData});
 
   const {userData} = useAppContext();
   const {user} = useAuth();
@@ -74,6 +74,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
   };
 
   const handlePayment = async () => {
+    let isSuccess = false;
     if (payment === 'payOnline') {
       let response: {
         [x: string]: any;
@@ -82,6 +83,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
         status?: number;
         error?: string;
       };
+
       if (params?.type === 'product') {
         response = await post({
           path: 'checkout/payment/product',
@@ -99,45 +101,57 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
           }),
         });
       }
-
-      const options = {
-        description: 'Chhattisgarh Herbals',
-        currency: 'INR',
-        key: 'rzp_test_LVpIWeJeXjNeF2', // Your api key
-        amount: response?.data?.amount,
-        name: user?.displayName,
-        order_id: response?.data?.paymentOrderId,
-        prefill: {
-          email: user?.email || 'chinmaymuduli1996@gmail.com',
-          contact: user?.phoneNumber,
+      console.log({response});
+      if (response.status === 200) {
+        const options = {
+          description: 'Chhattisgarh Herbals',
+          currency: 'INR',
+          key: 'rzp_test_LVpIWeJeXjNeF2', // Your api key
+          amount: response?.data?.amount,
           name: user?.displayName,
-        },
-      };
-      RazorpayCheckout.open(options)
-        .then(async (data: any) => {
-          const res = await post({
-            path: `checkout/payment-verify`,
-            body: JSON.stringify({
-              razorpay_payment_id: data?.razorpay_payment_id,
-              razorpay_order_id: data?.razorpay_order_id,
-              razorpay_signature: data?.razorpay_signature,
-              payment_order_id: response?.data?.paymentOrderId,
-            }),
+          order_id: response?.data?.paymentOrderId,
+          prefill: {
+            email: user?.email || 'chinmaymuduli1996@gmail.com',
+            contact: user?.phoneNumber,
+            name: user?.displayName,
+          },
+        };
+        RazorpayCheckout.open(options)
+          .then(async (data: any) => {
+            console.log({data});
+            const res = await post({
+              path: `checkout/payment-verify`,
+              body: JSON.stringify({
+                razorpay_payment_id: data?.razorpay_payment_id,
+                razorpay_order_id: data?.razorpay_order_id,
+                razorpay_signature: data?.razorpay_signature,
+                payment_order_id: response?.data?.paymentOrderId,
+              }),
+            });
+            console.log({res});
+            if (res.status === 200) {
+              navigation.navigate('ConfirmOrder');
+            } else {
+              Alert.alert('Error', response.error);
+            }
+          })
+          .catch((error: any) => {
+            console.log(error);
+            Alert.alert('Error', 'Transaction Failed');
           });
-          // console.log({res});
-          navigation.navigate('ConfirmOrder');
-        })
-        .catch((error: any) => {
-          console.log(error);
-          Alert.alert('Error', 'Transaction Failed');
-        });
+      }
+      Alert.alert('Error', response.error);
     } else {
       const res = await post({
         path: 'order/cash-on-delivery',
         body: JSON.stringify({
           type: params.type,
+          shippedTo: params?.addressId,
+          productId: params?.productId,
+          quantity: params?.quantity,
         }),
       });
+      if (res.status !== 200) return Alert.alert('Error', res.error);
     }
   };
 

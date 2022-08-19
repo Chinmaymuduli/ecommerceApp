@@ -1,16 +1,10 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useStore} from 'app';
-import {ICONS} from 'assets';
-import {CustomDrawer} from 'components/core';
+import {useAuth, useStore} from 'app';
 import {COLORS} from 'configs';
-import {useAppContext} from 'contexts';
 import {Badge, Box, Text} from 'native-base';
 
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
-// import Icon, {Icons} from '../components/core/Icons';
-// import Colors from '../constants/Colors';
-import * as Animatable from 'react-native-animatable';
 import {Category, Home, Order, Search, Cart} from 'screens';
 import Icon, {Icons} from '../components/core/Icons';
 
@@ -35,7 +29,7 @@ const CustomTabbarButton = ({children, onPress}: any) => (
 );
 
 export default function BottomTab() {
-  const {cartItems} = useStore();
+  const {user} = useAuth();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -134,7 +128,7 @@ export default function BottomTab() {
                   _text={{
                     fontSize: 10,
                   }}>
-                  {cartItems?.length ? cartItems?.length : 0}
+                  {user?.cartCount ? user?.cartCount : 0}
                 </Badge>
                 <Icon
                   type={Icons.Ionicons}

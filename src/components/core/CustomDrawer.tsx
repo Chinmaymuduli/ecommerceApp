@@ -117,7 +117,6 @@ const drawerArray = [
 const CustomDrawer = () => {
   const navigation = useNavigation<NavigationProps>();
   const [selectedButton, setSelectedButton] = React.useState(1);
-  const {setUserData} = useAppContext();
   const {user, setLoggedIn, setUserType} = useAuth(state => state);
 
   // console.log({user});

@@ -2,26 +2,55 @@ import React, {useState} from 'react';
 import {Box, Heading, HStack, Modal, Pressable, Radio, Text} from 'native-base';
 import {COLORS} from 'configs';
 import {useIsMounted, useSwrApi} from 'hooks';
+import {post} from 'api';
 
 type Props = {
   addressModal: boolean;
   setAddressModal: (previous: boolean) => void;
   setModalDialog: (data: boolean) => void;
+  // setAddressValue: (address: string) => void;
+  // addressValue: string;
+  productId: string;
+  quantity: number;
+  setShowErrorModal: (error: boolean) => void;
+  setLabel: (label: string) => void;
 };
 
 export default function AddressModal({
   addressModal,
   setAddressModal,
   setModalDialog,
+  // setAddressValue,
+  // addressValue,
+  setShowErrorModal,
+  setLabel,
+  productId,
+  quantity,
 }: Props) {
-  const {data, isValidating, mutate} = useSwrApi('address/all/my-addresses');
+  const [addressValue, setAddressValue] = useState<string>();
+  const {data} = useSwrApi('address/all/my-addresses');
   const modalAddressData = data?.data?.data;
   const isMounted = useIsMounted();
-  const [addressValue, setAddressValue] = useState<any>();
-  console.log({addressValue});
-  const handelAddress = () => {
+  const handelAddress = async () => {
+    // isMounted.current && setAddressModal(false);
+    // isMounted.current && setModalDialog(true);
     setAddressModal(false);
-    setModalDialog(true);
+    try {
+      const res = await post({
+        path: 'order/bulk',
+        body: JSON.stringify({
+          productId: productId,
+          quantity: quantity,
+          shippedTo: addressValue,
+        }),
+      });
+      console.log({res});
+      // setModalDialog(false);
+      if (res.status === 200) return setModalDialog(true);
+      return setShowErrorModal(true), setLabel(res.error);
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <>
@@ -40,7 +69,7 @@ export default function AddressModal({
                 Select Your Address
               </Heading>
             </Box>
-            {modalAddressData.map(
+            {modalAddressData?.map(
               (item: {
                 _id: string;
                 name:

@@ -19,6 +19,8 @@ import {useAuthFetch, useSwrApi} from 'hooks';
 import {User} from 'types';
 import {FetchLoader} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {VERIFY_IMAGE} from 'assets';
 
 const Profile = () => {
   const navigation = useNavigation<NavigationProps>();
@@ -37,7 +39,7 @@ const Profile = () => {
 
   const {data, isValidating} = useSwrApi('user/my-account');
   const authData = data?.data?.data;
-
+  // console.log({authData});
   return (
     <>
       {/* {!isLoading ? ( */}
@@ -75,7 +77,7 @@ const Profile = () => {
                     _text={{
                       fontSize: 7,
                     }}>
-                    {0}
+                    {authData?.cartCount ? authData?.cartCount : 0}
                   </Badge>
                   <Ionicons
                     name="cart"
@@ -101,25 +103,41 @@ const Profile = () => {
                   alt={'profileimg'}
                   borderRadius={50}
                 />
-                <Text color={COLORS.textWhite} mt={4} bold>
-                  {/* {data?.data?.displayName} */}
-                  {authData?.displayName}
-                </Text>
+                <HStack mt={4} alignItems={'center'} ml={1}>
+                  <Text color={COLORS.textWhite} bold>
+                    {authData?.displayName}
+                  </Text>
+                  {authData?.status === 'VERIFY' && (
+                    <Image
+                      source={VERIFY_IMAGE}
+                      h={5}
+                      w={5}
+                      alt={'verify_img'}
+                    />
+                  )}
+                </HStack>
 
                 <Box alignItems={'center'} mt={4}>
                   <Text color={COLORS.textWhite}>
                     {authData?.phoneNumber
                       ? authData?.phoneNumber
                       : 'No Number Found'}
-                    {/* {data?.data?.phoneNumber
-                      ? data?.data?.phoneNumber
-                      : 'No Number Found'} */}
                   </Text>
-                  <Text color={COLORS.textWhite}>
-                    {authData?.email ? authData?.email : 'No email found'}
-                  </Text>
+                  <HStack alignItems={'center'}>
+                    <Text color={COLORS.textWhite}>
+                      {authData?.email ? authData?.email : 'No email found'}
+                    </Text>
+                    {authData?.status === 'ACTIVE' && (
+                      <Image
+                        source={VERIFY_IMAGE}
+                        h={5}
+                        w={5}
+                        alt={'verify_img'}
+                      />
+                    )}
+                  </HStack>
                 </Box>
-                <Box position={'absolute'} right={4} bottom={3}>
+                <Box position={'absolute'} right={4} bottom={6}>
                   <FontAwesome5
                     name="user-edit"
                     size={20}
@@ -202,13 +220,7 @@ const Profile = () => {
                   px={4}
                   py={3}
                   onPress={() =>
-                    navigation.navigate(
-                      'SelectAddress',
-                      // {
-                      //   SelectProductData: [],
-                      // }
-                      {isProfile: true},
-                    )
+                    navigation.navigate('SelectAddress', {isProfile: true})
                   }>
                   <Text color={COLORS.primary} bold>
                     View Your Address
@@ -244,15 +256,15 @@ const Profile = () => {
             </Pressable>
             {/* B2B Account data */}
             {/* {userType !== 'b2c' ? ( */}
-            {userType === 'b2c' ? (
+            {userType !== 'b2c' ? (
               <Pressable
                 borderBottomWidth={1}
                 px={4}
                 borderColor={COLORS.lightGrey}
                 onPress={() => navigation.navigate('B2BAccount')}>
                 <HStack space={2} py={3} alignItems={'center'}>
-                  <Ionicons
-                    name="settings-sharp"
+                  <MaterialCommunityIcons
+                    name="shield-account"
                     size={24}
                     color={COLORS.grey}
                     onPress={() => navigation.navigate('B2BAccount')}

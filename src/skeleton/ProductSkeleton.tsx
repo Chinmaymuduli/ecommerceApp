@@ -5,7 +5,7 @@ import {Skeleton, VStack} from 'native-base';
 const ProductSkeleton = () => {
   return (
     <>
-      <VStack mt={3} mb={4}>
+      <VStack mt={3} mb={4} mr={2}>
         <VStack
           h={120}
           w={120}

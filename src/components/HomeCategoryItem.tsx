@@ -33,8 +33,6 @@ const HomeCategoryItem = ({
   const navigation = useNavigation<NavigationProps>();
 
   //wishhlist
-  const {data, isLoading, mutate} = useSwrApi('wishlists');
-  const wishListItems = data?.data?.data?.data;
 
   const handleWishlist = async (wishlistItem: ProductType) => {
     try {

@@ -1,12 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAuth} from 'app';
 import {APIOptsType} from 'src/types/api';
 import {APIFunction} from 'types';
 
 export const BASE_URL = `https://chhattisgarh-herbals-api.herokuapp.com/api`;
 
 const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
-  const Access_Token = await AsyncStorage.getItem('access_token');
   const GET_REFRESH_TOKEN = await AsyncStorage.getItem('tokenId');
+  const {setLoggedIn} = useAuth();
   const getResponse = await post({
     path: 'auth/get-access-token',
     body: JSON.stringify({
@@ -16,10 +17,12 @@ const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
 
   // console.log('first50', getResponse);
   if (getResponse.status === 401)
-    return await put({
-      path: 'auth/logout',
-      token: Access_Token,
-    });
+    return await AsyncStorage.setItem('isLoggedIn', 'false')
+      .then(() => {
+        console.log('Logout Success');
+        setLoggedIn(false);
+      })
+      .catch(error => console.log(error));
   if (getResponse.status !== 200) return;
   await AsyncStorage.setItem('access_token', getResponse.ACCESS_TOKEN);
   if (!getResponse?.REFRESH_Token) return;

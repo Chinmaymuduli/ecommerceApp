@@ -49,6 +49,7 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
     (item: {quantity: number}) => item?.quantity,
   );
 
+  console.log({OrderSummaryData});
   return (
     <>
       {isValidating ? (
@@ -132,7 +133,11 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
                     </HStack>
                     <HStack justifyContent={'space-between'}>
                       <Text>Delivery Charges</Text>
-                      <Text color={'green.600'}>Free</Text>
+                      <Text color={'green.600'}>
+                        {OrderSummaryData?.deliveryCharge
+                          ? OrderSummaryData?.deliveryCharge
+                          : 'Free'}
+                      </Text>
                     </HStack>
                   </VStack>
                 </Box>
