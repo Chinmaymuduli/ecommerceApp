@@ -40,11 +40,12 @@ const ConfirmOrder = ({route, navigation}: Props) => {
           />
           <Heading size={'md'}>Thank you for your order !</Heading>
           <Text mt={2} textAlign={'center'}>
-            Your order has been placed successfully. your ID is #
-            {Math.floor(Math.random() * 100000000)}
+            Your order has been placed successfully.
+            {/* your ID is #
+            {Math.floor(Math.random() * 100000000)} */}
           </Text>
         </Center>
-        <Box px={4}>
+        {/* <Box px={4}>
           <Box borderTopWidth={1} borderColor={COLORS.lightGrey}>
             <HStack justifyContent={'space-between'} mt={3}>
               <HStack space={2}>
@@ -95,11 +96,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Price(1 items)</Text>
-                  <Text>
-                    &#8377;
-                    {/* {TotalProductPriceWithoutDiscount} */}
-                    100
-                  </Text>
+                  <Text>&#8377; 100</Text>
                 </HStack>
 
                 <HStack
@@ -107,11 +104,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Saving</Text>
-                  <Text color={'green.500'}>
-                    - &#8377;
-                    {/* {totalDiscountAmount} */}
-                    50
-                  </Text>
+                  <Text color={'green.500'}>- &#8377; 50</Text>
                 </HStack>
                 <HStack
                   pt={2}
@@ -135,11 +128,10 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                 mt={2}>
                 <Text>Amount Payable</Text>
                 <Text bold>&#8377;70</Text>
-                {/* <Text bold>&#8377;{sumTotalPriceCustomerWillPay}</Text> */}
               </HStack>
             </Box>
           </Box>
-          {/* Order Details */}
+          
 
           <Pressable
             alignItems={'center'}
@@ -149,7 +141,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
               See Order Details
             </Text>
           </Pressable>
-        </Box>
+        </Box> */}
       </ScrollView>
     </Box>
   );

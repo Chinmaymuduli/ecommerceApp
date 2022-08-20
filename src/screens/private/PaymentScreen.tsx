@@ -101,7 +101,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
           }),
         });
       }
-      console.log({response});
+      // console.log({response});
       if (response.status === 200) {
         const options = {
           description: 'Chhattisgarh Herbals',
