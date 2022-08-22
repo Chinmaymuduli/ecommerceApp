@@ -157,14 +157,18 @@ const CustomDrawer = () => {
     );
   }, []);
 
-  const handleLogout = () => {
-    AsyncStorage.setItem('isLoggedIn', 'false')
-
-      .then(() => {
-        console.log('Logout Success');
-        setLoggedIn(false);
-      })
-      .catch(error => console.log(error));
+  const handleLogout = async () => {
+    try {
+      const logRes = await put({
+        path: 'auth/logout',
+      });
+      await AsyncStorage.setItem('isLoggedIn', 'false')
+        .then(() => {
+          console.log('Logout Success');
+          setLoggedIn(false);
+        })
+        .catch(error => console.log(error));
+    } catch (error) {}
   };
 
   return (
