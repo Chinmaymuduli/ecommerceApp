@@ -14,7 +14,7 @@ const useSwrApi = (url: string, options?: any) => {
       isMounted.current && setLoading(true);
       const getAccessToken = await AsyncStorage.getItem('access_token');
       const getRefreshToken = await AsyncStorage.getItem('tokenId');
-      // console.log({getRefreshToken});
+
       const res = await fetch(url, {
         method: 'GET',
         headers: {
@@ -22,7 +22,7 @@ const useSwrApi = (url: string, options?: any) => {
           Authorization: `Bearer ${getAccessToken}`,
         },
       });
-      // console.log(res.status);
+
       if (res?.status === 401) {
         const getResponse = await fetch(`${BASE_URL}/auth/get-access-token`, {
           method: 'POST',
@@ -39,7 +39,7 @@ const useSwrApi = (url: string, options?: any) => {
           'access_token',
           getResponseData?.ACCESS_TOKEN,
         );
-        if (getResponseData.status === 401)
+        if (getResponse.status === 401)
           return await AsyncStorage.setItem('isLoggedIn', 'false')
             .then(() => {
               console.log('Logout Success');
@@ -56,7 +56,7 @@ const useSwrApi = (url: string, options?: any) => {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${getResponseData?.ACCESS_TOKEN}`,
+            Authorization: `Bearer ${getAccessToken}`,
           },
         });
 
@@ -65,7 +65,7 @@ const useSwrApi = (url: string, options?: any) => {
         return {data, res};
       }
       const data = await res.json();
-      // console.log({dataRes: data});
+
       return {data, res};
     } catch (error) {
       console.log(error);
