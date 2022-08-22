@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {Alert, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   Box,
@@ -16,7 +16,8 @@ import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {ImagePicker} from './core';
-import {useIsMounted, useSwrApi} from 'hooks';
+import {useActions, useIsMounted, useSwrApi} from 'hooks';
+import {put} from 'api';
 
 const B2bDocument = () => {
   const [showModal, setShowModal] = useState(false);
@@ -25,8 +26,8 @@ const B2bDocument = () => {
   const [whyModal, setWhyModal] = useState(false);
   const [document, setDocument] = useState<string>();
   const isMounted = useIsMounted();
+  const {setLoading} = useActions();
 
-  // console.log({document});
   const {data, isValidating, mutate} = useSwrApi('user/my-account');
   const userData = data?.data?.data;
   const handleDismiss = () => {
@@ -39,8 +40,27 @@ const B2bDocument = () => {
   };
 
   useEffect(() => {
-    isMounted.current && setDocument(userData?.GSTDoc);
+    isMounted.current && setDocument(userData?.GSTDocType);
+    isMounted.current && setGstDocument(userData?.GSTDoc);
   }, [userData]);
+
+  const handelB2bDocuments = async () => {
+    try {
+      isMounted.current && setLoading(true);
+      const res = await put({
+        path: 'user/account',
+        body: JSON.stringify({
+          GSTDocType: document,
+        }),
+      });
+      res.status === 200 && Alert.alert('Success');
+    } catch (error) {
+      console.log({error});
+    } finally {
+      isMounted.current && setLoading(false);
+    }
+  };
+
   return (
     <>
       <Box px={5} mt={5}>
@@ -114,11 +134,17 @@ const B2bDocument = () => {
             )}
           </Pressable>
         </Box>
-        <Box borderWidth={1} borderRadius={5} bg={COLORS.primary} mt={7}>
+
+        <Pressable
+          borderWidth={1}
+          borderRadius={5}
+          bg={COLORS.primary}
+          mt={7}
+          onPress={() => handelB2bDocuments()}>
           <Text textAlign={'center'} bold py={2} color={COLORS.textWhite}>
             Save Document
           </Text>
-        </Box>
+        </Pressable>
       </Box>
       <Center>
         <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
@@ -195,13 +221,13 @@ const B2bDocument = () => {
       </Center>
 
       {/* image picker */}
-      {/* <ImagePicker
+      <ImagePicker
         visible={visible}
         onDismiss={handleDismiss}
         setImageURI={setGstDocument}
         cropperCircleOverlay={true}
         postImages={false}
-      /> */}
+      />
     </>
   );
 };

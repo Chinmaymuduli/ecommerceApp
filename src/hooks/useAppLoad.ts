@@ -20,6 +20,7 @@ export default function useAppLoad() {
           },
         );
         const userData = await response.json();
+        // console.log({userData});
         if (!userData) return setUser({});
         setUser(userData.data);
       } catch (error) {

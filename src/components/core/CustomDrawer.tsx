@@ -18,7 +18,13 @@ import Materialicons from 'react-native-vector-icons/MaterialIcons';
 import {useAppContext} from 'contexts';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {useAuth} from 'app';
-import {useActions, useAuthFetch, useFetch, useIsMounted} from 'hooks';
+import {
+  useActions,
+  useAuthFetch,
+  useFetch,
+  useIsMounted,
+  useSwrApi,
+} from 'hooks';
 import {post, put} from 'api';
 import {User} from 'types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -120,15 +126,17 @@ const CustomDrawer = () => {
   const {user, setLoggedIn, setUserType} = useAuth(state => state);
 
   // console.log({user});
+  const {data, isValidating} = useSwrApi('user/my-account');
+  const UserData = data?.data?.data;
+
+  // console.log({UserData});
 
   const DrawerNaviagte = (item: any) => {
     setSelectedButton(item?.id);
     if (item?.route === 'ExitApp') return handelCloseApp();
     if (item?.label === 'Business')
-      // return setUserType('b2b'), navigation.navigate(item?.route);
       return setUserType('b2b'), navigation.navigate(item?.route);
     if (item?.label === 'Category')
-      // return setUserType('b2c'),
       return setUserType('b2c'), navigation.navigate(item?.route);
     navigation.navigate(item?.route);
   };
@@ -172,15 +180,15 @@ const CustomDrawer = () => {
             <Image
               alt="drawerImage"
               source={{
-                uri: user?.photoURL
-                  ? user?.photoURL
+                uri: UserData?.photoURL
+                  ? UserData?.photoURL
                   : 'https://t3.ftcdn.net/jpg/01/17/72/36/240_F_117723612_z7zQmUrrpG4IRGQLvgX5nwtwC18ke3qU.jpg',
               }}
               style={styles.drawerImage}
             />
             <VStack>
-              <Heading size={'xs'}>{user?.displayName}</Heading>
-              <Text numberOfLines={1}>{user?.email}</Text>
+              <Heading size={'xs'}>{UserData?.displayName}</Heading>
+              <Text numberOfLines={1}>{UserData?.email}</Text>
             </VStack>
           </HStack>
         </Pressable>
@@ -195,7 +203,7 @@ const CustomDrawer = () => {
               py={3}
               px={3}
               bg={selectedButton === item.id ? COLORS.secondary : '#fff'}
-              mt={2}
+              // mt={2}
               borderRadius={10}
               mx={2}>
               <HStack justifyContent={'space-between'}>

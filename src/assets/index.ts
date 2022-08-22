@@ -104,3 +104,5 @@ export const CATEGORY_PLACEHOLDER = require('./images/catagories.png');
 export const REVIEW_IMAGE = require('./images/reviewImg.png');
 export const VERIFY_IMAGE = require('./images/verifyImg.png');
 export const SEARCH_IMAGE = require('./images/searchEmpty.png');
+export const PROFILE_AVATAR = require('./images/profile_avatar.png');
+export const CAMERA = require('./images/camera.webp');

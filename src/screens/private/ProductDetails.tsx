@@ -56,9 +56,12 @@ const ProductDetails = ({route, navigation}: Props) => {
 
   const [loader, setLoader] = useState(false);
   const {userType, user} = useAuth();
+  // console.log({user});
 
   const {data, isValidating, mutate} = useSwrApi(
-    `product/${productData._id}/info?userId=${user?._id}`,
+    user?._id
+      ? `product/${productData._id}/info?userId=${user?._id}`
+      : `product/${productData._id}/info`,
   );
   const authData: ProductType = data?.data?.data;
 
@@ -72,7 +75,6 @@ const ProductDetails = ({route, navigation}: Props) => {
   const [alertMessage, setAlertMessage] = useState('Successfully added!');
   const isMounted = useIsMounted();
   const [addressModal, setAddressModal] = useState(false);
-  const [addressValue, setAddressValue] = useState<any>();
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [label, setLabel] = useState('');
 
@@ -192,7 +194,7 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   }, []);
 
-  // console.log(authData);
+  // console.log(data);
 
   const BuyNow = async () => {
     try {
@@ -231,24 +233,6 @@ const ProductDetails = ({route, navigation}: Props) => {
   const handelB2bQuantity = async () => {
     setModalDialog(false);
     setAddQuantity('');
-    // try {
-    //   const res = await post({
-    //     path: 'order/bulk',
-    //     body: JSON.stringify({
-    //       productId: productData._id,
-    //       quantity: addQuantity,
-    //       shippedTo: addressValue,
-    //     }),
-    //   });
-    //   console.log({res});
-    //   setModalDialog(false);
-    //   if (res.status === 500)
-    //     return setShowErrorModal(true), setLabel(res.error);
-    // } catch (error) {
-    //   console.log(error);
-    // } finally {
-    //   setAddQuantity('');
-    // }
   };
 
   useEffect(() => {

@@ -249,6 +249,7 @@ export type User = {
   GSTNumber?: string;
   avatar?: string;
   cartCount?: number;
+  GSTDocType?: string;
 };
 // Api Types
 export type ApiProductType = {

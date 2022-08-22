@@ -27,6 +27,7 @@ import RazorpayCheckout from 'react-native-razorpay';
 import {useAuth} from 'app';
 import {post} from 'api';
 import {useSwrApi} from 'hooks';
+import {CAMERA} from 'assets';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'PaymentScreen'>;
 const PaymentScreen = ({navigation, route: {params}}: Props) => {
@@ -40,18 +41,24 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
 
   const checkoutData = data?.data?.data;
 
-  // console.log({checkoutData});
-
-  const {userData} = useAppContext();
-  const {user} = useAuth();
+  const {user, userType} = useAuth();
   const [payment, setPayment] = useState<any>('payOnline');
   const [gstValue, setGstValue] = useState<any>('noGst');
   const [showModal, setShowModal] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
-  const [profileImage, setProfileImage] = useState<any>('');
-  const [document, setDocument] = useState<any>('');
+  const [profileImage, setProfileImage] = useState<any>(
+    user?.GSTDoc ? user?.GSTDoc : null,
+  );
+  const [document, setDocument] = useState<any>(
+    user?.GSTDocType ? user?.GSTDocType : '',
+  );
   const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
-  const [GstNumber, setGstNumber] = useState<any>();
+  const [GstNumber, setGstNumber] = useState<any>(
+    user?.GSTNumber ? user?.GSTNumber : '',
+  );
+  const [label, setLabel] = useState<string>();
+
+  // console.log({user});
 
   const handleDismiss = () => {
     setVisible(false);
@@ -64,17 +71,15 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
   };
 
   const confirmOrder = () => {
-    if (profileImage && document) {
-      navigation.navigate('ConfirmOrder');
-    } else if (GstNumber) {
-      navigation.navigate('ConfirmOrder');
+    if ((profileImage && document) || GstNumber) {
+      handlePayment();
     } else {
       setShowErrorModal(true);
+      setLabel('Please Select at least one documents.');
     }
   };
 
   const handlePayment = async () => {
-    let isSuccess = false;
     if (payment === 'payOnline') {
       let response: {
         [x: string]: any;
@@ -101,7 +106,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
           }),
         });
       }
-      // console.log({response});
+
       if (response.status === 200) {
         const options = {
           description: 'Chhattisgarh Herbals',
@@ -139,8 +144,10 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
             console.log(error);
             Alert.alert('Error', 'Transaction Failed');
           });
+      } else {
+        setShowErrorModal(true);
+        setLabel(response.error);
       }
-      Alert.alert('Error', response.error);
     } else {
       const res = await post({
         path: 'order/cash-on-delivery',
@@ -166,7 +173,6 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
     });
   };
 
-  // console.log(checkoutData);
   return (
     <>
       {isValidating ? (
@@ -289,7 +295,8 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                 </Radio.Group>
               </Box>
             </Box>
-            {Boolean(userData?.role !== 'b2c') && (
+            {/* {Boolean(userData?.role !== 'b2c') && ( */}
+            {Boolean(userType !== 'b2c') && (
               <>
                 <Box bg={COLORS.textWhite} mt={2} px={4}>
                   <Box
@@ -375,11 +382,13 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                                 borderColor={COLORS.primary}>
                                 <Image
                                   resizeMode="cover"
-                                  source={{
-                                    uri: profileImage
-                                      ? profileImage
-                                      : 'https://img.freepik.com/free-vector/illustration-camera-icon_53876-5563.jpg?w=740&t=st=1655533735~exp=1655534335~hmac=2da184f3baa2ffe8fe2ea4c96b42c91d5c26cb59023e2c80c4c5ba24fe7a9338',
-                                  }}
+                                  source={
+                                    profileImage
+                                      ? {
+                                          uri: profileImage,
+                                        }
+                                      : CAMERA
+                                  }
                                   style={{width: 100, height: 100}}
                                   alt="GST_IMG"
                                   borderTopRadius={5}
@@ -457,7 +466,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
               bg={'#008000'}
               borderRadius={4}
               onPress={() => {
-                if (userData?.role === 'b2b') return confirmOrder();
+                if (userType === 'b2b') return confirmOrder();
                 handlePayment();
               }}>
               <HStack
@@ -499,14 +508,14 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                 <Modal.Header>Choose Documents</Modal.Header>
                 <Modal.Body>
                   <Radio.Group
-                    defaultValue="Bill Book"
+                    defaultValue={document ? document : 'BILL BOOK'}
                     name="myRadioGroup"
                     value={document}
                     onChange={nextValue => {
                       setDocument(nextValue);
                     }}
                     accessibilityLabel="Pick your favorite number">
-                    <Radio value="Bill Book" my={4}>
+                    <Radio value="BILL BOOK" my={4}>
                       Bill Book
                     </Radio>
                     <Divider />
@@ -514,7 +523,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                       Visiting Card
                     </Radio>
                     <Divider />
-                    <Radio value="Shop Photo" my={4}>
+                    <Radio value="SHOP PHOTO" my={4}>
                       Shop Photo
                     </Radio>
                     <Divider />
@@ -562,7 +571,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
           <ErrorModal
             setShowErrorModal={setShowErrorModal}
             showErrorModal={showErrorModal}
-            label="Please select at least one document."
+            label={label}
           />
         </Box>
       )}

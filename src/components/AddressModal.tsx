@@ -130,6 +130,7 @@ export default function AddressModal({
                   | undefined;
               }) => (
                 <Radio.Group
+                  key={item?._id}
                   name="myRadioGroup"
                   value={addressValue}
                   onChange={nextValue => {

@@ -17,6 +17,7 @@ const Routes = () => {
   const {user, loggedIn, setLoggedIn} = useAuth(state => state);
   const [userData, setUserData] = useState<string | null>();
   const isMounted = useIsMounted();
+  // console.log({user});
   const getUser = async () => {
     try {
       const newUserData = await AsyncStorage.getItem('isUserEnter');

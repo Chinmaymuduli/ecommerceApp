@@ -18,7 +18,7 @@ const Category = ({route}: Props) => {
 
   const CategoryData = categoryItem?.data?.data?.data;
 
-  const {loggedIn, user, userType} = useAuth();
+  const {user, userType} = useAuth();
 
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
@@ -32,7 +32,7 @@ const Category = ({route}: Props) => {
       setCategoryId(CategoryData ? CategoryData[0]?._id : '');
   }, [CategoryData]);
 
-  const {data, isLoading, mutate} = useSwrApi(
+  const {data, isValidating, mutate} = useSwrApi(
     user?._id
       ? `category/${categoryId}/products?userId=${user?._id}&type=${userType}`
       : `category/${categoryId}/products`,
@@ -43,7 +43,7 @@ const Category = ({route}: Props) => {
 
   return (
     <>
-      {!isLoading ? (
+      {!isValidating ? (
         <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
           <Box borderBottomWidth={1.5} borderColor={COLORS.lightGrey}>
             <HStack justifyContent={'space-between'} px={4} py={3}>

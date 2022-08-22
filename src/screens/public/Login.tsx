@@ -82,6 +82,16 @@ const Login = () => {
       setLoader(false);
     }
   };
+
+  const handelGuest = async () => {
+    await AsyncStorage.setItem('isLoggedIn', 'true')
+      .then(() => {
+        console.log('Login Success');
+        setLoggedIn(true);
+      })
+      .catch(error => console.log(error));
+    return;
+  };
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
       <ScrollView keyboardShouldPersistTaps="always">
@@ -242,10 +252,7 @@ const Login = () => {
               </Row>
             </Pressable>
 
-            <Pressable
-              mt={5}
-              // onPress={() => setIsLoggedIn(true)}
-            >
+            <Pressable mt={5} onPress={() => handelGuest()}>
               <Row justifyContent={'center'}>
                 <Text fontSize={15} underline>
                   Continue as guest

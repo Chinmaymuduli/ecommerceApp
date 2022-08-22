@@ -97,7 +97,7 @@ const Notifications = () => {
         path: `notification/mark-as-read/${data.id}`,
         token: token,
       });
-      console.log({markAsRead});
+      // console.log({markAsRead});
     } catch (error) {
       console.log(error);
     }
@@ -110,7 +110,7 @@ const Notifications = () => {
         path: `notification/${id}`,
         token: token,
       });
-      console.log({singleDelete});
+      // console.log({singleDelete});
       onClose();
     } catch (error) {
       console.log(error);

@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {BASE_URL} from 'api';
+import {useAuth} from 'app';
 import {useState} from 'react';
 import useSWR from 'swr';
 import useIsMounted from './useIsMounted';
@@ -7,11 +8,13 @@ import useIsMounted from './useIsMounted';
 const useSwrApi = (url: string, options?: any) => {
   const [isLoading, setLoading] = useState(false);
   const isMounted = useIsMounted();
+  const {setLoggedIn} = useAuth();
   const fetcher = async (url: string, options?: any) => {
     try {
       isMounted.current && setLoading(true);
       const getAccessToken = await AsyncStorage.getItem('access_token');
       const getRefreshToken = await AsyncStorage.getItem('tokenId');
+      // console.log({getRefreshToken});
       const res = await fetch(url, {
         method: 'GET',
         headers: {
@@ -19,6 +22,7 @@ const useSwrApi = (url: string, options?: any) => {
           Authorization: `Bearer ${getAccessToken}`,
         },
       });
+      // console.log(res.status);
       if (res?.status === 401) {
         const getResponse = await fetch(`${BASE_URL}/auth/get-access-token`, {
           method: 'POST',
@@ -30,16 +34,24 @@ const useSwrApi = (url: string, options?: any) => {
           }),
         });
         const getResponseData = await getResponse.json();
+
         await AsyncStorage.setItem(
           'access_token',
           getResponseData?.ACCESS_TOKEN,
         );
+        if (getResponseData.status === 401)
+          return await AsyncStorage.setItem('isLoggedIn', 'false')
+            .then(() => {
+              console.log('Logout Success');
+              setLoggedIn(false);
+            })
+            .catch(error => console.log(error));
         if (getResponseData?.REFRESH_TOKEN)
           return await AsyncStorage.setItem(
             'tokenId',
             getResponseData?.REFRESH_TOKEN,
           );
-        // console.log(getResponseData);
+
         const res = await fetch(`${url}`, {
           method: 'GET',
           headers: {

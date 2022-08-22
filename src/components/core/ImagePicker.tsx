@@ -1,5 +1,5 @@
 import ImgCropPicker from 'react-native-image-crop-picker';
-import {StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import BottomSheet from './BottomSheet';
 import {Button} from 'native-base';
@@ -13,18 +13,20 @@ interface Props {
   postImage?: any;
   cropperCircleOverlay?: boolean;
   postImages?: any;
+  path?: string;
 }
 const ImagePicker = ({
   visible,
   onDismiss,
   setImageURI,
   cropperCircleOverlay,
+  path,
 }: Props) => {
   const postImg = async (img: string) => {
     try {
       const token = await AsyncStorage.getItem('access_token');
       const imageData = new FormData();
-      imageData.append('avatar', {
+      imageData.append(path ?? 'GSTDoc', {
         uri: img,
         name: 'image.png',
         fileName: 'image',
@@ -38,7 +40,6 @@ const ImagePicker = ({
           Authorization: `Bearer ${token}`,
         },
       });
-      let response = await res.json();
     } catch (error) {
       console.log('err', error);
     }

@@ -28,6 +28,7 @@ import {useActions, useAuthFetch, useIsMounted} from 'hooks';
 import {User} from 'types';
 import {post, put} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {PROFILE_AVATAR} from 'assets';
 
 const EditProfile = () => {
   const navigation = useNavigation<NavigationProps>();
@@ -149,17 +150,16 @@ const EditProfile = () => {
               <Pressable onPress={() => setVisible(true)}>
                 <Center mt={5}>
                   <Image
-                    source={{
-                      uri: authData?.photoURL
-                        ? authData?.photoURL
-                        : 'https://www.w3schools.com/howto/img_avatar.png',
-                      // uri: data?.results?.photoURL
-                      //   ? data?.results?.photoURL
-                      //   : 'https://www.w3schools.com/howto/img_avatar.png',
-                    }}
+                    source={
+                      authData?.photoURL
+                        ? {
+                            uri: authData?.photoURL,
+                          }
+                        : PROFILE_AVATAR
+                    }
                     h={100}
                     w={100}
-                    alt={'profileimg'}
+                    alt={'profile_img'}
                     borderRadius={50}
                   />
                   <Box
@@ -343,6 +343,7 @@ const EditProfile = () => {
             onDismiss={() => setVisible(false)}
             setImageURI={setProfileImage}
             cropperCircleOverlay={true}
+            path="avatar"
           />
           {/* success modal */}
           <SuccessVerificationModal

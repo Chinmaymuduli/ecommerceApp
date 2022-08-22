@@ -83,13 +83,13 @@ const OrderSummaryCard = ({orderData}: Props) => {
                 % off
               </Text>
             </HStack>
-            <HStack mt={1}>
+            {/* <HStack mt={1}>
               <Text>Delivery Charges :</Text>
               <Text color={'green.600'} bold>
                 {' '}
                 Free
               </Text>
-            </HStack>
+            </HStack> */}
           </VStack>
         </HStack>
       </Box>
