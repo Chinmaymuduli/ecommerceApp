@@ -26,6 +26,7 @@ import {
 
 import {useNotifications, useSwrApi} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
+import {useAuth} from 'app';
 
 const Home = () => {
   const navigation = useNavigation<NavigationProps>();

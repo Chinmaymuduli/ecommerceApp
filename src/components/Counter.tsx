@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {ActivityIndicator, StyleSheet} from 'react-native';
 import React, {useCallback, useMemo, useState} from 'react';
 import {Box, HStack, Text} from 'native-base';
 import {COLORS} from 'configs';
@@ -19,34 +19,13 @@ const Counter = ({
   setAlertMessage,
   setOpenAlert,
   ProductMutate,
-}: Props) => {
-  // console.log({item});
-  // const {data} = useSwrApi('cart/all');
-  // const CartData = data?.data?.data?.products;
-
-  // console.log({item});
-
-  // const isCartItem = useMemo(
-  //   () =>
-  //     CartData?.some((i: {product: {_id: any}}) => i.product._id === item._id),
-  //   [CartData],
-  // );
-
-  // const quantity = useCallback(
-  //   (id: number) => {
-  //     const res = CartData?.filter(
-  //       (i: {product: {_id: number}}) => i.product._id === id,
-  //     )?.[0];
-
-  //     return res?.quantity;
-  //   },
-  //   [CartData],
-  // );
-
+}: // ProductMutate,
+Props) => {
+  const [loader, setLoader] = useState(false);
+  const isMounted = useIsMounted();
   const increment = async (id: number) => {
     try {
-      console.log('loading');
-
+      isMounted.current && setLoader(true);
       const res = await put({
         path: 'cart/add',
         body: JSON.stringify({
@@ -58,11 +37,14 @@ const Counter = ({
       if (res.status === 200) return ProductMutate();
     } catch (error) {
       console.log(error);
+    } finally {
+      isMounted.current && setLoader(false);
     }
   };
 
   const decrement = async (id: number) => {
     try {
+      isMounted.current && setLoader(true);
       const res = await put({
         path: 'cart/remove',
         body: JSON.stringify({
@@ -70,17 +52,18 @@ const Counter = ({
           quantity: -1,
         }),
       });
-      // console.log({res});
       if (res.status === 200) return ProductMutate();
     } catch (error) {
       console.log(error);
     } finally {
       ProductMutate();
+      isMounted.current && setLoader(false);
     }
   };
 
   const addToCartItem = async () => {
     try {
+      isMounted.current && setLoader(true);
       const response = await put({
         path: 'cart/add',
 
@@ -100,6 +83,7 @@ const Counter = ({
       console.log(error);
     } finally {
       ProductMutate();
+      isMounted.current && setLoader(false);
     }
   };
   return (
@@ -127,8 +111,11 @@ const Counter = ({
           </Box>
 
           <Box>
-            {/* <Text>{quantity(item._id)}</Text> */}
-            <Text>{item?.cartQuantity}</Text>
+            {loader ? (
+              <ActivityIndicator size={'small'} />
+            ) : (
+              <Text>{item?.cartQuantity}</Text>
+            )}
           </Box>
           <Box>
             <Entypo

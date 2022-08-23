@@ -1,8 +1,8 @@
 import {ScrollView, TouchableOpacity} from 'react-native';
-import {Box, Image, Text, VStack} from 'native-base';
-import React, {useEffect, useState} from 'react';
+import {Box, Image, Pressable, Text, VStack} from 'native-base';
+import React, {useState} from 'react';
 import {COLORS} from 'configs';
-import {useSwrApi} from 'hooks';
+import {PRODUCT_PLACEHOLDER} from 'assets';
 
 type categoryType = {
   categoryName?: string | any;
@@ -37,15 +37,56 @@ const CategoryButtom = ({
   //   }
   //   updateSwitchData(data.find((item: categoryType) => item.id === selectedId));
   // }, [selectedId, data]);
+  // console.log({getSelectionMode});
 
   return (
     <Box>
-      <ScrollView>
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: 100,
+        }}>
         <VStack
           flex={1}
           h={600}
           borderRightWidth={1}
           borderColor={COLORS.lightGrey}>
+          <Pressable
+            onPress={() => {
+              setCategoryId(''), setSelectionMode('');
+            }}>
+            <VStack alignItems={'center'} mt={3}>
+              <Box
+                bg={getSelectionMode == '' ? 'amber.200' : 'secondary.200'}
+                borderRadius={5}>
+                <Image
+                  alt="categoryImg"
+                  source={PRODUCT_PLACEHOLDER}
+                  style={{
+                    width: 50,
+                    height: 50,
+                    paddingHorizontal: 3,
+                  }}
+                  resizeMode={'contain'}
+                />
+              </Box>
+              <Text
+                textAlign={'center'}
+                color={getSelectionMode == '' ? '#000' : COLORS.fadeBlack}>
+                All
+              </Text>
+            </VStack>
+            {!getSelectionMode && (
+              <Box
+                // mt={3}
+                h={20}
+                w={2}
+                borderRadius={3}
+                borderRightWidth={3}
+                borderColor={'#000'}
+                position={'absolute'}
+                right={0}></Box>
+            )}
+          </Pressable>
           {data?.map((item: categoryType) => (
             <TouchableOpacity
               key={item._id}
@@ -64,11 +105,13 @@ const CategoryButtom = ({
                   borderRadius={5}>
                   <Image
                     alt="categoryImg"
-                    source={{
-                      uri: item?.imageURL
-                        ? item?.imageURL
-                        : 'https://5.imimg.com/data5/DR/DY/MY-52827986/herbal-products-500x500.jpg',
-                    }}
+                    source={
+                      item?.imageURL
+                        ? {
+                            uri: item?.imageURL,
+                          }
+                        : PRODUCT_PLACEHOLDER
+                    }
                     style={{
                       width: 50,
                       height: 50,

@@ -18,6 +18,7 @@ export default function useAppLoad() {
   useEffect(() => {
     (async () => {
       try {
+        console.log('i m running');
         const response = await fetch(
           'https://chhattisgarh-herbals-api.herokuapp.com/api/user/my-account',
           {

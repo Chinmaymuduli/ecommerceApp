@@ -28,6 +28,7 @@ const HomeCategoryItem = ({
   setAlertMessage,
   businessType,
   ProductMutate,
+
   isValidating,
 }: Props) => {
   const navigation = useNavigation<NavigationProps>();
@@ -41,7 +42,7 @@ const HomeCategoryItem = ({
           path: `wishlist/${wishlistItem?._id}`,
         });
         ProductMutate();
-        console.log({responseWish});
+        // console.log({responseWish});
         setOpenAlert(true);
         setAlertMessage('Remove from wishlist');
         setTimeout(() => {
@@ -68,99 +69,96 @@ const HomeCategoryItem = ({
 
   return (
     <>
-      {isValidating ? (
+      {/* {isValidating ? (
         <ProductSkeleton />
-      ) : (
-        <Box mt={3} overflow={'hidden'} mb={5}>
-          <Pressable
-            onPress={() =>
-              navigation.navigate('ProductDetails', {ProductDetailsType: item})
-            }>
-            <Box
-              h={120}
-              w={120}
-              borderWidth={1}
-              mr={3}
-              alignItems={'center'}
-              borderColor={COLORS.lightGrey}
-              overflow={'hidden'}
-              borderRadius={5}>
-              <Image
-                alt="image"
-                source={
-                  item?.displayImage?.url
-                    ? {
-                        uri: item?.displayImage?.url,
-                      }
-                    : PRODUCT_PLACEHOLDER
-                }
-                style={styles.image}
-                resizeMode={'contain'}
-              />
-            </Box>
-            <Box
-              width={8}
-              position={'absolute'}
-              bg={COLORS.secondary}
-              borderTopLeftRadius={5}
-              borderBottomRightRadius={5}>
-              <Text
-                fontSize={10}
-                flexWrap={'wrap'}
-                px={1}
-                color={COLORS.textWhite}>
-                {(+((item?.mrp - item?.salePrice) / item?.mrp) * 100).toFixed(
-                  0,
-                )}
-                % OFF
-              </Text>
-            </Box>
-            <Box position={'absolute'} right={4} borderRadius={10}>
-              <Ionicons
-                onPress={() => handleWishlist(item)}
-                name={item?.isInWishList ? 'heart' : 'heart-outline'}
-                size={22}
-                color={COLORS.primary}
-                style={{
-                  paddingHorizontal: 2,
-                  paddingVertical: 2,
-                }}
-              />
-            </Box>
-            {/* Add to cart */}
-            <Counter
-              item={item}
-              setOpenAlert={setOpenAlert}
-              setAlertMessage={setAlertMessage}
-              ProductMutate={ProductMutate}
+      ) : ( */}
+      <Box mt={3} overflow={'hidden'} mb={5}>
+        <Pressable
+          onPress={() =>
+            navigation.navigate('ProductDetails', {ProductDetailsType: item})
+          }>
+          <Box
+            h={120}
+            w={120}
+            borderWidth={1}
+            mr={3}
+            alignItems={'center'}
+            borderColor={COLORS.lightGrey}
+            overflow={'hidden'}
+            borderRadius={5}>
+            <Image
+              alt="image"
+              source={
+                item?.displayImage?.url
+                  ? {
+                      uri: item?.displayImage?.url,
+                    }
+                  : PRODUCT_PLACEHOLDER
+              }
+              style={styles.image}
+              resizeMode={'contain'}
             />
+          </Box>
+          <Box
+            width={8}
+            position={'absolute'}
+            bg={COLORS.secondary}
+            borderTopLeftRadius={5}
+            borderBottomRightRadius={5}>
+            <Text
+              fontSize={10}
+              flexWrap={'wrap'}
+              px={1}
+              color={COLORS.textWhite}>
+              {(+((item?.mrp - item?.salePrice) / item?.mrp) * 100).toFixed(0)}%
+              OFF
+            </Text>
+          </Box>
+          <Box position={'absolute'} right={4} borderRadius={10}>
+            <Ionicons
+              onPress={() => handleWishlist(item)}
+              name={item?.isInWishList ? 'heart' : 'heart-outline'}
+              size={22}
+              color={COLORS.primary}
+              style={{
+                paddingHorizontal: 2,
+                paddingVertical: 2,
+              }}
+            />
+          </Box>
+          {/* Add to cart */}
+          <Counter
+            item={item}
+            setOpenAlert={setOpenAlert}
+            setAlertMessage={setAlertMessage}
+            ProductMutate={ProductMutate}
+          />
 
-            <Box w={120}>
-              <Text bold fontSize={12} numberOfLines={1}>
-                {item?.title ? item?.title : item?.name}
+          <Box w={120}>
+            <Text bold fontSize={12} numberOfLines={1}>
+              {item?.title ? item?.title : item?.name}
+            </Text>
+            <HStack space={2}>
+              <Text fontSize={13}>
+                &#8377;
+                {item?.salePrice}
               </Text>
-              <HStack space={2}>
-                <Text fontSize={13}>
-                  &#8377;
-                  {item?.salePrice}
-                </Text>
-                <Text fontSize={13} textDecorationLine={'line-through'}>
-                  &#8377;
-                  {item?.mrp}
+              <Text fontSize={13} textDecorationLine={'line-through'}>
+                &#8377;
+                {item?.mrp}
+              </Text>
+            </HStack>
+            {businessType === 'b2b' ? (
+              <HStack>
+                <Text fontSize={13} color={COLORS.primary} bold>
+                  MOQ: {item?.moq} kg
                 </Text>
               </HStack>
-              {businessType === 'b2b' ? (
-                <HStack>
-                  <Text fontSize={13} color={COLORS.primary} bold>
-                    MOQ: {item?.moq} kg
-                    {/* MOQ: {item.b2bQuantity} */}
-                  </Text>
-                </HStack>
-              ) : null}
-            </Box>
-          </Pressable>
-        </Box>
-      )}
+            ) : null}
+          </Box>
+        </Pressable>
+      </Box>
+      {/* )} */}
     </>
   );
 };

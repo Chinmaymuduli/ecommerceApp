@@ -1,5 +1,5 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import React from 'react';
 import {
   Actionsheet,
   Box,
@@ -12,34 +12,46 @@ import {
 } from 'native-base';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useIsMounted} from 'hooks';
 
 const priceArr = [
-  {label: 'Below ₹100', value: 100 - 0},
-  {label: '₹100 - ₹200', value: 101 - 200},
-  {label: '₹200 - ₹300', value: 200 - 300},
-  {label: '₹300 - ₹500', value: 300 - 500},
-  {label: 'Above ₹500', value: 500 - 1000},
+  {label: 'Below ₹100', value: '0-100'},
+  {label: '₹100 - ₹200', value: '101-200'},
+  {label: '₹200 - ₹300', value: '200-300'},
+  {label: '₹300 - ₹500', value: '300-500'},
+  {label: 'Above ₹500', value: '500-10000000'},
 ];
 const rattingArr = [
-  {label: '1', value: 1},
-  {label: '2', value: 2},
-  {label: '3', value: 3},
-  {label: '4', value: 4},
-  {label: '5', value: 5},
+  {label: '1', value: '1-5'},
+  {label: '2', value: '2-5'},
+  {label: '3', value: '3-5'},
+  {label: '4', value: '4-5'},
 ];
 
-const FilterSheet = ({setFilterSheet, filterSheetOpen}: any) => {
+const FilterSheet = ({
+  setFilterSheet,
+  filterSheetOpen,
+  setFilterPrice,
+  setFilterRatting,
+  filterPrice,
+  filterRatting,
+}: any) => {
   const {onClose} = useDisclose();
-  const [cardBorder, setCardBorder] = useState<any>();
-  const [borderRatting, setBorderRatting] = useState<any>();
+  const isMounted = useIsMounted();
 
   const SelectQuantity = (item: any) => {
     // border color
-    setCardBorder(item);
+    isMounted.current && setFilterPrice(item?.value);
   };
   const SelectRatting = (item: any) => {
     // border color
-    setBorderRatting(item);
+    isMounted.current && setFilterRatting(item?.value);
+    // setFilterRatting(item);
+  };
+
+  const clearFilter = () => {
+    isMounted.current && setFilterPrice('');
+    isMounted.current && setFilterRatting('');
   };
   return (
     <Actionsheet
@@ -48,9 +60,14 @@ const FilterSheet = ({setFilterSheet, filterSheetOpen}: any) => {
         setFilterSheet(false), onClose();
       }}>
       <Actionsheet.Content>
-        <Box width={'100%'} mb={3} px={3}>
-          <Heading size={'sm'}>Select Price</Heading>
-        </Box>
+        <HStack width={'100%'} justifyContent={'space-between'} px={3}>
+          <Box mb={3}>
+            <Heading size={'sm'}>Select Price</Heading>
+          </Box>
+          <Pressable onPress={() => clearFilter()}>
+            <Text bold>Reset</Text>
+          </Pressable>
+        </HStack>
         <Box w={'100%'} px={3}>
           <Row flexWrap={'wrap'}>
             {priceArr.map((item, index) => (
@@ -60,9 +77,7 @@ const FilterSheet = ({setFilterSheet, filterSheetOpen}: any) => {
                 borderWidth={1}
                 borderRadius={5}
                 bg={'#e4e4e460'}
-                borderColor={
-                  cardBorder?.value === item.value ? '#228B22' : '#e4e4e4'
-                }
+                borderColor={filterPrice === item.value ? '#228B22' : '#e4e4e4'}
                 onPress={() => SelectQuantity(item)}
                 w={Dimensions.get('window').width / 2.5}
                 mx={1}
@@ -70,7 +85,7 @@ const FilterSheet = ({setFilterSheet, filterSheetOpen}: any) => {
                 <Text px={2} py={2}>
                   {item?.label}
                 </Text>
-                {cardBorder?.value === item.value && (
+                {filterPrice === item.value && (
                   <Box
                     bg={'#228B22'}
                     borderTopRightRadius={5}
@@ -98,19 +113,25 @@ const FilterSheet = ({setFilterSheet, filterSheetOpen}: any) => {
                 borderRadius={5}
                 bg={'#e4e4e460'}
                 borderColor={
-                  borderRatting?.value === item.value ? '#228B22' : '#e4e4e4'
+                  filterRatting === item.value ? '#228B22' : '#e4e4e4'
                 }
                 onPress={() => SelectRatting(item)}
                 w={Dimensions.get('window').width / 2.5}
                 mx={1}
                 my={1}>
-                <HStack alignItems={'center'} justifyContent={'center'}>
-                  <Text px={2} py={2}>
-                    {item?.label}
-                  </Text>
-                  <Ionicons name="star" size={16} color={'#FFC107'} />
+                <HStack
+                  alignItems={'center'}
+                  justifyContent={'center'}
+                  space={2}>
+                  <HStack alignItems={'center'}>
+                    <Text px={2} py={2}>
+                      {item?.label}
+                    </Text>
+                    <Ionicons name="star" size={16} color={'#FFC107'} />
+                  </HStack>
+                  <Text>above</Text>
                 </HStack>
-                {borderRatting?.value === item.value && (
+                {filterRatting === item.value && (
                   <Box
                     bg={'#228B22'}
                     borderTopRightRadius={5}

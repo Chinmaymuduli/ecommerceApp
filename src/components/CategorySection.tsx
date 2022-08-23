@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {ActivityIndicator, StyleSheet} from 'react-native';
 import React from 'react';
 import {
   Actionsheet,
@@ -22,6 +22,7 @@ import {Banner, wishlist} from 'assets';
 
 import HomeCategoryItem from './HomeCategoryItem';
 import {ProductType} from 'types';
+import {FetchLoader, SkeletonComponent} from './core';
 
 type CategoryProductType = {
   // data: {
@@ -37,6 +38,13 @@ type CategoryProductType = {
   setAlertMessage?: string | any;
   businessType?: string;
   mutate: () => void;
+  setSorting: (previous: string) => void;
+  sorting?: string;
+  setFilterPrice: (data: string) => void;
+  setFilterRatting: (data: string) => void;
+  filterRatting: string | any;
+  filterPrice: string | any;
+  isValidating: boolean;
 };
 
 const CategorySection = ({
@@ -45,15 +53,23 @@ const CategorySection = ({
   setAlertMessage,
   businessType,
   mutate,
+  isValidating,
+  setSorting,
+  sorting,
+  filterPrice,
+  filterRatting,
+  setFilterRatting,
+  setFilterPrice,
 }: CategoryProductType) => {
   const [filterSheetOpen, setFilterSheetOpen] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
-  // console.log('Bussiness', businessType);
 
   return (
     <>
       <FlatList
         data={data}
+        onRefresh={() => mutate()}
+        refreshing={isValidating}
         renderItem={({item}) => (
           <Box pl={1}>
             <HomeCategoryItem
@@ -62,6 +78,7 @@ const CategorySection = ({
               setAlertMessage={setAlertMessage}
               businessType={businessType}
               ProductMutate={mutate}
+              isValidating={isValidating}
             />
           </Box>
         )}
@@ -136,17 +153,17 @@ const CategorySection = ({
                       />
                     </HStack>
                     <Radio.Group
-                      defaultValue="lowtohigh"
+                      defaultValue="default"
                       name="myRadioGroup"
-                      // value={sortPrice}
-                      // onChange={value => {
-                      //   setSortPrice(value);
-                      // }}
+                      value={sorting}
+                      onChange={value => {
+                        setSorting(value), onClose();
+                      }}
                       accessibilityLabel="Pick your sorting">
-                      <Radio value="lowtohigh" my={3} colorScheme={'green'}>
+                      <Radio value="low-to-high" my={3} colorScheme={'green'}>
                         Price (Low to high)
                       </Radio>
-                      <Radio value="hightolow" my={3} colorScheme={'green'}>
+                      <Radio value="high-to-low" my={3} colorScheme={'green'}>
                         Price (High to low)
                       </Radio>
                       <Radio value="latest" my={3} colorScheme={'green'}>
@@ -155,33 +172,10 @@ const CategorySection = ({
                       <Radio value="popularity" my={3} colorScheme={'green'}>
                         Popularity
                       </Radio>
+                      <Radio value="default" my={3} colorScheme={'green'}>
+                        Default
+                      </Radio>
                     </Radio.Group>
-                    <HStack
-                      mt={3}
-                      w={'full'}
-                      space={5}
-                      //   bg={'red.100'}
-                      justifyContent={'center'}>
-                      <Pressable
-                        onPress={onClose}
-                        borderColor={COLORS.primary}
-                        borderWidth={1}
-                        borderRadius={5}>
-                        <Text px={8} py={1} color={COLORS.primary} bold>
-                          Cancel
-                        </Text>
-                      </Pressable>
-                      <Pressable
-                        // onPress={() => SortData()}
-                        onPress={onClose}
-                        bg={COLORS.primary}
-                        borderRadius={5}
-                        alignItems={'center'}>
-                        <Text color={COLORS.textWhite} px={8} py={1} bold>
-                          Apply
-                        </Text>
-                      </Pressable>
-                    </HStack>
                   </Box>
                 </Actionsheet.Content>
               </Actionsheet>
@@ -189,23 +183,33 @@ const CategorySection = ({
               <FilterSheet
                 setFilterSheet={setFilterSheetOpen}
                 filterSheetOpen={filterSheetOpen}
+                setFilterPrice={setFilterPrice}
+                setFilterRatting={setFilterRatting}
+                filterPrice={filterPrice}
+                filterRatting={filterRatting}
               />
             </HStack>
           </Box>
         )}
         ListEmptyComponent={() => (
-          <Box>
-            <Center h={350} w={'full'}>
-              <Image
-                source={wishlist}
-                style={styles.wishList_image}
-                alt={'wishlist image'}
-              />
-              <Text bold color={'black'} fontSize={18} mt={10}>
-                No Products Found
-              </Text>
-            </Center>
-          </Box>
+          <>
+            {!isValidating ? (
+              <Center h={350} w={'full'}>
+                <Image
+                  source={wishlist}
+                  style={styles.wishList_image}
+                  alt={'wishlist image'}
+                />
+                <Text bold color={'black'} fontSize={18} mt={10}>
+                  No Products Found
+                </Text>
+              </Center>
+            ) : (
+              <Box justifyContent={'center'} alignItems={'center'}>
+                <ActivityIndicator size={'large'} />
+              </Box>
+            )}
+          </>
         )}
       />
     </>

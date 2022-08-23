@@ -24,80 +24,104 @@ const Category = ({route}: Props) => {
   const [categoryName, setCategoryName] = useState('');
   const [openAlert, setOpenAlert] = useState<any>(false);
   const [alertMessage, setAlertMessage] = useState('Successfully added');
-  const [categoryId, setCategoryId] = useState();
+  const [categoryId, setCategoryId] = useState<string>('');
   const isMounted = useIsMounted();
+  const [sorting, setSorting] = useState<string | undefined>('default');
+  const [filterPrice, setFilterPrice] = useState<string>('');
+  const [filterRatting, setFilterRatting] = useState<string>('');
+  const [filterObject, setFilterObject] = useState<{
+    category: string[] | undefined;
+    rating: any[] | undefined;
+    price: any[] | undefined;
+  }>();
 
+  // setCategoryId(CategoryData ? CategoryData[0]?._id : '');
   useEffect(() => {
-    isMounted.current &&
-      setCategoryId(CategoryData ? CategoryData[0]?._id : '');
-  }, [CategoryData]);
+    if (isMounted.current) {
+      const filter = {
+        price: filterPrice
+          ? filterPrice.split('-').map(item => Number(item))
+          : undefined,
+        rating: filterRatting
+          ? filterRatting?.split('-').map(item => Number(item))
+          : undefined,
+        category: categoryId ? [categoryId] : undefined,
+      };
+      !filterPrice && delete filter.price;
+      !filterRatting && delete filter.rating;
+      !categoryId && delete filter.category;
+
+      setFilterObject(filter);
+    }
+  }, [CategoryData, filterPrice, filterRatting, categoryId]);
 
   const {data, isValidating, mutate} = useSwrApi(
     user?._id
-      ? `category/${categoryId}/products?userId=${user?._id}&type=${userType}`
-      : `category/${categoryId}/products`,
+      ? `products/filter?filter=${JSON.stringify(
+          filterObject,
+        )}&sortBy=${sorting}&userId=${user?._id}&type=${userType}`
+      : `products/filter?filter=${JSON.stringify(
+          filterObject,
+        )}&sortBy=${sorting}`,
   );
-
-  const CategoryProducts = data?.data?.data?.data;
-  // console.log({categoryId});
-
+  const filteredData = data?.data?.data?.data;
   return (
     <>
-      {!isValidating ? (
-        <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-          <Box borderBottomWidth={1.5} borderColor={COLORS.lightGrey}>
-            <HStack justifyContent={'space-between'} px={4} py={3}>
-              <HStack alignItems={'center'} space={4}>
-                <Ionicons
-                  name="menu"
-                  size={24}
-                  color="#000"
-                  onPress={() =>
-                    navigation.dispatch(DrawerActions.openDrawer())
-                  }
-                />
-                <Heading size={'md'}>
-                  {categoryName || 'All Categories'}
-                </Heading>
-              </HStack>
-            </HStack>
-          </Box>
-          {/* <ScrollView> */}
-          <Row>
-            <Box w={'1/4'}>
-              <CategoryButtom
-                // selectedId={route.params?.id || 1}
-                selectionMode={categoryId}
-                data={CategoryData}
-                setCategoryName={setCategoryName}
-                setCategoryId={setCategoryId}
+      {/* {!isValidating ? ( */}
+      <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+        <Box borderBottomWidth={1.5} borderColor={COLORS.lightGrey}>
+          <HStack justifyContent={'space-between'} px={4} py={3}>
+            <HStack alignItems={'center'} space={4}>
+              <Ionicons
+                name="menu"
+                size={24}
+                color="#000"
+                onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
               />
-            </Box>
+              <Heading size={'md'}>{categoryName || 'All Categories'}</Heading>
+            </HStack>
+          </HStack>
+        </Box>
+        {/* <ScrollView> */}
+        <Row>
+          <Box w={'1/4'}>
+            <CategoryButtom
+              // selectedId={route.params?.id || 1}
+              selectionMode={categoryId}
+              data={CategoryData}
+              setCategoryName={setCategoryName}
+              setCategoryId={setCategoryId}
+            />
+          </Box>
 
-            <VStack>
-              <Box>
-                <CategorySection
-                  data={CategoryProducts}
-                  setOpenAlert={setOpenAlert}
-                  setAlertMessage={setAlertMessage}
-                  // isBusiness={route.params?.isBussiness}
-                  businessType={userType}
-                  mutate={mutate}
-                />
-              </Box>
-            </VStack>
-          </Row>
-          {/* Alert */}
-          <AlertComponent
-            openAlert={openAlert}
-            setOpenAlert={setOpenAlert}
-            setAlertMessage={setAlertMessage}
-            alertMessage={alertMessage}
-          />
-        </SafeAreaView>
-      ) : (
+          <VStack>
+            <CategorySection
+              data={filteredData}
+              setOpenAlert={setOpenAlert}
+              setAlertMessage={setAlertMessage}
+              businessType={userType}
+              isValidating={isValidating}
+              mutate={mutate}
+              setSorting={setSorting}
+              sorting={sorting}
+              setFilterPrice={setFilterPrice}
+              filterPrice={filterPrice}
+              filterRatting={filterRatting}
+              setFilterRatting={setFilterRatting}
+            />
+          </VStack>
+        </Row>
+        {/* Alert */}
+        <AlertComponent
+          openAlert={openAlert}
+          setOpenAlert={setOpenAlert}
+          setAlertMessage={setAlertMessage}
+          alertMessage={alertMessage}
+        />
+      </SafeAreaView>
+      {/* ) : (
         <FetchLoader />
-      )}
+      )} */}
     </>
   );
 };

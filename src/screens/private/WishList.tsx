@@ -75,7 +75,7 @@ const WishList = ({navigation}: Props) => {
                 _text={{
                   fontSize: 8,
                 }}>
-                {cartItems.length ? cartItems.length : 0}
+                {cartItems?.length ? cartItems?.length : 0}
               </Badge>
               <Ionicons
                 name={'cart'}
@@ -88,7 +88,7 @@ const WishList = ({navigation}: Props) => {
           <Box>
             <FlatList
               // data={wishlistItems.length > 0 ? wishlistItems : []}
-              data={WishListItem.length > 0 ? WishListItem : []}
+              data={WishListItem?.length > 0 ? WishListItem : []}
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               numColumns={2}

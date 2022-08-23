@@ -24,6 +24,7 @@ const useSwrApi = (url: string, options?: any) => {
       });
 
       if (res?.status === 401) {
+        console.log('i m running');
         const getResponse = await fetch(`${BASE_URL}/auth/get-access-token`, {
           method: 'POST',
           headers: {
