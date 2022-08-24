@@ -1,5 +1,5 @@
-import {Dimensions, StyleSheet} from 'react-native';
-import React, {useEffect} from 'react';
+import {Dimensions, RefreshControl, StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {
   Box,
   HStack,
@@ -18,21 +18,33 @@ import {DrawerActions} from '@react-navigation/native';
 import {Empty, FetchLoader} from 'components/core';
 import {activeOrderType, PastOrderType} from 'types';
 import {PastOrder} from 'components';
-import {useSwrApi} from 'hooks';
+import {useAuthFetch, useIsMounted, useSwrApi} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Order'>;
 const Order = ({navigation}: Props) => {
   const [selectionMode, setSelectionMode] = React.useState<any>(1);
+  const isMounted = useIsMounted();
+  const isFocused = useIsFocused();
+  const [myOrders, setMyOrders] = useState<any[]>([]);
+  const [deliveredOrder, setDeliveryOrder] = useState<any[]>([]);
 
   const {data, isValidating, mutate} = useSwrApi('order/orders/my');
-  const myOrders = data?.data?.data?.data;
+  // const myOrders = data?.data?.data?.data;
 
   const deliveredData = useSwrApi('order/orders/my?status=DELIVERED');
-  const deliveredOrder = deliveredData?.data?.data?.data?.data;
-  // console.log({deliveredOrder});
-  const isFocused = useIsFocused();
+  // const deliveredOrder = deliveredData?.data?.data?.data?.data;
+
+  // const {authData} = useAuthFetch({
+  //   path: 'order/orders/my',
+  //   method: 'GET',
+  // });
+  // console.log({authData});
+
   useEffect(() => {
+    isMounted.current && setMyOrders(data?.data?.data?.data);
+    isMounted.current &&
+      setDeliveryOrder(deliveredData?.data?.data?.data?.data);
     mutate();
   }, [isFocused]);
 
@@ -80,7 +92,8 @@ const Order = ({navigation}: Props) => {
                   <Text
                     color={selectionMode === 1 ? COLORS.textWhite : '#000'}
                     bold>
-                    ({myOrders?.length}){/* ({myOrder?.length}) */}
+                    ({myOrders?.length ? myOrders?.length : 0})
+                    {/* ({myOrder?.length}) */}
                   </Text>
                 </HStack>
               </Box>
@@ -106,6 +119,12 @@ const Order = ({navigation}: Props) => {
             </Pressable>
           </HStack>
           <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={isValidating}
+                onRefresh={() => mutate()}
+              />
+            }
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
               paddingBottom: 100,
@@ -163,23 +182,25 @@ const Order = ({navigation}: Props) => {
                           </VStack>
                         </Pressable>
                         <HStack px={3} py={2}>
-                          <Pressable
-                            w={'full'}
-                            onPress={() =>
-                              navigation.navigate('OrderDetails', {
-                                orderId: item?._id,
-                              })
-                            }>
-                            <Box
-                              mr={2}
-                              bg={'green.100'}
-                              alignItems={'center'}
-                              borderRadius={4}>
-                              <Text bold py={1}>
-                                View Details
-                              </Text>
-                            </Box>
-                          </Pressable>
+                          {item?.status === 'INITIATED' && (
+                            <Pressable
+                              w={'full'}
+                              onPress={() =>
+                                navigation.navigate('OrderDetails', {
+                                  orderId: item?._id,
+                                })
+                              }>
+                              <Box
+                                mr={2}
+                                bg={'green.100'}
+                                alignItems={'center'}
+                                borderRadius={4}>
+                                <Text bold py={1}>
+                                  View Details
+                                </Text>
+                              </Box>
+                            </Pressable>
+                          )}
                         </HStack>
                       </Box>
                     </ScrollView>
@@ -195,8 +216,8 @@ const Order = ({navigation}: Props) => {
                   />
                 </>
               )
-            ) : deliveredOrder.length > 0 ? (
-              deliveredOrder.map((item: PastOrderType) => (
+            ) : deliveredOrder?.length > 0 ? (
+              deliveredOrder?.map((item: PastOrderType) => (
                 <PastOrder item={item} key={item._id} />
               ))
             ) : (

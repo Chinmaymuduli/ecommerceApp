@@ -11,10 +11,10 @@ const useSwrApi = (url: string, options?: any) => {
   const {setLoggedIn} = useAuth();
   const fetcher = async (url: string, options?: any) => {
     try {
+      console.log('first run');
       isMounted.current && setLoading(true);
-      const getAccessToken = await AsyncStorage.getItem('access_token');
+      let getAccessToken = await AsyncStorage.getItem('access_token');
       const getRefreshToken = await AsyncStorage.getItem('tokenId');
-
       const res = await fetch(url, {
         method: 'GET',
         headers: {
@@ -22,9 +22,9 @@ const useSwrApi = (url: string, options?: any) => {
           Authorization: `Bearer ${getAccessToken}`,
         },
       });
-
+      console.log({res});
       if (res?.status === 401) {
-        console.log('i m running');
+        console.log('i am running');
         const getResponse = await fetch(`${BASE_URL}/auth/get-access-token`, {
           method: 'POST',
           headers: {
@@ -34,37 +34,50 @@ const useSwrApi = (url: string, options?: any) => {
             refresh_token: getRefreshToken,
           }),
         });
+        console.log('reFetch', getResponse);
         const getResponseData = await getResponse.json();
 
-        await AsyncStorage.setItem(
-          'access_token',
-          getResponseData?.ACCESS_TOKEN,
-        );
-        if (getResponse.status === 401)
-          return await AsyncStorage.setItem('isLoggedIn', 'false')
+        if (getResponse.status === 401) {
+          // console.log(
+          //   url === 'user/my-account' &&
+          //     'Fetching user get access_token status 401',
+          // );
+          console.log('not refresh token');
+          await AsyncStorage.setItem('isLoggedIn', 'false')
             .then(() => {
               console.log('Logout Success');
               setLoggedIn(false);
             })
             .catch(error => console.log(error));
-        if (getResponseData?.REFRESH_TOKEN)
-          return await AsyncStorage.setItem(
-            'tokenId',
-            getResponseData?.REFRESH_TOKEN,
+          await AsyncStorage.removeItem('access_token');
+          await AsyncStorage.removeItem('tokenId');
+        } else {
+          await AsyncStorage.setItem(
+            'access_token',
+            getResponseData?.ACCESS_TOKEN,
           );
+          if (getResponseData?.REFRESH_TOKEN)
+            return await AsyncStorage.setItem(
+              'tokenId',
+              getResponseData?.REFRESH_TOKEN,
+            );
 
-        const res = await fetch(`${url}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${getAccessToken}`,
-          },
-        });
+          // console.log(url === 'user/my-account' && 'Fetching user data again');
+          getAccessToken = await AsyncStorage.getItem('access_token');
+          const refetchResponse = await fetch(`${url}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getAccessToken}`,
+            },
+          });
 
-        const data = await res.json();
-
-        return {data, res};
+          const data = await refetchResponse.json();
+          // console.log(url === 'user/my-account' && 'ReFetching user data done');
+          return {data, res};
+        }
       }
+
       const data = await res.json();
 
       return {data, res};

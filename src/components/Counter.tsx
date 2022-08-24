@@ -105,7 +105,7 @@ Props) => {
             <Entypo
               name="minus"
               size={20}
-              color={COLORS.fadeBlack}
+              color={loader ? COLORS.lightGrey : COLORS.fadeBlack}
               onPress={() => decrement(item._id)}
             />
           </Box>

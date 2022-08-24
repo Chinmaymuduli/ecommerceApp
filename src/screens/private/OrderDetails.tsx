@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import React from 'react';
+import {Alert, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
 import {
   Box,
   Heading,
@@ -12,20 +12,107 @@ import {
 } from 'native-base';
 import {COLORS} from 'configs';
 import {AYUSH_1} from 'assets';
-import {FetchLoader, Track} from 'components/core';
+import {
+  FetchLoader,
+  SuccessModal,
+  SuccessVerificationModal,
+  Track,
+} from 'components/core';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
-import {useSwrApi} from 'hooks';
+import {useIsMounted, useSwrApi} from 'hooks';
+import RNFetchBlob from 'rn-fetch-blob';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {GetToken} from 'src/api/authFetch';
+import {BASE_URL, post, remove} from 'api';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderDetails'>;
 const OrderDetails = ({route: {params}}: Props) => {
   const orderID = params?.orderId;
   const {data, isValidating} = useSwrApi(`order/${orderID}`);
   const OrderDetailsData = data?.data?.data;
-  // console.log(OrderDetailsData);
+
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string>();
+  const isMounted = useIsMounted();
+  const GetToken = async () => {
+    const getRefreshToken = await AsyncStorage.getItem('tokenId');
+    const getResponse = await fetch(`${BASE_URL}/auth/get-access-token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        refresh_token: getRefreshToken,
+      }),
+    });
+    const getResponseData = await getResponse.json();
+  };
+
+  const removeInvoice = async () => {
+    await remove({
+      path: `invoice/${orderID}`,
+    });
+  };
+  const handelInvoice = async () => {
+    try {
+      const getAccessToken = await AsyncStorage.getItem('access_token');
+      const {config, fs} = RNFetchBlob;
+      let DOCUMENT_DIR = fs.dirs.DownloadDir;
+      let Download_Url = `https://chhattisgarh-herbals-api.herokuapp.com/api/invoice/${orderID}`;
+      let ext: any = getExtention(Download_Url);
+      ext = '.' + ext[0];
+      let date = new Date();
+      let options = {
+        fileCache: true,
+        addAndroidDownloads: {
+          useDownloadManager: true,
+          notification: true,
+          title: 'Invoice Details',
+          path:
+            DOCUMENT_DIR +
+            '/Download' +
+            Math.floor(date.getTime() + date.getSeconds() / 2) +
+            ext,
+          description: 'Downloading..',
+        },
+      };
+      const fileDownload = config(options)
+        .fetch('GET', Download_Url, {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getAccessToken}`,
+        })
+        .then(res => {
+          console.log({res});
+          let status = res.info().status;
+          if (status === 401) {
+            Alert.alert(
+              'Something went wrong',
+              'Please try again after sometimes',
+            );
+            // GetToken();
+          } else {
+            console.log('The File Saved To ', res.path());
+            isMounted.current && setShowSuccessModal(true);
+            isMounted.current &&
+              setSuccessMessage('File Downloaded Successfully !');
+            removeInvoice();
+          }
+        })
+
+        .catch(err => {
+          console.log('Err', err);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getExtention = (filename: string) => {
+    return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined;
+  };
   return (
     <>
       {isValidating ? (
@@ -69,43 +156,48 @@ const OrderDetails = ({route: {params}}: Props) => {
                     />
                   </Box>
                 </HStack>
-                <Pressable
-                  borderWidth={1}
-                  alignSelf={'flex-start'}
-                  mx={4}
-                  borderColor={'red.400'}
-                  borderRadius={5}
-                  my={3}>
-                  <Text px={3} py={1} bold color={'red.400'}>
-                    Cancel Order
-                  </Text>
-                </Pressable>
+                {(OrderDetailsData?.status === 'INITIATED' ||
+                  OrderDetailsData?.status === 'SHIPPED') && (
+                  <Pressable
+                    borderWidth={1}
+                    alignSelf={'flex-start'}
+                    mx={4}
+                    borderColor={'red.400'}
+                    borderRadius={5}
+                    my={3}>
+                    <Text px={3} py={1} bold color={'red.400'}>
+                      Cancel Order
+                    </Text>
+                  </Pressable>
+                )}
               </Box>
               <Box borderBottomWidth={3} borderColor={COLORS.lightGrey}>
                 <Track track={OrderDetailsData} />
               </Box>
-              <Pressable>
-                <HStack
-                  justifyContent={'space-between'}
-                  py={4}
-                  px={5}
-                  borderColor={COLORS.lightGrey}
-                  borderBottomWidth={3}>
-                  <HStack space={3}>
-                    <FontAwesome
-                      name="file-text"
+              {OrderDetailsData?.status === 'DELIVERED' && (
+                <Pressable onPress={() => handelInvoice()}>
+                  <HStack
+                    justifyContent={'space-between'}
+                    py={4}
+                    px={5}
+                    borderColor={COLORS.lightGrey}
+                    borderBottomWidth={3}>
+                    <HStack space={3}>
+                      <FontAwesome
+                        name="file-text"
+                        size={20}
+                        color={COLORS.primary}
+                      />
+                      <Text bold>Invoice Download</Text>
+                    </HStack>
+                    <Ionicons
+                      name="chevron-forward"
                       size={20}
-                      color={COLORS.primary}
+                      color={COLORS.fadeBlack}
                     />
-                    <Text bold>Invoice Download</Text>
                   </HStack>
-                  <Ionicons
-                    name="chevron-forward"
-                    size={20}
-                    color={COLORS.fadeBlack}
-                  />
-                </HStack>
-              </Pressable>
+                </Pressable>
+              )}
 
               <Box borderBottomWidth={1} borderColor={COLORS.lightGrey} px={5}>
                 <Text py={3} color={'gray.400'} bold>
@@ -169,7 +261,11 @@ const OrderDetails = ({route: {params}}: Props) => {
                     </HStack>
                     <HStack justifyContent={'space-between'}>
                       <Text>Shipping Fee</Text>
-                      <Text color={'green.500'}>free</Text>
+                      <Text color={'green.500'}>
+                        {OrderDetailsData?.billing?.deliveryCharge > 0
+                          ? OrderDetailsData?.billing?.deliveryCharge
+                          : 'free'}
+                      </Text>
                     </HStack>
                   </VStack>
                 </Box>
@@ -204,6 +300,13 @@ const OrderDetails = ({route: {params}}: Props) => {
           </ScrollView>
         </Box>
       )}
+
+      {/* Modal */}
+      <SuccessVerificationModal
+        showSuccessModal={showSuccessModal}
+        setShowSuccessModal={setShowSuccessModal}
+        successMessage={successMessage}
+      />
     </>
   );
 };

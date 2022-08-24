@@ -162,13 +162,18 @@ const CustomDrawer = () => {
       const logRes = await put({
         path: 'auth/logout',
       });
+      console.log({logRes});
+      await AsyncStorage.removeItem('refresh_token');
+      await AsyncStorage.removeItem('tokenId');
       await AsyncStorage.setItem('isLoggedIn', 'false')
         .then(() => {
           console.log('Logout Success');
           setLoggedIn(false);
         })
         .catch(error => console.log(error));
-    } catch (error) {}
+    } catch (error) {
+      console.log({error});
+    }
   };
 
   return (

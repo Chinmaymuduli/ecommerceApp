@@ -21,25 +21,34 @@ import {FetchLoader} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {VERIFY_IMAGE} from 'assets';
+import {put} from 'api';
 
 const Profile = () => {
   const navigation = useNavigation<NavigationProps>();
   const {setLoggedIn, userType} = useAuth();
 
-  // console.log({userType});
-
   const handelLogout = async () => {
-    AsyncStorage.setItem('isLoggedIn', 'false')
-      .then(() => {
-        console.log('Logout Success');
-        setLoggedIn(false);
-      })
-      .catch(error => console.log(error));
+    try {
+      const logRes = await put({
+        path: 'auth/logout',
+      });
+      console.log({logRes});
+      await AsyncStorage.removeItem('refresh_token');
+      await AsyncStorage.removeItem('tokenId');
+      await AsyncStorage.setItem('isLoggedIn', 'false')
+        .then(() => {
+          console.log('Logout Success');
+          setLoggedIn(false);
+        })
+        .catch(error => console.log(error));
+    } catch (error) {
+      console.log({error});
+    }
   };
 
   const {data, isValidating} = useSwrApi('user/my-account');
   const authData = data?.data?.data;
-  // console.log({authData});
+  console.log({authData});
   return (
     <>
       {/* {!isLoading ? ( */}

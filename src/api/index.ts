@@ -16,13 +16,16 @@ const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
   });
 
   // console.log('first50', getResponse);
-  if (getResponse.status === 401)
-    return await AsyncStorage.setItem('isLoggedIn', 'false')
+  if (getResponse.status === 401) {
+    await AsyncStorage.setItem('isLoggedIn', 'false')
       .then(() => {
         console.log('Logout Success');
         setLoggedIn(false);
       })
       .catch(error => console.log(error));
+    await AsyncStorage.removeItem('access_token');
+    await AsyncStorage.removeItem('tokenId');
+  }
   if (getResponse.status !== 200) return;
   await AsyncStorage.setItem('access_token', getResponse.ACCESS_TOKEN);
   if (!getResponse?.REFRESH_Token) return;
@@ -36,7 +39,6 @@ export const post: APIFunction = async ({
   method = 'POST',
   options = {},
 }) => {
-  // if (token) headers.Authorization = `Bearer ${token}`;
   const accessToken = await AsyncStorage.getItem('access_token');
   try {
     const API_OPTIONS = {
@@ -78,8 +80,6 @@ export const put: APIFunction = async ({
   options = {},
 }) => {
   const accessToken = await AsyncStorage.getItem('access_token');
-  // if (token) headers.Authorization = `Bearer ${token || accessToken}`;
-  // if (token) headers.Authorization = `Bearer ${token}`;
   try {
     const API_OPTIONS = {
       method,
@@ -116,10 +116,7 @@ export const remove: APIFunction = async ({
   body = JSON.stringify({}),
   method = 'DELETE',
   options = {},
-  // headers = {'Content-Type': 'application/json'},
-  token = '',
 }) => {
-  // if (token) headers.Authorization = `Bearer ${token}`;
   const accessToken = await AsyncStorage.getItem('access_token');
   try {
     const API_OPTIONS = {
@@ -139,7 +136,6 @@ export const remove: APIFunction = async ({
         method: 'DELETE',
         options: {},
         headers: {'Content-Type': 'application/json'},
-        // token: '',
       });
     }
     const json = await response.json();
@@ -183,7 +179,3 @@ export const GET: APIFunction = async ({
 };
 export {default as END_POINTS} from './end-points';
 export {default as authFetch} from './authFetch';
-
-function fsx(fsx: any) {
-  throw new Error('Function not implemented.');
-}

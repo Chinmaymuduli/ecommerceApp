@@ -37,9 +37,9 @@ import {
   ProductComponent,
 } from 'components';
 import {useAuth} from 'app';
-import {useAuthFetch, useIsMounted, useSwrApi} from 'hooks';
+import {useIsMounted, useSwrApi} from 'hooks';
 import {ErrorModal, FetchLoader} from 'components/core';
-import {post, put, remove} from 'api';
+import {put, remove} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
@@ -110,15 +110,11 @@ const ProductDetails = ({route, navigation}: Props) => {
   );
   const SPECIAL_PRODUCT = similarProduct?.data?.data?.data?.data;
 
-  const increaseItem = () => {
-    setCount(count + 1);
-  };
+  const increaseItem = () => setCount(count + 1);
+
   const decreaseItem = () => {
-    if (count > 1) {
-      setCount(count - 1);
-    } else {
-      setCount(1);
-    }
+    if (count > 1) return setCount(count - 1);
+    setCount(1);
   };
 
   const renderItem = ({item}: productType) => {

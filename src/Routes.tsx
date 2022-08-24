@@ -11,13 +11,24 @@ import AppProvider from './layouts';
 import useFCMToken from './hooks/useFCMToken';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useIsMounted from './hooks/useIsMounted';
+import useSwrApi from './hooks/useSwrApi';
+import {BASE_URL} from 'api';
+import {useFocusEffect} from '@react-navigation/native';
+import useAuthFetch from './hooks/useAuthFetch';
+import {User} from 'types';
 
 const Drawer = createDrawerNavigator();
 const Routes = () => {
-  const {user, loggedIn, setLoggedIn} = useAuth(state => state);
+  // const {data, mutate} = useSwrApi('user/my-account');
+  const {user, loggedIn, setLoggedIn, setUser} = useAuth(state => state);
   const [userData, setUserData] = useState<string | null>();
   const isMounted = useIsMounted();
-  // console.log({user});
+
+  const {authData} = useAuthFetch<User>({
+    path: 'user/my-account',
+    method: 'GET',
+  });
+
   const getUser = async () => {
     try {
       const newUserData = await AsyncStorage.getItem('isUserEnter');
@@ -28,7 +39,7 @@ const Routes = () => {
   };
 
   useFCMToken();
-  useAppLoad();
+  // useAppLoad();
 
   const getIdData = async () => {
     try {
@@ -42,7 +53,8 @@ const Routes = () => {
   useEffect(() => {
     getUser();
     getIdData();
-  }, [loggedIn]);
+    isMounted.current && authData && setUser(authData);
+  }, [loggedIn, authData]);
 
   if (!user) return <SplashScreen />;
 

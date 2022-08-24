@@ -18,7 +18,7 @@ import {Rating} from 'react-native-ratings';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {PastOrderType} from 'types';
-import {useSwrApi} from 'hooks';
+import {useIsMounted, useSwrApi} from 'hooks';
 import {post} from 'api';
 
 type Props = {
@@ -31,6 +31,7 @@ const PastOrder = ({item}: Props) => {
   const [reviewTitle, setReviewTitle] = useState<string>();
   const [reviewText, setReviewText] = useState<string>();
   const navigation = useNavigation<NavigationProps>();
+  const isMounted = useIsMounted();
   const {data, mutate} = useSwrApi(`review/product/${item?.product?._id}`);
 
   const ReviewData = data?.data?.data;
@@ -57,7 +58,12 @@ const PastOrder = ({item}: Props) => {
   return (
     <Box px={4} py={4}>
       <Box borderWidth={1} borderRadius={5} borderColor={COLORS.lightGrey}>
-        <Pressable>
+        <Pressable
+          onPress={() =>
+            navigation.navigate('OrderDetails', {
+              orderId: item?._id,
+            })
+          }>
           <HStack alignItems={'center'} space={3} py={3} px={3}>
             <Image
               source={
@@ -112,7 +118,7 @@ const PastOrder = ({item}: Props) => {
                 ratingCount={5}
                 imageSize={20}
                 onFinishRating={(rating: React.SetStateAction<number>) => {
-                  setRatings(rating);
+                  isMounted.current && setRatings(rating);
                 }}
                 readonly={true}
               />
