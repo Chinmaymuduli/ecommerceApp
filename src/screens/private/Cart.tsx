@@ -30,7 +30,9 @@ const Cart = ({route, navigation}: Props) => {
   const [quantity, setQuantity] = React.useState();
 
   const handleProceed = () => {
-    navigation.navigate('OrderSummary', {});
+    navigation.navigate('OrderSummary', {
+      type: 'cart',
+    });
   };
 
   React.useEffect(() => {

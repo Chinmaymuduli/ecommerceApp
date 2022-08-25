@@ -2,16 +2,17 @@ import {Box, HStack, Image, Pressable, Text} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {useNavigation} from '@react-navigation/native';
-import {StyleSheet} from 'react-native';
+import {ActivityIndicator, StyleSheet} from 'react-native';
 import {ProductType} from 'types';
 import Counter from './Counter';
-import {useSwrApi} from 'hooks';
+import {useIsMounted, useSwrApi} from 'hooks';
 import {COLORS} from 'configs';
 import {put, remove} from 'api';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FetchLoader} from './core';
 import {ProductSkeleton} from '../../src/skeleton';
-import {PRODUCT_PLACEHOLDER, Special1} from 'assets';
+import {CELEBRATE, PRODUCT_PLACEHOLDER, Special1} from 'assets';
+import LottieView from 'lottie-react-native';
 
 type Props = {
   item: ProductType;
@@ -28,27 +29,30 @@ const HomeCategoryItem = ({
   setAlertMessage,
   businessType,
   ProductMutate,
-
   isValidating,
 }: Props) => {
   const navigation = useNavigation<NavigationProps>();
+  const [loading, setLoading] = useState(false);
+  const isMounted = useIsMounted();
+  const [celebrate, setCelebrate] = useState(false);
 
   //wishhlist
 
   const handleWishlist = async (wishlistItem: ProductType) => {
     try {
       if (item?.isInWishList) {
+        isMounted.current && setLoading(true);
         const responseWish = await remove({
           path: `wishlist/${wishlistItem?._id}`,
         });
         ProductMutate();
-        // console.log({responseWish});
-        setOpenAlert(true);
-        setAlertMessage('Remove from wishlist');
+        isMounted.current && setOpenAlert(true);
+        isMounted.current && setAlertMessage('Remove from wishlist');
         setTimeout(() => {
           setOpenAlert(false);
         }, 2000);
       } else {
+        isMounted.current && setLoading(true);
         const res = await put({
           path: 'wishlist',
           body: JSON.stringify({
@@ -56,24 +60,32 @@ const HomeCategoryItem = ({
           }),
         });
         ProductMutate();
-        setOpenAlert(true);
-        setAlertMessage('Added to wishlist');
-        setTimeout(() => {
-          setOpenAlert(false);
-        }, 2000);
+        if (!isValidating) {
+          isMounted.current && setOpenAlert(true);
+          isMounted.current && setAlertMessage('Added to wishlist');
+          isMounted.current && setCelebrate(true);
+          setTimeout(() => {
+            isMounted.current && setOpenAlert(false);
+            isMounted.current && setCelebrate(false);
+          }, 1000);
+        }
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      isMounted.current && setLoading(false);
     }
   };
+  // console.log({item});
 
   return (
     <>
       {/* {isValidating ? (
         <ProductSkeleton />
       ) : ( */}
-      <Box mt={3} overflow={'hidden'} mb={5}>
+      <Box mt={3} overflow={'hidden'} mb={5} position={'relative'}>
         <Pressable
+          position={'relative'}
           onPress={() =>
             navigation.navigate('ProductDetails', {ProductDetailsType: item})
           }>
@@ -115,17 +127,36 @@ const HomeCategoryItem = ({
             </Text>
           </Box>
           <Box position={'absolute'} right={4} borderRadius={10}>
-            <Ionicons
-              onPress={() => handleWishlist(item)}
-              name={item?.isInWishList ? 'heart' : 'heart-outline'}
-              size={22}
-              color={COLORS.primary}
-              style={{
-                paddingHorizontal: 2,
-                paddingVertical: 2,
-              }}
-            />
+            {loading ? (
+              <ActivityIndicator
+                size={'small'}
+                color={COLORS.primary}
+                style={{marginTop: 1}}
+              />
+            ) : (
+              <Ionicons
+                onPress={() => handleWishlist(item)}
+                name={item?.isInWishList ? 'heart' : 'heart-outline'}
+                size={22}
+                color={COLORS.primary}
+                style={{
+                  paddingHorizontal: 2,
+                  paddingVertical: 2,
+                }}
+              />
+            )}
           </Box>
+          {celebrate && (
+            <Box
+              w={20}
+              h={20}
+              position={'absolute'}
+              right={-13}
+              top={-30}
+              zIndex={1000}>
+              <LottieView source={CELEBRATE} autoPlay loop={true} />
+            </Box>
+          )}
           {/* Add to cart */}
           <Counter
             item={item}

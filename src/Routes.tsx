@@ -16,18 +16,19 @@ import {BASE_URL} from 'api';
 import {useFocusEffect} from '@react-navigation/native';
 import useAuthFetch from './hooks/useAuthFetch';
 import {User} from 'types';
+import useFetchApi from './hooks/useFetchApi';
 
 const Drawer = createDrawerNavigator();
 const Routes = () => {
-  // const {data, mutate} = useSwrApi('user/my-account');
   const {user, loggedIn, setLoggedIn, setUser} = useAuth(state => state);
   const [userData, setUserData] = useState<string | null>();
   const isMounted = useIsMounted();
 
-  const {authData} = useAuthFetch<User>({
-    path: 'user/my-account',
-    method: 'GET',
-  });
+  // const {data, error, fetchURL} = useFetchApi({});
+
+  useFCMToken();
+  useAppLoad();
+  // console.log({data});
 
   const getUser = async () => {
     try {
@@ -37,9 +38,6 @@ const Routes = () => {
       console.log(error);
     }
   };
-
-  useFCMToken();
-  // useAppLoad();
 
   const getIdData = async () => {
     try {
@@ -53,8 +51,10 @@ const Routes = () => {
   useEffect(() => {
     getUser();
     getIdData();
-    isMounted.current && authData && setUser(authData);
-  }, [loggedIn, authData]);
+    // fetchURL({
+    //   url: '/user/my-account',
+    // });
+  }, []);
 
   if (!user) return <SplashScreen />;
 

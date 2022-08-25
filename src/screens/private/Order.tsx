@@ -32,21 +32,20 @@ const Order = ({navigation}: Props) => {
   const {data, isValidating, mutate} = useSwrApi('order/orders/my');
   // const myOrders = data?.data?.data?.data;
 
-  const deliveredData = useSwrApi('order/orders/my?status=DELIVERED');
+  const {
+    data: deliveredData,
+    isValidating: deliveredDataValidating,
+    mutate: deliveryMutate,
+  } = useSwrApi('order/orders/my?status=DELIVERED');
+  // const deliveredData = useSwrApi('order/orders/my?status=DELIVERED');
   // const deliveredOrder = deliveredData?.data?.data?.data?.data;
-
-  // const {authData} = useAuthFetch({
-  //   path: 'order/orders/my',
-  //   method: 'GET',
-  // });
-  // console.log({authData});
+  // console.log({deliveredData});
 
   useEffect(() => {
     isMounted.current && setMyOrders(data?.data?.data?.data);
-    isMounted.current &&
-      setDeliveryOrder(deliveredData?.data?.data?.data?.data);
-    mutate();
-  }, [isFocused]);
+    isMounted.current && setDeliveryOrder(deliveredData?.data?.data?.data);
+    // mutate();
+  }, [isFocused, data, deliveredData]);
 
   return (
     <>
@@ -182,7 +181,7 @@ const Order = ({navigation}: Props) => {
                           </VStack>
                         </Pressable>
                         <HStack px={3} py={2}>
-                          {item?.status === 'INITIATED' && (
+                          {item?.status !== 'DELIVERED' && (
                             <Pressable
                               w={'full'}
                               onPress={() =>

@@ -11,7 +11,6 @@ const useSwrApi = (url: string, options?: any) => {
   const {setLoggedIn} = useAuth();
   const fetcher = async (url: string, options?: any) => {
     try {
-      console.log('first run');
       isMounted.current && setLoading(true);
       let getAccessToken = await AsyncStorage.getItem('access_token');
       const getRefreshToken = await AsyncStorage.getItem('tokenId');
@@ -22,7 +21,6 @@ const useSwrApi = (url: string, options?: any) => {
           Authorization: `Bearer ${getAccessToken}`,
         },
       });
-      console.log({res});
       if (res?.status === 401) {
         console.log('i am running');
         const getResponse = await fetch(`${BASE_URL}/auth/get-access-token`, {
@@ -38,10 +36,6 @@ const useSwrApi = (url: string, options?: any) => {
         const getResponseData = await getResponse.json();
 
         if (getResponse.status === 401) {
-          // console.log(
-          //   url === 'user/my-account' &&
-          //     'Fetching user get access_token status 401',
-          // );
           console.log('not refresh token');
           await AsyncStorage.setItem('isLoggedIn', 'false')
             .then(() => {

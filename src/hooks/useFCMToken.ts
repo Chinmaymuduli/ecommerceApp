@@ -1,6 +1,6 @@
-import { useCallback, useEffect } from 'react';
+import {useCallback, useEffect} from 'react';
 import messaging from '@react-native-firebase/messaging';
-import { post } from 'api';
+import {post, put} from 'api';
 
 const useFCMToken = () => {
   const requestUserPermission = useCallback(async () => {
@@ -18,14 +18,22 @@ const useFCMToken = () => {
       const fcmToken = await messaging().getToken();
       if (!fcmToken) return console.log("user doesn't have a device token yet");
       // console.log('FCM Token:', fcmToken);
-      await post({
-        path: "push-notification",
+      // await post({
+      //   path: "push-notification",
+      //   body: JSON.stringify({
+      //     FCM: fcmToken,
+      //     title: "Good AfterNoon🕑",
+      //     message: "click hear to found out more 👆"
+      //   })
+      // })
+      await put({
+        path: 'user/account',
         body: JSON.stringify({
-          FCM: fcmToken,
-          title: "Good AfterNoon🕑",
-          message: "click hear to found out more 👆"
-        })
-      })
+          fcmTokens: {
+            android: fcmToken,
+          },
+        }),
+      });
     } catch (error) {
       console.log(error);
     }

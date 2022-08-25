@@ -3,27 +3,11 @@ import React, {useEffect, useState} from 'react';
 import StepIndicator from 'react-native-step-indicator';
 import {COLORS} from 'configs';
 import {Box, Text} from 'native-base';
-import {useRoute} from '@react-navigation/native';
 import {useIsMounted} from 'hooks';
 
 const Track = ({track}: any) => {
   const [position, setPosition] = useState(0);
   const isMounted = useIsMounted();
-  // console.log(track?.status);
-
-  // switch (track?.status) {
-  //   case track.status === 'INITIATED':
-  //     setPosition(1);
-  //     break;
-  //   case track.status === 'SHIPPED':
-  //     setPosition(2);
-  //     break;
-  //   case track.status === 'DELIVERED':
-  //     setPosition(3);
-  //     break;
-  //   default:
-  //     break;
-  // }
 
   useEffect(() => {
     if (track?.status === 'INITIATED') {
@@ -40,15 +24,15 @@ const Track = ({track}: any) => {
   const labels: any = [
     <Box>
       <Text>Ordered</Text>
-      <Text fontSize={12}>Tue,7th Jun 2020</Text>
+      {/* <Text fontSize={12}>Tue,7th Jun 2020</Text> */}
     </Box>,
     <Box>
       <Text>Shipped</Text>
-      <Text fontSize={12}>Wed,8th Jun 2020</Text>
+      {/* <Text fontSize={12}>Wed,8th Jun 2020</Text> */}
     </Box>,
     <Box>
       <Text>Delivered</Text>
-      <Text fontSize={12}>Fri,10th Jun 2020</Text>
+      {/* <Text fontSize={12}>Fri,10th Jun 2020</Text> */}
     </Box>,
   ];
   return (
@@ -73,7 +57,6 @@ const Track = ({track}: any) => {
           stepIndicatorLabelUnFinishedColor: COLORS.lightGrey,
           labelColor: '#999999',
           labelSize: 13,
-          // currentStepLabelColor: '#999999',
         }}
         currentPosition={position}
         labels={labels}

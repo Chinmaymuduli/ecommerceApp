@@ -7,7 +7,7 @@ export const BASE_URL = `https://chhattisgarh-herbals-api.herokuapp.com/api`;
 
 const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
   const GET_REFRESH_TOKEN = await AsyncStorage.getItem('tokenId');
-  const {setLoggedIn} = useAuth();
+  // const {setLoggedIn} = useAuth();
   const getResponse = await post({
     path: 'auth/get-access-token',
     body: JSON.stringify({
@@ -16,13 +16,15 @@ const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
   });
 
   // console.log('first50', getResponse);
+  console.log('401 fetch', getResponse);
   if (getResponse.status === 401) {
-    await AsyncStorage.setItem('isLoggedIn', 'false')
-      .then(() => {
-        console.log('Logout Success');
-        setLoggedIn(false);
-      })
-      .catch(error => console.log(error));
+    // await AsyncStorage.setItem('isLoggedIn', 'false')
+    //   .then(() => {
+    //     console.log('Logout Success');
+    //     setLoggedIn(false);
+    //   })
+    //   .catch(error => console.log(error));
+    console.log('401 delete');
     await AsyncStorage.removeItem('access_token');
     await AsyncStorage.removeItem('tokenId');
   }
@@ -52,6 +54,7 @@ export const post: APIFunction = async ({
     };
     const response = await fetch(`${BASE_URL}/${path}`, API_OPTIONS);
     if (response.status === 401) {
+      console.log('post 401 running');
       return GetToken(post, {
         path,
         body: JSON.stringify({}),
@@ -91,8 +94,8 @@ export const put: APIFunction = async ({
       ...options,
     };
     const response = await fetch(`${BASE_URL}/${path}`, API_OPTIONS);
-    console.log(response.status);
     if (response.status === 401) {
+      console.log('i m put 401');
       return GetToken(put, {
         path,
         body: JSON.stringify({}),
@@ -130,6 +133,7 @@ export const remove: APIFunction = async ({
     };
     const response = await fetch(`${BASE_URL}/${path}`, API_OPTIONS);
     if (response.status === 401) {
+      console.log(' i m remove 401');
       return GetToken(remove, {
         path,
         body: JSON.stringify({}),

@@ -40,9 +40,9 @@ const Home = () => {
   );
   const CategoryList = data?.data?.data;
 
-  useEffect(() => {
-    mutate();
-  }, [isFocused]);
+  // useEffect(() => {
+  //   mutate();
+  // }, [isFocused]);
 
   return (
     <>

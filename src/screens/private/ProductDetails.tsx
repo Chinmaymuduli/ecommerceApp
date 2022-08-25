@@ -12,7 +12,6 @@ import {
   Input,
   Modal,
   Pressable,
-  Radio,
   Row,
   ScrollView,
   Spinner,
@@ -56,7 +55,6 @@ const ProductDetails = ({route, navigation}: Props) => {
 
   const [loader, setLoader] = useState(false);
   const {userType, user} = useAuth();
-  // console.log({user});
 
   const {data, isValidating, mutate} = useSwrApi(
     user?._id
@@ -190,13 +188,10 @@ const ProductDetails = ({route, navigation}: Props) => {
     }
   }, []);
 
-  // console.log(data);
-
   const BuyNow = async () => {
     try {
       if (addQuantity) {
         return setAddressModal(true);
-        // return setModalDialog(true);
       }
       navigation.navigate('OrderSummary', {
         productId: chooseWeight._id,
@@ -274,9 +269,7 @@ const ProductDetails = ({route, navigation}: Props) => {
               />
               <Pagination
                 dotsLength={
-                  authData?.images?.length
-                    ? authData?.images?.length
-                    : SPECIAL_PRODUCT?.length
+                  authData?.images?.length ? authData?.images?.length : 1
                 }
                 activeDotIndex={index}
                 dotStyle={{

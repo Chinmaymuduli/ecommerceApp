@@ -116,8 +116,9 @@ export default function BottomTab() {
         options={{
           tabBarIcon: ({focused}) => (
             <>
-              <Box alignItems={'center'} justifyContent={'center'} mb={3}>
-                <Badge
+              <Box alignItems={'center'} justifyContent={'center'}>
+                {/* <Box alignItems={'center'} justifyContent={'center'} mb={3}> */}
+                {/* <Badge
                   colorScheme="danger"
                   rounded="full"
                   mb={-3}
@@ -129,7 +130,7 @@ export default function BottomTab() {
                     fontSize: 10,
                   }}>
                   {user?.cartCount ? user?.cartCount : 0}
-                </Badge>
+                </Badge> */}
                 <Icon
                   type={Icons.Ionicons}
                   name="cart"

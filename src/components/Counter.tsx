@@ -4,7 +4,6 @@ import {Box, HStack, Text} from 'native-base';
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {ProductType} from 'types';
-import {useStore} from 'app';
 import {useIsMounted, useSwrApi} from 'hooks';
 import {put, remove} from 'api';
 
@@ -19,8 +18,7 @@ const Counter = ({
   setAlertMessage,
   setOpenAlert,
   ProductMutate,
-}: // ProductMutate,
-Props) => {
+}: Props) => {
   const [loader, setLoader] = useState(false);
   const isMounted = useIsMounted();
   const increment = async (id: number) => {
@@ -34,7 +32,7 @@ Props) => {
         }),
       });
 
-      if (res.status === 200) return ProductMutate();
+      if (res?.status === 200) return ProductMutate();
     } catch (error) {
       console.log(error);
     } finally {
@@ -52,7 +50,7 @@ Props) => {
           quantity: -1,
         }),
       });
-      if (res.status === 200) return ProductMutate();
+      if (res?.status === 200) return ProductMutate();
     } catch (error) {
       console.log(error);
     } finally {
@@ -105,8 +103,8 @@ Props) => {
             <Entypo
               name="minus"
               size={20}
-              color={loader ? COLORS.lightGrey : COLORS.fadeBlack}
-              onPress={() => decrement(item._id)}
+              color={loader ? COLORS.grey : COLORS.fadeBlack}
+              onPress={loader ? () => {} : () => decrement(item._id)}
             />
           </Box>
 
@@ -121,15 +119,17 @@ Props) => {
             <Entypo
               name="plus"
               size={18}
-              color={COLORS.fadeBlack}
+              color={loader ? COLORS.grey : COLORS.fadeBlack}
               style={{
                 paddingHorizontal: 3,
                 paddingVertical: 3,
               }}
-              onPress={() => increment(item._id)}
+              onPress={loader ? () => {} : () => increment(item._id)}
             />
           </Box>
         </HStack>
+      ) : loader ? (
+        <ActivityIndicator size={'small'} />
       ) : (
         <Box>
           <Entypo

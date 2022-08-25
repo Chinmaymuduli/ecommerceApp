@@ -9,6 +9,7 @@ export const GetToken = async (
   params: APIOptsType,
 ) => {
   const {setLoggedIn} = useAuth();
+  console.log('user fetching');
 
   const GET_REFRESH_TOKEN = await AsyncStorage.getItem('tokenId');
 

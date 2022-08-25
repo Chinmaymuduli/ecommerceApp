@@ -31,6 +31,8 @@ import {CAMERA} from 'assets';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'PaymentScreen'>;
 const PaymentScreen = ({navigation, route: {params}}: Props) => {
+  console.log({params});
+
   const {data, isValidating, mutate} = useSwrApi(
     `orders/summary?type=${params?.type}&productId=${
       params?.productId
@@ -57,8 +59,6 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
     user?.GSTNumber ? user?.GSTNumber : '',
   );
   const [label, setLabel] = useState<string>();
-
-  // console.log({user});
 
   const handleDismiss = () => {
     setVisible(false);
@@ -96,15 +96,19 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
             productId: params?.productId,
             quantity: params?.quantity,
             addressId: params?.addressId,
+            couponId: checkoutData?.couponInfo?.couponId,
           }),
         });
+        // console.log({response});
       } else {
         response = await post({
           path: 'checkout/payment/cart',
           body: JSON.stringify({
             shippedTo: params?.addressId,
+            couponId: checkoutData?.couponInfo?.couponId,
           }),
         });
+        // console.log({response2: response});
       }
 
       if (response.status === 200) {
@@ -173,6 +177,8 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
     });
   };
 
+  console.log({checkoutData});
+
   return (
     <>
       {isValidating ? (
@@ -207,7 +213,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                       alignItems={'center'}>
                       <Text>Saving</Text>
                       <Text color={'green.500'}>
-                        - &#8377;{checkoutData?.discount}
+                        - &#8377;{checkoutData?.discount.toFixed(2)}
                       </Text>
                     </HStack>
                     <HStack
@@ -218,7 +224,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                       <Text color={'green.500'}>
                         - &#8377;{' '}
                         {checkoutData?.couponInfo?.benefitAmount
-                          ? checkoutData?.couponInfo?.benefitAmount
+                          ? (checkoutData?.couponInfo?.benefitAmount).toFixed(2)
                           : 0}
                       </Text>
                     </HStack>
@@ -228,7 +234,11 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                       justifyContent={'space-between'}
                       alignItems={'center'}>
                       <Text>Delivery Charges</Text>
-                      <Text color={'green.500'}>free</Text>
+                      <Text color={'green.500'}>
+                        {checkoutData?.deliveryCharge
+                          ? checkoutData?.deliveryCharge
+                          : 'free'}
+                      </Text>
                     </HStack>
                   </Box>
                 </Box>
@@ -487,7 +497,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                     </Text>
                     <Text textDecorationLine={'line-through'} color={'#fff'}>
                       &#8377;
-                      {checkoutData?.discount}
+                      {checkoutData?.discount?.toFixed(2)}
                     </Text>
                   </HStack>
                 </HStack>
