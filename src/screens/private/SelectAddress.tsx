@@ -9,7 +9,8 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {AddressType} from 'types';
 import {FetchLoader} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useAddress, useIsMounted} from 'hooks';
+import {useAddress, useIsMounted, useSwrApi} from 'hooks';
+import {useIsFocused} from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
 const SelectAddress = ({route, navigation}: Props) => {
@@ -17,38 +18,40 @@ const SelectAddress = ({route, navigation}: Props) => {
 
   const [addressId, setAddressId] = useState<string | null>();
   const [addressValue, setAddressValue] = React.useState<any>();
-
+  const isFocused = useIsFocused();
   const [loading, setLoading] = useState(false);
 
   const isMounted = useIsMounted();
 
   const isProfile = route.params?.isProfile;
 
-  const fetchData = async () => {
-    try {
-      isMounted.current && setLoading(true);
-      const token = await AsyncStorage.getItem('ACCESS_TOKEN');
-      const resp = await fetch(
-        'https://chhattisgarh-herbals-api.herokuapp.com/api/address/all/my-addresses',
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-      const response_data = await resp.json();
+  // const fetchData = async () => {
+  //   try {
+  //     isMounted.current && setLoading(true);
+  //     const token = await AsyncStorage.getItem('ACCESS_TOKEN');
+  //     const resp = await fetch(
+  //       'https://chhattisgarh-herbals-api.herokuapp.com/api/address/all/my-addresses',
+  //       {
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       },
+  //     );
+  //     const response_data = await resp.json();
 
-      isMounted.current && setAddress(response_data?.data);
-      isMounted.current && setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  //     isMounted.current && setAddress(response_data?.data);
+  //     isMounted.current && setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  const {data, mutate, isValidating} = useSwrApi('address/all/my-addresses');
   useEffect(() => {
-    fetchData();
-  }, []);
+    isMounted.current && setAddress(data?.data?.data);
+    mutate();
+  }, [isFocused]);
 
   const handelDeliver = async () => {
     await AsyncStorage.setItem('address_id', addressValue);
@@ -71,7 +74,7 @@ const SelectAddress = ({route, navigation}: Props) => {
 
   return (
     <>
-      {!loading ? (
+      {!isValidating ? (
         <Box flex={1} bg={COLORS.textWhite}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <Box px={4} borderBottomWidth={10} borderColor={COLORS.lightGrey}>
