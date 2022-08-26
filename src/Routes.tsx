@@ -11,29 +11,30 @@ import AppProvider from './layouts';
 import useFCMToken from './hooks/useFCMToken';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import useIsMounted from './hooks/useIsMounted';
+import useConfig from './hooks/useConfig';
+import useAppContext from './contexts/useAppContext';
 import useSwrApi from './hooks/useSwrApi';
-import {BASE_URL} from 'api';
-import {useFocusEffect} from '@react-navigation/native';
-import useAuthFetch from './hooks/useAuthFetch';
-import {User} from 'types';
-import useFetchApi from './hooks/useFetchApi';
 
 const Drawer = createDrawerNavigator();
 const Routes = () => {
-  const {user, loggedIn, setLoggedIn, setUser} = useAuth(state => state);
-  const [userData, setUserData] = useState<string | null>();
+  const {user, setUser} = useAuth(state => state);
+  const {setIsLoggedIn, isLoggedIn} = useAppContext();
+  const [userEnter, setUserEnter] = useState<string | null>();
   const isMounted = useIsMounted();
+  // const{} = useSwrApi('')
+  const {data, isLoading} = useAppLoad();
 
-  // const {data, error, fetchURL} = useFetchApi({});
+  console.log({isLoggedIn});
 
   useFCMToken();
-  useAppLoad();
-  // console.log({data});
+  // useAppLoad();
+
+  useConfig();
 
   const getUser = async () => {
     try {
       const newUserData = await AsyncStorage.getItem('isUserEnter');
-      isMounted.current && setUserData(newUserData);
+      isMounted.current && setUserEnter(newUserData);
     } catch (error) {
       console.log(error);
     }
@@ -42,8 +43,14 @@ const Routes = () => {
   const getIdData = async () => {
     try {
       const value = await AsyncStorage.getItem('isLoggedIn');
-      if (value === 'true') return setLoggedIn(true);
-      isMounted.current && setLoggedIn(false);
+      // const asGuest = await AsyncStorage.getItem('asGuest');
+      console.log('value', value);
+      if (value === 'true') {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+      // if (value === 'true' && asGuest !== 'true') return setLoggedIn(true);
     } catch (e) {
       console.log('error', e);
     }
@@ -51,17 +58,16 @@ const Routes = () => {
   useEffect(() => {
     getUser();
     getIdData();
-    // fetchURL({
-    //   url: '/user/my-account',
-    // });
-  }, []);
+  }, [isLoggedIn]);
 
-  if (!user) return <SplashScreen />;
+  console.log('isLoggedIn', isLoggedIn);
+
+  if (isLoggedIn === null || isLoading) return <SplashScreen />;
 
   return (
     <AppProvider>
-      {loggedIn ? (
-        // {user?._id && loggedIn ? (
+      {/* {!isLoading && loggedIn ? ( */}
+      {isLoggedIn ? (
         <Drawer.Navigator
           screenOptions={{
             headerShown: false,
@@ -84,7 +90,7 @@ const Routes = () => {
           />
         </Drawer.Navigator>
       ) : (
-        <PublicRoutes initialRouteName={userData ? 'Login' : 'OnBoarding'} />
+        <PublicRoutes initialRouteName={userEnter ? 'Login' : 'OnBoarding'} />
       )}
     </AppProvider>
   );

@@ -12,9 +12,9 @@ export default ({url, method, body, isFormData}: fetchURLProps) => {
     async ({url, method, body, isFormData}: fetchURLProps) => {
       try {
         isMounted.current && setLoading(true);
-        const ACCESS_TOKEN = await AsyncStorage.getItem('access_token');
+        const ACCESS_TOKEN = await AsyncStorage.getItem('ACCESS_TOKEN');
         //   const ACCESS_TOKEN = await AsyncStorage.getItem("ACCESS_TOKEN");
-        const REFRESH_TOKEN = await AsyncStorage.getItem('tokenId');
+        const REFRESH_TOKEN = await AsyncStorage.getItem('REFRESH_TOKEN');
         //   const REFRESH_TOKEN = await AsyncStorage.getItem("REFRESH_TOKEN");
         const options: RequestInit = {
           method: method || 'GET',
@@ -43,19 +43,19 @@ export default ({url, method, body, isFormData}: fetchURLProps) => {
           );
           if (getAccessTokenRes.status === 401) {
             console.log('logout data');
-            await AsyncStorage.removeItem('access_token');
-            await AsyncStorage.removeItem('tokenId');
+            await AsyncStorage.removeItem('ACCESS_TOKEN');
+            await AsyncStorage.removeItem('REFRESH_TOKEN');
             return;
           }
           const getAccessTokenResData = await getAccessTokenRes.json();
           getAccessTokenResData?.ACCESS_TOKEN &&
             (await AsyncStorage.setItem(
-              'access_token',
+              'ACCESS_TOKEN',
               getAccessTokenResData?.ACCESS_TOKEN,
             ));
           getAccessTokenResData?.REFRESH_TOKEN &&
             (await AsyncStorage.setItem(
-              'tokenId',
+              'REFRESH_TOKEN',
               getAccessTokenResData?.REFRESH_TOKEN,
             ));
           console.log('Refetching data');

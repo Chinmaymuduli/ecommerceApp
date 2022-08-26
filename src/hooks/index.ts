@@ -9,3 +9,4 @@ export {default as useAuthFetch} from './useAuthFetch';
 export {default as useSwrApi} from './useSwrApi';
 export {default as useAddress} from './useAddress';
 export {default as useFetchApi} from './useFetchApi';
+export {default as useConfig} from './useConfig';

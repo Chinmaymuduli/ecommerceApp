@@ -44,7 +44,7 @@ const SupportUs = () => {
   const onSubmit = async (data: supportType) => {
     try {
       setLoader(true);
-      const token = await AsyncStorage.getItem('access_token');
+      const token = await AsyncStorage.getItem('ACCESS_TOKEN');
       const supportData = await post({
         path: 'support-form',
         body: JSON.stringify({

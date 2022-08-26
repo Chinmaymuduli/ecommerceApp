@@ -17,6 +17,7 @@ export {default as REGISTER_SUCCESS} from './animation/registerSuccess.json';
 export {default as LOADER_IMG} from './animation/loader._screen.json';
 export {default as NOTIFICATIONS} from './animation/notifications.json';
 export {default as CELEBRATE} from './animation/celebrate.json';
+export {default as LOADER_JSON} from './animation/loader.json';
 
 export const LOGO = require('./images/logo.png');
 export const LOADER = require('./images/loader_img.gif');

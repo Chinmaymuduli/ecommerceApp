@@ -18,6 +18,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {ImagePicker} from './core';
 import {useActions, useIsMounted, useSwrApi} from 'hooks';
 import {put} from 'api';
+import {User} from 'types';
 
 const B2bDocument = () => {
   const [showModal, setShowModal] = useState(false);
@@ -25,11 +26,12 @@ const B2bDocument = () => {
   const [visible, setVisible] = useState(false);
   const [whyModal, setWhyModal] = useState(false);
   const [document, setDocument] = useState<string>();
+  const [userData, setUserData] = useState<User | any>();
   const isMounted = useIsMounted();
   const {setLoading} = useActions();
 
   const {data, isValidating, mutate} = useSwrApi('user/my-account');
-  const userData = data?.data?.data;
+  // const userData = data?.data?.data;
   const handleDismiss = () => {
     setVisible(false);
   };
@@ -40,6 +42,7 @@ const B2bDocument = () => {
   };
 
   useEffect(() => {
+    isMounted.current && setUserData(data?.data?.data);
     isMounted.current && setDocument(userData?.GSTDocType);
     isMounted.current && setGstDocument(userData?.GSTDoc);
   }, [userData]);
@@ -227,6 +230,7 @@ const B2bDocument = () => {
         setImageURI={setGstDocument}
         cropperCircleOverlay={true}
         postImages={false}
+        mutate={mutate}
       />
     </>
   );

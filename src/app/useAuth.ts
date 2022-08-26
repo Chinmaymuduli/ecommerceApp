@@ -4,7 +4,7 @@ import create from 'zustand';
 type AuthState = {
   user?: Partial<User>;
   setUser: (user: Partial<User>) => Promise<void>;
-  loggedIn?: boolean;
+  loggedIn?: any;
   setLoggedIn: (prev: boolean) => void;
   userType?: string;
   setUserType: (prev: string) => void;
@@ -12,7 +12,7 @@ type AuthState = {
 
 const useAuth = create<AuthState>(set => ({
   user: undefined,
-  loggedIn: false,
+  loggedIn: null,
   userType: 'b2c',
   setLoggedIn: bool =>
     set(() => ({

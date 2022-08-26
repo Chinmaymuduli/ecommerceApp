@@ -21,7 +21,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
-import {useAppContext} from 'contexts';
 import {ErrorModal, FetchLoader, ImagePicker} from 'components/core';
 import RazorpayCheckout from 'react-native-razorpay';
 import {useAuth} from 'app';
@@ -99,7 +98,6 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
             couponId: checkoutData?.couponInfo?.couponId,
           }),
         });
-        // console.log({response});
       } else {
         response = await post({
           path: 'checkout/payment/cart',
@@ -108,7 +106,6 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
             couponId: checkoutData?.couponInfo?.couponId,
           }),
         });
-        // console.log({response2: response});
       }
 
       if (response.status === 200) {
@@ -570,13 +567,13 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
             </Modal>
           </Center>
           {/* Image Picker */}
-          <ImagePicker
+          {/* <ImagePicker
             visible={visible}
             onDismiss={handleDismiss}
             setImageURI={setProfileImage}
             cropperCircleOverlay={true}
             postImages={false}
-          />
+          /> */}
           {/* Error Modal */}
           <ErrorModal
             setShowErrorModal={setShowErrorModal}

@@ -54,7 +54,6 @@ const PastOrder = ({item}: Props) => {
       mutate();
     }
   };
-
   return (
     <Box px={4} py={4}>
       <Box borderWidth={1} borderRadius={5} borderColor={COLORS.lightGrey}>

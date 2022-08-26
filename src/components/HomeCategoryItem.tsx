@@ -59,6 +59,7 @@ const HomeCategoryItem = ({
             productId: wishlistItem?._id,
           }),
         });
+
         ProductMutate();
         if (!isValidating) {
           isMounted.current && setOpenAlert(true);

@@ -44,8 +44,8 @@ const Order = ({navigation}: Props) => {
   useEffect(() => {
     isMounted.current && setMyOrders(data?.data?.data?.data);
     isMounted.current && setDeliveryOrder(deliveredData?.data?.data?.data);
-    // mutate();
-  }, [isFocused, data, deliveredData]);
+    mutate();
+  }, [isFocused]);
 
   return (
     <>
@@ -141,9 +141,9 @@ const Order = ({navigation}: Props) => {
                           <HStack alignItems={'center'} space={3} py={3} px={3}>
                             <Image
                               source={
-                                item?.displayImage?.url
+                                item?.product?.displayImage?.url
                                   ? {
-                                      uri: item?.displayImage?.url,
+                                      uri: item?.product?.displayImage?.url,
                                     }
                                   : PRODUCT_PLACEHOLDER
                               }
@@ -168,8 +168,8 @@ const Order = ({navigation}: Props) => {
                             <HStack justifyContent={'space-between'}>
                               <Text bold>Total Price :</Text>
                               <Text fontSize={15}>
-                                &#8377;{' '}
-                                {item?.quantity * item?.product?.salePrice}
+                                &#8377; {item?.totalPrice}
+                                {/* {item?.quantity * item?.product?.salePrice} */}
                               </Text>
                             </HStack>
                             <HStack justifyContent={'space-between'}>

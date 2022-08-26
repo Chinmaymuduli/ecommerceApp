@@ -12,7 +12,7 @@ const useAuthFetch = <T>(props: ApiAuthType) => {
   const fetchData = useCallback(async ({method, path, body}: ApiAuthType) => {
     try {
       isMounted.current && setIsLoading(true);
-      const getAccessToken = await AsyncStorage.getItem('access_token');
+      const getAccessToken = await AsyncStorage.getItem('ACCESS_TOKEN');
       const response = await authFetch({
         path,
         method,

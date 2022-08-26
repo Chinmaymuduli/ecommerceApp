@@ -48,7 +48,7 @@ const Address = ({route, navigation}: Props) => {
   const onSubmit = async (data: AddressType) => {
     try {
       isMounted.current && setLoading(true);
-      const token = await AsyncStorage.getItem('access_token');
+      const token = await AsyncStorage.getItem('ACCESS_TOKEN');
       const AddressData = JSON.stringify({
         landmark: data.housenumber,
         email: 'demouser@gmail.com',

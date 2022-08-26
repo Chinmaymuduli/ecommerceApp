@@ -24,7 +24,7 @@ import {
   SuccessVerificationModal,
 } from 'components/core';
 import {Controller, useForm} from 'react-hook-form';
-import {useActions, useAuthFetch, useIsMounted} from 'hooks';
+import {useActions, useAuthFetch, useIsMounted, useSwrApi} from 'hooks';
 import {User} from 'types';
 import {post, put} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -39,6 +39,7 @@ const EditProfile = () => {
   const {setLoading} = useActions();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string>();
+  const [authData, setAuthData] = useState<User>();
   const {
     control,
     handleSubmit,
@@ -46,20 +47,33 @@ const EditProfile = () => {
     setValue,
   } = useForm();
 
-  const {authData, isLoading} = useAuthFetch<User>({
-    path: 'user/my-account',
-    method: 'GET',
-  });
+  // const {authData, isLoading} = useAuthFetch<User>({
+  //   path: 'user/my-account',
+  //   method: 'GET',
+  // });
+
+  const {data, isValidating, mutate} = useSwrApi('user/my-account');
 
   useEffect(() => {
-    setValue('displayName', authData?.displayName);
-    setValue(
-      'phoneNumber',
-      `${authData?.phoneNumber ? authData?.phoneNumber : ''}`,
-    );
-    setValue3('email', authData?.email);
-    setGender(authData?.gender);
-  }, [authData]);
+    isMounted.current && setAuthData(data?.data?.data);
+    isMounted.current && setValue('displayName', authData?.displayName);
+    isMounted.current &&
+      setValue(
+        'phoneNumber',
+        `${authData?.phoneNumber ? authData?.phoneNumber : ''}`,
+      );
+    isMounted.current && setValue3('email', authData?.email);
+    isMounted.current && setGender(authData?.gender);
+  }, [data]);
+  // useEffect(() => {
+  //   setValue('displayName', authData?.displayName);
+  //   setValue(
+  //     'phoneNumber',
+  //     `${authData?.phoneNumber ? authData?.phoneNumber : ''}`,
+  //   );
+  //   setValue3('email', authData?.email);
+  //   setGender(authData?.gender);
+  // }, [authData]);
 
   const {
     control: control3,
@@ -71,7 +85,7 @@ const EditProfile = () => {
   const onSubmit = async (data: any) => {
     try {
       isMounted.current && setLoading(true);
-      const token = await AsyncStorage.getItem('access_token');
+      const token = await AsyncStorage.getItem('ACCESS_TOKEN');
       const nameResponse = await put({
         path: 'user/account',
         body: JSON.stringify({
@@ -117,7 +131,7 @@ const EditProfile = () => {
   };
   return (
     <>
-      {!isLoading ? (
+      {!isValidating ? (
         <Box flex={1} bg={COLORS.textWhite}>
           <ScrollView keyboardShouldPersistTaps="always">
             <Box bg={COLORS.primary}>
@@ -344,6 +358,7 @@ const EditProfile = () => {
             setImageURI={setProfileImage}
             cropperCircleOverlay={true}
             path="avatar"
+            mutate={mutate}
           />
           {/* success modal */}
           <SuccessVerificationModal

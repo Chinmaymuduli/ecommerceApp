@@ -17,7 +17,7 @@ const CartAlert = ({isOpen, onClose, id, mutate}: Props) => {
   const handleDelete = async (id: any) => {
     console.log('iddd', id);
     try {
-      const getAccessToken = await AsyncStorage.getItem('access_token');
+      const getAccessToken = await AsyncStorage.getItem('ACCESS_TOKEN');
 
       await remove({
         path: `cart/${id}`,

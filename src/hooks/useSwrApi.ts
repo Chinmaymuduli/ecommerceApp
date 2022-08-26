@@ -12,8 +12,8 @@ const useSwrApi = (url: string, options?: any) => {
   const fetcher = async (url: string, options?: any) => {
     try {
       isMounted.current && setLoading(true);
-      let getAccessToken = await AsyncStorage.getItem('access_token');
-      const getRefreshToken = await AsyncStorage.getItem('tokenId');
+      let getAccessToken = await AsyncStorage.getItem('ACCESS_TOKEN');
+      const getRefreshToken = await AsyncStorage.getItem('REFRESH_TOKEN');
       const res = await fetch(url, {
         method: 'GET',
         headers: {
@@ -43,21 +43,21 @@ const useSwrApi = (url: string, options?: any) => {
               setLoggedIn(false);
             })
             .catch(error => console.log(error));
-          await AsyncStorage.removeItem('access_token');
-          await AsyncStorage.removeItem('tokenId');
+          await AsyncStorage.removeItem('ACCESS_TOKEN');
+          await AsyncStorage.removeItem('REFRESH_TOKEN');
         } else {
           await AsyncStorage.setItem(
-            'access_token',
+            'ACCESS_TOKEN',
             getResponseData?.ACCESS_TOKEN,
           );
           if (getResponseData?.REFRESH_TOKEN)
             return await AsyncStorage.setItem(
-              'tokenId',
+              'REFRESH_TOKEN',
               getResponseData?.REFRESH_TOKEN,
             );
 
           // console.log(url === 'user/my-account' && 'Fetching user data again');
-          getAccessToken = await AsyncStorage.getItem('access_token');
+          getAccessToken = await AsyncStorage.getItem('ACCESS_TOKEN');
           const refetchResponse = await fetch(`${url}`, {
             method: 'GET',
             headers: {

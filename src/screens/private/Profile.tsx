@@ -34,7 +34,7 @@ const Profile = () => {
       });
       console.log({logRes});
       await AsyncStorage.removeItem('refresh_token');
-      await AsyncStorage.removeItem('tokenId');
+      await AsyncStorage.removeItem('REFRESH_TOKEN');
       await AsyncStorage.setItem('isLoggedIn', 'false')
         .then(() => {
           console.log('Logout Success');

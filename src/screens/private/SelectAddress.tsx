@@ -27,7 +27,7 @@ const SelectAddress = ({route, navigation}: Props) => {
   const fetchData = async () => {
     try {
       isMounted.current && setLoading(true);
-      const token = await AsyncStorage.getItem('access_token');
+      const token = await AsyncStorage.getItem('ACCESS_TOKEN');
       const resp = await fetch(
         'https://chhattisgarh-herbals-api.herokuapp.com/api/address/all/my-addresses',
         {

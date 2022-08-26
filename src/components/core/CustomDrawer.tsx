@@ -123,7 +123,8 @@ const drawerArray = [
 const CustomDrawer = () => {
   const navigation = useNavigation<NavigationProps>();
   const [selectedButton, setSelectedButton] = React.useState(1);
-  const {user, setLoggedIn, setUserType} = useAuth(state => state);
+  const {user, setUserType, setUser} = useAuth(state => state);
+  const {setIsLoggedIn} = useAppContext();
 
   // console.log({user});
   const {data, isValidating} = useSwrApi('user/my-account');
@@ -159,16 +160,19 @@ const CustomDrawer = () => {
 
   const handleLogout = async () => {
     try {
+      console.log('running logout');
+
       const logRes = await put({
         path: 'auth/logout',
       });
       console.log({logRes});
-      await AsyncStorage.removeItem('refresh_token');
-      await AsyncStorage.removeItem('tokenId');
+
+      await AsyncStorage.removeItem('ACCESS_TOKEN');
+      await AsyncStorage.removeItem('REFRESH_TOKEN');
       await AsyncStorage.setItem('isLoggedIn', 'false')
         .then(() => {
           console.log('Logout Success');
-          setLoggedIn(false);
+          setIsLoggedIn(false);
         })
         .catch(error => console.log(error));
     } catch (error) {
@@ -250,7 +254,7 @@ const CustomDrawer = () => {
           <Divider />
         </Box>
         <Box px={5} mb={8} mt={2}>
-          <Pressable onPress={handleLogout}>
+          <Pressable onPress={() => handleLogout()}>
             <HStack justifyContent={'space-between'}>
               <HStack space={3}>
                 <Materialicons

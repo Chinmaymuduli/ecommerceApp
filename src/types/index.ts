@@ -117,11 +117,7 @@ export type reviewType = {
 };
 export type activeOrderType = {
   name: string;
-  // OrderID: string;
-  // status: string;
-  // currentPrice: number;
-  // img: any;
-  // total: string | number;
+  totalPrice?: number;
   product: ProductType;
   quantity: number;
   _id: string;

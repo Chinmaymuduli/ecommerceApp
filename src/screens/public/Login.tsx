@@ -23,6 +23,7 @@ import {ErrorModal} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAuth} from 'app';
 import {VerifyEmailModal} from 'components';
+import {useAppContext} from 'contexts';
 
 type DATATYPE = {
   email?: string;
@@ -34,7 +35,8 @@ const Login = () => {
   const [loader, setLoader] = React.useState(false);
   const [showPassword, setShowPassword] = React.useState(true);
   const isMounted = useIsMounted();
-  const {setUser, setLoggedIn} = useAuth();
+  const {setUser, user} = useAuth();
+  const {setIsLoggedIn} = useAppContext();
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [label, setLabel] = useState();
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -44,7 +46,7 @@ const Login = () => {
     formState: {errors},
   } = useForm();
 
-  // console.log({user});
+  console.log({user});
   const onSubmit = async (data: DATATYPE) => {
     try {
       isMounted.current && setLoader(true);
@@ -62,15 +64,16 @@ const Login = () => {
         return;
       }
       if (loginData.status === 200) {
-        // navigation.navigate('Home');
-        await AsyncStorage.setItem('tokenId', loginData.REFRESH_TOKEN);
-        await AsyncStorage.setItem('access_token', loginData.ACCESS_TOKEN);
+        await AsyncStorage.setItem('REFRESH_TOKEN', loginData.REFRESH_TOKEN);
+        await AsyncStorage.setItem('ACCESS_TOKEN', loginData.ACCESS_TOKEN);
+        await AsyncStorage.setItem('asGuest', 'false');
         await AsyncStorage.setItem('isUserEnter', JSON.stringify(true));
 
         await AsyncStorage.setItem('isLoggedIn', 'true')
           .then(() => {
             console.log('Login Success');
-            setLoggedIn(true);
+            setIsLoggedIn(true);
+            // setLoggedIn(true);
           })
           .catch(error => console.log(error));
         return;
@@ -84,12 +87,14 @@ const Login = () => {
   };
 
   const handelGuest = async () => {
-    await AsyncStorage.setItem('isLoggedIn', 'true')
-      .then(() => {
-        console.log('Login Success');
-        setLoggedIn(true);
-      })
-      .catch(error => console.log(error));
+    try {
+      await AsyncStorage.setItem('isLoggedIn', 'true');
+      await AsyncStorage.setItem('asGuest', 'true');
+      console.log('Login Success');
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.log(error);
+    }
     return;
   };
   return (

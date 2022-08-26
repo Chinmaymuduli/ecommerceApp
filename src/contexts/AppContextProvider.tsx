@@ -13,7 +13,8 @@ export const AppContext = createContext<ContextType>({});
 
 const AppContextProvider: React.FC = ({children}) => {
   const [cartItems, setCartItems] = useState<any>([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<any>(null);
+
   const [userData, setUserData] = useState({
     name: '',
     role: 'b2c',

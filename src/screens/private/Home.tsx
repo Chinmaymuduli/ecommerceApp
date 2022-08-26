@@ -29,6 +29,8 @@ import {useIsFocused} from '@react-navigation/native';
 import {useAuth} from 'app';
 
 const Home = () => {
+  const {user} = useAuth();
+
   const isFocused = useIsFocused();
   const navigation = useNavigation<NavigationProps>();
   const [openAlert, setOpenAlert] = React.useState<boolean>(false);
@@ -39,10 +41,6 @@ const Home = () => {
     'categories/featured',
   );
   const CategoryList = data?.data?.data;
-
-  // useEffect(() => {
-  //   mutate();
-  // }, [isFocused]);
 
   return (
     <>

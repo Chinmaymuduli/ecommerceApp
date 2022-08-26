@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Box, Heading, HStack, Modal, Pressable, Radio, Text} from 'native-base';
 import {COLORS} from 'configs';
-import {useIsMounted, useSwrApi} from 'hooks';
+import {useActions, useIsMounted, useSwrApi} from 'hooks';
 import {post} from 'api';
 
 type Props = {
@@ -20,21 +20,20 @@ export default function AddressModal({
   addressModal,
   setAddressModal,
   setModalDialog,
-  // setAddressValue,
-  // addressValue,
+
   setShowErrorModal,
   setLabel,
   productId,
   quantity,
 }: Props) {
+  const {loading, setLoading} = useActions();
   const [addressValue, setAddressValue] = useState<string>();
   const {data} = useSwrApi('address/all/my-addresses');
   const modalAddressData = data?.data?.data;
   const isMounted = useIsMounted();
   const handelAddress = async () => {
-    // isMounted.current && setAddressModal(false);
-    // isMounted.current && setModalDialog(true);
-    setAddressModal(false);
+    isMounted.current && setAddressModal(false);
+    isMounted.current && setLoading(true);
     try {
       const res = await post({
         path: 'order/bulk',
@@ -45,11 +44,12 @@ export default function AddressModal({
         }),
       });
       console.log({res});
-      // setModalDialog(false);
       if (res.status === 200) return setModalDialog(true);
       return setShowErrorModal(true), setLabel(res.error);
     } catch (error) {
       console.log(error);
+    } finally {
+      isMounted.current && setLoading(false);
     }
   };
   return (

@@ -81,14 +81,14 @@ const ProductDetails = ({route, navigation}: Props) => {
   const handleCart = async (data: ProductType) => {
     try {
       setLoader(true);
-      const access_token = await AsyncStorage.getItem('access_token');
+      const ACCESS_TOKEN = await AsyncStorage.getItem('ACCESS_TOKEN');
       await put({
         path: 'cart/add',
         body: JSON.stringify({
           product: data._id,
           quantity: count,
         }),
-        token: access_token,
+        token: ACCESS_TOKEN,
       });
       setShowAlert(true);
       setAlertMessage('Added to Cart');

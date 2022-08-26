@@ -11,7 +11,7 @@ export const GetToken = async (
   const {setLoggedIn} = useAuth();
   console.log('user fetching');
 
-  const GET_REFRESH_TOKEN = await AsyncStorage.getItem('tokenId');
+  const GET_REFRESH_TOKEN = await AsyncStorage.getItem('REFRESH_TOKEN');
 
   const getResponse = await post({
     path: 'auth/get-access-token',
@@ -20,9 +20,9 @@ export const GetToken = async (
     }),
   });
   if (getResponse.status === 200) {
-    await AsyncStorage.setItem('access_token', getResponse?.ACCESS_TOKEN);
+    await AsyncStorage.setItem('ACCESS_TOKEN', getResponse?.ACCESS_TOKEN);
     if (getResponse.REFRESH_Token) {
-      await AsyncStorage.setItem('tokenId', getResponse?.REFRESH_Token);
+      await AsyncStorage.setItem('REFRESH_TOKEN', getResponse?.REFRESH_Token);
     }
     successFunction(params);
   }
@@ -34,8 +34,8 @@ export const GetToken = async (
         setLoggedIn(false);
       })
       .catch(error => console.log(error));
-    await AsyncStorage.removeItem('access_token');
-    await AsyncStorage.removeItem('tokenId');
+    await AsyncStorage.removeItem('ACCESS_TOKEN');
+    await AsyncStorage.removeItem('REFRESH_TOKEN');
   }
 };
 const authFetch: APIFunction = ({path, body, method, token}) =>

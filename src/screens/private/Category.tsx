@@ -11,6 +11,7 @@ import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {CategorySection} from 'components';
 import {useIsMounted, useSwrApi} from 'hooks';
 import {useAuth} from 'app';
+import {ProductType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route}: Props) => {
@@ -29,6 +30,7 @@ const Category = ({route}: Props) => {
   const [sorting, setSorting] = useState<string | undefined>('default');
   const [filterPrice, setFilterPrice] = useState<string>('');
   const [filterRatting, setFilterRatting] = useState<string>('');
+  const [filteredData, setFilterData] = useState<ProductType[]>([]);
   const [filterObject, setFilterObject] = useState<{
     category: string[] | undefined;
     rating: any[] | undefined;
@@ -64,7 +66,13 @@ const Category = ({route}: Props) => {
           filterObject,
         )}&sortBy=${sorting}`,
   );
-  const filteredData = data?.data?.data?.data;
+
+  useEffect(() => {
+    isMounted.current && setFilterData(data?.data?.data?.data);
+  }, [data]);
+
+  // console.log(filteredData?.length);
+
   return (
     <>
       {/* {!isValidating ? ( */}

@@ -9,6 +9,7 @@ import {useAuth, useStore} from 'app';
 import {useIsMounted, useSwrApi} from 'hooks';
 import {put, remove} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {PRODUCT_PLACEHOLDER} from 'assets';
 
 type Props = {
   item: CartItemType;
@@ -24,7 +25,6 @@ const WishListCard = ({
   mutateWishlist,
 }: Props) => {
   const isMounted = useIsMounted();
-  // console.log({item});
   const {data, mutate} = useSwrApi('cart/all');
   const wishListCart = data?.data.data?.products;
   const CategoryData = wishListCart?.find((item: {_id: string}) => item);
@@ -94,11 +94,13 @@ const WishListCard = ({
         borderRadius={5}>
         <Pressable>
           <Image
-            source={{
-              uri: item?.product?.images?.length
-                ? item?.product?.images[0]
-                : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1-r88R2pOX-lj1C6Zn3QO3I_Osu-G3viCm1fUWNVhiDn_mkszDqEn8qXAe3bR1sJo9Pg&usqp=CAU',
-            }}
+            source={
+              item?.product?.displayImage?.url
+                ? {
+                    uri: item?.product?.displayImage?.url,
+                  }
+                : PRODUCT_PLACEHOLDER
+            }
             style={styles.image}
             alt={'wishlistImg'}
             resizeMode={'contain'}

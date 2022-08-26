@@ -1,18 +1,25 @@
-import {Alert, StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import {Alert, RefreshControl, StyleSheet} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import {
   Box,
   Heading,
   HStack,
+  Icon,
   Image,
   Pressable,
+  Radio,
   ScrollView,
   Text,
   VStack,
 } from 'native-base';
 import {COLORS} from 'configs';
-import {AYUSH_1} from 'assets';
-import {FetchLoader, SuccessVerificationModal, Track} from 'components/core';
+import {AYUSH_1, PRODUCT_PLACEHOLDER} from 'assets';
+import {
+  FetchLoader,
+  ModalComponent,
+  SuccessVerificationModal,
+  Track,
+} from 'components/core';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
@@ -24,63 +31,91 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import RazorpayCheckout from 'react-native-razorpay';
 import {BASE_URL, post, put, remove} from 'api';
 import {useAuth} from 'app';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderDetails'>;
 const OrderDetails = ({route: {params}}: Props) => {
   const orderID = params?.orderId;
-  const {data, isValidating} = useSwrApi(`order/${orderID}`);
-  const OrderDetailsData = data?.data?.data;
+  const {data, isValidating, mutate} = useSwrApi(`order/${orderID}`);
+  // const OrderDetailsData = data?.data?.data;
   const {user} = useAuth();
-
+  const [showModalComponent, setShowModalComponent] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string>();
+  const [paymentMethod, setPaymentMethod] = useState<string>('COD');
+  const [OrderDetailsData, setOrderDetailsData] = useState<any>();
   const isMounted = useIsMounted();
 
-  const handelB2bPayment = async () => {
+  useEffect(() => {
+    isMounted.current && setOrderDetailsData(data?.data?.data);
+  }, [data]);
+
+  const handelPayment = async () => {
     try {
-      const b2bRes = await post({
-        path: `order/bulk/payment/${OrderDetailsData?._id}`,
-      });
-      console.log({b2bRes});
-      if (b2bRes.status === 200) {
-        const options = {
-          description: 'Chhattisgarh Herbals',
-          currency: 'INR',
-          key: 'rzp_test_LVpIWeJeXjNeF2', // Your api key
-          amount: b2bRes?.data?.amount,
-          name: user?.displayName,
-          order_id: b2bRes?.data?.id,
-          prefill: {
-            email: user?.email || 'chinmaymuduli1996@gmail.com',
-            contact: user?.phoneNumber,
+      isMounted.current && setShowModalComponent(false);
+      if (paymentMethod === 'Online') {
+        const b2bRes = await post({
+          path: `order/bulk/payment/${OrderDetailsData?._id}`,
+        });
+        console.log({b2bRes});
+        if (b2bRes.status === 200) {
+          const options = {
+            description: 'Chhattisgarh Herbals',
+            currency: 'INR',
+            key: 'rzp_test_LVpIWeJeXjNeF2', // Your api key
+            amount: b2bRes?.data?.amount,
             name: user?.displayName,
-          },
-        };
-        RazorpayCheckout.open(options)
-          .then(async (data: any) => {
-            console.log({data});
-            const res = await post({
-              path: `checkout/payment-verify`,
-              body: JSON.stringify({
-                razorpay_payment_id: data?.razorpay_payment_id,
-                razorpay_order_id: data?.razorpay_order_id,
-                razorpay_signature: data?.razorpay_signature,
-                payment_order_id: b2bRes?.data?.id,
-              }),
+            order_id: b2bRes?.data?.id,
+            prefill: {
+              email: user?.email || 'chinmaymuduli1996@gmail.com',
+              contact: user?.phoneNumber,
+              name: user?.displayName,
+            },
+          };
+          RazorpayCheckout.open(options)
+            .then(async (data: any) => {
+              console.log({data});
+              const res = await post({
+                path: `order/bulk/payment/${OrderDetailsData?._id}/verify`,
+                body: JSON.stringify({
+                  razorpay_payment_id: data?.razorpay_payment_id,
+                  razorpay_order_id: data?.razorpay_order_id,
+                  razorpay_signature: data?.razorpay_signature,
+                  payment_order_id: b2bRes?.data?.id,
+                  paymentMethod: 'ONLINE',
+                }),
+              });
+              console.log({res});
+              if (res.status === 200) {
+                Alert.alert('Success', 'Successfully payment');
+                mutate();
+              } else {
+                Alert.alert('Error', res.error);
+                mutate();
+              }
+            })
+            .catch((error: any) => {
+              console.log(error);
+              Alert.alert('Error', 'Transaction Failed');
             });
-            console.log({res});
-            if (res.status === 200) {
-              Alert.alert('Success', 'Successfully payment');
-            } else {
-              Alert.alert('Error', b2bRes.error);
-            }
-          })
-          .catch((error: any) => {
-            console.log(error);
-            Alert.alert('Error', 'Transaction Failed');
-          });
+        }
+      } else {
+        const codRes = await post({
+          path: `order/bulk/payment/${OrderDetailsData?._id}/verify`,
+          body: JSON.stringify({
+            paymentMethod: 'COD',
+          }),
+        });
+        if (codRes.status === 200) {
+          Alert.alert('Success', 'Order Placed Successfully');
+          mutate();
+        } else {
+          Alert.alert('Error', codRes.error);
+        }
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const removeInvoice = async () => {
@@ -90,7 +125,7 @@ const OrderDetails = ({route: {params}}: Props) => {
   };
   const handelInvoice = async () => {
     try {
-      const getAccessToken = await AsyncStorage.getItem('access_token');
+      const getAccessToken = await AsyncStorage.getItem('ACCESS_TOKEN');
       const {config, fs} = RNFetchBlob;
       let DOCUMENT_DIR = fs.dirs.DownloadDir;
       let Download_Url = `${BASE_URL}/invoice/${orderID}`;
@@ -161,7 +196,14 @@ const OrderDetails = ({route: {params}}: Props) => {
         <FetchLoader />
       ) : (
         <Box flex={1} bg={COLORS.textWhite}>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={isValidating}
+                onRefresh={() => mutate()}
+              />
+            }>
             <Box>
               <Box
                 borderBottomWidth={1}
@@ -185,13 +227,18 @@ const OrderDetails = ({route: {params}}: Props) => {
                     </Text>
                     <Text bold fontSize={16}>
                       &#8377;{' '}
-                      {OrderDetailsData?.product.salePrice *
-                        OrderDetailsData?.quantity}
+                      {/* {OrderDetailsData?.product.salePrice *
+                        OrderDetailsData?.quantity} */}
+                      {OrderDetailsData?.totalPrice}
                     </Text>
                   </VStack>
                   <Box w={'30%'}>
                     <Image
-                      source={AYUSH_1}
+                      source={
+                        OrderDetailsData?.product?.displayImage?.url
+                          ? {uri: OrderDetailsData?.product?.displayImage?.url}
+                          : PRODUCT_PLACEHOLDER
+                      }
                       style={styles.image}
                       alt={'detailsImg'}
                       resizeMode="contain"
@@ -225,7 +272,10 @@ const OrderDetails = ({route: {params}}: Props) => {
               {OrderDetailsData?.status === 'PENDING' &&
                 OrderDetailsData?.totalPrice > 0 && (
                   <Pressable
-                    onPress={() => handelB2bPayment()}
+                    // onPress={() => handelB2bPayment()}
+                    onPress={() => {
+                      isMounted.current && setShowModalComponent(true);
+                    }}
                     px={5}
                     borderBottomWidth={3}
                     borderColor={COLORS.lightGrey}>
@@ -344,11 +394,7 @@ const OrderDetails = ({route: {params}}: Props) => {
                 <Box px={5} borderColor={COLORS.lightGrey}>
                   <HStack justifyContent={'space-between'} py={2}>
                     <Text bold>Total Amount</Text>
-                    <Text bold>
-                      &#8377;{' '}
-                      {OrderDetailsData?.product?.salePrice *
-                        OrderDetailsData?.quantity}
-                    </Text>
+                    <Text bold>&#8377; {OrderDetailsData?.totalPrice}</Text>
                   </HStack>
                 </Box>
               </Box>
@@ -374,6 +420,60 @@ const OrderDetails = ({route: {params}}: Props) => {
           </ScrollView>
         </Box>
       )}
+
+      {/* Modal Component */}
+      <ModalComponent
+        title="Select Payment"
+        showModalComponent={showModalComponent}
+        setShowModalComponent={setShowModalComponent}>
+        <>
+          <Radio.Group
+            name="payment"
+            size="sm"
+            value={paymentMethod}
+            onChange={pm => {
+              isMounted.current && setPaymentMethod(pm);
+            }}>
+            <VStack space={3}>
+              <Radio
+                alignItems="flex-start"
+                icon={<Icon as={<FontAwesome5 name="hand-holding-usd" />} />}
+                _text={{
+                  mt: '-1',
+                  ml: '2',
+                  fontSize: 'md',
+                }}
+                value="COD">
+                Cash on delivery
+              </Radio>
+              <Radio
+                colorScheme="warning"
+                mt={2}
+                alignItems="flex-start"
+                icon={<Icon as={<FontAwesome name="bank" />} />}
+                _text={{
+                  mt: '2',
+                  ml: '2',
+                  fontSize: 'md',
+                }}
+                value="Online">
+                Online
+              </Radio>
+            </VStack>
+          </Radio.Group>
+          <Pressable onPress={() => handelPayment()}>
+            <Box
+              bg={COLORS.primary}
+              alignItems={'center'}
+              borderRadius={5}
+              mt={5}>
+              <Heading size={'sm'} color={COLORS.textWhite} py={1}>
+                Continue
+              </Heading>
+            </Box>
+          </Pressable>
+        </>
+      </ModalComponent>
 
       {/* Modal */}
       <SuccessVerificationModal

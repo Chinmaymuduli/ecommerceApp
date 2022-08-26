@@ -14,8 +14,10 @@ interface Props {
   cropperCircleOverlay?: boolean;
   postImages?: any;
   path?: string;
+  mutate: () => void;
 }
 const ImagePicker = ({
+  mutate,
   visible,
   onDismiss,
   setImageURI,
@@ -24,7 +26,7 @@ const ImagePicker = ({
 }: Props) => {
   const postImg = async (img: string) => {
     try {
-      const token = await AsyncStorage.getItem('access_token');
+      const token = await AsyncStorage.getItem('ACCESS_TOKEN');
       const imageData = new FormData();
       imageData.append(path ?? 'GSTDoc', {
         uri: img,
@@ -40,6 +42,9 @@ const ImagePicker = ({
           Authorization: `Bearer ${token}`,
         },
       });
+      if (res.status === 200) {
+        mutate();
+      }
     } catch (error) {
       console.log('err', error);
     }

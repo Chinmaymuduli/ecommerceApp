@@ -6,32 +6,28 @@ import {APIFunction} from 'types';
 export const BASE_URL = `https://chhattisgarh-herbals-api.herokuapp.com/api`;
 
 const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
-  const GET_REFRESH_TOKEN = await AsyncStorage.getItem('tokenId');
-  // const {setLoggedIn} = useAuth();
+  console.log('get token running');
+  const GET_REFRESH_TOKEN = await AsyncStorage.getItem('REFRESH_TOKEN');
+
+  console.log('GET_REFRESH_TOKEN', GET_REFRESH_TOKEN);
   const getResponse = await post({
     path: 'auth/get-access-token',
     body: JSON.stringify({
       refresh_token: GET_REFRESH_TOKEN,
     }),
   });
-
-  // console.log('first50', getResponse);
-  console.log('401 fetch', getResponse);
+  console.log({getResponse});
   if (getResponse.status === 401) {
-    // await AsyncStorage.setItem('isLoggedIn', 'false')
-    //   .then(() => {
-    //     console.log('Logout Success');
-    //     setLoggedIn(false);
-    //   })
-    //   .catch(error => console.log(error));
+    await AsyncStorage.setItem('isLoggedIn', 'false');
     console.log('401 delete');
-    await AsyncStorage.removeItem('access_token');
-    await AsyncStorage.removeItem('tokenId');
+    await AsyncStorage.removeItem('ACCESS_TOKEN');
+    await AsyncStorage.removeItem('REFRESH_TOKEN');
   }
-  if (getResponse.status !== 200) return;
-  await AsyncStorage.setItem('access_token', getResponse.ACCESS_TOKEN);
-  if (!getResponse?.REFRESH_Token) return;
-  await AsyncStorage.setItem('tokenId', getResponse?.REFRESH_Token);
+
+  await AsyncStorage.setItem('ACCESS_TOKEN', getResponse.ACCESS_TOKEN);
+  if (getResponse?.REFRESH_Token) {
+    await AsyncStorage.setItem('REFRESH_TOKEN', getResponse?.REFRESH_Token);
+  }
   await successFunction(params);
 };
 
@@ -41,7 +37,7 @@ export const post: APIFunction = async ({
   method = 'POST',
   options = {},
 }) => {
-  const accessToken = await AsyncStorage.getItem('access_token');
+  const accessToken = await AsyncStorage.getItem('ACCESS_TOKEN');
   try {
     const API_OPTIONS = {
       method,
@@ -57,11 +53,9 @@ export const post: APIFunction = async ({
       console.log('post 401 running');
       return GetToken(post, {
         path,
-        body: JSON.stringify({}),
+        body,
         method: 'POST',
-        options: {},
-        headers: {'Content-Type': 'application/json'},
-        token: '',
+        options,
       });
     }
     const json = await response.json();
@@ -82,7 +76,7 @@ export const put: APIFunction = async ({
   method = 'PUT',
   options = {},
 }) => {
-  const accessToken = await AsyncStorage.getItem('access_token');
+  const accessToken = await AsyncStorage.getItem('ACCESS_TOKEN');
   try {
     const API_OPTIONS = {
       method,
@@ -98,8 +92,9 @@ export const put: APIFunction = async ({
       console.log('i m put 401');
       return GetToken(put, {
         path,
-        body: JSON.stringify({}),
+        body,
         method: 'PUT',
+        options,
       });
     }
     const json = await response.json();
@@ -120,7 +115,7 @@ export const remove: APIFunction = async ({
   method = 'DELETE',
   options = {},
 }) => {
-  const accessToken = await AsyncStorage.getItem('access_token');
+  const accessToken = await AsyncStorage.getItem('ACCESS_TOKEN');
   try {
     const API_OPTIONS = {
       method,
@@ -136,10 +131,9 @@ export const remove: APIFunction = async ({
       console.log(' i m remove 401');
       return GetToken(remove, {
         path,
-        body: JSON.stringify({}),
+        body,
         method: 'DELETE',
-        options: {},
-        headers: {'Content-Type': 'application/json'},
+        options,
       });
     }
     const json = await response.json();

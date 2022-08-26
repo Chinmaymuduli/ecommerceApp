@@ -25,14 +25,6 @@ import {ProductType} from 'types';
 import {FetchLoader, SkeletonComponent} from './core';
 
 type CategoryProductType = {
-  // data: {
-  //   id?: number;
-  //   name?: string;
-  //   discount?: number;
-  //   img?: any;
-  //   currentPrice?: number;
-  //   offer?: string;
-  // }[];
   data: ProductType[];
   setOpenAlert?: boolean | any;
   setAlertMessage?: string | any;
