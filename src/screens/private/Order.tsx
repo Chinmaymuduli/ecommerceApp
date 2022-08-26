@@ -25,7 +25,6 @@ type Props = NativeStackScreenProps<PrivateRoutesType, 'Order'>;
 const Order = ({navigation}: Props) => {
   const [selectionMode, setSelectionMode] = React.useState<any>(1);
   const isMounted = useIsMounted();
-  const isFocused = useIsFocused();
   const [myOrders, setMyOrders] = useState<any[]>([]);
   const [deliveredOrder, setDeliveryOrder] = useState<any[]>([]);
 
@@ -37,19 +36,16 @@ const Order = ({navigation}: Props) => {
     isValidating: deliveredDataValidating,
     mutate: deliveryMutate,
   } = useSwrApi('order/orders/my?status=DELIVERED');
-  // const deliveredData = useSwrApi('order/orders/my?status=DELIVERED');
-  // const deliveredOrder = deliveredData?.data?.data?.data?.data;
-  // console.log({deliveredData});
 
   useEffect(() => {
     isMounted.current && setMyOrders(data?.data?.data?.data);
     isMounted.current && setDeliveryOrder(deliveredData?.data?.data?.data);
-    mutate();
-  }, [isFocused]);
+    // mutate();
+  }, [data, deliveredData]);
 
   return (
     <>
-      {isValidating ? (
+      {isValidating || deliveredDataValidating ? (
         <FetchLoader />
       ) : (
         <Box flex={1} bg={COLORS.textWhite}>
@@ -137,7 +133,12 @@ const Order = ({navigation}: Props) => {
                         borderWidth={1}
                         borderRadius={5}
                         borderColor={COLORS.lightGrey}>
-                        <Pressable>
+                        <Pressable
+                          onPress={() =>
+                            navigation.navigate('OrderDetails', {
+                              orderId: item?._id,
+                            })
+                          }>
                           <HStack alignItems={'center'} space={3} py={3} px={3}>
                             <Image
                               source={

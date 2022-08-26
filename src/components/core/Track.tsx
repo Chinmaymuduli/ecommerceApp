@@ -13,7 +13,7 @@ const Track = ({track}: any) => {
     if (track?.status === 'INITIATED') {
       return setPosition(0);
     }
-    if (track?.status === 'SHIPPED') {
+    if (track?.status === 'SHIPPED' || track?.status === 'CANCELLED') {
       return setPosition(1);
     }
     if (track?.status === 'DELIVERED') {
@@ -21,24 +21,50 @@ const Track = ({track}: any) => {
     }
   }, []);
 
-  const labels: any = [
-    <Box>
-      <Text>Ordered</Text>
-      {/* <Text fontSize={12}>Tue,7th Jun 2020</Text> */}
-    </Box>,
-    <Box>
-      <Text>Shipped</Text>
-      {/* <Text fontSize={12}>Wed,8th Jun 2020</Text> */}
-    </Box>,
-    <Box>
-      <Text>Delivered</Text>
-      {/* <Text fontSize={12}>Fri,10th Jun 2020</Text> */}
-    </Box>,
-  ];
+  // const labels: any = [
+  //   <Box>
+  //     <Text>Ordered</Text>
+  //   </Box>,
+  //   <Box>
+  //     <Text>Shipped</Text>
+  //   </Box>,
+  //   <Box>
+  //     <Text>Delivered</Text>
+  //   </Box>,
+  // ]
+
+  let labels: any;
+
+  {
+    track?.status === 'CANCELLED'
+      ? (labels = [
+          <Box>
+            <Text bold>Ordered</Text>
+          </Box>,
+          <Box>
+            <Text color={COLORS.danger} bold>
+              Cancelled
+            </Text>
+          </Box>,
+        ])
+      : (labels = [
+          <Box>
+            <Text>Ordered</Text>
+          </Box>,
+          <Box>
+            <Text>Shipped</Text>
+          </Box>,
+          <Box>
+            <Text>Delivered</Text>
+          </Box>,
+        ]);
+  }
+
+  console.log(labels?.length);
   return (
     <View style={{height: 200, paddingLeft: 15}}>
       <StepIndicator
-        stepCount={3}
+        stepCount={labels?.length}
         customStyles={{
           stepIndicatorSize: 10,
           separatorStrokeWidth: 3,

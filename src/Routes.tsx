@@ -13,7 +13,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import useIsMounted from './hooks/useIsMounted';
 import useConfig from './hooks/useConfig';
 import useAppContext from './contexts/useAppContext';
-import useSwrApi from './hooks/useSwrApi';
 
 const Drawer = createDrawerNavigator();
 const Routes = () => {

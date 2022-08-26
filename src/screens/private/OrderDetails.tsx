@@ -185,11 +185,15 @@ const OrderDetails = ({route: {params}}: Props) => {
       const cancelRes = await put({
         path: `order/${OrderDetailsData?._id}/cancel`,
       });
-      console.log({cancelRes});
+
+      if (cancelRes?.status === 200) return mutate();
     } catch (error) {
       console.log(error);
+    } finally {
+      mutate();
     }
   };
+  // console.log({OrderDetailsData});
   return (
     <>
       {isValidating ? (

@@ -18,29 +18,33 @@ import {useStore} from 'app';
 import {useAddress, useIsMounted, useSwrApi} from 'hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FetchLoader} from 'components/core';
+import {useIsFocused} from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route: {params}}: Props) => {
   const isMounted = useIsMounted();
-
+  const isFocused = useIsFocused();
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>();
-  const productData = useSwrApi(
+  const {
+    data: productData,
+    isValidating: productValidating,
+    mutate,
+  } = useSwrApi(
     params?.type === 'product'
       ? `orders/summary?type=${params.type}&quantity=${params.quantity}&productId=${params.productId}`
       : `orders/summary?type=cart`,
   );
-  const OrderSummaryData = productData?.data?.data?.data;
+
+  const OrderSummaryData = productData?.data?.data;
 
   useEffect(() => {
     (async () => {
       const addressID = await AsyncStorage.getItem('address_id');
       isMounted.current && setSelectedAddressId(addressID);
     })();
-  }, []);
+  }, [selectedAddressId, isMounted, isFocused]);
 
-  const {data, isValidating, mutate} = useSwrApi(
-    `address/${selectedAddressId}`,
-  );
+  const {data, isValidating} = useSwrApi(`address/${selectedAddressId}`);
 
   const SelectedAddress = data?.data?.data;
 
@@ -48,10 +52,9 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
     (item: {quantity: number}) => item?.quantity,
   );
 
-  console.log({OrderSummaryData});
   return (
     <>
-      {isValidating ? (
+      {productValidating ? (
         <FetchLoader />
       ) : (
         <Box flex={1} bg={COLORS.textWhite}>
@@ -81,22 +84,27 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
                   </Box>
                 </Pressable>
               </HStack>
-              <VStack mt={2} space={1} pb={4}>
-                <HStack space={4}>
-                  <Text bold>{SelectedAddress?.name}</Text>
-                  <Box bg={'green.100'} borderRadius={5}>
-                    <Text px={2}>{SelectedAddress?.type}</Text>
-                  </Box>
-                </HStack>
-                <Text fontSize={13}>
-                  {SelectedAddress?.landmark} {SelectedAddress?.street} ,{' '}
-                  {SelectedAddress?.city} , {SelectedAddress?.state} -{' '}
-                  {SelectedAddress?.zip}
-                </Text>
-                <Text>
-                  +{SelectedAddress?.countryCode} {SelectedAddress?.phoneNumber}
-                </Text>
-              </VStack>
+              {SelectedAddress ? (
+                <VStack mt={2} space={1} pb={4}>
+                  <HStack space={4}>
+                    <Text bold>{SelectedAddress?.name}</Text>
+                    <Box bg={'green.100'} borderRadius={5}>
+                      <Text px={2}>{SelectedAddress?.type}</Text>
+                    </Box>
+                  </HStack>
+                  <Text fontSize={13}>
+                    {SelectedAddress?.landmark} {SelectedAddress?.street} ,{' '}
+                    {SelectedAddress?.city} , {SelectedAddress?.state} -{' '}
+                    {SelectedAddress?.zip}
+                  </Text>
+                  <Text>
+                    +{SelectedAddress?.countryCode}{' '}
+                    {SelectedAddress?.phoneNumber}
+                  </Text>
+                </VStack>
+              ) : (
+                <Heading size={'sm'}>Please Choose address</Heading>
+              )}
             </Box>
             {/* card */}
             {/* {cartData.map((od: CartItemType) => (
