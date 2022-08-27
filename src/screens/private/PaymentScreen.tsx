@@ -128,6 +128,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
           RazorpayCheckout.open(options)
             .then(async (data: any) => {
               console.log({data});
+              isMounted.current && setLoading(true);
               const res = await post({
                 path: `checkout/payment-verify`,
                 body: JSON.stringify({
@@ -140,6 +141,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
               console.log({res});
               if (res.status === 200) {
                 navigation.navigate('ConfirmOrder');
+                isMounted.current && setLoading(false);
               } else {
                 Alert.alert('Error', res.error);
               }
