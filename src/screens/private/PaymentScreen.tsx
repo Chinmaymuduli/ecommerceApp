@@ -25,13 +25,11 @@ import {ErrorModal, FetchLoader, ImagePicker} from 'components/core';
 import RazorpayCheckout from 'react-native-razorpay';
 import {useAuth} from 'app';
 import {post} from 'api';
-import {useSwrApi} from 'hooks';
+import {useActions, useIsMounted, useSwrApi} from 'hooks';
 import {CAMERA} from 'assets';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'PaymentScreen'>;
 const PaymentScreen = ({navigation, route: {params}}: Props) => {
-  console.log({params});
-
   const {data, isValidating, mutate} = useSwrApi(
     `orders/summary?type=${params?.type}&productId=${
       params?.productId
@@ -43,6 +41,8 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
   const checkoutData = data?.data?.data;
 
   const {user, userType} = useAuth();
+  const {setLoading} = useActions();
+  const isMounted = useIsMounted();
   const [payment, setPayment] = useState<any>('payOnline');
   const [gstValue, setGstValue] = useState<any>('noGst');
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -79,88 +79,95 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
   };
 
   const handlePayment = async () => {
-    if (payment === 'payOnline') {
-      let response: {
-        [x: string]: any;
-        amount?: number;
-        data: any;
-        status?: number;
-        error?: string;
-      };
+    try {
+      isMounted.current && setLoading(true);
+      if (payment === 'payOnline') {
+        let response: {
+          [x: string]: any;
+          amount?: number;
+          data: any;
+          status?: number;
+          error?: string;
+        };
 
-      if (params?.type === 'product') {
-        response = await post({
-          path: 'checkout/payment/product',
+        if (params?.type === 'product') {
+          response = await post({
+            path: 'checkout/payment/product',
+            body: JSON.stringify({
+              productId: params?.productId,
+              quantity: params?.quantity,
+              addressId: params?.addressId,
+              couponId: checkoutData?.couponInfo?.couponId,
+            }),
+          });
+        } else {
+          response = await post({
+            path: 'checkout/payment/cart',
+            body: JSON.stringify({
+              shippedTo: params?.addressId,
+              couponId: checkoutData?.couponInfo?.couponId,
+            }),
+          });
+        }
+        console.log({response});
+
+        if (response.status === 200) {
+          const options = {
+            description: 'Chhattisgarh Herbals',
+            currency: 'INR',
+            key: 'rzp_test_LVpIWeJeXjNeF2', // Your api key
+            amount: response?.data?.amount,
+            name: user?.displayName,
+            order_id: response?.data?.paymentOrderId,
+            prefill: {
+              email: user?.email || 'chinmaymuduli1996@gmail.com',
+              contact: user?.phoneNumber,
+              name: user?.displayName,
+            },
+          };
+          RazorpayCheckout.open(options)
+            .then(async (data: any) => {
+              console.log({data});
+              const res = await post({
+                path: `checkout/payment-verify`,
+                body: JSON.stringify({
+                  razorpay_payment_id: data?.razorpay_payment_id,
+                  razorpay_order_id: data?.razorpay_order_id,
+                  razorpay_signature: data?.razorpay_signature,
+                  payment_order_id: response?.data?.paymentOrderId,
+                }),
+              });
+              console.log({res});
+              if (res.status === 200) {
+                navigation.navigate('ConfirmOrder');
+              } else {
+                Alert.alert('Error', res.error);
+              }
+            })
+            .catch((error: any) => {
+              console.log(error);
+              Alert.alert('Error', 'Transaction Failed');
+            });
+        } else {
+          setShowErrorModal(true);
+          setLabel(response.error);
+        }
+      } else {
+        const res = await post({
+          path: 'order/cash-on-delivery',
           body: JSON.stringify({
+            type: params.type,
+            shippedTo: params?.addressId,
             productId: params?.productId,
             quantity: params?.quantity,
-            addressId: params?.addressId,
-            couponId: checkoutData?.couponInfo?.couponId,
           }),
         });
-      } else {
-        response = await post({
-          path: 'checkout/payment/cart',
-          body: JSON.stringify({
-            shippedTo: params?.addressId,
-            couponId: checkoutData?.couponInfo?.couponId,
-          }),
-        });
+        if (res.status !== 200) return Alert.alert('Error', res.error);
       }
-      console.log({response});
-
-      if (response.status === 200) {
-        const options = {
-          description: 'Chhattisgarh Herbals',
-          currency: 'INR',
-          key: 'rzp_test_LVpIWeJeXjNeF2', // Your api key
-          amount: response?.data?.amount,
-          name: user?.displayName,
-          order_id: response?.data?.paymentOrderId,
-          prefill: {
-            email: user?.email || 'chinmaymuduli1996@gmail.com',
-            contact: user?.phoneNumber,
-            name: user?.displayName,
-          },
-        };
-        RazorpayCheckout.open(options)
-          .then(async (data: any) => {
-            console.log({data});
-            const res = await post({
-              path: `checkout/payment-verify`,
-              body: JSON.stringify({
-                razorpay_payment_id: data?.razorpay_payment_id,
-                razorpay_order_id: data?.razorpay_order_id,
-                razorpay_signature: data?.razorpay_signature,
-                payment_order_id: response?.data?.paymentOrderId,
-              }),
-            });
-            console.log({res});
-            if (res.status === 200) {
-              navigation.navigate('ConfirmOrder');
-            } else {
-              Alert.alert('Error', response.error);
-            }
-          })
-          .catch((error: any) => {
-            console.log(error);
-            Alert.alert('Error', 'Transaction Failed');
-          });
-      } else {
-        setShowErrorModal(true);
-        setLabel(response.error);
-      }
-    } else {
-      const res = await post({
-        path: 'order/cash-on-delivery',
-        body: JSON.stringify({
-          type: params.type,
-          shippedTo: params?.addressId,
-          productId: params?.productId,
-          quantity: params?.quantity,
-        }),
-      });
-      if (res.status !== 200) return Alert.alert('Error', res.error);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      isMounted.current && setLoading(false);
     }
   };
 

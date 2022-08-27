@@ -69,7 +69,7 @@ const Login = () => {
         await AsyncStorage.setItem('asGuest', 'false');
         await AsyncStorage.setItem('isUserEnter', JSON.stringify(true));
 
-        await AsyncStorage.setItem('isLoggedIn', 'true')
+        AsyncStorage.setItem('isLoggedIn', 'true')
           .then(() => {
             console.log('Login Success');
             setIsLoggedIn(true);

@@ -16,6 +16,7 @@ export default function useAppLoad() {
 
   useEffect(() => {
     (async () => {
+      console.log('useappload running');
       try {
         console.log('Running App');
         setIsLoading(true);
