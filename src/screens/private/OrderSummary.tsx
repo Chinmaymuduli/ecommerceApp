@@ -51,6 +51,7 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
   const quantityData = OrderSummaryData?.products?.find(
     (item: {quantity: number}) => item?.quantity,
   );
+  // console.log({OrderSummaryData});
 
   return (
     <>

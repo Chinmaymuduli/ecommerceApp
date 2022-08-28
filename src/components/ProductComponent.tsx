@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {Box, HStack, Image, Pressable, Text} from 'native-base';
@@ -7,32 +7,56 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {ProductType} from 'types';
 import {useStore} from 'app';
 import {PRODUCT_PLACEHOLDER} from 'assets';
+import {put, remove} from 'api';
+import {useIsMounted} from 'hooks';
+import {useAppContext} from 'contexts';
 type productType = {
   item: any;
 };
 
 const ProductComponent = ({item}: productType) => {
   const {wishlistItems, removeFromWishlist, addToWishlist} = useStore();
+  const isMounted = useIsMounted();
+  const {guestUser} = useAppContext();
+  const [loading, setLoading] = useState(false);
 
-  const handleWishlist = (wishlistItem: ProductType) => {
-    const removeWishList = wishlistItems.some(data => {
-      return data.id === wishlistItem.id;
-    });
+  const handleWishlist = async (wishlistItem: ProductType) => {
+    try {
+      if (item?.isInWishList) {
+        isMounted.current && setLoading(true);
+        const responseWish = await remove({
+          path: `wishlist/${wishlistItem?._id}`,
+        });
+        // ProductMutate();
+        // isMounted.current && setOpenAlert(true);
+        // isMounted.current && setAlertMessage('Remove from wishlist');
+        // setTimeout(() => {
+        //   setOpenAlert(false);
+        // }, 2000);
+      } else {
+        isMounted.current && setLoading(true);
+        const res = await put({
+          path: 'wishlist',
+          body: JSON.stringify({
+            productId: wishlistItem?._id,
+          }),
+        });
 
-    if (removeWishList) {
-      removeFromWishlist(wishlistItem?.id);
-      // setShowAlert(true);
-      // setAlertMessage('Remove from wishlist');
-      // setTimeout(() => {
-      //   setShowAlert(false);
-      // }, 2000);
-    } else {
-      addToWishlist(wishlistItem);
-      // setShowAlert(true);
-      // setAlertMessage('Added to wishlist');
-      // setTimeout(() => {
-      //   setShowAlert(false);
-      // }, 2000);
+        // ProductMutate();
+        // if (!isValidating) {
+        //   isMounted.current && setOpenAlert(true);
+        //   isMounted.current && setAlertMessage('Added to wishlist');
+        //   isMounted.current && setCelebrate(true);
+        //   setTimeout(() => {
+        //     isMounted.current && setOpenAlert(false);
+        //     isMounted.current && setCelebrate(false);
+        //   }, 1000);
+        // }
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      isMounted.current && setLoading(false);
     }
   };
   return (
@@ -69,50 +93,67 @@ const ProductComponent = ({item}: productType) => {
             off
           </Text>
         </Box>
-        <Box position={'absolute'} right={4} borderRadius={10}>
-          <Ionicons
-            onPress={() => handleWishlist(item)}
-            name={
-              wishlistItems.some(data => {
-                return data?.id === item.id;
-              })
-                ? 'heart'
-                : 'heart-outline'
-            }
-            size={22}
-            color={COLORS.primary}
-            style={{
-              paddingHorizontal: 2,
-              paddingVertical: 2,
-            }}
-          />
-        </Box>
+        {guestUser === 'true' ? null : (
+          <Box position={'absolute'} right={4} borderRadius={10}>
+            <Ionicons
+              onPress={() => handleWishlist(item)}
+              name={
+                wishlistItems.some(data => {
+                  return data?.id === item.id;
+                })
+                  ? 'heart'
+                  : 'heart-outline'
+              }
+              size={22}
+              color={COLORS.primary}
+              style={{
+                paddingHorizontal: 2,
+                paddingVertical: 2,
+              }}
+            />
+          </Box>
+        )}
 
-        <Box
-          alignSelf={'flex-end'}
-          right={3}
-          bg={COLORS.textWhite}
-          mt={-5}
-          shadow={1}
-          borderRadius={5}
-          borderColor={COLORS.lightGrey}>
-          {item?.isInCart ? (
-            <HStack
-              bg={'#FFFF0060'}
-              w={'120'}
-              justifyContent="space-between"
-              alignItems={'center'}>
-              <Box>
-                <Entypo
-                  name="minus"
-                  size={20}
-                  color={COLORS.fadeBlack}
-                  // onPress={() => decrement()}
-                />
-              </Box>
-              <Box>
-                <Text>{item?.cartQuantity}</Text>
-              </Box>
+        {guestUser === 'true' ? null : (
+          <Box
+            alignSelf={'flex-end'}
+            right={3}
+            bg={COLORS.textWhite}
+            mt={-5}
+            shadow={1}
+            borderRadius={5}
+            borderColor={COLORS.lightGrey}>
+            {item?.isInCart ? (
+              <HStack
+                bg={'#FFFF0060'}
+                w={'120'}
+                justifyContent="space-between"
+                alignItems={'center'}>
+                <Box>
+                  <Entypo
+                    name="minus"
+                    size={20}
+                    color={COLORS.fadeBlack}
+                    // onPress={() => decrement()}
+                  />
+                </Box>
+                <Box>
+                  <Text>{item?.cartQuantity}</Text>
+                </Box>
+                <Box>
+                  <Entypo
+                    name="plus"
+                    size={18}
+                    color={COLORS.fadeBlack}
+                    style={{
+                      paddingHorizontal: 3,
+                      paddingVertical: 3,
+                    }}
+                    // onPress={increment}
+                  />
+                </Box>
+              </HStack>
+            ) : (
               <Box>
                 <Entypo
                   name="plus"
@@ -122,25 +163,12 @@ const ProductComponent = ({item}: productType) => {
                     paddingHorizontal: 3,
                     paddingVertical: 3,
                   }}
-                  // onPress={increment}
+                  // onPress={() => AddSpecialCart(item)}
                 />
               </Box>
-            </HStack>
-          ) : (
-            <Box>
-              <Entypo
-                name="plus"
-                size={18}
-                color={COLORS.fadeBlack}
-                style={{
-                  paddingHorizontal: 3,
-                  paddingVertical: 3,
-                }}
-                // onPress={() => AddSpecialCart(item)}
-              />
-            </Box>
-          )}
-        </Box>
+            )}
+          </Box>
+        )}
 
         <Box w={120} mt={2}>
           <Text bold fontSize={12} numberOfLines={1}>

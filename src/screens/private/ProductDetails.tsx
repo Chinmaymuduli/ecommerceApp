@@ -40,6 +40,7 @@ import {useIsMounted, useSwrApi} from 'hooks';
 import {ErrorModal, FetchLoader} from 'components/core';
 import {put, remove} from 'api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useAppContext} from 'contexts';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 
@@ -77,6 +78,7 @@ const ProductDetails = ({route, navigation}: Props) => {
   const [label, setLabel] = useState('');
 
   const {isOpen, onOpen, onClose} = useDisclose();
+  const {guestUser} = useAppContext();
 
   const handleCart = async (data: ProductType) => {
     try {
@@ -234,6 +236,11 @@ const ProductDetails = ({route, navigation}: Props) => {
       ? 0
       : authData?.reviews?.stars / authData?.reviews?.total;
 
+  const handelGuestLogin = () => {
+    isMounted.current && setShowErrorModal(true);
+    isMounted.current && setLabel('Please Login !');
+  };
+
   // console.log({rating});
   return (
     <>
@@ -248,12 +255,16 @@ const ProductDetails = ({route, navigation}: Props) => {
               <Ionicons name="arrow-back" size={24} color="black" />
             </Pressable>
             <Box>
-              <Ionicons
-                name={authData?.isInWishList ? 'heart' : 'heart-outline'}
-                size={30}
-                color="green"
-                onPress={() => handleWishlist(authData)}
-              />
+              {guestUser === 'true' ? (
+                <Text></Text>
+              ) : (
+                <Ionicons
+                  name={authData?.isInWishList ? 'heart' : 'heart-outline'}
+                  size={30}
+                  color="green"
+                  onPress={() => handleWishlist(authData)}
+                />
+              )}
             </Box>
           </HStack>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -542,7 +553,11 @@ const ProductDetails = ({route, navigation}: Props) => {
               {!authData?.isInCart ? (
                 !loader ? (
                   <Pressable
-                    onPress={() => handleCart(chooseWeight)}
+                    onPress={
+                      guestUser === 'true'
+                        ? () => handelGuestLogin()
+                        : () => handleCart(chooseWeight)
+                    }
                     bg={'#C1E1C1'}
                     w={160}
                     alignItems={'center'}
@@ -578,7 +593,11 @@ const ProductDetails = ({route, navigation}: Props) => {
               )}
               <Pressable
                 // onPress={() => BuyNow(productData)}
-                onPress={() => BuyNow()}
+                onPress={
+                  guestUser === 'true'
+                    ? () => handelGuestLogin()
+                    : () => BuyNow()
+                }
                 bg={COLORS.primary}
                 w={175}
                 borderTopRightRadius={5}

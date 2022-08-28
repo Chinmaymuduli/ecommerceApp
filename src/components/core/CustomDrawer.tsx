@@ -1,5 +1,5 @@
 import {Alert, BackHandler, StyleSheet} from 'react-native';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   Box,
   Divider,
@@ -18,16 +18,11 @@ import Materialicons from 'react-native-vector-icons/MaterialIcons';
 import {useAppContext} from 'contexts';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {useAuth} from 'app';
-import {
-  useActions,
-  useAuthFetch,
-  useFetch,
-  useIsMounted,
-  useSwrApi,
-} from 'hooks';
+import {useSwrApi} from 'hooks';
 import {post, put} from 'api';
 import {User} from 'types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const drawerArray = [
   {
@@ -124,13 +119,12 @@ const CustomDrawer = () => {
   const navigation = useNavigation<NavigationProps>();
   const [selectedButton, setSelectedButton] = React.useState(1);
   const {user, setUserType, setUser} = useAuth(state => state);
-  const {setIsLoggedIn} = useAppContext();
+  const {setIsLoggedIn, setGuestUser, guestUser} = useAppContext();
 
-  // console.log({user});
   const {data, isValidating} = useSwrApi('user/my-account');
   const UserData = data?.data?.data;
 
-  // console.log({UserData});
+  // console.log({guestUser});
 
   const DrawerNaviagte = (item: any) => {
     setSelectedButton(item?.id);
@@ -139,6 +133,10 @@ const CustomDrawer = () => {
       return setUserType('b2b'), navigation.navigate(item?.route);
     if (item?.label === 'Category')
       return setUserType('b2c'), navigation.navigate(item?.route);
+    if (item?.label === 'Your Account')
+      return guestUser === 'true'
+        ? handelGuestLogin()
+        : navigation.navigate(item?.route);
     navigation.navigate(item?.route);
   };
 
@@ -169,7 +167,8 @@ const CustomDrawer = () => {
 
       await AsyncStorage.removeItem('ACCESS_TOKEN');
       await AsyncStorage.removeItem('REFRESH_TOKEN');
-      await AsyncStorage.setItem('isLoggedIn', 'false')
+      await AsyncStorage.removeItem('asGuest');
+      AsyncStorage.setItem('isLoggedIn', 'false')
         .then(() => {
           console.log('Logout Success');
           setIsLoggedIn(false);
@@ -180,10 +179,24 @@ const CustomDrawer = () => {
     }
   };
 
+  const handelGuestLogin = () => {
+    AsyncStorage.setItem('isLoggedIn', 'false')
+      .then(() => {
+        console.log('Logout Success');
+        setIsLoggedIn(false);
+      })
+      .catch(error => console.log(error));
+  };
+
   return (
     <Box flex={1}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Pressable onPress={() => navigation.navigate('Profile')}>
+        <Pressable
+          onPress={
+            guestUser === 'true'
+              ? () => handelGuestLogin()
+              : () => navigation.navigate('Profile')
+          }>
           <HStack
             space={3}
             alignItems={'center'}
@@ -253,27 +266,47 @@ const CustomDrawer = () => {
         <Box py={2}>
           <Divider />
         </Box>
-        <Box px={5} mb={8} mt={2}>
-          <Pressable onPress={() => handleLogout()}>
-            <HStack justifyContent={'space-between'}>
-              <HStack space={3}>
-                <Materialicons
-                  name="power-settings-new"
-                  size={22}
-                  color="#000"
-                />
-                <Text>Sign Out</Text>
+        {guestUser === 'true' ? (
+          <Box px={5} mb={8} mt={2}>
+            <Pressable onPress={() => handelGuestLogin()}>
+              <HStack justifyContent={'space-between'}>
+                <HStack space={3}>
+                  <AntDesign name="login" size={22} color="#000" />
+                  <Text>Login</Text>
+                </HStack>
+                <Box bg={'#C1E1C1'} borderRadius={20}>
+                  <ICONS.ChevronRight
+                    size={22}
+                    color={'#000'}
+                    style={{padding: 10}}
+                  />
+                </Box>
               </HStack>
-              <Box bg={'#C1E1C1'} borderRadius={20}>
-                <ICONS.ChevronRight
-                  size={22}
-                  color={'#000'}
-                  style={{padding: 10}}
-                />
-              </Box>
-            </HStack>
-          </Pressable>
-        </Box>
+            </Pressable>
+          </Box>
+        ) : (
+          <Box px={5} mb={8} mt={2}>
+            <Pressable onPress={() => handleLogout()}>
+              <HStack justifyContent={'space-between'}>
+                <HStack space={3}>
+                  <Materialicons
+                    name="power-settings-new"
+                    size={22}
+                    color="#000"
+                  />
+                  <Text>Sign Out</Text>
+                </HStack>
+                <Box bg={'#C1E1C1'} borderRadius={20}>
+                  <ICONS.ChevronRight
+                    size={22}
+                    color={'#000'}
+                    style={{padding: 10}}
+                  />
+                </Box>
+              </HStack>
+            </Pressable>
+          </Box>
+        )}
       </ScrollView>
     </Box>
   );

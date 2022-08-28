@@ -1,5 +1,5 @@
 import {ImageBackground, SafeAreaView, StyleSheet} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Badge,
   Box,
@@ -24,23 +24,30 @@ import {
   SpecialProduct,
 } from 'components';
 
-import {useNotifications, useSwrApi} from 'hooks';
+import {useIsMounted, useNotifications, useSwrApi} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
 import {useAuth} from 'app';
+import {CategoryType} from 'types';
 
 const Home = () => {
   const {user} = useAuth();
-
+  // console.log('userdata', user);
   const isFocused = useIsFocused();
+  const isMounted = useIsMounted();
   const navigation = useNavigation<NavigationProps>();
   const [openAlert, setOpenAlert] = React.useState<boolean>(false);
+  const [CategoryList, setCategoryList] = useState<CategoryType[]>();
   const [alertMessage, setAlertMessage] =
     React.useState<any>('Added Successfully');
   const {notifications} = useNotifications();
   const {data, mutate, isValidating, isLoading} = useSwrApi(
     'categories/featured',
   );
-  const CategoryList = data?.data?.data;
+
+  useEffect(() => {
+    isMounted.current && setCategoryList(data?.data?.data);
+    mutate();
+  }, [isFocused, isMounted]);
 
   return (
     <>

@@ -13,6 +13,7 @@ import {FetchLoader} from './core';
 import {ProductSkeleton} from '../../src/skeleton';
 import {CELEBRATE, PRODUCT_PLACEHOLDER, Special1} from 'assets';
 import LottieView from 'lottie-react-native';
+import {useAppContext} from 'contexts';
 
 type Props = {
   item: ProductType;
@@ -35,6 +36,8 @@ const HomeCategoryItem = ({
   const [loading, setLoading] = useState(false);
   const isMounted = useIsMounted();
   const [celebrate, setCelebrate] = useState(false);
+  const {guestUser} = useAppContext();
+  // console.log({guestUser});
 
   //wishhlist
 
@@ -127,26 +130,28 @@ const HomeCategoryItem = ({
               OFF
             </Text>
           </Box>
-          <Box position={'absolute'} right={4} borderRadius={10}>
-            {loading ? (
-              <ActivityIndicator
-                size={'small'}
-                color={COLORS.primary}
-                style={{marginTop: 1}}
-              />
-            ) : (
-              <Ionicons
-                onPress={() => handleWishlist(item)}
-                name={item?.isInWishList ? 'heart' : 'heart-outline'}
-                size={22}
-                color={COLORS.primary}
-                style={{
-                  paddingHorizontal: 2,
-                  paddingVertical: 2,
-                }}
-              />
-            )}
-          </Box>
+          {guestUser === 'true' ? null : (
+            <Box position={'absolute'} right={4} borderRadius={10}>
+              {loading ? (
+                <ActivityIndicator
+                  size={'small'}
+                  color={COLORS.primary}
+                  style={{marginTop: 1}}
+                />
+              ) : (
+                <Ionicons
+                  onPress={() => handleWishlist(item)}
+                  name={item?.isInWishList ? 'heart' : 'heart-outline'}
+                  size={22}
+                  color={COLORS.primary}
+                  style={{
+                    paddingHorizontal: 2,
+                    paddingVertical: 2,
+                  }}
+                />
+              )}
+            </Box>
+          )}
           {celebrate && (
             <Box
               w={20}
@@ -159,12 +164,16 @@ const HomeCategoryItem = ({
             </Box>
           )}
           {/* Add to cart */}
-          <Counter
-            item={item}
-            setOpenAlert={setOpenAlert}
-            setAlertMessage={setAlertMessage}
-            ProductMutate={ProductMutate}
-          />
+          {guestUser === 'true' ? (
+            <></>
+          ) : (
+            <Counter
+              item={item}
+              setOpenAlert={setOpenAlert}
+              setAlertMessage={setAlertMessage}
+              ProductMutate={ProductMutate}
+            />
+          )}
 
           <Box w={120}>
             <Text bold fontSize={12} numberOfLines={1}>

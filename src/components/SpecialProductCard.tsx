@@ -9,6 +9,7 @@ import {ProductType} from 'types';
 import {put} from 'api';
 import {SpecialProductSkeleton} from '../../src/skeleton';
 import {PRODUCT_PLACEHOLDER} from 'assets';
+import {useAppContext} from 'contexts';
 
 type Props = {
   item: ProductType;
@@ -18,7 +19,7 @@ type Props = {
 
 const SpecialProductCard = ({item, isValidating, mutate}: Props) => {
   const navigation = useNavigation<NavigationProps>();
-
+  const {guestUser} = useAppContext();
   const decrement = async () => {
     try {
       const res = await put({
@@ -122,31 +123,46 @@ const SpecialProductCard = ({item, isValidating, mutate}: Props) => {
             </Box>
           </Pressable>
 
-          <Box
-            alignSelf={'flex-end'}
-            right={3}
-            bg={COLORS.textWhite}
-            mt={-5}
-            shadow={1}
-            borderRadius={5}
-            borderColor={COLORS.lightGrey}>
-            {item?.isInCart ? (
-              <HStack
-                bg={'#FFFF0060'}
-                w={'152'}
-                justifyContent="space-between"
-                alignItems={'center'}>
-                <Box>
-                  <Entypo
-                    name="minus"
-                    size={20}
-                    color={COLORS.fadeBlack}
-                    onPress={() => decrement()}
-                  />
-                </Box>
-                <Box>
-                  <Text>{item.cartQuantity}</Text>
-                </Box>
+          {guestUser === 'true' ? null : (
+            <Box
+              alignSelf={'flex-end'}
+              right={3}
+              bg={COLORS.textWhite}
+              mt={-5}
+              shadow={1}
+              borderRadius={5}
+              borderColor={COLORS.lightGrey}>
+              {item?.isInCart ? (
+                <HStack
+                  bg={'#FFFF0060'}
+                  w={'152'}
+                  justifyContent="space-between"
+                  alignItems={'center'}>
+                  <Box>
+                    <Entypo
+                      name="minus"
+                      size={20}
+                      color={COLORS.fadeBlack}
+                      onPress={() => decrement()}
+                    />
+                  </Box>
+                  <Box>
+                    <Text>{item.cartQuantity}</Text>
+                  </Box>
+                  <Box>
+                    <Entypo
+                      name="plus"
+                      size={18}
+                      color={COLORS.fadeBlack}
+                      style={{
+                        paddingHorizontal: 3,
+                        paddingVertical: 3,
+                      }}
+                      onPress={increment}
+                    />
+                  </Box>
+                </HStack>
+              ) : (
                 <Box>
                   <Entypo
                     name="plus"
@@ -156,25 +172,12 @@ const SpecialProductCard = ({item, isValidating, mutate}: Props) => {
                       paddingHorizontal: 3,
                       paddingVertical: 3,
                     }}
-                    onPress={increment}
+                    onPress={() => AddSpecialCart(item)}
                   />
                 </Box>
-              </HStack>
-            ) : (
-              <Box>
-                <Entypo
-                  name="plus"
-                  size={18}
-                  color={COLORS.fadeBlack}
-                  style={{
-                    paddingHorizontal: 3,
-                    paddingVertical: 3,
-                  }}
-                  onPress={() => AddSpecialCart(item)}
-                />
-              </Box>
-            )}
-          </Box>
+              )}
+            </Box>
+          )}
         </Box>
       )}
     </>

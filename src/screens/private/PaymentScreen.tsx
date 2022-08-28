@@ -143,11 +143,13 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                 navigation.navigate('ConfirmOrder');
                 isMounted.current && setLoading(false);
               } else {
+                isMounted.current && setLoading(false);
                 Alert.alert('Error', res.error);
               }
             })
             .catch((error: any) => {
               console.log(error);
+              isMounted.current && setLoading(false);
               Alert.alert('Error', 'Transaction Failed');
             });
         } else {

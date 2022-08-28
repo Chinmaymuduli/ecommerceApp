@@ -27,11 +27,10 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {post} from 'api';
 import {useActions, useIsMounted} from 'hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ErrorModal} from 'components/core';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Address'>;
 const Address = ({route, navigation}: Props) => {
-  // console.log('objectAddress', route.params.SelectAddress);
-  // const previousData = route.params.SelectAddress;
   const {
     control,
     handleSubmit,
@@ -42,6 +41,8 @@ const Address = ({route, navigation}: Props) => {
   const [selectedType, setSelectedType] = React.useState(1);
   const [state, setState] = React.useState<string>('Chhattisgarh');
   const [addressTypeText, setAddressTypeText] = useState('Home');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [label, setLabel] = useState();
 
   const isMounted = useIsMounted();
   const {setLoading} = useActions();
@@ -70,13 +71,7 @@ const Address = ({route, navigation}: Props) => {
       });
       console.log({postAddress});
       if (postAddress.status === 200) {
-        navigation.navigate(
-          'SelectAddress',
-          {},
-          //  {
-          //   SelectProductData: previousData,
-          // }
-        );
+        navigation.navigate('SelectAddress', {});
       }
     } catch (error) {
       console.log(error);
@@ -393,6 +388,13 @@ const Address = ({route, navigation}: Props) => {
           </Box>
         </Actionsheet.Content>
       </Actionsheet>
+
+      {/* modal */}
+      <ErrorModal
+        setShowErrorModal={setShowErrorModal}
+        showErrorModal={showErrorModal}
+        label={label}
+      />
     </Box>
   );
 };
