@@ -203,6 +203,8 @@ const OrderDetails = ({route: {params}}: Props) => {
       console.log(error);
     }
   };
+
+  console.log({OrderDetailsData});
   return (
     <>
       {isValidating ? (
@@ -403,7 +405,13 @@ const OrderDetails = ({route: {params}}: Props) => {
                 <Box px={5} borderColor={COLORS.lightGrey}>
                   <HStack justifyContent={'space-between'} py={2}>
                     <Text bold>Total Amount</Text>
-                    <Text bold>&#8377; {OrderDetailsData?.totalPrice}</Text>
+                    <Text bold>
+                      &#8377;{' '}
+                      {OrderDetailsData?.billing?.orders?.length > 1
+                        ? OrderDetailsData?.totalPrice
+                        : OrderDetailsData?.billing?.totalPrice}
+                    </Text>
+                    {/* <Text bold>&#8377; {OrderDetailsData?.totalPrice}</Text> */}
                   </HStack>
                 </Box>
               </Box>
@@ -419,7 +427,10 @@ const OrderDetails = ({route: {params}}: Props) => {
                       <Text>{OrderDetailsData?.billing?.paymentMethod} :</Text>
                       <Text>
                         &#8377;
-                        {OrderDetailsData?.totalPrice}
+                        {/* {OrderDetailsData?.totalPrice} */}
+                        {OrderDetailsData?.billing?.orders?.length > 1
+                          ? OrderDetailsData?.totalPrice
+                          : OrderDetailsData?.billing?.totalPrice}
                       </Text>
                     </HStack>
                   </HStack>

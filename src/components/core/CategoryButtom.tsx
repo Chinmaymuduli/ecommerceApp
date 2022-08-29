@@ -42,8 +42,9 @@ const CategoryButtom = ({
   return (
     <Box>
       <ScrollView
+        showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: 100,
+          paddingBottom: 300,
         }}>
         <VStack
           flex={1}

@@ -15,7 +15,6 @@ const HomeCategoriesItem = ({
   isLoading: boolean;
 }) => {
   const navigation = useNavigation<NavigationProps>();
-  // console.log({isLoading});
 
   return (
     <>

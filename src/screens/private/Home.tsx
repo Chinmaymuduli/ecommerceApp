@@ -1,4 +1,4 @@
-import {ImageBackground, SafeAreaView, StyleSheet} from 'react-native';
+import {ImageBackground, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   Badge,
@@ -26,7 +26,6 @@ import {
 
 import {useIsMounted, useSwrApi} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
-import {useAuth} from 'app';
 import {CategoryType} from 'types';
 
 const Home = () => {

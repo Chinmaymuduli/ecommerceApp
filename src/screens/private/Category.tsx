@@ -14,7 +14,8 @@ import {useAuth} from 'app';
 import {ProductType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
-const Category = ({route}: Props) => {
+const Category = ({route: {params}}: Props) => {
+  // console.log({params});
   const categoryItem = useSwrApi('categories');
 
   const CategoryData = categoryItem?.data?.data?.data;

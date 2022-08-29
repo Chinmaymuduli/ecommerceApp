@@ -22,9 +22,12 @@ import {CategorySkeleton} from 'src/skeleton';
 
 const HomeCategories = () => {
   const navigation = useNavigation<NavigationProps>();
+  const [CategoryData, setCategoryData] = useState<CategoryType[]>();
   const isMounted = useIsMounted();
-  const {data, isLoading, isValidating} = useSwrApi('categories');
-  const CategoryData: CategoryType[] = data?.data?.data;
+  const {data, isValidating} = useSwrApi('categories?limit=5&chunk=0');
+  useEffect(() => {
+    isMounted.current && setCategoryData(data?.data?.data);
+  }, [data]);
 
   return (
     <>
@@ -38,7 +41,6 @@ const HomeCategories = () => {
           </Pressable>
         </HStack>
         <FlatList
-          // data={category}
           data={CategoryData}
           renderItem={({item}) => (
             <HomeCategoriesItem item={item} isLoading={isValidating} />
