@@ -13,7 +13,7 @@ import {
   VStack,
 } from 'native-base';
 import {COLORS} from 'configs';
-import {AYUSH_1, PRODUCT_PLACEHOLDER} from 'assets';
+import {PRODUCT_PLACEHOLDER} from 'assets';
 import {
   FetchLoader,
   ModalComponent,
