@@ -18,11 +18,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FilterSheet from './FilterSheet';
-import {Banner, wishlist} from 'assets';
+import {wishlist} from 'assets';
 
 import HomeCategoryItem from './HomeCategoryItem';
 import {ProductType} from 'types';
-import {FetchLoader, SkeletonComponent} from './core';
 import {useIsMounted, useSwrApi} from 'hooks';
 
 type CategoryProductType = {
@@ -59,15 +58,11 @@ const CategorySection = ({
   const isMounted = useIsMounted();
   const [categoryBanner, setCategoryBanner] = useState<any[]>();
 
-  const {data, isValidating: bannerValidating} = useSwrApi(
-    `banners?type=category`,
-  );
+  const {data} = useSwrApi(`banners?type=category`);
 
   useEffect(() => {
     isMounted.current && setCategoryBanner(data?.data?.data);
   }, [data]);
-
-  // console.log(categoryBanner[0].imageURL);
 
   return (
     <>

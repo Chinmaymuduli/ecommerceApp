@@ -71,8 +71,6 @@ const Category = ({route}: Props) => {
     isMounted.current && setFilterData(data?.data?.data?.data);
   }, [data]);
 
-  // console.log(filteredData?.length);
-
   return (
     <>
       {/* {!isValidating ? ( */}

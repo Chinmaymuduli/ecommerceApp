@@ -10,7 +10,7 @@ import {
   ScrollView,
   Text,
 } from 'native-base';
-import {GOURMET5, LOGO, MENU2, WOMEN_MP} from 'assets';
+import {CHAWAN, LOGO, MENU2, WOMEN_MP} from 'assets';
 import {COLORS} from 'configs';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -24,7 +24,7 @@ import {
   SpecialProduct,
 } from 'components';
 
-import {useIsMounted, useNotifications, useSwrApi} from 'hooks';
+import {useIsMounted, useSwrApi} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
 import {useAuth} from 'app';
 import {CategoryType} from 'types';
@@ -202,7 +202,7 @@ const Home = () => {
               borderRadius={5}>
               <HStack>
                 <Image
-                  source={GOURMET5}
+                  source={CHAWAN}
                   style={styles.honeyImg}
                   alt={'honey_img'}
                   resizeMode={'contain'}

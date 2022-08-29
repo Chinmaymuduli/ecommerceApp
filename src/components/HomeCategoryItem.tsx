@@ -11,7 +11,7 @@ import {put, remove} from 'api';
 import React, {useEffect, useState} from 'react';
 import {FetchLoader} from './core';
 import {ProductSkeleton} from '../../src/skeleton';
-import {CELEBRATE, PRODUCT_PLACEHOLDER, Special1} from 'assets';
+import {CELEBRATE, PRODUCT_PLACEHOLDER} from 'assets';
 import LottieView from 'lottie-react-native';
 import {useAppContext} from 'contexts';
 

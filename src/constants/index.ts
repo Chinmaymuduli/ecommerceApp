@@ -1,12 +1,1 @@
-// export { default as CATEGORYARR } from './category';
-export { default as SLIDER_DATA } from './sliderData';
-export { default as AYUSHPRODUCT } from './ayushProducts';
-export { default as GOURMETPRODUCT } from './gourmetProducts';
-export { default as PERSONALPRODUCT } from './PersonalProducts';
-export { default as HOMEPRODUCT } from './homeProduct';
-export { default as SWEETPRODUCT } from './sweetProduct';
-export { default as SPECIAL_PRODUCT } from './specialProduct';
-export { default as INDIANSTATE } from './State';
-export { default as AYUSHRAWPRODUCT } from './AyushRawProduct';
-export { default as GOURMETRAWPRODUCT } from './GourmetRawProduct';
-export { default as SWEETRAW } from './SweetRaw';
+export {default as INDIANSTATE} from './State';
