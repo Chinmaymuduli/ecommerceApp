@@ -6,7 +6,8 @@ import {useSwrApi} from 'hooks';
 import {BannerType} from 'types';
 
 const HomeSlider = () => {
-  const {data, mutate, isLoading, isValidating} = useSwrApi('banners');
+  const {data, mutate, isLoading, isValidating} =
+    useSwrApi('banners?type=hero');
   const BannerData: BannerType[] = data?.data?.data;
   return (
     <>

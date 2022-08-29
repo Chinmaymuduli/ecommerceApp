@@ -57,7 +57,7 @@ const CategorySection = ({
   const [filterSheetOpen, setFilterSheetOpen] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
   const isMounted = useIsMounted();
-  const [categoryBanner, setCategoryBanner] = useState();
+  const [categoryBanner, setCategoryBanner] = useState<any[]>();
 
   const {data, isValidating: bannerValidating} = useSwrApi(
     `banners?type=category`,
@@ -65,9 +65,9 @@ const CategorySection = ({
 
   useEffect(() => {
     isMounted.current && setCategoryBanner(data?.data?.data);
-  }, []);
+  }, [data]);
 
-  // console.log({categoryBanner});
+  // console.log(categoryBanner[0].imageURL);
 
   return (
     <>
@@ -98,17 +98,21 @@ const CategorySection = ({
                 {filteredData?.length} products
               </Text>
             </Box>
-            <Box h={150} mt={2}>
-              <Image
-                resizeMode="contain"
-                source={Banner}
-                alt={'banner'}
-                style={{
-                  width: '100%',
-                  height: 150,
-                }}
-              />
-            </Box>
+            {categoryBanner?.length && (
+              <Box h={150} mt={2}>
+                <Image
+                  resizeMode="contain"
+                  source={
+                    categoryBanner?.length && {uri: categoryBanner[0]?.imageURL}
+                  }
+                  alt={'banner'}
+                  style={{
+                    width: '100%',
+                    height: 150,
+                  }}
+                />
+              </Box>
+            )}
             <HStack position={'absolute'} right={0} top={3} space={3}>
               <Pressable
                 bg={COLORS.textWhite}

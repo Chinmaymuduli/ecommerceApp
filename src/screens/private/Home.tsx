@@ -37,15 +37,25 @@ const Home = () => {
   const navigation = useNavigation<NavigationProps>();
   const [openAlert, setOpenAlert] = React.useState<boolean>(false);
   const [CategoryList, setCategoryList] = useState<CategoryType[]>();
+  const [notifications, setNotifications] = useState<any[]>();
   const [alertMessage, setAlertMessage] =
     React.useState<any>('Added Successfully');
-  const {notifications} = useNotifications();
+
   const {data, mutate, isValidating, isLoading} = useSwrApi(
     'categories/featured',
   );
 
+  const {data: notificationData} = useSwrApi('notifications');
+  // console.log({notificationData});
+
+  const notificationUnread = notificationData?.data?.data?.data.filter(
+    (item: {isRead: boolean}) => item?.isRead === false,
+  );
+  // console.log(notificationUnread);
+
   useEffect(() => {
     isMounted.current && setCategoryList(data?.data?.data);
+    isMounted.current && setNotifications(notificationUnread);
     mutate();
   }, [isFocused, isMounted]);
 
