@@ -66,9 +66,9 @@ const CartItem = ({item, setQuantity, mutate}: CartItemTypes) => {
           <Image
             alt="cartImg"
             source={
-              item?.displayImage?.url
+              item?.product?.displayImage
                 ? {
-                    uri: item?.displayImage?.url,
+                    uri: item?.product?.displayImage?.url,
                   }
                 : PRODUCT_PLACEHOLDER
             }

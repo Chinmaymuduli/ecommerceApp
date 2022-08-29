@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Alert,
   Badge,
@@ -18,16 +18,22 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS} from 'configs';
 import {wishlist} from 'assets';
 import {WishListCard} from 'components';
-import {useStore} from 'app';
-import {useSwrApi} from 'hooks';
+import {useAuth, useStore} from 'app';
+import {useIsMounted, useSwrApi} from 'hooks';
 import {FetchLoader} from 'components/core';
+import {ApiProductType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'WishList'>;
 const WishList = ({navigation}: Props) => {
-  const {wishlistItems, cartItems} = useStore();
-  const {data, isLoading, mutate} = useSwrApi('wishlists');
+  const {user} = useAuth();
+  const {data, mutate, isValidating} = useSwrApi('wishlists');
+  const [WishListItem, setWishListItem] = useState<ApiProductType[]>([]);
+  const isMounted = useIsMounted();
 
-  const WishListItem = data?.data?.data?.data;
+  // const WishListItem = data?.data?.data?.data;
+  useEffect(() => {
+    isMounted.current && setWishListItem(data?.data?.data?.data);
+  }, [data, isMounted]);
 
   const [alertMessage, setAlertMessage] = useState<string>('Item Added');
   const [shownAlert, setShownAlert] = useState<boolean>(false);
@@ -41,9 +47,11 @@ const WishList = ({navigation}: Props) => {
       />
     );
   };
+
+  console.log({user});
   return (
     <>
-      {!isLoading ? (
+      {!isValidating ? (
         <Box flex={1} bg={COLORS.textWhite}>
           <HStack
             justifyContent={'space-between'}
@@ -75,7 +83,7 @@ const WishList = ({navigation}: Props) => {
                 _text={{
                   fontSize: 8,
                 }}>
-                {cartItems?.length ? cartItems?.length : 0}
+                {user?.cartCount}
               </Badge>
               <Ionicons
                 name={'cart'}
@@ -87,7 +95,8 @@ const WishList = ({navigation}: Props) => {
           </HStack>
           <Box>
             <FlatList
-              // data={wishlistItems.length > 0 ? wishlistItems : []}
+              onRefresh={() => mutate()}
+              refreshing={isValidating}
               data={WishListItem?.length > 0 ? WishListItem : []}
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}

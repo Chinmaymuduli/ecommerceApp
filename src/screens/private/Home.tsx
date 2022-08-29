@@ -30,8 +30,6 @@ import {useAuth} from 'app';
 import {CategoryType} from 'types';
 
 const Home = () => {
-  const {user} = useAuth();
-  // console.log('userdata', user);
   const isFocused = useIsFocused();
   const isMounted = useIsMounted();
   const navigation = useNavigation<NavigationProps>();
@@ -41,27 +39,23 @@ const Home = () => {
   const [alertMessage, setAlertMessage] =
     React.useState<any>('Added Successfully');
 
-  const {data, mutate, isValidating, isLoading} = useSwrApi(
-    'categories/featured',
-  );
+  const {data, mutate, isValidating} = useSwrApi('categories/featured');
 
   const {data: notificationData} = useSwrApi('notifications');
-  // console.log({notificationData});
 
   const notificationUnread = notificationData?.data?.data?.data.filter(
     (item: {isRead: boolean}) => item?.isRead === false,
   );
-  // console.log(notificationUnread);
 
   useEffect(() => {
     isMounted.current && setCategoryList(data?.data?.data);
     isMounted.current && setNotifications(notificationUnread);
     mutate();
-  }, [isFocused, isMounted]);
+  }, [isFocused]);
 
   return (
     <>
-      {isLoading ? (
+      {isValidating ? (
         <FetchLoader />
       ) : (
         <Box safeAreaTop flex={1} bg={'white'}>

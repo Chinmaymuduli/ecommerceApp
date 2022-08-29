@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
 import {BASE_URL} from 'api';
 import {useAuth} from 'app';
 import {useState} from 'react';
@@ -9,6 +10,7 @@ const useSwrApi = (url: string, options?: any) => {
   const [isLoading, setLoading] = useState(false);
   const isMounted = useIsMounted();
   const {setLoggedIn} = useAuth();
+  const navigation = useNavigation();
   const fetcher = async (url: string, options?: any) => {
     try {
       isMounted.current && setLoading(true);
@@ -45,6 +47,7 @@ const useSwrApi = (url: string, options?: any) => {
             .catch(error => console.log(error));
           await AsyncStorage.removeItem('ACCESS_TOKEN');
           await AsyncStorage.removeItem('REFRESH_TOKEN');
+          // navigation.navigate('Login');
         } else {
           await AsyncStorage.setItem(
             'ACCESS_TOKEN',

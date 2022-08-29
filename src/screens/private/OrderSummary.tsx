@@ -36,7 +36,7 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
   );
 
   const OrderSummaryData = productData?.data?.data;
-
+  console.log({OrderSummaryData});
   useEffect(() => {
     (async () => {
       const addressID = await AsyncStorage.getItem('address_id');

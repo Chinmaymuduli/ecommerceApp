@@ -9,7 +9,7 @@ import {
   Text,
   VStack,
 } from 'native-base';
-import {AYUSH_1, ORDER, PRODUCT_PLACEHOLDER} from 'assets';
+import {ORDER, PRODUCT_PLACEHOLDER} from 'assets';
 import {COLORS} from 'configs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -41,7 +41,7 @@ const Order = ({navigation}: Props) => {
     isMounted.current && setMyOrders(data?.data?.data?.data);
     isMounted.current && setDeliveryOrder(deliveredData?.data?.data?.data);
     // mutate();
-  }, [data, deliveredData]);
+  }, [data, deliveredData, isMounted]);
 
   return (
     <>
@@ -117,7 +117,9 @@ const Order = ({navigation}: Props) => {
             refreshControl={
               <RefreshControl
                 refreshing={isValidating}
-                onRefresh={() => mutate()}
+                onRefresh={
+                  selectionMode === 1 ? () => mutate() : () => deliveryMutate()
+                }
               />
             }
             showsVerticalScrollIndicator={false}

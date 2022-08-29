@@ -11,33 +11,13 @@ import {
   VStack,
 } from 'native-base';
 import {COLORS} from 'configs';
-import {AYUSH_1, AYUSH_2, REVIEW, ReviewImg} from 'assets';
+import {REVIEW, ReviewImg} from 'assets';
 import {Rating} from 'react-native-ratings';
 import {MyReviewCard} from 'components';
 import {reviewType} from 'types';
 import {useSwrApi} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
 import {FetchLoader} from 'components/core';
-
-const MyReviewArr = [
-  {
-    img: AYUSH_1,
-    name: 'Mahua laddu',
-    rating: 4,
-    date: '12/05/2022',
-    review:
-      ' Lorem ipsum dolor sit amer, consectetur advising elite. The product is so beautiful so i recommend you to buy it.',
-  },
-
-  {
-    img: AYUSH_2,
-    name: 'Ayushmati Oil',
-    rating: 4,
-    date: '10/04/2022',
-    review:
-      ' Lorem ipsum dolor sit ames, consectetur advising elis. The product is so beautiful so i recommend you to buy it.',
-  },
-];
 
 const MyReview = () => {
   const {data, isValidating, mutate} = useSwrApi('my-reviews');

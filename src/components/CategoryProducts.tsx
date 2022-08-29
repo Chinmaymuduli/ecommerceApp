@@ -42,7 +42,7 @@ const CategoryProducts = ({
 
   useEffect(() => {
     isMounted.current && mutate();
-  }, [isFocused]);
+  }, [isFocused, isMounted]);
 
   return (
     <>

@@ -66,7 +66,13 @@ export type PrivateRoutesType = {
     discount?: number;
     couponId?: string;
   };
-  ConfirmOrder: undefined;
+  ConfirmOrder: {
+    totalMrp?: number;
+    discount?: number;
+    deliveryCharges?: number;
+    couponDiscount?: number;
+    totalSalePrice?: number;
+  };
   // {
   //   confirmOrderData: CartItemType[];
   // };
@@ -146,12 +152,12 @@ const PrivateRoutes = () => {
       <Stack.Screen
         name="ConfirmOrder"
         component={ConfirmOrder}
-        options={{
-          title: 'Confirm Order',
-          headerShown: true,
-          headerBackTitleVisible: false,
-          headerTintColor: '#000',
-        }}
+        // options={{
+        //   title: 'Confirm Order',
+        //   headerShown: true,
+        //   headerBackTitleVisible: false,
+        //   headerTintColor: '#000',
+        // }}
       />
       <Stack.Screen
         name="OrderSummary"

@@ -272,12 +272,14 @@ export type ApiProductType = {
 };
 export type ReviewType = {
   product: ProductType;
-  // user: UserType;
+  _id?: string;
   user: User;
   rating: number;
   title: string;
   comment: string;
-  // order: OrderType;
+  order: {
+    user: User;
+  };
 };
 
 export type BannerType = {

@@ -49,6 +49,8 @@ const MyReviewCard = ({item, reviewMutate}: Props) => {
     }
   };
 
+  console.log(item?.order?.product?.displayImage?.url);
+
   return (
     <>
       <Box bg={COLORS.lightGrey}>
@@ -58,8 +60,8 @@ const MyReviewCard = ({item, reviewMutate}: Props) => {
               <Box h={100} alignItems={'center'} justifyContent={'center'}>
                 <Image
                   source={
-                    item?.order?.product?.displayImage
-                      ? {uri: item?.order?.product?.displayImage}
+                    item?.order?.product?.displayImage?.url
+                      ? {uri: item?.order?.product?.displayImage?.url}
                       : PRODUCT_PLACEHOLDER
                   }
                   style={styles.image}

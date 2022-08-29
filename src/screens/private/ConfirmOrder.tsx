@@ -20,7 +20,7 @@ import moment from 'moment';
 import {getPrice} from 'utils';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ConfirmOrder'>;
-const ConfirmOrder = ({route, navigation}: Props) => {
+const ConfirmOrder = ({route: {params}, navigation}: Props) => {
   // const confirmData = route.params?.confirmOrderData;
 
   // const {
@@ -28,6 +28,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
   //   sumTotalPriceCustomerWillPay,
   //   totalDiscountAmount,
   // } = getPrice(confirmData);
+  console.log({params});
   return (
     <Box flex={1} bg={COLORS.textWhite}>
       <ScrollView>
@@ -45,7 +46,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
             {Math.floor(Math.random() * 100000000)} */}
           </Text>
         </Center>
-        {/* <Box px={4}>
+        <Box px={4}>
           <Box borderTopWidth={1} borderColor={COLORS.lightGrey}>
             <HStack justifyContent={'space-between'} mt={3}>
               <HStack space={2}>
@@ -61,7 +62,7 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   <Text bold fontSize={12}>
                     Order Date
                   </Text>
-                  <Text fontSize={11}>{moment(new Date()).format('llll')}</Text>
+                  <Text fontSize={11}>{moment(new Date()).format('LL')}</Text>
                 </VStack>
               </HStack>
               <HStack space={2}>
@@ -95,8 +96,8 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   pt={2}
                   justifyContent={'space-between'}
                   alignItems={'center'}>
-                  <Text>Price(1 items)</Text>
-                  <Text>&#8377; 100</Text>
+                  <Text>Price</Text>
+                  <Text>&#8377; {params?.totalMrp}</Text>
                 </HStack>
 
                 <HStack
@@ -104,14 +105,17 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Saving</Text>
-                  <Text color={'green.500'}>- &#8377; 50</Text>
+                  <Text color={'green.500'}> &#8377; {params?.discount}</Text>
                 </HStack>
                 <HStack
                   pt={2}
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Coupon Discount</Text>
-                  <Text color={'green.500'}>- &#8377; 0</Text>
+                  <Text color={'green.500'}>
+                    - &#8377;{' '}
+                    {params?.couponDiscount ? params?.couponDiscount : 0}
+                  </Text>
                 </HStack>
                 <HStack
                   mb={2}
@@ -119,7 +123,9 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Delivery Charges</Text>
-                  <Text color={'green.500'}>free</Text>
+                  <Text color={'green.500'}>
+                    {params?.deliveryCharges ? params?.deliveryCharges : 'free'}
+                  </Text>
                 </HStack>
               </Box>
               <HStack
@@ -127,11 +133,10 @@ const ConfirmOrder = ({route, navigation}: Props) => {
                 alignItems={'center'}
                 mt={2}>
                 <Text>Amount Payable</Text>
-                <Text bold>&#8377;70</Text>
+                <Text bold>&#8377;{params?.totalSalePrice}</Text>
               </HStack>
             </Box>
           </Box>
-          
 
           <Pressable
             alignItems={'center'}
@@ -141,7 +146,18 @@ const ConfirmOrder = ({route, navigation}: Props) => {
               See Order Details
             </Text>
           </Pressable>
-        </Box> */}
+        </Box>
+        {/* <Pressable
+          onPress={() => navigation.navigate('Order')}
+          alignItems={'center'}
+          mt={20}>
+          <Box>
+            <Heading size={'sm'} color={COLORS.primary}>
+              Go To Order
+            </Heading>
+            
+          </Box>
+        </Pressable> */}
       </ScrollView>
     </Box>
   );

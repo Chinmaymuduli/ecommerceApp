@@ -4,6 +4,7 @@ import StepIndicator from 'react-native-step-indicator';
 import {COLORS} from 'configs';
 import {Box, Text} from 'native-base';
 import {useIsMounted} from 'hooks';
+import moment from 'moment';
 
 const Track = ({track}: any) => {
   const [position, setPosition] = useState(0);
@@ -40,6 +41,7 @@ const Track = ({track}: any) => {
       ? (labels = [
           <Box>
             <Text bold>Ordered</Text>
+            <Text>12/08/22</Text>
           </Box>,
           <Box>
             <Text color={COLORS.danger} bold>
@@ -49,18 +51,23 @@ const Track = ({track}: any) => {
         ])
       : (labels = [
           <Box>
-            <Text>Ordered</Text>
+            <Text bold>Ordered</Text>
+            <Text fontSize={12}>{moment(track?.createdAt).format('ll')}</Text>
           </Box>,
           <Box>
-            <Text>Shipped</Text>
+            <Text>Shipped {''} </Text>
           </Box>,
           <Box>
             <Text>Delivered</Text>
+            {track?.ETA && (
+              <Text fontSize={12} bold>
+                {moment(track?.ETA).format('l')}
+              </Text>
+            )}
           </Box>,
         ]);
   }
 
-  console.log(labels?.length);
   return (
     <View style={{height: 200, paddingLeft: 15}}>
       <StepIndicator

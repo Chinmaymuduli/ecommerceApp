@@ -25,6 +25,8 @@ const ManageReview = ({productId}: Props) => {
   const {data} = useSwrApi(`reviews/product/${productId}`);
   const ReviewData: ReviewType[] = data?.data?.data?.data;
 
+  console.log({ReviewData});
+
   const {isOpen, onOpen, onClose} = useDisclose();
   return (
     <>
@@ -42,7 +44,7 @@ const ManageReview = ({productId}: Props) => {
             </Pressable>
           </HStack>
           {ReviewData?.map(item => (
-            <Box key={item?.user?._id} mt={3} bg={'#ECFFDC60'} borderRadius={6}>
+            <Box key={item?._id} mt={3} bg={'#ECFFDC60'} borderRadius={6}>
               <Box px={4} py={2}>
                 <HStack space={2} alignItems={'center'}>
                   <Image
@@ -60,7 +62,7 @@ const ManageReview = ({productId}: Props) => {
                     }}
                   />
                   <VStack>
-                    <Text fontSize={15}>{item?.user?.displayName}</Text>
+                    <Text fontSize={15}>{item?.order?.user?.displayName}</Text>
 
                     <HStack space={1}>
                       <Rating

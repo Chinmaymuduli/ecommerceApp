@@ -140,7 +140,13 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
               });
               console.log({res});
               if (res.status === 200) {
-                navigation.navigate('ConfirmOrder');
+                navigation.navigate('ConfirmOrder', {
+                  totalMrp: checkoutData?.totalMrp,
+                  discount: checkoutData?.discount,
+                  deliveryCharges: checkoutData?.deliveryCharge,
+                  couponDiscount: checkoutData?.couponInfo?.benefitAmount,
+                  totalSalePrice: checkoutData?.totalSalePrice,
+                });
                 isMounted.current && setLoading(false);
               } else {
                 isMounted.current && setLoading(false);
@@ -166,7 +172,18 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
             quantity: params?.quantity,
           }),
         });
-        if (res.status !== 200) return Alert.alert('Error', res.error);
+        console.log({res});
+        if (res.status !== 200) {
+          Alert.alert('Error', res.error);
+        } else {
+          navigation.navigate('ConfirmOrder', {
+            totalMrp: checkoutData?.totalMrp,
+            discount: checkoutData?.discount,
+            deliveryCharges: checkoutData?.deliveryCharge,
+            couponDiscount: checkoutData?.couponInfo?.benefitAmount,
+            totalSalePrice: checkoutData?.totalSalePrice,
+          });
+        }
       }
     } catch (error) {
       console.log(error);
@@ -186,7 +203,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
     });
   };
 
-  console.log({checkoutData});
+  // console.log(checkoutData);
 
   return (
     <>
@@ -212,7 +229,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                       pt={2}
                       justifyContent={'space-between'}
                       alignItems={'center'}>
-                      <Text>Price(1 items)</Text>
+                      <Text>Price</Text>
                       <Text>&#8377;{checkoutData?.totalMrp}</Text>
                     </HStack>
 
@@ -244,6 +261,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                       alignItems={'center'}>
                       <Text>Delivery Charges</Text>
                       <Text color={'green.500'}>
+                        +{' '}
                         {checkoutData?.deliveryCharge
                           ? checkoutData?.deliveryCharge
                           : 'free'}

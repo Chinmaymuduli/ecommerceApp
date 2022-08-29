@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {RefreshControl, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {Box, HStack, Pressable, Radio, ScrollView, Text} from 'native-base';
 import {COLORS} from 'configs';
@@ -24,34 +24,11 @@ const SelectAddress = ({route, navigation}: Props) => {
   const isMounted = useIsMounted();
 
   const isProfile = route.params?.isProfile;
-
-  // const fetchData = async () => {
-  //   try {
-  //     isMounted.current && setLoading(true);
-  //     const token = await AsyncStorage.getItem('ACCESS_TOKEN');
-  //     const resp = await fetch(
-  //       'https://chhattisgarh-herbals-api.herokuapp.com/api/address/all/my-addresses',
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       },
-  //     );
-  //     const response_data = await resp.json();
-
-  //     isMounted.current && setAddress(response_data?.data);
-  //     isMounted.current && setLoading(false);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
   const {data, mutate, isValidating} = useSwrApi('address/all/my-addresses');
   useEffect(() => {
     isMounted.current && setAddress(data?.data?.data);
     mutate();
-  }, [isFocused]);
+  }, [isFocused, isMounted]);
 
   const handelDeliver = async () => {
     await AsyncStorage.setItem('address_id', addressValue);
@@ -70,13 +47,20 @@ const SelectAddress = ({route, navigation}: Props) => {
     })();
   }, []);
 
-  console.log({addressValue});
+  // console.log({addressValue});
 
   return (
     <>
       {!isValidating ? (
         <Box flex={1} bg={COLORS.textWhite}>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={isValidating}
+                onRefresh={() => mutate()}
+              />
+            }>
             <Box px={4} borderBottomWidth={10} borderColor={COLORS.lightGrey}>
               <Pressable
                 onPress={() =>

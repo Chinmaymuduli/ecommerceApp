@@ -64,6 +64,7 @@ const Address = ({route, navigation}: Props) => {
         isDefault: true,
         type: addressTypeText,
       });
+
       const postAddress = await post({
         path: 'address',
         body: AddressData,

@@ -26,9 +26,9 @@ export const LoginBg = require('./images/loginBg.png');
 export const MENU = require('./images/c1.png');
 export const MENU2 = require('./images/c2.png');
 
-export const Banner1 = require('./images/Banner1.png');
-export const Banner2 = require('./images/Banner2.png');
-export const Banner3 = require('./images/Banner3.png');
+// export const Banner1 = require('./images/Banner1.png');
+// export const Banner2 = require('./images/Banner2.png');
+// export const Banner3 = require('./images/Banner3.png');
 
 export const CHAWAN = require('./images/chawanprash.png');
 

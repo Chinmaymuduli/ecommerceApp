@@ -1,7 +1,9 @@
 import {Alert, RefreshControl, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
+  AlertDialog,
   Box,
+  Button,
   Heading,
   HStack,
   Icon,
@@ -25,7 +27,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Octicons from 'react-native-vector-icons/Octicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
-import {useIsMounted, useSwrApi} from 'hooks';
+import {useActions, useIsMounted, useSwrApi} from 'hooks';
 import RNFetchBlob from 'rn-fetch-blob';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RazorpayCheckout from 'react-native-razorpay';
@@ -37,7 +39,6 @@ type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderDetails'>;
 const OrderDetails = ({route: {params}}: Props) => {
   const orderID = params?.orderId;
   const {data, isValidating, mutate} = useSwrApi(`order/${orderID}`);
-  // const OrderDetailsData = data?.data?.data;
   const {user} = useAuth();
   const [showModalComponent, setShowModalComponent] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -45,6 +46,12 @@ const OrderDetails = ({route: {params}}: Props) => {
   const [paymentMethod, setPaymentMethod] = useState<string>('COD');
   const [OrderDetailsData, setOrderDetailsData] = useState<any>();
   const isMounted = useIsMounted();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const {setLoading, loading} = useActions();
+
+  const onClose = () => setIsOpen(false);
+
+  const cancelRef = React.useRef(null);
 
   useEffect(() => {
     isMounted.current && setOrderDetailsData(data?.data?.data);
@@ -182,18 +189,20 @@ const OrderDetails = ({route: {params}}: Props) => {
 
   const handelCancelOrder = async () => {
     try {
+      onClose();
+      isMounted.current && setLoading(true);
       const cancelRes = await put({
         path: `order/${OrderDetailsData?._id}/cancel`,
       });
 
-      if (cancelRes?.status === 200) return mutate();
+      if (cancelRes?.status === 200) {
+        mutate();
+        isMounted.current && setLoading(false);
+      }
     } catch (error) {
       console.log(error);
-    } finally {
-      mutate();
     }
   };
-  // console.log({OrderDetailsData});
   return (
     <>
       {isValidating ? (
@@ -230,10 +239,7 @@ const OrderDetails = ({route: {params}}: Props) => {
                       Seller : {OrderDetailsData?.shippedFrom?.name}
                     </Text>
                     <Text bold fontSize={16}>
-                      &#8377;{' '}
-                      {/* {OrderDetailsData?.product.salePrice *
-                        OrderDetailsData?.quantity} */}
-                      {OrderDetailsData?.totalPrice}
+                      &#8377; {OrderDetailsData?.totalPrice}
                     </Text>
                   </VStack>
                   <Box w={'30%'}>
@@ -253,7 +259,7 @@ const OrderDetails = ({route: {params}}: Props) => {
                 </HStack>
                 {OrderDetailsData?.status === 'INITIATED' && (
                   <Pressable
-                    onPress={() => handelCancelOrder()}
+                    onPress={() => setIsOpen(!isOpen)}
                     borderWidth={1}
                     alignSelf={'flex-start'}
                     mx={4}
@@ -276,7 +282,6 @@ const OrderDetails = ({route: {params}}: Props) => {
               {OrderDetailsData?.status === 'PENDING' &&
                 OrderDetailsData?.totalPrice > 0 && (
                   <Pressable
-                    // onPress={() => handelB2bPayment()}
                     onPress={() => {
                       isMounted.current && setShowModalComponent(true);
                     }}
@@ -485,6 +490,34 @@ const OrderDetails = ({route: {params}}: Props) => {
         setShowSuccessModal={setShowSuccessModal}
         successMessage={successMessage}
       />
+
+      <AlertDialog
+        leastDestructiveRef={cancelRef}
+        isOpen={isOpen}
+        onClose={onClose}>
+        <AlertDialog.Content>
+          <AlertDialog.CloseButton />
+          <AlertDialog.Header>Cancel Order</AlertDialog.Header>
+          <AlertDialog.Body>
+            This will cancel your order item . This action cannot be reversed.
+            Cancel data can not be recovered.
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="unstyled"
+                colorScheme="coolGray"
+                onPress={onClose}
+                ref={cancelRef}>
+                Cancel
+              </Button>
+              <Button colorScheme="danger" onPress={() => handelCancelOrder()}>
+                Cancel Order
+              </Button>
+            </Button.Group>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
     </>
   );
 };
