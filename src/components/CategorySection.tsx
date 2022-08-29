@@ -1,5 +1,5 @@
 import {ActivityIndicator, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Actionsheet,
   Box,
@@ -23,9 +23,10 @@ import {Banner, wishlist} from 'assets';
 import HomeCategoryItem from './HomeCategoryItem';
 import {ProductType} from 'types';
 import {FetchLoader, SkeletonComponent} from './core';
+import {useIsMounted, useSwrApi} from 'hooks';
 
 type CategoryProductType = {
-  data: ProductType[];
+  filteredData: ProductType[];
   setOpenAlert?: boolean | any;
   setAlertMessage?: string | any;
   businessType?: string;
@@ -40,7 +41,7 @@ type CategoryProductType = {
 };
 
 const CategorySection = ({
-  data,
+  filteredData,
   setOpenAlert,
   setAlertMessage,
   businessType,
@@ -55,11 +56,23 @@ const CategorySection = ({
 }: CategoryProductType) => {
   const [filterSheetOpen, setFilterSheetOpen] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
+  const isMounted = useIsMounted();
+  const [categoryBanner, setCategoryBanner] = useState();
+
+  const {data, isValidating: bannerValidating} = useSwrApi(
+    `banners?type=category`,
+  );
+
+  useEffect(() => {
+    isMounted.current && setCategoryBanner(data?.data?.data);
+  }, []);
+
+  // console.log({categoryBanner});
 
   return (
     <>
       <FlatList
-        data={data}
+        data={filteredData}
         onRefresh={() => mutate()}
         refreshing={isValidating}
         renderItem={({item}) => (
@@ -82,7 +95,7 @@ const CategorySection = ({
           <Box py={1} w={'270'}>
             <Box px={3}>
               <Text fontSize={15} py={2}>
-                {data?.length} products
+                {filteredData?.length} products
               </Text>
             </Box>
             <Box h={150} mt={2}>

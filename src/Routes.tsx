@@ -83,7 +83,6 @@ const Routes = () => {
           }),
         });
         if (getResponse.status === 401) {
-          Alert.alert('Error', 'Logout');
           await AsyncStorage.removeItem('ACCESS_TOKEN');
           await AsyncStorage.removeItem('REFRESH_TOKEN');
           await AsyncStorage.setItem('isLoggedIn', 'false');

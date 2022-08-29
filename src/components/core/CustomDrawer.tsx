@@ -13,7 +13,7 @@ import {
 } from 'native-base';
 import {ICONS} from 'assets';
 import {COLORS} from 'configs';
-import {useNavigation} from '@react-navigation/native';
+import {DrawerActions, useNavigation} from '@react-navigation/native';
 import Materialicons from 'react-native-vector-icons/MaterialIcons';
 import {useAppContext} from 'contexts';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
@@ -138,6 +138,7 @@ const CustomDrawer = () => {
         ? handelGuestLogin()
         : navigation.navigate(item?.route);
     navigation.navigate(item?.route);
+    navigation.dispatch(DrawerActions.closeDrawer());
   };
 
   const handelCloseApp = useCallback(() => {

@@ -16,7 +16,7 @@ const SpecialProduct = () => {
   const {data, isValidating, mutate} = useSwrApi(
     `products/featured?${
       user?._id ? `userId=${user?._id}` : ''
-    }&type=${userType}`,
+    }&type=${userType}&limit=10&chunk=0`,
   );
 
   const SpecialProductData: ProductType[] = data?.data?.data?.data;

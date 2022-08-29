@@ -104,7 +104,7 @@ const Category = ({route}: Props) => {
 
           <VStack>
             <CategorySection
-              data={filteredData}
+              filteredData={filteredData}
               setOpenAlert={setOpenAlert}
               setAlertMessage={setAlertMessage}
               businessType={userType}
