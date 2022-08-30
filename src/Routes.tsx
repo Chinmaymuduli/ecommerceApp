@@ -22,16 +22,9 @@ const Routes = () => {
   const {setIsLoggedIn, isLoggedIn} = useAppContext();
   const [userEnter, setUserEnter] = useState<string | null>();
   const isMounted = useIsMounted();
-  // const{} = useSwrApi('')
   const {data, isLoading} = useAppLoad();
-
-  console.log({data});
-
   useFCMToken();
-  // useAppLoad();
-
-  useConfig();
-
+  const {configData, isConfigLoading} = useConfig();
   const getUser = async () => {
     try {
       const newUserData = await AsyncStorage.getItem('isUserEnter');
@@ -131,7 +124,8 @@ const Routes = () => {
 
   console.log('isLoggedIn', isLoggedIn);
 
-  if (isLoggedIn === null || isLoading) return <SplashScreen />;
+  if (isLoggedIn === null || isLoading || isConfigLoading)
+    return <SplashScreen />;
 
   return (
     <AppProvider>

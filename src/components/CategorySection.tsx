@@ -60,7 +60,9 @@ const CategorySection = ({
   const isMounted = useIsMounted();
   const [categoryBanner, setCategoryBanner] = useState<any[]>();
 
-  const {data} = useSwrApi(`banners?type=category`);
+  const {data, isValidating: categoryValidating} = useSwrApi(
+    `banners?type=category`,
+  );
 
   useEffect(() => {
     isMounted.current && setCategoryBanner(data?.data?.data);
@@ -209,9 +211,10 @@ const CategorySection = ({
                 </Text>
               </Center>
             ) : (
-              <Box justifyContent={'center'} alignItems={'center'}>
-                <ActivityIndicator size={'large'} />
-              </Box>
+              // <Box justifyContent={'center'} alignItems={'center'}>
+              //   <ActivityIndicator size={'large'} />
+              // </Box>
+              <Text></Text>
             )}
           </>
         )}

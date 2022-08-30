@@ -5,10 +5,10 @@ import {useNavigation} from '@react-navigation/native';
 import {ActivityIndicator, StyleSheet} from 'react-native';
 import {ProductType} from 'types';
 import Counter from './Counter';
-import {useIsMounted, useSwrApi} from 'hooks';
+import {useIsMounted} from 'hooks';
 import {COLORS} from 'configs';
 import {put, remove} from 'api';
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {ProductSkeleton} from '../../src/skeleton';
 import {CELEBRATE, PRODUCT_PLACEHOLDER} from 'assets';
 import LottieView from 'lottie-react-native';
@@ -78,7 +78,6 @@ const HomeCategoryItem = ({
       isMounted.current && setLoading(false);
     }
   };
-  // console.log({item});
 
   return (
     <>

@@ -1,20 +1,19 @@
 import {useEffect, useState} from 'react';
 import {useAuth} from 'app';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import useIsMounted from './useIsMounted';
-
 import {BASE_URL} from 'api';
-
-import {Alert} from 'react-native';
 
 export default function useAppLoad() {
   const {setUser, user} = useAuth(state => state);
   const isMounted = useIsMounted();
+  const [configData, setConfigData] = useState();
+  const [isConfigLoading, setIsConfigLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
         console.log('config running');
+        isMounted.current && setIsConfigLoading(true);
         const response = await fetch(`${BASE_URL}/config`, {
           method: 'GET',
           headers: {
@@ -22,13 +21,15 @@ export default function useAppLoad() {
           },
         });
         console.log('status', response);
-        const configData = await response.json();
-        console.log('data', configData);
+        const data = await response.json();
+        isMounted.current && setConfigData(data);
       } catch (error) {
         console.log(error);
+      } finally {
+        isMounted.current && setIsConfigLoading(false);
       }
     })();
   }, []);
 
-  return {};
+  return {configData, isConfigLoading};
 }

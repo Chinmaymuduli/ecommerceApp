@@ -56,7 +56,7 @@ const Category = ({route: {params}}: Props) => {
       !filterPrice.current && delete filter.price;
       !filterRatting.current && delete filter.rating;
       !categoryId && delete filter.category;
-      console.log({filter});
+      // console.log({filter});
       setFilterObject(filter);
     }
   }, [CategoryData, filterPrice, filterRatting, categoryId]);
