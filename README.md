@@ -10,3 +10,12 @@ adb -s b85e914e reverse tcp:8081 tcp:8081
 - swr
 - color
 - isMounted
+
+## 30 08 22
+
+- any
+- isMounted
+- loading
+- app update
+- spelling
+- unused imports and declarations

@@ -62,7 +62,8 @@ const SelectAddress = ({route, navigation}: Props) => {
     })();
   }, []);
 
-  console.log(addressValue);
+  console.log(address);
+  // console.log(addressValue);
 
   return (
     <>

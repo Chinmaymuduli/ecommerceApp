@@ -1,5 +1,5 @@
 import {Dimensions, StyleSheet} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Actionsheet,
   Box,
@@ -29,35 +29,37 @@ const rattingArr = [
 ];
 
 const FilterSheet = ({
-  setFilterSheet,
+  filterClose,
   filterSheetOpen,
-  setFilterPrice,
-  setFilterRatting,
   filterPrice,
   filterRatting,
+  applyFilter,
 }: any) => {
-  const {onClose} = useDisclose();
   const isMounted = useIsMounted();
+  const [reload, setReload] = useState<boolean>(false);
 
   const SelectQuantity = (item: any) => {
-    // border color
-    isMounted.current && setFilterPrice(item?.value);
+    filterPrice.current = item?.value;
   };
   const SelectRatting = (item: any) => {
     // border color
-    isMounted.current && setFilterRatting(item?.value);
-    // setFilterRatting(item);
+    filterRatting.current = item?.value;
   };
 
   const clearFilter = () => {
-    isMounted.current && setFilterPrice('');
-    isMounted.current && setFilterRatting('');
+    filterPrice.current = '';
+    filterRatting.current = '';
+    isMounted.current && setReload((prev: boolean) => !prev);
+    applyFilter();
+    filterClose();
   };
+
+  useEffect(() => {}, [reload]);
   return (
     <Actionsheet
       isOpen={filterSheetOpen}
       onClose={() => {
-        setFilterSheet(false), onClose();
+        filterClose();
       }}>
       <Actionsheet.Content>
         <HStack width={'100%'} justifyContent={'space-between'} px={3}>
@@ -77,15 +79,22 @@ const FilterSheet = ({
                 borderWidth={1}
                 borderRadius={5}
                 bg={'#e4e4e460'}
-                borderColor={filterPrice === item.value ? '#228B22' : '#e4e4e4'}
-                onPress={() => SelectQuantity(item)}
+                // borderColor={filterPrice === item.value ? '#228B22' : '#e4e4e4'}
+                borderColor={
+                  filterPrice.current === item.value ? '#228B22' : '#e4e4e4'
+                }
+                onPress={() => {
+                  SelectQuantity(item);
+                  setReload((prev: boolean) => !prev);
+                }}
                 w={Dimensions.get('window').width / 2.5}
                 mx={1}
                 my={1}>
                 <Text px={2} py={2}>
                   {item?.label}
                 </Text>
-                {filterPrice === item.value && (
+                {filterPrice.current === item.value && (
+                  // {filterPrice === item.value && (
                   <Box
                     bg={'#228B22'}
                     borderTopRightRadius={5}
@@ -113,9 +122,11 @@ const FilterSheet = ({
                 borderRadius={5}
                 bg={'#e4e4e460'}
                 borderColor={
-                  filterRatting === item.value ? '#228B22' : '#e4e4e4'
+                  filterRatting.current === item.value ? '#228B22' : '#e4e4e4'
                 }
-                onPress={() => SelectRatting(item)}
+                onPress={() => {
+                  SelectRatting(item), setReload((prev: boolean) => !prev);
+                }}
                 w={Dimensions.get('window').width / 2.5}
                 mx={1}
                 my={1}>
@@ -131,7 +142,7 @@ const FilterSheet = ({
                   </HStack>
                   <Text>above</Text>
                 </HStack>
-                {filterRatting === item.value && (
+                {filterRatting.current === item.value && (
                   <Box
                     bg={'#228B22'}
                     borderTopRightRadius={5}
@@ -150,7 +161,7 @@ const FilterSheet = ({
             borderWidth={1}
             borderColor={'#228B22'}
             onPress={() => {
-              setFilterSheet(false), onClose();
+              filterClose();
             }}
             borderRadius={5}>
             <Text px={10} py={1} color={'#228B22'}>
@@ -161,7 +172,8 @@ const FilterSheet = ({
             bg={'#228B22'}
             borderRadius={5}
             onPress={() => {
-              setFilterSheet(false), onClose();
+              filterClose();
+              applyFilter();
             }}>
             <Text color={COLORS.textWhite} px={10} py={1} bold>
               Apply

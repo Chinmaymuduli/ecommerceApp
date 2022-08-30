@@ -6,9 +6,8 @@ import HomeCategoryItem from './HomeCategoryItem';
 import {ProductType} from 'types';
 import {useIsMounted, useSwrApi} from 'hooks';
 import {COLORS} from 'configs';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useAuth} from 'app';
-import {FetchLoader} from './core';
 
 type CategoryProductType = {
   title?: string;
@@ -28,6 +27,8 @@ const CategoryProducts = ({
 }: CategoryProductType) => {
   const navigation = useNavigation<NavigationProps>();
   const {user, userType} = useAuth(state => state);
+  const [CategoryProductData, setCategoryProductData] =
+    useState<ProductType[]>();
   const isMounted = useIsMounted();
 
   const {data, mutate, isValidating} = useSwrApi(
@@ -36,13 +37,11 @@ const CategoryProducts = ({
       : `category/${item?._id}/products?type=${userType}`,
   );
 
-  const CategoryProductData: ProductType[] = data?.data?.data?.data;
-
   const isFocused = useIsFocused();
 
   useEffect(() => {
-    isMounted.current && mutate();
-  }, [isFocused, isMounted]);
+    isMounted.current && setCategoryProductData(data?.data?.data?.data);
+  }, [isFocused, data]);
 
   return (
     <>
@@ -80,11 +79,18 @@ const CategoryProducts = ({
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           ListEmptyComponent={
-            <Box mt={5}>
-              <Heading size={'sm'} color={COLORS.primary} textAlign={'center'}>
-                No Products Found
-              </Heading>
-            </Box>
+            <>
+              {!data && (
+                <Box mt={5}>
+                  <Heading
+                    size={'sm'}
+                    color={COLORS.primary}
+                    textAlign={'center'}>
+                    No Products Found
+                  </Heading>
+                </Box>
+              )}
+            </>
           }
         />
       </Box>

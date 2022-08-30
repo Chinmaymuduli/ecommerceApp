@@ -49,8 +49,7 @@ const Home = () => {
   useEffect(() => {
     isMounted.current && setCategoryList(data?.data?.data);
     isMounted.current && setNotifications(notificationUnread);
-    // mutate();
-  }, [isFocused]);
+  }, [isFocused, data]);
 
   return (
     <>

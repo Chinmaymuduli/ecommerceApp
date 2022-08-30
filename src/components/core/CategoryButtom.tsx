@@ -24,22 +24,17 @@ const CategoryButtom = ({
   setCategoryId,
 }: any) => {
   const [getSelectionMode, setSelectionMode] = useState(selectionMode);
-
-  //for switch the button
   const updateSwitchData = (value: categoryType) => {
     setSelectionMode(value?._id);
     setCategoryName(value?.name);
     setCategoryId(value?._id);
   };
   useEffect(() => {
-    if (!selectedId) {
-      updateSwitchData(data[0]);
-    }
+    if (!selectedId) updateSwitchData(data?.[0]);
     updateSwitchData(
-      data.find((item: categoryType) => item._id === selectedId),
+      data?.find((item: categoryType) => item?._id === selectedId),
     );
   }, [selectedId, data]);
-  // console.log(data[0]);
 
   return (
     <Box>

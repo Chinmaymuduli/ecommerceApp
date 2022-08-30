@@ -1,6 +1,6 @@
 import {SafeAreaView, StyleSheet} from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {Box, Heading, HStack, Row, VStack} from 'native-base';
+import React, {useEffect, useRef, useState} from 'react';
+import {Box, Center, Heading, HStack, Row, Spinner, VStack} from 'native-base';
 import {AlertComponent, CategoryButtom, FetchLoader} from 'components/core';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
@@ -15,13 +15,9 @@ import {ProductType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route: {params}}: Props) => {
-  // console.log({params});
   const categoryItem = useSwrApi('categories');
-
   const CategoryData = categoryItem?.data?.data?.data;
-
   const {user, userType} = useAuth();
-
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
   const [openAlert, setOpenAlert] = useState<any>(false);
@@ -29,36 +25,14 @@ const Category = ({route: {params}}: Props) => {
   const [categoryId, setCategoryId] = useState<string>('');
   const isMounted = useIsMounted();
   const [sorting, setSorting] = useState<string | undefined>('default');
-  const [filterPrice, setFilterPrice] = useState<string>('');
-  const [filterRatting, setFilterRatting] = useState<string>('');
+  const filterPrice = useRef<string>('');
+  const filterRatting = useRef<string>('');
   const [filteredData, setFilterData] = useState<ProductType[]>([]);
   const [filterObject, setFilterObject] = useState<{
     category: string[] | undefined;
     rating: any[] | undefined;
     price: any[] | undefined;
   }>();
-
-  // setCategoryId(CategoryData ? CategoryData[0]?._id : '');
-
-  useEffect(() => {
-    if (isMounted.current) {
-      const filter = {
-        price: filterPrice
-          ? filterPrice.split('-').map(item => Number(item))
-          : undefined,
-        rating: filterRatting
-          ? filterRatting?.split('-').map(item => Number(item))
-          : undefined,
-        category: categoryId ? [categoryId] : undefined,
-      };
-      !filterPrice && delete filter.price;
-      !filterRatting && delete filter.rating;
-      !categoryId && delete filter.category;
-
-      setFilterObject(filter);
-    }
-  }, [CategoryData, filterPrice, filterRatting, categoryId]);
-
   const {data, isValidating, mutate} = useSwrApi(
     user?._id
       ? `products/filter?filter=${JSON.stringify(
@@ -68,16 +42,47 @@ const Category = ({route: {params}}: Props) => {
           filterObject,
         )}&sortBy=${sorting}`,
   );
-
+  useEffect(() => {
+    if (isMounted.current) {
+      const filter = {
+        price: filterPrice
+          ? filterPrice.current.split('-').map(item => Number(item))
+          : undefined,
+        rating: filterRatting
+          ? filterRatting?.current.split('-').map(item => Number(item))
+          : undefined,
+        category: categoryId ? [categoryId] : undefined,
+      };
+      !filterPrice.current && delete filter.price;
+      !filterRatting.current && delete filter.rating;
+      !categoryId && delete filter.category;
+      console.log({filter});
+      setFilterObject(filter);
+    }
+  }, [CategoryData, filterPrice, filterRatting, categoryId]);
+  const applyFilter = () => {
+    if (isMounted.current) {
+      const filter = {
+        price: filterPrice
+          ? filterPrice.current.split('-').map(item => Number(item))
+          : undefined,
+        rating: filterRatting
+          ? filterRatting.current.split('-').map(item => Number(item))
+          : undefined,
+        category: categoryId ? [categoryId] : undefined,
+      };
+      !filterPrice.current && delete filter.price;
+      !filterRatting.current && delete filter.rating;
+      !categoryId && delete filter.category;
+      setFilterObject(filter);
+    }
+  };
   useEffect(() => {
     isMounted.current && setFilterData(data?.data?.data?.data);
   }, [data]);
 
-  console.log({categoryId});
-
   return (
     <>
-      {/* {!isValidating ? ( */}
       <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
         <Box borderBottomWidth={1.5} borderColor={COLORS.lightGrey}>
           <HStack justifyContent={'space-between'} px={4} py={3}>
@@ -114,10 +119,9 @@ const Category = ({route: {params}}: Props) => {
               mutate={mutate}
               setSorting={setSorting}
               sorting={sorting}
-              setFilterPrice={setFilterPrice}
               filterPrice={filterPrice}
               filterRatting={filterRatting}
-              setFilterRatting={setFilterRatting}
+              applyFilter={applyFilter}
             />
           </VStack>
         </Row>
@@ -129,9 +133,6 @@ const Category = ({route: {params}}: Props) => {
           alertMessage={alertMessage}
         />
       </SafeAreaView>
-      {/* ) : (
-        <FetchLoader />
-      )} */}
     </>
   );
 };

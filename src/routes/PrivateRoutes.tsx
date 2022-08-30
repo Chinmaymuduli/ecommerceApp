@@ -29,7 +29,7 @@ import {
   WishList,
 } from 'screens';
 import BottomTab from './BottomTab';
-import {CartItemType, ProductDetailsType, ProductType} from 'types';
+import {ProductDetailsType, ProductType} from 'types';
 
 export type PrivateRoutesType = {
   Home: undefined;
@@ -112,10 +112,7 @@ const PrivateRoutes = () => {
       }}>
       <Stack.Screen name="Bottomtab" component={BottomTab} />
       <Stack.Screen name="Cart" component={Cart} />
-      {/* <Stack.Screen name="Category" component={Category} /> */}
-
       <Stack.Screen name="Search" component={Search} />
-      {/* <Stack.Screen name="Order" component={Order} /> */}
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
       <Stack.Screen
         name="Coupon"

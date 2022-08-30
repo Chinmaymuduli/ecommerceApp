@@ -32,11 +32,10 @@ type CategoryProductType = {
   mutate: () => void;
   setSorting: (previous: string) => void;
   sorting?: string;
-  setFilterPrice: (data: string) => void;
-  setFilterRatting: (data: string) => void;
-  filterRatting: string | any;
-  filterPrice: string | any;
+  filterRatting: any;
+  filterPrice: any;
   isValidating: boolean;
+  applyFilter: () => void;
 };
 
 const CategorySection = ({
@@ -50,11 +49,14 @@ const CategorySection = ({
   sorting,
   filterPrice,
   filterRatting,
-  setFilterRatting,
-  setFilterPrice,
+  applyFilter,
 }: CategoryProductType) => {
-  const [filterSheetOpen, setFilterSheetOpen] = React.useState(false);
   const {isOpen, onOpen, onClose} = useDisclose();
+  const {
+    isOpen: filterSheetOpen,
+    onOpen: filterOpen,
+    onClose: filterClose,
+  } = useDisclose();
   const isMounted = useIsMounted();
   const [categoryBanner, setCategoryBanner] = useState<any[]>();
 
@@ -127,9 +129,7 @@ const CategorySection = ({
                 bg={COLORS.textWhite}
                 shadow={2}
                 borderRadius={5}
-                onPress={() => {
-                  setFilterSheetOpen(true);
-                }}>
+                onPress={filterOpen}>
                 <AntDesign
                   name="filter"
                   size={20}
@@ -184,13 +184,13 @@ const CategorySection = ({
                 </Actionsheet.Content>
               </Actionsheet>
               {/* filter */}
+
               <FilterSheet
-                setFilterSheet={setFilterSheetOpen}
+                filterClose={filterClose}
                 filterSheetOpen={filterSheetOpen}
-                setFilterPrice={setFilterPrice}
-                setFilterRatting={setFilterRatting}
                 filterPrice={filterPrice}
                 filterRatting={filterRatting}
+                applyFilter={applyFilter}
               />
             </HStack>
           </Box>

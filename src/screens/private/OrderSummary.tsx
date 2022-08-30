@@ -46,17 +46,13 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
     `address/${selectedAddressId}`,
   );
 
-  // const SelectedAddress = data?.data?.data;
-
   const quantityData = OrderSummaryData?.products?.find(
     (item: {quantity: number}) => item?.quantity,
   );
-  // console.log({SelectedAddress});
 
   useEffect(() => {
     isMounted.current && setSelectAddress(data?.data?.data);
-    mutate();
-  }, []);
+  }, [data]);
 
   return (
     <>

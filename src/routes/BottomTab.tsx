@@ -1,10 +1,8 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useAuth, useStore} from 'app';
 import {COLORS} from 'configs';
-import {Badge, Box, Text} from 'native-base';
-
+import {Box, Text} from 'native-base';
 import React from 'react';
-import {StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity} from 'react-native';
 import {Category, Home, Order, Search, Cart} from 'screens';
 import Icon, {Icons} from '../components/core/Icons';
 
@@ -29,7 +27,6 @@ const CustomTabbarButton = ({children, onPress}: any) => (
 );
 
 export default function BottomTab() {
-  const {user} = useAuth();
   return (
     <Tab.Navigator
       screenOptions={{
