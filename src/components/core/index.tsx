@@ -13,3 +13,4 @@ export {default as FetchLoader} from './FetchLoader';
 export {default as SkeletonComponent} from './SkeletonComponent';
 export {default as CartAlert} from './CartAlert';
 export {default as ModalComponent} from './ModalComponent';
+export {default as CountryPicker} from './CountryPicker';

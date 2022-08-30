@@ -1,4 +1,4 @@
-import {Dimensions, StyleSheet} from 'react-native';
+import {Alert, Dimensions, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {
   Actionsheet,
@@ -19,7 +19,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {INDIANSTATE} from '../../constants';
+import {COUNTRY_DATA, INDIANSTATE} from '../../constants';
 import {useNavigation} from '@react-navigation/native';
 import {NavigationProps, PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {AddressType} from 'types';
@@ -27,7 +27,7 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {post} from 'api';
 import {useActions, useIsMounted} from 'hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {ErrorModal} from 'components/core';
+import {CountryPicker, ErrorModal} from 'components/core';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Address'>;
 const Address = ({route, navigation}: Props) => {
@@ -43,18 +43,27 @@ const Address = ({route, navigation}: Props) => {
   const [addressTypeText, setAddressTypeText] = useState('Home');
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [label, setLabel] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [country, setCountry] = useState({
+    code: 'IN',
+    label: 'India',
+    phone: '91',
+  });
+
+  console.log({country});
 
   const isMounted = useIsMounted();
   const {setLoading} = useActions();
   const onSubmit = async (data: AddressType) => {
+    console.log('dataAddress', data);
     try {
       isMounted.current && setLoading(true);
       const token = await AsyncStorage.getItem('ACCESS_TOKEN');
       const AddressData = JSON.stringify({
-        landmark: data.housenumber,
-        email: 'demouser@gmail.com',
+        landmark: data?.housenumber,
+        email: data.email,
         phoneNumber: data.phoneNumber,
-        countryCode: 91,
+        countryCode: country?.phone,
         name: data.firstName,
         street: data.roadName,
         city: data.city,
@@ -70,9 +79,10 @@ const Address = ({route, navigation}: Props) => {
         body: AddressData,
         token: token,
       });
-      console.log({postAddress});
       if (postAddress.status === 200) {
         navigation.navigate('SelectAddress', {});
+      } else {
+        Alert.alert('Error', postAddress?.error);
       }
     } catch (error) {
       console.log(error);
@@ -125,11 +135,23 @@ const Address = ({route, navigation}: Props) => {
               render={({field: {onChange, onBlur, value}}) => (
                 <Input
                   onBlur={onBlur}
-                  placeholder="phone number"
+                  placeholder="Phone Number"
                   keyboardType="numeric"
                   onChangeText={val => onChange(val)}
                   value={value}
                   fontSize={15}
+                  InputLeftElement={
+                    <>
+                      <Pressable onPress={() => setModalVisible(true)}>
+                        <HStack>
+                          <Box px={2}>
+                            <Text>+{country?.phone}</Text>
+                          </Box>
+                          <Box borderWidth={1.2}></Box>
+                        </HStack>
+                      </Pressable>
+                    </>
+                  }
                 />
               )}
               name="phoneNumber"
@@ -138,6 +160,29 @@ const Address = ({route, navigation}: Props) => {
             />
             <FormControl.ErrorMessage mt={0}>
               {errors.phoneNumber?.message}
+            </FormControl.ErrorMessage>
+          </FormControl>
+
+          <FormControl isRequired isInvalid={'email' in errors} mt={2}>
+            <FormControl.Label>Email</FormControl.Label>
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <Input
+                  onBlur={onBlur}
+                  placeholder="Enter Email"
+                  autoCapitalize="none"
+                  onChangeText={val => onChange(val)}
+                  value={value}
+                  fontSize={15}
+                />
+              )}
+              name="email"
+              rules={{required: 'Email is required'}}
+              defaultValue=""
+            />
+            <FormControl.ErrorMessage mt={0}>
+              {errors.email?.message}
             </FormControl.ErrorMessage>
           </FormControl>
           <Box flexDirection={'row'}>
@@ -395,6 +440,13 @@ const Address = ({route, navigation}: Props) => {
         setShowErrorModal={setShowErrorModal}
         showErrorModal={showErrorModal}
         label={label}
+      />
+
+      <CountryPicker
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        data={COUNTRY_DATA}
+        setCountry={setCountry}
       />
     </Box>
   );

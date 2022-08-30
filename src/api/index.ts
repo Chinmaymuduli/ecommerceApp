@@ -6,17 +6,14 @@ import {APIFunction} from 'types';
 export const BASE_URL = `https://chhattisgarh-herbals-api.herokuapp.com/api`;
 
 const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
-  console.log('get token running');
   const GET_REFRESH_TOKEN = await AsyncStorage.getItem('REFRESH_TOKEN');
 
-  console.log('GET_REFRESH_TOKEN', GET_REFRESH_TOKEN);
   const getResponse = await post({
     path: 'auth/get-access-token',
     body: JSON.stringify({
       refresh_token: GET_REFRESH_TOKEN,
     }),
   });
-  console.log({getResponse});
   if (getResponse.status === 401) {
     await AsyncStorage.setItem('isLoggedIn', 'false');
     console.log('401 delete');
@@ -148,21 +145,19 @@ export const remove: APIFunction = async ({
     return {error};
   }
 };
-export const GET: APIFunction = async ({
-  path,
-  method = 'GET',
-  options = {},
-  headers = {'Content-Type': 'application/json'},
-  token = '',
-}) => {
-  if (token) headers.Authorization = `Bearer ${token}`;
+export const GET: APIFunction = async path => {
+  const accessToken = await AsyncStorage.getItem('ACCESS_TOKEN');
   try {
     const API_OPTIONS = {
-      method,
-      headers,
-      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
     };
     const response = await fetch(`${BASE_URL}/${path}`, API_OPTIONS);
+    if (response.status === 401) {
+      return GetToken(GET, path);
+    }
     const json = await response.json();
 
     return {

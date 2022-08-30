@@ -1,6 +1,15 @@
 import {RefreshControl, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {Box, HStack, Pressable, Radio, ScrollView, Text} from 'native-base';
+import {
+  Box,
+  Center,
+  Heading,
+  HStack,
+  Pressable,
+  Radio,
+  ScrollView,
+  Text,
+} from 'native-base';
 import {COLORS} from 'configs';
 import Entypo from 'react-native-vector-icons/Entypo';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
@@ -11,24 +20,30 @@ import {FetchLoader} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useAddress, useIsMounted, useSwrApi} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
+import LottieView from 'lottie-react-native';
+import {NO_RESULT} from 'assets';
+import useSWR from 'swr';
+import {GET} from 'api';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
 const SelectAddress = ({route, navigation}: Props) => {
   const [address, setAddress] = useState<any>();
 
   const [addressId, setAddressId] = useState<string | null>();
-  const [addressValue, setAddressValue] = React.useState<any>();
+  const [addressValue, setAddressValue] = React.useState<any>('');
   const isFocused = useIsFocused();
-  const [loading, setLoading] = useState(false);
 
   const isMounted = useIsMounted();
 
   const isProfile = route.params?.isProfile;
-  const {data, mutate, isValidating} = useSwrApi('address/all/my-addresses');
+  const {data, mutate, isValidating} = useSWR('address/all/my-addresses', GET);
+  // const {data, mutate, isValidating} = useSwrApi('address/all/my-addresses');
+
   useEffect(() => {
-    isMounted.current && setAddress(data?.data?.data);
+    console.log({data});
+    isMounted.current && setAddress(data?.data);
     mutate();
-  }, [isFocused, isMounted]);
+  }, [isFocused, isMounted, data]);
 
   const handelDeliver = async () => {
     await AsyncStorage.setItem('address_id', addressValue);
@@ -47,14 +62,17 @@ const SelectAddress = ({route, navigation}: Props) => {
     })();
   }, []);
 
-  // console.log({addressValue});
+  console.log(addressValue);
 
   return (
     <>
-      {!isValidating ? (
+      {data ? (
         <Box flex={1} bg={COLORS.textWhite}>
           <ScrollView
             showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: 100,
+            }}
             refreshControl={
               <RefreshControl
                 refreshing={isValidating}
@@ -62,16 +80,7 @@ const SelectAddress = ({route, navigation}: Props) => {
               />
             }>
             <Box px={4} borderBottomWidth={10} borderColor={COLORS.lightGrey}>
-              <Pressable
-                onPress={() =>
-                  navigation.navigate(
-                    'Address',
-                    // {
-                    //   SelectAddress: summaryData,
-                    // }
-                  )
-                }
-                py={4}>
+              <Pressable onPress={() => navigation.navigate('Address')} py={4}>
                 <HStack
                   py={1}
                   borderRadius={5}
@@ -93,12 +102,13 @@ const SelectAddress = ({route, navigation}: Props) => {
                     borderBottomWidth={1}
                     borderColor={COLORS.lightGrey}>
                     <Radio.Group
-                      value={addressValue}
+                      value={addressValue ?? address[0]._id}
                       onChange={nextValue => {
-                        setAddressValue(nextValue);
+                        isMounted.current && setAddressValue(nextValue);
                       }}
                       name="myRadioGroup"
-                      defaultValue={addressId ? addressId : address[0]._id}
+                      defaultValue={address[1]._id}
+                      // defaultValue={addressId ? addressId : address[0]._id }
                       accessibilityLabel="Select address">
                       <Radio
                         value={item?._id}
@@ -126,7 +136,12 @@ const SelectAddress = ({route, navigation}: Props) => {
                 ))
               ) : (
                 <Box>
-                  <Text>Please Add Address</Text>
+                  <Center h={450}>
+                    <LottieView source={NO_RESULT} autoPlay loop={true} />
+                  </Center>
+                  <Box alignItems={'center'} mt={-10}>
+                    <Heading size={'md'}>No Address Found</Heading>
+                  </Box>
                 </Box>
               )}
             </Box>

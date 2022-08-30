@@ -71,7 +71,15 @@ export type AddressType = {
   city?: string;
   housenumber?: string;
   roadName?: string;
-  pincode?: string;
+  pincode?: StringConstructor;
+  landmark?: string;
+  zip?: string;
+  email?: string;
+  countryCode?: string;
+  name?: string;
+  type?: string;
+  street?: string;
+  state?: string;
 };
 
 export type CartType = {

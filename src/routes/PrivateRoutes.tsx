@@ -40,6 +40,7 @@ export type PrivateRoutesType = {
     id?: number | any;
     b2b?: boolean;
     isBussiness?: boolean;
+    _id?: string;
   };
   Search: undefined;
   Order: undefined;

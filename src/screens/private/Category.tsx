@@ -39,6 +39,7 @@ const Category = ({route: {params}}: Props) => {
   }>();
 
   // setCategoryId(CategoryData ? CategoryData[0]?._id : '');
+
   useEffect(() => {
     if (isMounted.current) {
       const filter = {
@@ -72,6 +73,8 @@ const Category = ({route: {params}}: Props) => {
     isMounted.current && setFilterData(data?.data?.data?.data);
   }, [data]);
 
+  console.log({categoryId});
+
   return (
     <>
       {/* {!isValidating ? ( */}
@@ -93,7 +96,7 @@ const Category = ({route: {params}}: Props) => {
         <Row>
           <Box w={'1/4'}>
             <CategoryButtom
-              // selectedId={route.params?.id || 1}
+              selectedId={params?._id || ''}
               selectionMode={categoryId}
               data={CategoryData}
               setCategoryName={setCategoryName}

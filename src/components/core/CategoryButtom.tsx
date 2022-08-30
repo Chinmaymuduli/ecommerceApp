@@ -1,6 +1,6 @@
 import {ScrollView, TouchableOpacity} from 'react-native';
 import {Box, Image, Pressable, Text, VStack} from 'native-base';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {COLORS} from 'configs';
 import {PRODUCT_PLACEHOLDER} from 'assets';
 
@@ -31,13 +31,15 @@ const CategoryButtom = ({
     setCategoryName(value?.name);
     setCategoryId(value?._id);
   };
-  // useEffect(() => {
-  //   if (!selectedId) {
-  //     updateSwitchData(data[0]);
-  //   }
-  //   updateSwitchData(data.find((item: categoryType) => item.id === selectedId));
-  // }, [selectedId, data]);
-  // console.log({getSelectionMode});
+  useEffect(() => {
+    if (!selectedId) {
+      updateSwitchData(data[0]);
+    }
+    updateSwitchData(
+      data.find((item: categoryType) => item._id === selectedId),
+    );
+  }, [selectedId, data]);
+  // console.log(data[0]);
 
   return (
     <Box>

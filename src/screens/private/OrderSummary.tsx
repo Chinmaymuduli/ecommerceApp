@@ -1,4 +1,4 @@
-import {StyleSheet} from 'react-native';
+import {RefreshControl, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   Box,
@@ -19,24 +19,22 @@ import {useAddress, useIsMounted, useSwrApi} from 'hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FetchLoader} from 'components/core';
 import {useIsFocused} from '@react-navigation/native';
+import {AddressType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route: {params}}: Props) => {
   const isMounted = useIsMounted();
   const isFocused = useIsFocused();
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>();
-  const {
-    data: productData,
-    isValidating: productValidating,
-    mutate,
-  } = useSwrApi(
+  const [SelectedAddress, setSelectAddress] = useState<AddressType>();
+  const {data: productData, isValidating: productValidating} = useSwrApi(
     params?.type === 'product'
       ? `orders/summary?type=${params.type}&quantity=${params.quantity}&productId=${params.productId}`
       : `orders/summary?type=cart`,
   );
 
   const OrderSummaryData = productData?.data?.data;
-  console.log({OrderSummaryData});
+  // console.log({OrderSummaryData});
   useEffect(() => {
     (async () => {
       const addressID = await AsyncStorage.getItem('address_id');
@@ -44,14 +42,21 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
     })();
   }, [selectedAddressId, isMounted, isFocused]);
 
-  const {data, isValidating} = useSwrApi(`address/${selectedAddressId}`);
+  const {data, isValidating, mutate} = useSwrApi(
+    `address/${selectedAddressId}`,
+  );
 
-  const SelectedAddress = data?.data?.data;
+  // const SelectedAddress = data?.data?.data;
 
   const quantityData = OrderSummaryData?.products?.find(
     (item: {quantity: number}) => item?.quantity,
   );
-  // console.log({OrderSummaryData});
+  // console.log({SelectedAddress});
+
+  useEffect(() => {
+    isMounted.current && setSelectAddress(data?.data?.data);
+    mutate();
+  }, []);
 
   return (
     <>
@@ -59,7 +64,14 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
         <FetchLoader />
       ) : (
         <Box flex={1} bg={COLORS.textWhite}>
-          <ScrollView showsVerticalScrollIndicator={false}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={isValidating}
+                onRefresh={() => mutate()}
+              />
+            }>
             <Box
               px={5}
               mt={5}
@@ -108,9 +120,7 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
               )}
             </Box>
             {/* card */}
-            {/* {cartData.map((od: CartItemType) => (
-        <OrderSummaryCard key={od.product?._id} orderData={od} />
-      ))} */}
+
             {OrderSummaryData?.products?.map((od: any) => (
               <OrderSummaryCard key={od._id} orderData={od} />
             ))}
@@ -129,7 +139,7 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
                     borderStyle={'dashed'}>
                     <HStack justifyContent={'space-between'}>
                       <Text>Price</Text>
-                      {/* <Text>100</Text> */}
+
                       <Text>{OrderSummaryData?.totalMrp}</Text>
                     </HStack>
                     <HStack justifyContent={'space-between'}>
@@ -187,7 +197,8 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
                 <HStack alignItems={'center'} space={2} pl={2}>
                   <Box>
                     <Text bold color={'#fff'}>
-                      {/* {orderItems.length} items */}1 items
+                      {/* {orderItems.length} items */}
+                      {OrderSummaryData?.products?.length} items
                     </Text>
                   </Box>
                   <HStack space={2}>

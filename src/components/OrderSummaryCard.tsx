@@ -37,12 +37,12 @@ const OrderSummaryCard = ({orderData}: Props) => {
               }}
             />
             {/* Counter start */}
-            {userType !== 'b2b' && (
+            {/* {userType !== 'b2b' && (
               <OrderSummaryCounter
                 orderQuantity={orderData?.quantity}
                 productID={orderData?.product?.id}
               />
-            )}
+            )} */}
             {/* Counter End */}
           </VStack>
           <VStack pl={5}>

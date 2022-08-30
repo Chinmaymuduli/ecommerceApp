@@ -10,7 +10,7 @@ const useSwrApi = (url: string, options?: any) => {
   const [isLoading, setLoading] = useState(false);
   const isMounted = useIsMounted();
   const {setLoggedIn} = useAuth();
-  const navigation = useNavigation();
+
   const fetcher = async (url: string, options?: any) => {
     try {
       isMounted.current && setLoading(true);
