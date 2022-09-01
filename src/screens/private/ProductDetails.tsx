@@ -106,7 +106,7 @@ const ProductDetails = ({route, navigation}: Props) => {
   };
 
   const similarProduct = useSwrApi(
-    `category/${authData?.category}/products?type=${userType}&limit=6&chunk=0`,
+    `category/${authData?.category}/products?userId=${user?._id}&type=${userType}&limit=6&chunk=0`,
   );
   const SPECIAL_PRODUCT = similarProduct?.data?.data?.data?.data;
 
@@ -241,7 +241,7 @@ const ProductDetails = ({route, navigation}: Props) => {
     isMounted.current && setLabel('Please Login !');
   };
 
-  // console.log({rating});
+  console.log({SPECIAL_PRODUCT});
   return (
     <>
       {!isValidating ? (
@@ -592,7 +592,6 @@ const ProductDetails = ({route, navigation}: Props) => {
                 </Pressable>
               )}
               <Pressable
-                // onPress={() => BuyNow(productData)}
                 onPress={
                   guestUser === 'true'
                     ? () => handelGuestLogin()

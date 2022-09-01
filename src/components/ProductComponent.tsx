@@ -20,6 +20,8 @@ const ProductComponent = ({item}: productType) => {
   const {guestUser} = useAppContext();
   const [loading, setLoading] = useState(false);
 
+  // console.log({item});
+
   const handleWishlist = async (wishlistItem: ProductType) => {
     try {
       if (item?.isInWishList) {
@@ -56,6 +58,69 @@ const ProductComponent = ({item}: productType) => {
     } catch (error) {
       console.log(error);
     } finally {
+      isMounted.current && setLoading(false);
+    }
+  };
+
+  const increment = async (id: number) => {
+    try {
+      isMounted.current && setLoading(true);
+      const res = await put({
+        path: 'cart/add',
+        body: JSON.stringify({
+          product: id,
+          quantity: 1,
+        }),
+      });
+
+      // if (res?.status === 200) return ProductMutate();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      isMounted.current && setLoading(false);
+    }
+  };
+
+  const decrement = async (id: number) => {
+    try {
+      isMounted.current && setLoading(true);
+      const res = await put({
+        path: 'cart/remove',
+        body: JSON.stringify({
+          product: id,
+          quantity: -1,
+        }),
+      });
+      // if (res?.status === 200) return ProductMutate();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // ProductMutate();
+      isMounted.current && setLoading(false);
+    }
+  };
+
+  const addToCartItem = async () => {
+    try {
+      isMounted.current && setLoading(true);
+      const response = await put({
+        path: 'cart/add',
+        body: JSON.stringify({
+          product: item?._id,
+          quantity: 1,
+        }),
+      });
+      console.log({response});
+      // setOpenAlert(true),
+      //   setAlertMessage('Added to cart'),
+      //   setTimeout(() => {
+      //     setOpenAlert(false);
+      //   }, 4000);
+      // if (response.status === 200) return mutate();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      // ProductMutate();
       isMounted.current && setLoading(false);
     }
   };
@@ -134,7 +199,7 @@ const ProductComponent = ({item}: productType) => {
                     name="minus"
                     size={20}
                     color={COLORS.fadeBlack}
-                    // onPress={() => decrement()}
+                    onPress={() => decrement(item?._id)}
                   />
                 </Box>
                 <Box>
@@ -149,7 +214,7 @@ const ProductComponent = ({item}: productType) => {
                       paddingHorizontal: 3,
                       paddingVertical: 3,
                     }}
-                    // onPress={increment}
+                    onPress={() => increment(item?._id)}
                   />
                 </Box>
               </HStack>
@@ -163,7 +228,7 @@ const ProductComponent = ({item}: productType) => {
                     paddingHorizontal: 3,
                     paddingVertical: 3,
                   }}
-                  // onPress={() => AddSpecialCart(item)}
+                  onPress={() => addToCartItem()}
                 />
               </Box>
             )}
