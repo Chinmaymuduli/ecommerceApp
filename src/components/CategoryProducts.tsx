@@ -8,6 +8,7 @@ import {useIsMounted, useSwrApi} from 'hooks';
 import {COLORS} from 'configs';
 import React, {useEffect, useState} from 'react';
 import {useAuth} from 'app';
+import {ProductSkeleton} from '../../src/skeleton';
 
 type CategoryProductType = {
   title?: string;
@@ -46,6 +47,8 @@ const CategoryProducts = ({
   useEffect(() => {
     isMounted.current && setCategoryProductData(data?.data?.data?.data);
   }, [isFocused, data]);
+
+  if (isValidating && !data) return <ProductSkeleton />;
 
   return (
     <>

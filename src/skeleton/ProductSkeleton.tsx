@@ -21,7 +21,7 @@ const ProductSkeleton = () => {
           }}>
           <Skeleton h="40" />
         </VStack>
-        <Skeleton.Text lines={1} mt={3} />
+        {/* <Skeleton.Text lines={1} mt={3} /> */}
       </VStack>
     </>
   );

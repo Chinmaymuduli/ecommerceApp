@@ -24,7 +24,7 @@ const HomeCategories = () => {
   const navigation = useNavigation<NavigationProps>();
   const [CategoryData, setCategoryData] = useState<CategoryType[]>();
   const isMounted = useIsMounted();
-  const {data, isValidating} = useSwrApi('categories?limit=5&chunk=0');
+  const {data, isValidating} = useSwrApi('categories?limit=6&chunk=0');
   useEffect(() => {
     isMounted.current && setCategoryData(data?.data?.data);
   }, [data]);
