@@ -15,6 +15,7 @@ import useConfig from './hooks/useConfig';
 import useAppContext from './contexts/useAppContext';
 import {BASE_URL} from 'api';
 import {Alert} from 'react-native';
+import AppUpdate from './components/core/AppUpdate';
 
 const Drawer = createDrawerNavigator();
 const Routes = () => {
@@ -22,6 +23,7 @@ const Routes = () => {
   const {setIsLoggedIn, isLoggedIn} = useAppContext();
   const [userEnter, setUserEnter] = useState<string | null>();
   const isMounted = useIsMounted();
+  const [showModal, setShowModal] = useState(false);
   const {data, isLoading} = useAppLoad();
   useFCMToken();
   const {configData, isConfigLoading} = useConfig();
@@ -122,7 +124,10 @@ const Routes = () => {
     getUserData();
   }, [isLoggedIn]);
 
-  console.log('isLoggedIn', isLoggedIn);
+  console.log({isLoggedIn});
+
+  if ((configData?.data?.androidApp?.version || 0) > 1)
+    return <AppUpdate data={configData} />;
 
   if (isLoggedIn === null || isLoading || isConfigLoading)
     return <SplashScreen />;
