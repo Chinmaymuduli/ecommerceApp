@@ -101,6 +101,10 @@ const WishList = ({navigation}: Props) => {
               renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               numColumns={2}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={{
+                paddingBottom: 100,
+              }}
               ListEmptyComponent={() => (
                 <Box mt={20}>
                   <Center h={400} w={'full'}>

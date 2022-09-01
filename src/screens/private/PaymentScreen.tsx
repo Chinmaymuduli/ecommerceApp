@@ -512,7 +512,12 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                 alignItems={'center'}>
                 <HStack alignItems={'center'} space={2} pl={2}>
                   <Text bold color={'#fff'}>
-                    {params?.quantity} items
+                    {checkoutData?.products?.reduce(
+                      (acc: number, cur: {quantity: number}) =>
+                        (acc += cur.quantity),
+                      0,
+                    )}{' '}
+                    items
                   </Text>
                   <HStack space={2}>
                     <Text bold color={'#fff'}>
