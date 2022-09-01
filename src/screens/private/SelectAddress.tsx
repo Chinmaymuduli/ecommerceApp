@@ -103,12 +103,12 @@ const SelectAddress = ({route, navigation}: Props) => {
                     borderBottomWidth={1}
                     borderColor={COLORS.lightGrey}>
                     <Radio.Group
-                      value={addressValue ?? address[0]._id}
+                      value={addressValue ?? address[0]?._id}
                       onChange={nextValue => {
                         isMounted.current && setAddressValue(nextValue);
                       }}
                       name="myRadioGroup"
-                      defaultValue={address[1]._id}
+                      defaultValue={address[0]?._id}
                       // defaultValue={addressId ? addressId : address[0]._id }
                       accessibilityLabel="Select address">
                       <Radio
