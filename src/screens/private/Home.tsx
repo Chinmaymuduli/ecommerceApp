@@ -1,4 +1,4 @@
-import {ImageBackground, StyleSheet} from 'react-native';
+import {ImageBackground, Linking, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   Badge,
@@ -45,6 +45,10 @@ const Home = () => {
   const notificationUnread = notificationData?.data?.data?.data.filter(
     (item: {isRead: boolean}) => item?.isRead === false,
   );
+
+  const {data: bannerMiddle} = useSwrApi('banners?type=middle');
+  const {data: bannerBottom} = useSwrApi('banners?type=bottom');
+  // console.log(bannerMiddle?.data?.data?.data[0]?.title);
 
   useEffect(() => {
     isMounted.current && setCategoryList(data?.data?.data);
@@ -148,22 +152,32 @@ const Home = () => {
             {/* Women Empower */}
             <Pressable alignItems={'center'} my={3}>
               <ImageBackground
-                source={WOMEN_MP}
+                source={
+                  bannerMiddle?.data?.data?.data[0]?.imageURL
+                    ? {uri: bannerMiddle?.data?.data?.data[0]?.imageURL}
+                    : WOMEN_MP
+                }
                 style={styles.women_empower}
                 borderRadius={5}
                 resizeMode={'cover'}>
                 <Box>
                   <Text color={COLORS.textWhite} textAlign={'center'} bold>
-                    From the heart of Chhattisgarh
+                    {bannerMiddle?.data?.data?.data[0]?.description}
                   </Text>
                   <Heading
                     mt={2}
                     color={'#98FB98'}
                     textAlign={'center'}
                     size={'md'}>
-                    EMPOWERING TRIBAL WOMEN
+                    {/* EMPOWERING TRIBAL WOMEN */}
+                    {bannerMiddle?.data?.data?.data[0]?.title}
                   </Heading>
-                  <Box
+                  <Pressable
+                    onPress={() =>
+                      Linking.openURL(
+                        'https://chhattisgarh-herbals-web.vercel.app/',
+                      )
+                    }
                     mt={2}
                     shadow={1}
                     bg={COLORS.textWhite}
@@ -174,7 +188,7 @@ const Home = () => {
                     <Text px={3} py={1} color={COLORS.secondary}>
                       Know More
                     </Text>
-                  </Box>
+                  </Pressable>
                 </Box>
               </ImageBackground>
             </Pressable>
@@ -194,22 +208,34 @@ const Home = () => {
               borderRadius={5}>
               <HStack>
                 <Image
-                  source={CHAWAN}
+                  source={
+                    bannerBottom?.data?.data?.data[0]?.imageURL
+                      ? {uri: bannerBottom?.data?.data?.data[0]?.imageURL}
+                      : CHAWAN
+                  }
                   style={styles.honeyImg}
                   alt={'honey_img'}
                   resizeMode={'contain'}
                 />
                 <Box justifyContent={'center'} alignItems={'center'}>
-                  <Text>HEALTHY FOOD</Text>
-                  <Heading size={'xs'} mt={1}>
-                    OUR BEST SELLING PRODUCT
+                  <Text>{bannerBottom?.data?.data?.data[0]?.title}</Text>
+                  <Heading
+                    size={'xs'}
+                    mt={1}
+                    flexWrap={'wrap'}
+                    w={210}
+                    textAlign={'center'}>
+                    {bannerBottom?.data?.data?.data[0]?.description}
                   </Heading>
-                  <Text mt={1}>Super Offer Up TO 50% OFF</Text>
-                  <Box bg={COLORS.primary} borderRadius={10} mt={1}>
+                  <Pressable
+                    bg={COLORS.primary}
+                    borderRadius={10}
+                    mt={1}
+                    onPress={() => navigation.navigate('Category', {})}>
                     <Text px={3} py={1} color={COLORS.textWhite}>
                       Shop Now
                     </Text>
-                  </Box>
+                  </Pressable>
                 </Box>
               </HStack>
             </Box>

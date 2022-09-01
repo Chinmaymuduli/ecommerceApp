@@ -65,7 +65,7 @@ const CategorySection = ({
   );
 
   useEffect(() => {
-    isMounted.current && setCategoryBanner(data?.data?.data);
+    isMounted.current && setCategoryBanner(data?.data?.data?.data);
   }, [data]);
 
   return (

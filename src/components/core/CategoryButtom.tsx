@@ -31,7 +31,7 @@ const CategoryButtom = ({
   };
   useEffect(() => {
     updateSwitchData(
-      data?.find((item: categoryType) => item?._id === selectedId),
+      data?.data?.find((item: categoryType) => item?._id === selectedId),
     );
     if (!selectedId) updateSwitchData(data?.[0]);
   }, [selectedId, data]);
@@ -85,7 +85,7 @@ const CategoryButtom = ({
                 right={0}></Box>
             )}
           </Pressable>
-          {data?.map((item: categoryType) => (
+          {data?.data?.map((item: categoryType) => (
             <TouchableOpacity
               key={item._id}
               style={{
