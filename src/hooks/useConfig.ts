@@ -5,13 +5,21 @@ import {BASE_URL} from 'api';
 
 type CONFIG_TYPE = {
   data: {
-    GST?: number;
-    androidApp?: {
-      isDismissible: boolean;
-      message: string;
-      title: string;
+    androidApp: {
       version: number;
+      title: string;
+      message: string;
+      isDismissible: boolean;
     };
+    iosApp: {
+      version: number;
+      title: string;
+      message: string;
+      isDismissible: boolean;
+    };
+    referral: number;
+    GST: number;
+    deliveryCharge: number;
   };
 };
 

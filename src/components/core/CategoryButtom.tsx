@@ -30,10 +30,10 @@ const CategoryButtom = ({
     setCategoryId(value?._id);
   };
   useEffect(() => {
-    if (!selectedId) updateSwitchData(data?.[0]);
     updateSwitchData(
       data?.find((item: categoryType) => item?._id === selectedId),
     );
+    if (!selectedId) updateSwitchData(data?.[0]);
   }, [selectedId, data]);
 
   return (

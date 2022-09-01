@@ -178,6 +178,7 @@ const PrivateRoutes = () => {
         }}
       />
       <Stack.Screen name="WishList" component={WishList} />
+
       <Stack.Screen
         name="OrderDetails"
         component={OrderDetails}

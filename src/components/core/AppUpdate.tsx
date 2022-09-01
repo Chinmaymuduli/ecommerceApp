@@ -1,4 +1,4 @@
-import {DevSettings, StyleSheet} from 'react-native';
+import {DevSettings, Linking, StyleSheet} from 'react-native';
 import React, {useState} from 'react';
 import {
   Box,
@@ -15,17 +15,16 @@ import {UPDATE_APP} from 'assets';
 import {COLORS} from 'configs';
 import {useNavigation} from '@react-navigation/native';
 
-type Props = {
-  data: any;
-};
-
-const AppUpdate = ({data}: Props) => {
+const AppUpdate = () => {
   const navigation = useNavigation();
   const [showModal, setShowModal] = useState(true);
   //   console.log({data});
+  const handelCancel = () => {
+    setShowModal(false);
+  };
   return (
     <Center>
-      <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
+      <Modal isOpen={showModal}>
         <Modal.Content maxWidth="400px">
           <Modal.Body>
             <Center h={150} w={230}>
@@ -41,9 +40,9 @@ const AppUpdate = ({data}: Props) => {
             </Box>
             <Center mt={5}>
               <HStack space={8}>
-                {data?.data?.androidApp?.isDismissible !== true && (
+                {/* {data?.data?.androidApp?.isDismissible !== true && (
                   <Pressable
-                    // onPress={() => navigation.navigate(<PrivateRoutes/>)}
+                    onPress={() => handelCancel()}
                     borderWidth={1}
                     borderRadius={5}
                     borderColor={COLORS.primary}>
@@ -51,11 +50,15 @@ const AppUpdate = ({data}: Props) => {
                       Cancel
                     </Heading>
                   </Pressable>
-                )}
+                )} */}
                 <Pressable
                   bg={COLORS.primary}
                   borderRadius={5}
-                  onPress={() => DevSettings.reload()}>
+                  onPress={() =>
+                    Linking.openURL(
+                      'http://play.google.com/store/apps/details?id=com.chhattisgarhverbalsapp',
+                    )
+                  }>
                   <Heading size={'sm'} color={COLORS.textWhite} px={3} py={1}>
                     Update
                   </Heading>

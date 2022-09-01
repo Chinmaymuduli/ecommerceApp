@@ -15,8 +15,12 @@ import {ProductType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route: {params}}: Props) => {
-  const categoryItem = useSwrApi('categories');
-  const CategoryData = categoryItem?.data?.data?.data;
+  const {
+    data: categoryItem,
+    mutate: CategoryMutate,
+    isValidating: categoryValidating,
+  } = useSwrApi('categories');
+  const CategoryData = categoryItem?.data?.data;
   const {user, userType} = useAuth();
   const navigation = useNavigation<NavigationProps>();
   const [categoryName, setCategoryName] = useState('');
@@ -83,56 +87,64 @@ const Category = ({route: {params}}: Props) => {
 
   return (
     <>
-      <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
-        <Box borderBottomWidth={1.5} borderColor={COLORS.lightGrey}>
-          <HStack justifyContent={'space-between'} px={4} py={3}>
-            <HStack alignItems={'center'} space={4}>
-              <Ionicons
-                name="menu"
-                size={24}
-                color="#000"
-                onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
-              />
-              <Heading size={'md'}>{categoryName || 'All Categories'}</Heading>
+      {categoryValidating ? (
+        <FetchLoader />
+      ) : (
+        <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+          <Box borderBottomWidth={1.5} borderColor={COLORS.lightGrey}>
+            <HStack justifyContent={'space-between'} px={4} py={3}>
+              <HStack alignItems={'center'} space={4}>
+                <Ionicons
+                  name="menu"
+                  size={24}
+                  color="#000"
+                  onPress={() =>
+                    navigation.dispatch(DrawerActions.openDrawer())
+                  }
+                />
+                <Heading size={'md'}>
+                  {categoryName || 'All Categories'}
+                </Heading>
+              </HStack>
             </HStack>
-          </HStack>
-        </Box>
-        {/* <ScrollView> */}
-        <Row>
-          <Box w={'1/4'}>
-            <CategoryButtom
-              selectedId={params?._id || ''}
-              selectionMode={categoryId}
-              data={CategoryData}
-              setCategoryName={setCategoryName}
-              setCategoryId={setCategoryId}
-            />
           </Box>
+          {/* <ScrollView> */}
+          <Row>
+            <Box w={'1/4'}>
+              <CategoryButtom
+                selectedId={params?._id || ''}
+                selectionMode={categoryId}
+                data={CategoryData}
+                setCategoryName={setCategoryName}
+                setCategoryId={setCategoryId}
+              />
+            </Box>
 
-          <VStack>
-            <CategorySection
-              filteredData={filteredData}
-              setOpenAlert={setOpenAlert}
-              setAlertMessage={setAlertMessage}
-              businessType={userType}
-              isValidating={isValidating}
-              mutate={mutate}
-              setSorting={setSorting}
-              sorting={sorting}
-              filterPrice={filterPrice}
-              filterRatting={filterRatting}
-              applyFilter={applyFilter}
-            />
-          </VStack>
-        </Row>
-        {/* Alert */}
-        <AlertComponent
-          openAlert={openAlert}
-          setOpenAlert={setOpenAlert}
-          setAlertMessage={setAlertMessage}
-          alertMessage={alertMessage}
-        />
-      </SafeAreaView>
+            <VStack>
+              <CategorySection
+                filteredData={filteredData}
+                setOpenAlert={setOpenAlert}
+                setAlertMessage={setAlertMessage}
+                businessType={userType}
+                isValidating={isValidating}
+                mutate={mutate}
+                setSorting={setSorting}
+                sorting={sorting}
+                filterPrice={filterPrice}
+                filterRatting={filterRatting}
+                applyFilter={applyFilter}
+              />
+            </VStack>
+          </Row>
+          {/* Alert */}
+          <AlertComponent
+            openAlert={openAlert}
+            setOpenAlert={setOpenAlert}
+            setAlertMessage={setAlertMessage}
+            alertMessage={alertMessage}
+          />
+        </SafeAreaView>
+      )}
     </>
   );
 };

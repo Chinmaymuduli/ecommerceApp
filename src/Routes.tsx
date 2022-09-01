@@ -126,8 +126,7 @@ const Routes = () => {
 
   console.log({isLoggedIn});
 
-  if ((configData?.data?.androidApp?.version || 0) > 1)
-    return <AppUpdate data={configData} />;
+  if ((configData?.data?.androidApp?.version || 0) > 1) return <AppUpdate />;
 
   if (isLoggedIn === null || isLoading || isConfigLoading)
     return <SplashScreen />;
