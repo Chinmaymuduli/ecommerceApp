@@ -11,12 +11,12 @@ import {PRODUCT_PLACEHOLDER} from 'assets';
 
 type CartItemTypes = {
   item: CartItemType;
-  setQuantity?: number | any;
+  setQuantity?: (prev: number) => void;
   mutate: () => void;
 };
 
 const CartItem = ({item, setQuantity, mutate}: CartItemTypes) => {
-  const [deleteId, setDeleteId] = useState();
+  const [deleteId, setDeleteId] = useState<string>('');
 
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -54,7 +54,7 @@ const CartItem = ({item, setQuantity, mutate}: CartItemTypes) => {
     }
   };
 
-  const handleAlert = (id: any) => {
+  const handleAlert = (id: string) => {
     setIsOpen(!isOpen);
     setDeleteId(id);
   };

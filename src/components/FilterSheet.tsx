@@ -28,13 +28,21 @@ const rattingArr = [
   {label: '4', value: '4-5'},
 ];
 
+type Props = {
+  filterClose: () => void;
+  filterSheetOpen: boolean;
+  filterPrice: any;
+  filterRatting: any;
+  applyFilter: () => void;
+};
+
 const FilterSheet = ({
   filterClose,
   filterSheetOpen,
   filterPrice,
   filterRatting,
   applyFilter,
-}: any) => {
+}: Props) => {
   const isMounted = useIsMounted();
   const [reload, setReload] = useState<boolean>(false);
 

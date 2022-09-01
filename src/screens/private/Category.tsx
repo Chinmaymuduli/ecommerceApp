@@ -85,6 +85,8 @@ const Category = ({route: {params}}: Props) => {
     isMounted.current && setFilterData(data?.data?.data?.data);
   }, [data]);
 
+  // console.log({CategoryData});
+
   return (
     <>
       {categoryValidating ? (

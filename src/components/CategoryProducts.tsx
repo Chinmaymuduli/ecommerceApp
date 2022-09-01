@@ -11,13 +11,17 @@ import {useAuth} from 'app';
 
 type CategoryProductType = {
   title?: string;
-  image?: string | any;
+  image?: string;
   label?: string;
   discount?: string;
   price?: string;
-  setOpenAlert?: any;
-  setAlertMessage?: any;
-  item?: any;
+  setOpenAlert: (previousValue: boolean) => void;
+  setAlertMessage: (txt: string) => void;
+  item?: {
+    _id?: string;
+    name?: string;
+    description?: string;
+  };
 };
 
 const CategoryProducts = ({
@@ -49,7 +53,7 @@ const CategoryProducts = ({
         <HStack alignItems={'center'} justifyContent={'space-between'}>
           <Box>
             <Heading size={'sm'}>{item?.name}</Heading>
-            <Text fontSize={12}>Eat healthy , stay healthy</Text>
+            <Text fontSize={12}>{item?.description}</Text>
           </Box>
           <Pressable onPress={() => navigation.navigate('Category', {})}>
             <HStack alignItems={'center'} pr={3} space={1}>

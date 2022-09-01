@@ -26,8 +26,8 @@ import {useIsMounted, useSwrApi} from 'hooks';
 
 type CategoryProductType = {
   filteredData: ProductType[];
-  setOpenAlert?: boolean | any;
-  setAlertMessage?: string | any;
+  setOpenAlert: (prev: boolean) => void;
+  setAlertMessage: (prev: string) => void;
   businessType?: string;
   mutate: () => void;
   setSorting: (previous: string) => void;

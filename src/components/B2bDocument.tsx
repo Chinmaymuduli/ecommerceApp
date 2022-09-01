@@ -22,11 +22,11 @@ import {User} from 'types';
 
 const B2bDocument = () => {
   const [showModal, setShowModal] = useState(false);
-  const [gstDocument, setGstDocument] = useState();
+  const [gstDocument, setGstDocument] = useState<string>('');
   const [visible, setVisible] = useState(false);
   const [whyModal, setWhyModal] = useState(false);
   const [document, setDocument] = useState<string>();
-  const [userData, setUserData] = useState<User | any>();
+  const [userData, setUserData] = useState<User>();
   const isMounted = useIsMounted();
   const {setLoading} = useActions();
 
@@ -44,7 +44,7 @@ const B2bDocument = () => {
   useEffect(() => {
     isMounted.current && setUserData(data?.data?.data);
     isMounted.current && setDocument(userData?.GSTDocType);
-    isMounted.current && setGstDocument(userData?.GSTDoc);
+    isMounted.current && setGstDocument(userData?.GSTDoc as string);
   }, [userData]);
 
   const handelB2bDocuments = async () => {

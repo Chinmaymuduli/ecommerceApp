@@ -42,8 +42,6 @@ const ConfirmOrder = ({route: {params}, navigation}: Props) => {
           <Heading size={'md'}>Thank you for your order !</Heading>
           <Text mt={2} textAlign={'center'}>
             Your order has been placed successfully.
-            {/* your ID is #
-            {Math.floor(Math.random() * 100000000)} */}
           </Text>
         </Center>
         <Box px={4}>
@@ -76,11 +74,9 @@ const ConfirmOrder = ({route: {params}, navigation}: Props) => {
                 </Box>
                 <VStack>
                   <Text bold fontSize={12}>
-                    Order ID
+                    Order Time
                   </Text>
-                  <Text fontSize={11}>
-                    #{Math.floor(Math.random() * 100000000)}
-                  </Text>
+                  <Text fontSize={11}>{moment(new Date()).format('LTS')}</Text>
                 </VStack>
               </HStack>
             </HStack>
@@ -147,17 +143,6 @@ const ConfirmOrder = ({route: {params}, navigation}: Props) => {
             </Text>
           </Pressable>
         </Box>
-        {/* <Pressable
-          onPress={() => navigation.navigate('Order')}
-          alignItems={'center'}
-          mt={20}>
-          <Box>
-            <Heading size={'sm'} color={COLORS.primary}>
-              Go To Order
-            </Heading>
-            
-          </Box>
-        </Pressable> */}
       </ScrollView>
     </Box>
   );

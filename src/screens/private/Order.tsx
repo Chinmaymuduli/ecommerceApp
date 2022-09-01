@@ -25,11 +25,11 @@ type Props = NativeStackScreenProps<PrivateRoutesType, 'Order'>;
 const Order = ({navigation}: Props) => {
   const [selectionMode, setSelectionMode] = React.useState<any>(1);
   const isMounted = useIsMounted();
+  const isFocused = useIsFocused();
   const [myOrders, setMyOrders] = useState<any[]>([]);
   const [deliveredOrder, setDeliveryOrder] = useState<any[]>([]);
 
   const {data, isValidating, mutate} = useSwrApi('order/orders/my');
-  // const myOrders = data?.data?.data?.data;
 
   const {
     data: deliveredData,
@@ -43,92 +43,101 @@ const Order = ({navigation}: Props) => {
     // mutate();
   }, [data, deliveredData, isMounted]);
 
+  useEffect(() => {
+    mutate();
+  }, [isFocused]);
+
+  if (isValidating && !data) return <FetchLoader />;
+
+  // console.log({selectionMode});
+
   return (
     <>
-      {isValidating || deliveredDataValidating ? (
+      {/* {isValidating || deliveredDataValidating ? ( */}
+      {/* {isValidating && !data ? (
         <FetchLoader />
-      ) : (
-        <Box flex={1} bg={COLORS.textWhite}>
-          <HStack
-            justifyContent={'space-between'}
-            px={4}
-            py={4}
-            borderBottomWidth={2}
-            borderColor={COLORS.lightGrey}>
-            <HStack space={4} alignItems={'center'}>
-              <Pressable
-                justifyContent={'center'}
-                onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-                <Ionicons name="grid-outline" size={25} color="green" />
-              </Pressable>
-
-              <Text bold fontSize={18}>
-                My Order
-              </Text>
-            </HStack>
-          </HStack>
-          <HStack px={4} mt={2}>
+      ) : ( */}
+      <Box flex={1} bg={COLORS.textWhite}>
+        <HStack
+          justifyContent={'space-between'}
+          px={4}
+          py={4}
+          borderBottomWidth={2}
+          borderColor={COLORS.lightGrey}>
+          <HStack space={4} alignItems={'center'}>
             <Pressable
-              width={Dimensions.get('window').width / 2.3}
-              mr={3}
-              onPress={() => setSelectionMode(1)}>
-              <Box
-                bg={selectionMode === 1 ? COLORS.primary : COLORS.lightGrey}
-                alignItems={'center'}
-                borderRadius={6}>
-                <HStack alignItems={'center'} space={1}>
-                  <Text
-                    bold
-                    fontSize={16}
-                    color={selectionMode === 1 ? COLORS.textWhite : '#000'}
-                    py={2}>
-                    Active
-                  </Text>
-                  <Text
-                    color={selectionMode === 1 ? COLORS.textWhite : '#000'}
-                    bold>
-                    ({myOrders?.length ? myOrders?.length : 0})
-                    {/* ({myOrder?.length}) */}
-                  </Text>
-                </HStack>
-              </Box>
+              justifyContent={'center'}
+              onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+              <Ionicons name="grid-outline" size={25} color="green" />
             </Pressable>
-            <Pressable flex={1} onPress={() => setSelectionMode(2)}>
-              <Box
-                bg={selectionMode === 2 ? COLORS.primary : COLORS.lightGrey}
-                alignItems={'center'}
-                borderRadius={6}>
-                <HStack alignItems={'center'} space={1}>
-                  <Text
-                    bold
-                    fontSize={16}
-                    py={2}
-                    color={selectionMode === 2 ? COLORS.textWhite : '#000'}>
-                    Past Order
-                  </Text>
-                  <Text color={selectionMode === 2 ? COLORS.textWhite : '#000'}>
-                    ({deliveredOrder ? deliveredOrder?.length : 0})
-                  </Text>
-                </HStack>
-              </Box>
-            </Pressable>
+
+            <Text bold fontSize={18}>
+              My Order
+            </Text>
           </HStack>
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={isValidating}
-                onRefresh={
-                  selectionMode === 1 ? () => mutate() : () => deliveryMutate()
-                }
-              />
-            }
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={{
-              paddingBottom: 100,
-            }}>
-            {selectionMode === 1 ? (
-              myOrders?.length > 0 ? (
-                myOrders?.map((item: activeOrderType, index: any) => (
+        </HStack>
+        <HStack px={4} mt={2}>
+          <Pressable
+            width={Dimensions.get('window').width / 2.3}
+            mr={3}
+            onPress={() => setSelectionMode(1)}>
+            <Box
+              bg={selectionMode === 1 ? COLORS.primary : COLORS.lightGrey}
+              alignItems={'center'}
+              borderRadius={6}>
+              <HStack alignItems={'center'} space={1}>
+                <Text
+                  bold
+                  fontSize={16}
+                  color={selectionMode === 1 ? COLORS.textWhite : '#000'}
+                  py={2}>
+                  Active
+                </Text>
+                {/* <Text
+                  color={selectionMode === 1 ? COLORS.textWhite : '#000'}
+                  bold>
+                  ({myOrders?.length ? myOrders?.length : 0})
+                </Text> */}
+              </HStack>
+            </Box>
+          </Pressable>
+          <Pressable flex={1} onPress={() => setSelectionMode(2)}>
+            <Box
+              bg={selectionMode === 2 ? COLORS.primary : COLORS.lightGrey}
+              alignItems={'center'}
+              borderRadius={6}>
+              <HStack alignItems={'center'} space={1}>
+                <Text
+                  bold
+                  fontSize={16}
+                  py={2}
+                  color={selectionMode === 2 ? COLORS.textWhite : '#000'}>
+                  Past Order
+                </Text>
+                {/* <Text color={selectionMode === 2 ? COLORS.textWhite : '#000'}>
+                  ({deliveredOrder ? deliveredOrder?.length : 0})
+                </Text> */}
+              </HStack>
+            </Box>
+          </Pressable>
+        </HStack>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={isValidating}
+              onRefresh={
+                selectionMode === 1 ? () => mutate() : () => deliveryMutate()
+              }
+            />
+          }
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 100,
+          }}>
+          {selectionMode === 1 ? (
+            data?.data?.data?.data?.length > 0 ? (
+              data?.data?.data?.data?.map(
+                (item: activeOrderType, index: any) => (
                   <Box key={item?._id} px={4} py={4}>
                     <ScrollView>
                       <Box
@@ -207,34 +216,30 @@ const Order = ({navigation}: Props) => {
                       </Box>
                     </ScrollView>
                   </Box>
-                ))
-              ) : (
-                <>
-                  <Empty
-                    animation={ORDER}
-                    title={'No Active Order'}
-                    h={400}
-                    noLoop
-                  />
-                </>
+                ),
               )
-            ) : deliveredOrder?.length > 0 ? (
-              deliveredOrder?.map((item: PastOrderType) => (
-                <PastOrder item={item} key={item._id} />
-              ))
             ) : (
               <>
                 <Empty
                   animation={ORDER}
-                  title={'No Past Order'}
+                  title={'No Active Order'}
                   h={400}
                   noLoop
                 />
               </>
-            )}
-          </ScrollView>
-        </Box>
-      )}
+            )
+          ) : deliveredData?.data?.data?.data?.length > 0 ? (
+            deliveredData?.data?.data?.data?.map((item: PastOrderType) => (
+              <PastOrder item={item} key={item._id} />
+            ))
+          ) : (
+            <>
+              <Empty animation={ORDER} title={'No Past Order'} h={400} noLoop />
+            </>
+          )}
+        </ScrollView>
+      </Box>
+      {/* )} */}
     </>
   );
 };
