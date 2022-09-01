@@ -101,7 +101,10 @@ const ConfirmOrder = ({route: {params}, navigation}: Props) => {
                   justifyContent={'space-between'}
                   alignItems={'center'}>
                   <Text>Saving</Text>
-                  <Text color={'green.500'}> &#8377; {params?.discount}</Text>
+                  <Text color={'green.500'}>
+                    {' '}
+                    &#8377; {params?.discount?.toFixed(2)}
+                  </Text>
                 </HStack>
                 <HStack
                   pt={2}
@@ -110,7 +113,9 @@ const ConfirmOrder = ({route: {params}, navigation}: Props) => {
                   <Text>Coupon Discount</Text>
                   <Text color={'green.500'}>
                     - &#8377;{' '}
-                    {params?.couponDiscount ? params?.couponDiscount : 0}
+                    {params?.couponDiscount
+                      ? params?.couponDiscount.toFixed(2)
+                      : 0}
                   </Text>
                 </HStack>
                 <HStack
@@ -120,6 +125,7 @@ const ConfirmOrder = ({route: {params}, navigation}: Props) => {
                   alignItems={'center'}>
                   <Text>Delivery Charges</Text>
                   <Text color={'green.500'}>
+                    +{' '}
                     {params?.deliveryCharges ? params?.deliveryCharges : 'free'}
                   </Text>
                 </HStack>

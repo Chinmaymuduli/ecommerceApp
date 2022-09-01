@@ -26,7 +26,7 @@ const HomeCategories = () => {
   const isMounted = useIsMounted();
   const {data, isValidating} = useSwrApi('categories?limit=6&chunk=0');
   useEffect(() => {
-    isMounted.current && setCategoryData(data?.data?.data);
+    isMounted.current && setCategoryData(data?.data?.data?.data);
   }, [data]);
 
   return (

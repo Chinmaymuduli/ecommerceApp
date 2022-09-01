@@ -13,7 +13,7 @@ type Props = {
 
 const OrderSummaryCard = ({orderData}: Props) => {
   const {userType} = useAuth();
-  // console.log({orderData});
+  // console.log(orderData?.quantity);
   const review =
     orderData?.product?.reviews?.stars === 0
       ? 0
@@ -51,7 +51,7 @@ const OrderSummaryCard = ({orderData}: Props) => {
             </Text>
             <Text mt={1}>
               {orderData?.product?.measureUnit}{' '}
-              {orderData?.product?.measureType}
+              {orderData?.product?.measureType} x {orderData?.quantity}
             </Text>
             <HStack>
               <Rating
@@ -83,13 +83,6 @@ const OrderSummaryCard = ({orderData}: Props) => {
                 % off
               </Text>
             </HStack>
-            {/* <HStack mt={1}>
-              <Text>Delivery Charges :</Text>
-              <Text color={'green.600'} bold>
-                {' '}
-                Free
-              </Text>
-            </HStack> */}
           </VStack>
         </HStack>
       </Box>

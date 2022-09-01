@@ -261,7 +261,7 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
                       alignItems={'center'}>
                       <Text>Delivery Charges</Text>
                       <Text color={'green.500'}>
-                        +{' '}
+                        + &#8377;
                         {checkoutData?.deliveryCharge
                           ? checkoutData?.deliveryCharge
                           : 'free'}

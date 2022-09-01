@@ -34,7 +34,7 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
   );
 
   const OrderSummaryData = productData?.data?.data;
-  // console.log({OrderSummaryData});
+
   useEffect(() => {
     (async () => {
       const addressID = await AsyncStorage.getItem('address_id');
@@ -134,6 +134,19 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
                     pb={3}
                     borderStyle={'dashed'}>
                     <HStack justifyContent={'space-between'}>
+                      <Text>Quantity</Text>
+
+                      <Text>
+                        {params.quantity
+                          ? params?.quantity
+                          : OrderSummaryData?.products?.reduce(
+                              (acc: number, cur: {quantity: number}) =>
+                                (acc += cur.quantity),
+                              0,
+                            )}
+                      </Text>
+                    </HStack>
+                    <HStack justifyContent={'space-between'}>
                       <Text>Price</Text>
 
                       <Text>{OrderSummaryData?.totalMrp}</Text>
@@ -148,6 +161,7 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
                     <HStack justifyContent={'space-between'}>
                       <Text>Delivery Charges</Text>
                       <Text color={'green.600'}>
+                        +{' '}
                         {OrderSummaryData?.deliveryCharge
                           ? OrderSummaryData?.deliveryCharge
                           : 'Free'}

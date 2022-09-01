@@ -8,7 +8,7 @@ import {BannerType} from 'types';
 const HomeSlider = () => {
   const {data, mutate, isLoading, isValidating} =
     useSwrApi('banners?type=hero');
-  const BannerData: BannerType[] = data?.data?.data;
+  const BannerData: BannerType[] = data?.data?.data?.data;
   return (
     <>
       <FlatList
