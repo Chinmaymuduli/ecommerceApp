@@ -1,4 +1,4 @@
-import {Alert, Dimensions, StyleSheet} from 'react-native';
+import {Alert, Dimensions} from 'react-native';
 import React, {useState} from 'react';
 import {
   Actionsheet,
@@ -20,8 +20,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {COUNTRY_DATA, INDIANSTATE} from '../../constants';
-import {useNavigation} from '@react-navigation/native';
-import {NavigationProps, PrivateRoutesType} from 'src/routes/PrivateRoutes';
+import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {AddressType} from 'types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {post} from 'api';
@@ -37,7 +36,6 @@ const Address = ({route, navigation}: Props) => {
     formState: {errors},
   } = useForm();
   const {isOpen, onOpen, onClose} = useDisclose();
-  const [loader, setLoader] = React.useState(false);
   const [selectedType, setSelectedType] = React.useState(1);
   const [state, setState] = React.useState<string>('Chhattisgarh');
   const [addressTypeText, setAddressTypeText] = useState('Home');
@@ -55,7 +53,6 @@ const Address = ({route, navigation}: Props) => {
   const isMounted = useIsMounted();
   const {setLoading} = useActions();
   const onSubmit = async (data: AddressType) => {
-    console.log('dataAddress', data);
     try {
       isMounted.current && setLoading(true);
       const token = await AsyncStorage.getItem('ACCESS_TOKEN');
@@ -91,12 +88,12 @@ const Address = ({route, navigation}: Props) => {
     }
   };
 
-  const Hometype = () => {
+  const HomeType = () => {
     setSelectedType(1);
     setAddressTypeText('HOME');
   };
 
-  const Worktype = () => {
+  const WorkType = () => {
     setSelectedType(2);
     setAddressTypeText('WORK');
   };
@@ -327,7 +324,7 @@ const Address = ({route, navigation}: Props) => {
             <Text bold>Type of address</Text>
             <HStack space={5} mt={3}>
               <Pressable
-                onPress={() => Hometype()}
+                onPress={() => HomeType()}
                 borderWidth={1}
                 borderRadius={15}
                 bg={selectedType === 1 ? '#98FB9860' : COLORS.textWhite}
@@ -352,7 +349,7 @@ const Address = ({route, navigation}: Props) => {
               </Pressable>
 
               <Pressable
-                onPress={() => Worktype()}
+                onPress={() => WorkType()}
                 borderWidth={1}
                 borderRadius={15}
                 bg={selectedType === 2 ? '#98FB9860' : COLORS.textWhite}
@@ -453,5 +450,3 @@ const Address = ({route, navigation}: Props) => {
 };
 
 export default Address;
-
-const styles = StyleSheet.create({});

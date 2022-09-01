@@ -1,6 +1,6 @@
 import {SafeAreaView, StyleSheet} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Box, Center, Heading, HStack, Row, Spinner, VStack} from 'native-base';
+import {Box, Center, Heading, HStack, Row, VStack} from 'native-base';
 import {AlertComponent, CategoryButtom, FetchLoader} from 'components/core';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {DrawerActions, useNavigation} from '@react-navigation/native';
@@ -15,11 +15,8 @@ import {ProductType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Category'>;
 const Category = ({route: {params}}: Props) => {
-  const {
-    data: categoryItem,
-    mutate: CategoryMutate,
-    isValidating: categoryValidating,
-  } = useSwrApi('categories');
+  const {data: categoryItem, isValidating: categoryValidating} =
+    useSwrApi('categories');
   const CategoryData = categoryItem?.data?.data;
   const {user, userType} = useAuth();
   const navigation = useNavigation<NavigationProps>();
@@ -60,7 +57,6 @@ const Category = ({route: {params}}: Props) => {
       !filterPrice.current && delete filter.price;
       !filterRatting.current && delete filter.rating;
       !categoryId && delete filter.category;
-      // console.log({filter});
       setFilterObject(filter);
     }
   }, [CategoryData, filterPrice, filterRatting, categoryId]);
@@ -84,8 +80,6 @@ const Category = ({route: {params}}: Props) => {
   useEffect(() => {
     isMounted.current && setFilterData(data?.data?.data?.data);
   }, [data]);
-
-  // console.log({CategoryData});
 
   return (
     <>

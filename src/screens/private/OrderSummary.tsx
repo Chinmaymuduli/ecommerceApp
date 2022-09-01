@@ -14,8 +14,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {OrderSummaryCard} from 'components';
-import {useStore} from 'app';
-import {useAddress, useIsMounted, useSwrApi} from 'hooks';
+import {useIsMounted, useSwrApi} from 'hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FetchLoader} from 'components/core';
 import {useIsFocused} from '@react-navigation/native';
@@ -207,7 +206,6 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
                 <HStack alignItems={'center'} space={2} pl={2}>
                   <Box>
                     <Text bold color={'#fff'}>
-                      {/* {orderItems.length} items */}
                       {OrderSummaryData?.products?.length} items
                     </Text>
                   </Box>

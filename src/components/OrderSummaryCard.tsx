@@ -3,7 +3,6 @@ import {Box, HStack, Image, Text, VStack} from 'native-base';
 import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
 import {CartItemType} from 'types';
-import OrderSummaryCounter from './OrderSummaryCounter';
 import {PRODUCT_PLACEHOLDER} from 'assets';
 import {useAuth} from 'app';
 
@@ -12,8 +11,6 @@ type Props = {
 };
 
 const OrderSummaryCard = ({orderData}: Props) => {
-  const {userType} = useAuth();
-  // console.log(orderData?.quantity);
   const review =
     orderData?.product?.reviews?.stars === 0
       ? 0
@@ -36,14 +33,6 @@ const OrderSummaryCard = ({orderData}: Props) => {
                 height: 100,
               }}
             />
-            {/* Counter start */}
-            {/* {userType !== 'b2b' && (
-              <OrderSummaryCounter
-                orderQuantity={orderData?.quantity}
-                productID={orderData?.product?.id}
-              />
-            )} */}
-            {/* Counter End */}
           </VStack>
           <VStack pl={5}>
             <Text bold fontSize={16}>
