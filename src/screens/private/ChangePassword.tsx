@@ -15,13 +15,13 @@ import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {Controller, useForm} from 'react-hook-form';
 import {changePasswordType, User} from 'types';
-import {useActions, useFetch, useIsMounted} from 'hooks';
+import {useActions, useIsMounted, useSwrApi} from 'hooks';
 import {post} from 'api';
 import {ErrorModal, SuccessVerificationModal} from 'components/core';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'ChangePassword'>;
 const ChangePassword = ({navigation}: Props) => {
-  const {data} = useFetch<User>('user');
+  const {data: userData} = useSwrApi('user/my-account');
   const [showErrorModal, setShowErrorModal] = useState<boolean>();
   const [label, setLabel] = useState();
   const [showSuccessModal, setShowSuccessModal] = useState<boolean>();
@@ -40,13 +40,12 @@ const ChangePassword = ({navigation}: Props) => {
       const ChangePasswordPost = await post({
         path: 'auth/forgot-password/verify-otp',
         body: JSON.stringify({
-          email: data?.results.email,
-          OTP: Reset_data.OTP,
-          newPassword: Reset_data.Password,
-          confirmPassword: Reset_data.retypePassword,
+          email: userData?.data?.data?.email,
+          OTP: Reset_data?.OTP,
+          newPassword: Reset_data?.Password,
+          confirmPassword: Reset_data?.retypePassword,
         }),
       });
-      // console.log({ChangePasswordPost});
       if (ChangePasswordPost.status === 500) {
         setShowErrorModal(true);
         setLabel(ChangePasswordPost.error);
@@ -64,14 +63,12 @@ const ChangePassword = ({navigation}: Props) => {
   };
 
   const resendOTP = async () => {
-    // console.log('object');
     try {
       isMounted.current && setLoading(true);
       const RESEND_OTP = await post({
         path: 'auth/forgot-password',
         body: JSON.stringify({
-          email: 'chinmaymuduli1996@gmail.com',
-          // email: data?.results?.email,
+          email: userData?.data?.data?.email,
         }),
       });
       console.log({RESEND_OTP});
@@ -103,12 +100,6 @@ const ChangePassword = ({navigation}: Props) => {
               color={COLORS.textWhite}
               onPress={() => navigation.navigate('Search')}
             />
-            <Ionicons
-              name="cart"
-              size={24}
-              color={COLORS.textWhite}
-              onPress={() => navigation.navigate('Cart', {})}
-            />
           </HStack>
         </HStack>
       </Box>
@@ -118,8 +109,7 @@ const ChangePassword = ({navigation}: Props) => {
             <Text bold color={COLORS.grey}>
               Email ID
             </Text>
-            {/* <Text bold>{data?.results?.email}</Text> */}
-            <Text bold>chinmay@gmail.com</Text>
+            <Text bold>{userData?.data?.data?.email}</Text>
           </Stack>
           <Stack mt={4}>
             <Text bold color={COLORS.grey}>
@@ -187,7 +177,7 @@ const ChangePassword = ({navigation}: Props) => {
           </FormControl>
         </Box>
         <Box mt={7}>
-          <Text bold>Enter OTP sent to {data?.results.email}</Text>
+          <Text bold>Enter OTP sent to {userData?.data?.data?.email}</Text>
           <FormControl isRequired isInvalid={'OTP' in errors}>
             <Controller
               control={control}
@@ -204,7 +194,7 @@ const ChangePassword = ({navigation}: Props) => {
                   value={value}
                   InputRightElement={
                     <>
-                      <Pressable onPress={() => console.log('touched')}>
+                      <Pressable onPress={() => resendOTP()}>
                         <Text color={'green.600'} bold>
                           Resend
                         </Text>
