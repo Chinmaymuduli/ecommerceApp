@@ -16,54 +16,18 @@ import {
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {COLORS} from 'configs';
-import {
-  AYUSH_2,
-  GOURMET2,
-  GOURMET3,
-  GOURMET5,
-  NO_RESULT,
-  PRODUCT_PLACEHOLDER,
-  SEARCH_IMAGE,
-} from 'assets';
+import {NO_RESULT, PRODUCT_PLACEHOLDER, SEARCH_IMAGE} from 'assets';
 import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {NavigationProps} from 'src/routes/PrivateRoutes';
 import {Empty, FetchLoader} from 'components/core';
 import {useIsMounted, useSwrApi} from 'hooks';
+import {ProductType} from 'types';
 
-const searchArr = [
-  {id: 1, label: 'chawanprash', img: GOURMET5},
-  {id: 2, label: 'Ragi Cookies', img: GOURMET2},
-  {id: 3, label: 'Aloe Vera Juice', img: GOURMET3},
-  {id: 4, label: 'Jyotismati Oil', img: AYUSH_2},
-  {id: 5, label: 'Mahua Laddu', img: GOURMET2},
-  {id: 6, label: 'Jyotismati Oil', img: GOURMET5},
-];
-
-type searchArrType = {
-  id: number;
-  label: string;
-  img: string | any;
-};
-
-// const Search = ({autoFocus}: TextInputProps) => {
 const Search = () => {
   const navigation = useNavigation<NavigationProps>();
   const [search, setSearch] = React.useState<string>('');
   const isMounted = useIsMounted();
   const isFocused = useIsFocused();
-
-  // console.log({search});
-  // const inputRef = useRef<TextInput>(null);
-
-  // useEffect(() => {
-  //   console.log('goo', autoFocus);
-  //   autoFocus &&
-  //     setTimeout(() => {
-  //       if (inputRef.current) {
-  //         inputRef.current.focus();
-  //       }
-  //     }, 40);
-  // }, []);
 
   const {data, isValidating, mutate} = useSwrApi(
     `products/search?searchText=${search}`,
@@ -84,7 +48,6 @@ const Search = () => {
             value={search}
             onChangeText={text => setSearch(text)}
             fontSize={15}
-            // ref={inputRef}
             InputLeftElement={
               <Pressable pl={2}>
                 <Ionicons
@@ -119,8 +82,7 @@ const Search = () => {
                       Searched Product
                     </Text>
                   </Box>
-                  {/* {searchData?.map((item: searchArrType) => ( */}
-                  {searchDataText?.map((item: any) => (
+                  {searchDataText?.map((item: ProductType) => (
                     <Pressable
                       key={item?._id}
                       mt={4}

@@ -22,11 +22,19 @@ import {NO_RESULT} from 'assets';
 import {put, remove} from 'api';
 import moment from 'moment';
 
+type NotificationsType = {
+  _id?: string | any;
+  description?: string;
+  message?: string;
+  updatedAt?: string;
+  isRead?: boolean;
+};
+
 const Notifications = () => {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [openAlert, setOpenAlert] = React.useState(false);
   const onCloseAlert = () => setOpenAlert(false);
-  const [notificationDes, setNotificationDes] = useState<any>();
+  const [notificationDes, setNotificationDes] = useState<NotificationsType>();
 
   const cancelRef = React.useRef(null);
   const isMounted = useIsMounted();
@@ -63,7 +71,7 @@ const Notifications = () => {
     }
   };
 
-  const handelRead = async (data: any) => {
+  const handelRead = async (data: NotificationsType) => {
     try {
       await put({
         path: `notification/mark-as-read/${data._id}`,
@@ -77,7 +85,7 @@ const Notifications = () => {
     }
   };
 
-  const handelDelete = async (_id: any) => {
+  const handelDelete = async (_id: NotificationsType) => {
     try {
       await remove({
         path: `notification/${_id}`,
@@ -131,7 +139,7 @@ const Notifications = () => {
                     </Text>
                   </Box>
                 </Row> */}
-                {notificationData?.map((item: any) => (
+                {notificationData?.map((item: NotificationsType) => (
                   <Pressable
                     key={item?._id}
                     borderBottomWidth={1}

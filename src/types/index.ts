@@ -5,7 +5,7 @@ export type quantity = {
   id?: number;
   label?: string;
   discount?: number;
-  img?: any;
+  img?: string;
   offer?: string;
   price?: number;
   quantity?: number;
@@ -34,7 +34,8 @@ export type ProductDetailsType = {
   id?: number;
   name?: string;
   description?: string;
-  img?: string | any;
+  // img?: string | any;
+  img?: string;
   currentPrice?: number | any;
   inStock?: boolean;
   quantity?: number;
@@ -55,38 +56,39 @@ export type HomeProductType = {
   id: number;
   name?: string;
   discount?: number | any;
-  img?: string | any;
+  img?: ImageSourcePropType;
   currentPrice?: number | any;
   offer?: string;
   moq?: number;
   mrp: number;
   salePrice: number;
-  images?: any[];
+  images?: ImageSourcePropType[];
   title?: string;
 };
 
 export type AddressType = {
-  firstName?: string;
-  phoneNumber?: string | number;
-  city?: string;
-  houseNumber?: string;
-  roadName?: string;
-  pinCode?: StringConstructor;
-  landmark?: string;
-  zip?: string;
-  email?: string;
-  countryCode?: string;
-  name?: string;
-  type?: string;
-  street?: string;
-  state?: string;
+  _id: string;
+  user: User;
+  name: string;
+  landmark: string;
+  email: string;
+  phoneNumber: number;
+  countryCode: number;
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  zip: number;
+  isDefault: boolean;
+  type: string;
 };
 
 export type CartType = {
   id: number;
   name: string;
   discount: number;
-  img: string | any;
+  img: ImageSourcePropType;
+  // img: string | any;
   currentPrice: number | any;
   offer: string;
   quantity: number;
@@ -94,7 +96,7 @@ export type CartType = {
 // *****
 
 export type CartItemType = {
-  _id: any;
+  _id: string;
 
   // product: ProductDetailsType
   product: ProductType;
@@ -145,7 +147,8 @@ export type WishListCardType = {
   label?: string;
   price?: number;
   ratingsby?: number;
-  img?: string | any;
+  img?: ImageSourcePropType;
+  // img?: string | any;
   discount?: number;
   offer?: string;
 };
@@ -154,7 +157,8 @@ export type PastOrderType = {
   quantity: number | undefined;
   OrderID: string;
   status: string;
-  img: string | any;
+  img: ImageSourcePropType;
+  // img: string | any;
   total: string;
   _id?: string;
   product?: ProductType;
@@ -174,7 +178,10 @@ export type ProductVariants = {
   measureType: string;
   measureUnit: number;
   mrp: number;
-  review: any;
+  review: {
+    total: number;
+    star: number;
+  };
   salePrice: number;
   stock: number;
 };
@@ -205,7 +212,7 @@ export type ProductType = {
   stock?: number;
   title?: string;
   type?: string;
-  images?: any;
+  images?: ImageSourcePropType[];
   variants?: ProductVariants[];
   products?: ProductType[];
   isInCart?: boolean;
@@ -266,9 +273,8 @@ export type ApiProductType = {
   stock?: number;
   salePrice: number;
   mrp?: number;
-  displayImage?: any;
-  images?: any[];
-  store?: any;
+  displayImage?: ImageSourcePropType;
+  images?: ImageSourcePropType[];
   variantOf?: ProductType;
   measureType?: 'kg' | 'gm' | 'ltr' | 'ml' | 'pc';
   measureUnit?: number;

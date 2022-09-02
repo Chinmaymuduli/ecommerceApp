@@ -11,11 +11,11 @@ import {put, remove} from 'api';
 import {useIsMounted} from 'hooks';
 import {useAppContext} from 'contexts';
 type productType = {
-  item: any;
+  item: ProductType;
 };
 
 const ProductComponent = ({item}: productType) => {
-  const {wishlistItems, removeFromWishlist, addToWishlist} = useStore();
+  const {wishlistItems} = useStore();
   const isMounted = useIsMounted();
   const {guestUser} = useAppContext();
   const [loading, setLoading] = useState(false);
@@ -29,12 +29,6 @@ const ProductComponent = ({item}: productType) => {
         const responseWish = await remove({
           path: `wishlist/${wishlistItem?._id}`,
         });
-        // ProductMutate();
-        // isMounted.current && setOpenAlert(true);
-        // isMounted.current && setAlertMessage('Remove from wishlist');
-        // setTimeout(() => {
-        //   setOpenAlert(false);
-        // }, 2000);
       } else {
         isMounted.current && setLoading(true);
         const res = await put({
@@ -43,17 +37,6 @@ const ProductComponent = ({item}: productType) => {
             productId: wishlistItem?._id,
           }),
         });
-
-        // ProductMutate();
-        // if (!isValidating) {
-        //   isMounted.current && setOpenAlert(true);
-        //   isMounted.current && setAlertMessage('Added to wishlist');
-        //   isMounted.current && setCelebrate(true);
-        //   setTimeout(() => {
-        //     isMounted.current && setOpenAlert(false);
-        //     isMounted.current && setCelebrate(false);
-        //   }, 1000);
-        // }
       }
     } catch (error) {
       console.log(error);
@@ -72,8 +55,6 @@ const ProductComponent = ({item}: productType) => {
           quantity: 1,
         }),
       });
-
-      // if (res?.status === 200) return ProductMutate();
     } catch (error) {
       console.log(error);
     } finally {
@@ -91,11 +72,9 @@ const ProductComponent = ({item}: productType) => {
           quantity: -1,
         }),
       });
-      // if (res?.status === 200) return ProductMutate();
     } catch (error) {
       console.log(error);
     } finally {
-      // ProductMutate();
       isMounted.current && setLoading(false);
     }
   };
@@ -162,13 +141,7 @@ const ProductComponent = ({item}: productType) => {
           <Box position={'absolute'} right={4} borderRadius={10}>
             <Ionicons
               onPress={() => handleWishlist(item)}
-              name={
-                wishlistItems.some(data => {
-                  return data?.id === item.id;
-                })
-                  ? 'heart'
-                  : 'heart-outline'
-              }
+              name={item?.isInWishList ? 'heart' : 'heart-outline'}
               size={22}
               color={COLORS.primary}
               style={{

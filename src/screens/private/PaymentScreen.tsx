@@ -43,18 +43,18 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
   const {user, userType} = useAuth();
   const {setLoading} = useActions();
   const isMounted = useIsMounted();
-  const [payment, setPayment] = useState<any>('payOnline');
-  const [gstValue, setGstValue] = useState<any>('noGst');
+  const [payment, setPayment] = useState<string>('payOnline');
+  const [gstValue, setGstValue] = useState<string>('noGst');
   const [showModal, setShowModal] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
-  const [profileImage, setProfileImage] = useState<any>(
+  const [profileImage, setProfileImage] = useState<string | null>(
     user?.GSTDoc ? user?.GSTDoc : null,
   );
-  const [document, setDocument] = useState<any>(
+  const [document, setDocument] = useState<string>(
     user?.GSTDocType ? user?.GSTDocType : '',
   );
   const [showErrorModal, setShowErrorModal] = useState<boolean>(false);
-  const [GstNumber, setGstNumber] = useState<any>(
+  const [GstNumber, setGstNumber] = useState<string>(
     user?.GSTNumber ? user?.GSTNumber : '',
   );
   const [label, setLabel] = useState<string>();
@@ -109,7 +109,6 @@ const PaymentScreen = ({navigation, route: {params}}: Props) => {
             }),
           });
         }
-        console.log({response});
 
         if (response.status === 200) {
           const options = {

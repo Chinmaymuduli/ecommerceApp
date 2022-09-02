@@ -21,32 +21,31 @@ import {WishListCard} from 'components';
 import {useAuth, useStore} from 'app';
 import {useIsMounted, useSwrApi} from 'hooks';
 import {FetchLoader} from 'components/core';
-import {ApiProductType} from 'types';
+import {ApiProductType, ProductType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'WishList'>;
 const WishList = ({navigation}: Props) => {
   const {user} = useAuth();
   const {data, mutate, isValidating} = useSwrApi('wishlists');
-  const [WishListItem, setWishListItem] = useState<ApiProductType[]>([]);
+  const [WishListItem, setWishListItem] = useState([]);
   const isMounted = useIsMounted();
 
-  // const WishListItem = data?.data?.data?.data;
   useEffect(() => {
     isMounted.current && setWishListItem(data?.data?.data?.data);
   }, [data, isMounted]);
 
   const [alertMessage, setAlertMessage] = useState<string>('Item Added');
   const [shownAlert, setShownAlert] = useState<boolean>(false);
-  const renderItem = ({item}: any) => {
-    return (
-      <WishListCard
-        item={item}
-        setAlertMessage={setAlertMessage}
-        setShownAlert={setShownAlert}
-        mutateWishlist={mutate}
-      />
-    );
-  };
+  // const renderItem = ({item}: ProductType) => {
+  //   return (
+  //     <WishListCard
+  //       item={item}
+  //       setAlertMessage={setAlertMessage}
+  //       setShownAlert={setShownAlert}
+  //       mutateWishlist={mutate}
+  //     />
+  //   );
+  // };
 
   console.log({user});
   return (
@@ -98,7 +97,17 @@ const WishList = ({navigation}: Props) => {
               onRefresh={() => mutate()}
               refreshing={isValidating}
               data={WishListItem?.length > 0 ? WishListItem : []}
-              renderItem={renderItem}
+              renderItem={({item, index}) => {
+                return (
+                  <WishListCard
+                    item={item}
+                    setAlertMessage={setAlertMessage}
+                    setShownAlert={setShownAlert}
+                    mutateWishlist={mutate}
+                  />
+                );
+              }}
+              // renderItem={renderItem}
               keyExtractor={(item, index) => index.toString()}
               numColumns={2}
               showsVerticalScrollIndicator={false}

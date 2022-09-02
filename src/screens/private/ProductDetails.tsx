@@ -1,4 +1,10 @@
-import {Dimensions, SafeAreaView, Share, StyleSheet} from 'react-native';
+import {
+  Dimensions,
+  ImageSourcePropType,
+  SafeAreaView,
+  Share,
+  StyleSheet,
+} from 'react-native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   Actionsheet,
@@ -47,7 +53,7 @@ type Props = NativeStackScreenProps<PrivateRoutesType, 'ProductDetails'>;
 type productType = {
   item: {
     url?: string;
-    img?: any;
+    img?: ImageSourcePropType;
   };
 };
 
@@ -66,10 +72,10 @@ const ProductDetails = ({route, navigation}: Props) => {
 
   const [index, setIndex] = useState(0);
   const SLIDER_WIDTH = Dimensions.get('window').width;
-  const [count, setCount] = useState<any>(1);
+  const [count, setCount] = useState<number>(1);
   const [chooseWeight, setChooseWeight] = useState<any>({authData});
   const [showAlert, setShowAlert] = useState(false);
-  const [addQuantity, setAddQuantity] = useState<any>();
+  const [addQuantity, setAddQuantity] = useState<number | any>();
   const [modalDialog, setModalDialog] = useState(false);
   const [alertMessage, setAlertMessage] = useState('Successfully added!');
   const isMounted = useIsMounted();

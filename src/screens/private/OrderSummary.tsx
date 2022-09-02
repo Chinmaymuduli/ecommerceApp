@@ -18,7 +18,7 @@ import {useIsMounted, useSwrApi} from 'hooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {FetchLoader} from 'components/core';
 import {useIsFocused} from '@react-navigation/native';
-import {AddressType} from 'types';
+import {AddressType, ApiProductType, CartItemType, ProductType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route: {params}}: Props) => {
@@ -129,7 +129,7 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
             </Box>
             {/* card */}
 
-            {OrderSummaryData?.products?.map((od: any) => (
+            {OrderSummaryData?.products?.map((od: CartItemType) => (
               <OrderSummaryCard key={od._id} orderData={od} />
             ))}
             {/* Card End */}

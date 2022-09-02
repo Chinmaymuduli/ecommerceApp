@@ -26,12 +26,13 @@ import {NO_RESULT} from 'assets';
 import useSWR from 'swr';
 import {GET, put, remove} from 'api';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {AddressType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
 const SelectAddress = ({route, navigation}: Props) => {
-  const [address, setAddress] = useState<any>();
+  const [address, setAddress] = useState<AddressType[]>([]);
 
-  const [addressValue, setAddressValue] = React.useState<any>('');
+  const [addressValue, setAddressValue] = React.useState<string>('');
   const [deleteAddressId, setDeleteAddressId] = useState<string>('');
   const [isOpen, setIsOpen] = React.useState(false);
   const isFocused = useIsFocused();
@@ -139,7 +140,7 @@ const SelectAddress = ({route, navigation}: Props) => {
             </Box>
             <Box px={2}>
               {address?.length > 0 ? (
-                address.map((item: any) => (
+                address?.map((item: AddressType) => (
                   <Box
                     key={item._id}
                     mt={3}

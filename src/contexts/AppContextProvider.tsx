@@ -2,8 +2,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, {useState, createContext, useEffect} from 'react';
 
 type ContextType = {
-  cartItems?: any;
-  setCartItems?: any;
   isLoggedIn?: boolean;
   setIsLoggedIn?: any;
   setUserData?: any;
@@ -15,7 +13,6 @@ type ContextType = {
 export const AppContext = createContext<ContextType>({});
 
 const AppContextProvider: React.FC = ({children}) => {
-  const [cartItems, setCartItems] = useState<any>([]);
   const [isLoggedIn, setIsLoggedIn] = useState<any>(null);
   const [guestUser, setGuestUser] = useState<any>('false');
 
@@ -36,8 +33,6 @@ const AppContextProvider: React.FC = ({children}) => {
   }, [isLoggedIn]);
 
   const value = {
-    cartItems,
-    setCartItems,
     isLoggedIn,
     setIsLoggedIn,
     setUserData,

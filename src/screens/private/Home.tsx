@@ -28,15 +28,20 @@ import {useIsMounted, useSwrApi} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
 import {CategoryType} from 'types';
 
+type NotificationType = {
+  message?: string;
+  title?: string;
+};
+
 const Home = () => {
   const isFocused = useIsFocused();
   const isMounted = useIsMounted();
   const navigation = useNavigation<NavigationProps>();
   const [openAlert, setOpenAlert] = React.useState<boolean>(false);
   const [CategoryList, setCategoryList] = useState<CategoryType[]>();
-  const [notifications, setNotifications] = useState<any[]>();
+  const [notifications, setNotifications] = useState<NotificationType[]>();
   const [alertMessage, setAlertMessage] =
-    React.useState<any>('Added Successfully');
+    React.useState<string>('Added Successfully');
 
   const {data, mutate, isValidating} = useSwrApi('categories/featured');
 
@@ -139,7 +144,7 @@ const Home = () => {
 
             {/* Product Section */}
 
-            {CategoryList?.map((item: any) => (
+            {CategoryList?.map((item: CategoryType) => (
               <Box mt={2} key={item._id}>
                 <CategoryProducts
                   item={item}

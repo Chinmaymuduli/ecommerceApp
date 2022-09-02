@@ -34,6 +34,7 @@ import RazorpayCheckout from 'react-native-razorpay';
 import {BASE_URL, post, put, remove} from 'api';
 import {useAuth} from 'app';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {ProductType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderDetails'>;
 const OrderDetails = ({route: {params}}: Props) => {

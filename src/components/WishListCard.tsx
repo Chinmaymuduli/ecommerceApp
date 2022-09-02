@@ -4,11 +4,9 @@ import {Box, HStack, Image, Pressable, Stack, Text} from 'native-base';
 import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {CartItemType, CategoryType, ProductType, WishListCardType} from 'types';
-import {useAuth, useStore} from 'app';
+import {CartItemType} from 'types';
 import {useIsMounted, useSwrApi} from 'hooks';
 import {put, remove} from 'api';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PRODUCT_PLACEHOLDER} from 'assets';
 
 type Props = {
