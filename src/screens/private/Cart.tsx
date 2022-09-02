@@ -27,7 +27,6 @@ const Cart = ({route, navigation}: Props) => {
 
   const CartItems = data?.data?.data;
   const isFocused = useIsFocused();
-  const [quantity, setQuantity] = React.useState<number>();
 
   const handleProceed = () => {
     navigation.navigate('OrderSummary', {
@@ -86,12 +85,7 @@ const Cart = ({route, navigation}: Props) => {
 
                 <Box>
                   {CartItems?.products?.map((item: CartItemType) => (
-                    <CartItem
-                      item={item}
-                      key={item?._id}
-                      setQuantity={setQuantity}
-                      mutate={mutate}
-                    />
+                    <CartItem item={item} key={item?._id} mutate={mutate} />
                   ))}
                 </Box>
                 <Box

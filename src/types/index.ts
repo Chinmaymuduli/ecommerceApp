@@ -69,9 +69,9 @@ export type AddressType = {
   firstName?: string;
   phoneNumber?: string | number;
   city?: string;
-  housenumber?: string;
+  houseNumber?: string;
   roadName?: string;
-  pincode?: StringConstructor;
+  pinCode?: StringConstructor;
   landmark?: string;
   zip?: string;
   email?: string;

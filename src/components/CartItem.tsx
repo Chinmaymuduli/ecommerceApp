@@ -11,11 +11,10 @@ import {PRODUCT_PLACEHOLDER} from 'assets';
 
 type CartItemTypes = {
   item: CartItemType;
-  setQuantity?: (prev: number) => void;
   mutate: () => void;
 };
 
-const CartItem = ({item, setQuantity, mutate}: CartItemTypes) => {
+const CartItem = ({item, mutate}: CartItemTypes) => {
   const [deleteId, setDeleteId] = useState<string>('');
 
   const [isOpen, setIsOpen] = React.useState(false);
@@ -132,10 +131,6 @@ const CartItem = ({item, setQuantity, mutate}: CartItemTypes) => {
           </HStack>
         </Box>
       </HStack>
-      {/* <OrderSummaryCounter
-        orderQuantity={item?.quantity}
-        productID={item?.product.id}
-      /> */}
 
       <CartAlert
         onClose={onClose}

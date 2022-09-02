@@ -1,4 +1,4 @@
-import {ActivityIndicator, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   Actionsheet,
@@ -211,9 +211,6 @@ const CategorySection = ({
                 </Text>
               </Center>
             ) : (
-              // <Box justifyContent={'center'} alignItems={'center'}>
-              //   <ActivityIndicator size={'large'} />
-              // </Box>
               <Text></Text>
             )}
           </>

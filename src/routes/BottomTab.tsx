@@ -8,7 +8,7 @@ import Icon, {Icons} from '../components/core/Icons';
 
 const Tab = createBottomTabNavigator();
 
-const CustomTabbarButton = ({children, onPress}: any) => (
+const CustomTabBarButton = ({children, onPress}: any) => (
   // <Box>
   <TouchableOpacity
     onPress={onPress}
@@ -83,7 +83,7 @@ export default function BottomTab() {
           tabBarIcon: ({focused}) => (
             <Icon type={Icons.Ionicons} name="search-outline" color={'#fff'} />
           ),
-          tabBarButton: props => <CustomTabbarButton {...props} />,
+          tabBarButton: props => <CustomTabBarButton {...props} />,
         }}
       />
       <Tab.Screen
@@ -114,20 +114,6 @@ export default function BottomTab() {
           tabBarIcon: ({focused}) => (
             <>
               <Box alignItems={'center'} justifyContent={'center'}>
-                {/* <Box alignItems={'center'} justifyContent={'center'} mb={3}> */}
-                {/* <Badge
-                  colorScheme="danger"
-                  rounded="full"
-                  mb={-3}
-                  mr={-3}
-                  zIndex={1}
-                  variant="solid"
-                  alignSelf="flex-end"
-                  _text={{
-                    fontSize: 10,
-                  }}>
-                  {user?.cartCount ? user?.cartCount : 0}
-                </Badge> */}
                 <Icon
                   type={Icons.Ionicons}
                   name="cart"

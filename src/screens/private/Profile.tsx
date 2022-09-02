@@ -22,23 +22,45 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {VERIFY_IMAGE} from 'assets';
 import {put} from 'api';
+import {useAppContext} from 'contexts';
 
 const Profile = () => {
   const navigation = useNavigation<NavigationProps>();
-  const {setLoggedIn, userType} = useAuth();
+  const {userType} = useAuth();
+  const {setIsLoggedIn} = useAppContext();
 
   const handelLogout = async () => {
+    // try {
+    //   const logRes = await put({
+    //     path: 'auth/logout',
+    //   });
+    //   console.log({logRes});
+    //   await AsyncStorage.removeItem('refresh_token');
+    //   await AsyncStorage.removeItem('REFRESH_TOKEN');
+    //   await AsyncStorage.setItem('isLoggedIn', 'false')
+    //     .then(() => {
+    //       console.log('Logout Success');
+    //       setLoggedIn(false);
+    //     })
+    //     .catch(error => console.log(error));
+    // } catch (error) {
+    //   console.log({error});
+    // }
     try {
+      console.log('running logout');
+
       const logRes = await put({
         path: 'auth/logout',
       });
       console.log({logRes});
-      await AsyncStorage.removeItem('refresh_token');
+
+      await AsyncStorage.removeItem('ACCESS_TOKEN');
       await AsyncStorage.removeItem('REFRESH_TOKEN');
-      await AsyncStorage.setItem('isLoggedIn', 'false')
+      await AsyncStorage.removeItem('asGuest');
+      AsyncStorage.setItem('isLoggedIn', 'false')
         .then(() => {
           console.log('Logout Success');
-          setLoggedIn(false);
+          setIsLoggedIn(false);
         })
         .catch(error => console.log(error));
     } catch (error) {

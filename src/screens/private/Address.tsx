@@ -19,7 +19,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {COUNTRY_DATA, INDIANSTATE} from '../../constants';
+import {COUNTRY_DATA, INDIAN_STATE} from '../../constants';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {AddressType} from 'types';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
@@ -57,7 +57,7 @@ const Address = ({route: {params}, navigation}: Props) => {
       isMounted.current && setLoading(true);
       const token = await AsyncStorage.getItem('ACCESS_TOKEN');
       const AddressData = JSON.stringify({
-        landmark: data?.housenumber,
+        landmark: data?.houseNumber,
         email: data.email,
         phoneNumber: data.phoneNumber,
         countryCode: country?.phone,
@@ -66,7 +66,7 @@ const Address = ({route: {params}, navigation}: Props) => {
         city: data.city,
         state: state,
         country: 'india',
-        zip: data.pincode,
+        zip: data.pinCode,
         isDefault: false,
         type: addressTypeText,
       });
@@ -188,26 +188,26 @@ const Address = ({route: {params}, navigation}: Props) => {
           </FormControl>
           <Box flexDirection={'row'}>
             <Box w={Dimensions.get('window').width / 2.3}>
-              <FormControl isRequired isInvalid={'pincode' in errors} mt={2}>
+              <FormControl isRequired isInvalid={'pinCode' in errors} mt={2}>
                 <FormControl.Label>Pincode</FormControl.Label>
                 <Controller
                   control={control}
                   render={({field: {onChange, onBlur, value}}) => (
                     <Input
                       onBlur={onBlur}
-                      placeholder="pincode"
+                      placeholder="pinCode"
                       keyboardType="numeric"
                       onChangeText={val => onChange(val)}
                       value={value}
                       fontSize={15}
                     />
                   )}
-                  name="pincode"
-                  rules={{required: 'Pincode is required', minLength: 3}}
+                  name="pinCode"
+                  rules={{required: 'PinCode is required', minLength: 3}}
                   defaultValue=""
                 />
                 <FormControl.ErrorMessage mt={0}>
-                  {errors.pincode?.message}
+                  {errors.pinCode?.message}
                 </FormControl.ErrorMessage>
               </FormControl>
             </Box>
@@ -279,7 +279,7 @@ const Address = ({route: {params}, navigation}: Props) => {
             </Box>
           </Box>
 
-          <FormControl isRequired isInvalid={'housenumber' in errors} mt={2}>
+          <FormControl isRequired isInvalid={'houseNumber' in errors} mt={2}>
             <FormControl.Label>House No., Building name</FormControl.Label>
             <Controller
               control={control}
@@ -292,12 +292,12 @@ const Address = ({route: {params}, navigation}: Props) => {
                   fontSize={15}
                 />
               )}
-              name="housenumber"
+              name="houseNumber"
               rules={{required: 'Field is required', minLength: 3}}
               defaultValue=""
             />
             <FormControl.ErrorMessage mt={0}>
-              {errors.housenumber?.message}
+              {errors.houseNumber?.message}
             </FormControl.ErrorMessage>
           </FormControl>
 
@@ -414,7 +414,7 @@ const Address = ({route: {params}, navigation}: Props) => {
             </Box>
             <ScrollView showsVerticalScrollIndicator={false}>
               <Box mt={4} mb={4}>
-                {INDIANSTATE.map((item, index) => (
+                {INDIAN_STATE.map((item, index) => (
                   <Box key={index} pb={5}>
                     <Radio.Group
                       name="myRadioGroup"

@@ -4,7 +4,6 @@ import {
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 
-// import BottomTab from './BottomTab';
 import {
   Address,
   B2BAccount,
@@ -44,7 +43,7 @@ export type PrivateRoutesType = {
   };
   Search: undefined;
   Order: undefined;
-  Bottomtab: undefined;
+  BottomTab: undefined;
   ProductDetails: {
     ProductDetailsType: ProductType;
   };
@@ -114,7 +113,7 @@ const PrivateRoutes = () => {
         headerShown: false,
         headerTitleStyle: {fontFamily: 'Nunito-Bold'},
       }}>
-      <Stack.Screen name="Bottomtab" component={BottomTab} />
+      <Stack.Screen name="BottomTab" component={BottomTab} />
       <Stack.Screen name="Cart" component={Cart} />
       <Stack.Screen name="Search" component={Search} />
       <Stack.Screen name="ProductDetails" component={ProductDetails} />
@@ -151,16 +150,7 @@ const PrivateRoutes = () => {
         }}
       />
 
-      <Stack.Screen
-        name="ConfirmOrder"
-        component={ConfirmOrder}
-        // options={{
-        //   title: 'Confirm Order',
-        //   headerShown: true,
-        //   headerBackTitleVisible: false,
-        //   headerTintColor: '#000',
-        // }}
-      />
+      <Stack.Screen name="ConfirmOrder" component={ConfirmOrder} />
       <Stack.Screen
         name="OrderSummary"
         component={OrderSummary}
@@ -226,16 +216,7 @@ const PrivateRoutes = () => {
         }}
       />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
-      <Stack.Screen
-        name="B2BAccount"
-        component={B2BAccount}
-        // options={{
-        //   title: 'Account',
-        //   headerShown: true,
-        //   headerBackTitleVisible: false,
-        //   headerTintColor: '#000',
-        // }}
-      />
+      <Stack.Screen name="B2BAccount" component={B2BAccount} />
     </Stack.Navigator>
   );
 };

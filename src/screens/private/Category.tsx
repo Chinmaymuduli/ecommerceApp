@@ -31,8 +31,8 @@ const Category = ({route: {params}}: Props) => {
   const [filteredData, setFilterData] = useState<ProductType[]>([]);
   const [filterObject, setFilterObject] = useState<{
     category: string[] | undefined;
-    rating: any[] | undefined;
-    price: any[] | undefined;
+    rating: number[] | undefined;
+    price: number[] | undefined;
   }>();
   const {data, isValidating, mutate} = useSwrApi(
     user?._id

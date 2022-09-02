@@ -87,7 +87,6 @@ const FilterSheet = ({
                 borderWidth={1}
                 borderRadius={5}
                 bg={'#e4e4e460'}
-                // borderColor={filterPrice === item.value ? '#228B22' : '#e4e4e4'}
                 borderColor={
                   filterPrice.current === item.value ? '#228B22' : '#e4e4e4'
                 }
@@ -102,7 +101,6 @@ const FilterSheet = ({
                   {item?.label}
                 </Text>
                 {filterPrice.current === item.value && (
-                  // {filterPrice === item.value && (
                   <Box
                     bg={'#228B22'}
                     borderTopRightRadius={5}
