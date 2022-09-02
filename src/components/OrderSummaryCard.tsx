@@ -4,7 +4,6 @@ import {COLORS} from 'configs';
 import {Rating} from 'react-native-ratings';
 import {CartItemType} from 'types';
 import {PRODUCT_PLACEHOLDER} from 'assets';
-import {useAuth} from 'app';
 
 type Props = {
   orderData: CartItemType;

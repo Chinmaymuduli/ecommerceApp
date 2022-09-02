@@ -29,7 +29,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {CountryPicker, ErrorModal} from 'components/core';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'Address'>;
-const Address = ({route, navigation}: Props) => {
+const Address = ({route: {params}, navigation}: Props) => {
   const {
     control,
     handleSubmit,
@@ -67,7 +67,7 @@ const Address = ({route, navigation}: Props) => {
         state: state,
         country: 'india',
         zip: data.pincode,
-        isDefault: true,
+        isDefault: false,
         type: addressTypeText,
       });
 
@@ -77,7 +77,11 @@ const Address = ({route, navigation}: Props) => {
         token: token,
       });
       if (postAddress.status === 200) {
-        navigation.navigate('SelectAddress', {});
+        navigation.navigate('SelectAddress', {
+          type: params?.type,
+          quantity: params?.quantity,
+          productId: params?.productId,
+        });
       } else {
         Alert.alert('Error', postAddress?.error);
       }

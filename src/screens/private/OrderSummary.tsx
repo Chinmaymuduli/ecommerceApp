@@ -22,6 +22,7 @@ import {AddressType} from 'types';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'OrderSummary'>;
 const OrderSummary = ({navigation, route: {params}}: Props) => {
+  console.log({params});
   const isMounted = useIsMounted();
   const isFocused = useIsFocused();
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>();
@@ -53,7 +54,6 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
     isMounted.current && setSelectAddress(data?.data?.data);
   }, [data]);
 
-  // console.log({selectedAddressId});
   const handelOrderSummary = () => {
     if (!selectedAddressId)
       return Alert.alert('Error', 'Please Provide Address');
@@ -65,6 +65,7 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
     });
   };
 
+  console.log(OrderSummaryData);
   return (
     <>
       {productValidating ? (
@@ -183,7 +184,6 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
                 <Box borderBottomWidth={1} borderColor={COLORS.lightGrey}>
                   <HStack px={4} justifyContent={'space-between'} py={3}>
                     <Text bold>Total Amount</Text>
-                    {/* <Text bold>&#8377; 200</Text> */}
                     <Text bold>&#8377; {OrderSummaryData?.totalSalePrice}</Text>
                   </HStack>
                 </Box>

@@ -56,7 +56,11 @@ export type PrivateRoutesType = {
     addressId?: string | null;
     totalPrice?: number;
   };
-  Address: undefined;
+  Address: {
+    type?: string;
+    quantity?: number;
+    productId?: string;
+  };
   PaymentScreen: {
     type?: string;
     quantity?: number;

@@ -17,10 +17,9 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import {PrivateRoutesType} from 'src/routes/PrivateRoutes';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 
-import {AddressType} from 'types';
 import {FetchLoader} from 'components/core';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useAddress, useIsMounted, useSwrApi} from 'hooks';
+import {useIsMounted} from 'hooks';
 import {useIsFocused} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import {NO_RESULT} from 'assets';
@@ -43,7 +42,7 @@ const SelectAddress = ({route, navigation}: Props) => {
   const {data, mutate, isValidating} = useSWR('address/all/my-addresses', GET);
 
   useEffect(() => {
-    console.log({data});
+    // console.log({data});
     isMounted.current && setAddress(data?.data);
     mutate();
   }, [isFocused, isMounted, data]);
@@ -61,6 +60,7 @@ const SelectAddress = ({route, navigation}: Props) => {
     isMounted.current && setIsOpen(!isOpen);
     isMounted.current && setDeleteAddressId(id);
   };
+
   const handelDeleteAddress = async () => {
     try {
       isMounted.current && setIsOpen(!isOpen);
@@ -80,7 +80,7 @@ const SelectAddress = ({route, navigation}: Props) => {
     }
   };
 
-  const handelSelectAddress = async (id: any) => {
+  const handelSelectAddress = async (id: string) => {
     try {
       const res = await put({
         path: `address/${id}`,
@@ -98,6 +98,8 @@ const SelectAddress = ({route, navigation}: Props) => {
     }
   };
 
+  // console.log({addressValue});
+
   return (
     <>
       {data ? (
@@ -114,7 +116,15 @@ const SelectAddress = ({route, navigation}: Props) => {
               />
             }>
             <Box px={4} borderBottomWidth={10} borderColor={COLORS.lightGrey}>
-              <Pressable onPress={() => navigation.navigate('Address')} py={4}>
+              <Pressable
+                onPress={() =>
+                  navigation.navigate('Address', {
+                    type: route.params?.type,
+                    productId: route.params?.productId,
+                    quantity: route.params?.quantity,
+                  })
+                }
+                py={4}>
                 <HStack
                   py={1}
                   borderRadius={5}
@@ -136,14 +146,11 @@ const SelectAddress = ({route, navigation}: Props) => {
                     borderBottomWidth={1}
                     borderColor={COLORS.lightGrey}>
                     <Radio.Group
+                      // value={addressValue}
                       value={item?.isDefault === true ? item?._id : ''}
-                      // onChange={nextValue => {
-                      //   isMounted.current && setAddressValue(nextValue);
-                      // }}
+                      // onChange={nxt => setAddressValue(nxt)}
                       onChange={() => handelSelectAddress(item?._id)}
                       name="myRadioGroup"
-                      // defaultValue={item?.isDefault}
-                      // defaultValue={addressId ? addressId : address[0]?._id}
                       accessibilityLabel="Select address">
                       <Radio
                         value={item?._id}
@@ -152,7 +159,7 @@ const SelectAddress = ({route, navigation}: Props) => {
                         colorScheme="green">
                         <Box pb={3}>
                           <HStack space={2} justifyContent={'space-between'}>
-                            <HStack>
+                            <HStack space={3}>
                               <Text bold>{item?.name}</Text>
                               <Box bg={'green.100'} borderRadius={5}>
                                 <Text px={2}>{item.type}</Text>
