@@ -204,7 +204,7 @@ const OrderDetails = ({route: {params}}: Props) => {
     }
   };
 
-  console.log({OrderDetailsData});
+  // console.log({OrderDetailsData});
   return (
     <>
       {isValidating ? (

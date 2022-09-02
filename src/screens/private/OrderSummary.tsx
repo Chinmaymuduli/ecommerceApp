@@ -1,4 +1,4 @@
-import {RefreshControl, StyleSheet} from 'react-native';
+import {Alert, RefreshControl, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
   Box,
@@ -52,6 +52,18 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
   useEffect(() => {
     isMounted.current && setSelectAddress(data?.data?.data);
   }, [data]);
+
+  // console.log({selectedAddressId});
+  const handelOrderSummary = () => {
+    if (!selectedAddressId)
+      return Alert.alert('Error', 'Please Provide Address');
+    navigation.navigate('PaymentScreen', {
+      type: params?.type,
+      quantity: quantityData.quantity,
+      productId: params?.productId,
+      addressId: selectedAddressId,
+    });
+  };
 
   return (
     <>
@@ -192,12 +204,13 @@ const OrderSummary = ({navigation, route: {params}}: Props) => {
               bg={'#008000'}
               borderRadius={4}
               onPress={() =>
-                navigation.navigate('PaymentScreen', {
-                  type: params?.type,
-                  quantity: quantityData.quantity,
-                  productId: params?.productId,
-                  addressId: selectedAddressId,
-                })
+                // navigation.navigate('PaymentScreen', {
+                //   type: params?.type,
+                //   quantity: quantityData.quantity,
+                //   productId: params?.productId,
+                //   addressId: selectedAddressId,
+                // })
+                handelOrderSummary()
               }>
               <HStack
                 justifyContent={'space-between'}

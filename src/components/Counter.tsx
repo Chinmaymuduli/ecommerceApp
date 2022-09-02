@@ -19,7 +19,6 @@ const Counter = ({
   setOpenAlert,
   ProductMutate,
 }: Props) => {
-  // console.log(item?._id);
   const [loader, setLoader] = useState(false);
   const isMounted = useIsMounted();
   const increment = async (id: number) => {
@@ -67,7 +66,7 @@ const Counter = ({
         path: 'cart/add',
         body: JSON.stringify({
           product: item?._id,
-          quantity: 1,
+          quantity: item?.moq || 1,
         }),
       });
       console.log({response});

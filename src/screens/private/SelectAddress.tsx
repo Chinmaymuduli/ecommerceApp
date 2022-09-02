@@ -1,7 +1,9 @@
-import {RefreshControl, StyleSheet} from 'react-native';
+import {Alert, RefreshControl, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {
+  AlertDialog,
   Box,
+  Button,
   Center,
   Heading,
   HStack,
@@ -23,21 +25,22 @@ import {useIsFocused} from '@react-navigation/native';
 import LottieView from 'lottie-react-native';
 import {NO_RESULT} from 'assets';
 import useSWR from 'swr';
-import {GET} from 'api';
+import {GET, put, remove} from 'api';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type Props = NativeStackScreenProps<PrivateRoutesType, 'SelectAddress'>;
 const SelectAddress = ({route, navigation}: Props) => {
   const [address, setAddress] = useState<any>();
 
-  const [addressId, setAddressId] = useState<string | null>();
   const [addressValue, setAddressValue] = React.useState<any>('');
+  const [deleteAddressId, setDeleteAddressId] = useState<string>('');
+  const [isOpen, setIsOpen] = React.useState(false);
   const isFocused = useIsFocused();
-
   const isMounted = useIsMounted();
-
+  const onClose = () => setIsOpen(false);
+  const cancelRef = React.useRef(null);
   const isProfile = route.params?.isProfile;
   const {data, mutate, isValidating} = useSWR('address/all/my-addresses', GET);
-  // const {data, mutate, isValidating} = useSwrApi('address/all/my-addresses');
 
   useEffect(() => {
     console.log({data});
@@ -54,16 +57,46 @@ const SelectAddress = ({route, navigation}: Props) => {
     });
   };
 
-  useEffect(() => {
-    (async () => {
-      const addressValue = await AsyncStorage.getItem('address_id');
-      isMounted.current && setAddressId(addressValue);
-      isMounted.current && setAddressValue(addressValue);
-    })();
-  }, []);
+  const handelAddress = (id: string) => {
+    isMounted.current && setIsOpen(!isOpen);
+    isMounted.current && setDeleteAddressId(id);
+  };
+  const handelDeleteAddress = async () => {
+    try {
+      isMounted.current && setIsOpen(!isOpen);
+      console.log(`address/${deleteAddressId}`);
+      const res = await remove({
+        path: `address/${deleteAddressId}`,
+      });
+      if (res?.status === 200) {
+        mutate();
+      } else {
+        Alert.alert('Error', res.error);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      mutate();
+    }
+  };
 
-  console.log(address);
-  // console.log(addressValue);
+  const handelSelectAddress = async (id: any) => {
+    try {
+      const res = await put({
+        path: `address/${id}`,
+        body: JSON.stringify({
+          isDefault: true,
+        }),
+      });
+      console.log({res});
+      if (res?.status === 200) {
+        isMounted.current && setAddressValue(id);
+        mutate();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>
@@ -103,14 +136,14 @@ const SelectAddress = ({route, navigation}: Props) => {
                     borderBottomWidth={1}
                     borderColor={COLORS.lightGrey}>
                     <Radio.Group
-                      value={addressValue}
-                      // value={addressValue ?? address[0]?._id}
-                      onChange={nextValue => {
-                        isMounted.current && setAddressValue(nextValue);
-                      }}
+                      value={item?.isDefault === true ? item?._id : ''}
+                      // onChange={nextValue => {
+                      //   isMounted.current && setAddressValue(nextValue);
+                      // }}
+                      onChange={() => handelSelectAddress(item?._id)}
                       name="myRadioGroup"
-                      // defaultValue={address[0]?._id}
-                      defaultValue={addressId ? addressId : address[0]?._id}
+                      // defaultValue={item?.isDefault}
+                      // defaultValue={addressId ? addressId : address[0]?._id}
                       accessibilityLabel="Select address">
                       <Radio
                         value={item?._id}
@@ -118,11 +151,22 @@ const SelectAddress = ({route, navigation}: Props) => {
                         mx={2}
                         colorScheme="green">
                         <Box pb={3}>
-                          <HStack space={2}>
-                            <Text bold>{item?.name}</Text>
-                            <Box bg={'green.100'} borderRadius={5}>
-                              <Text px={2}>{item.type}</Text>
-                            </Box>
+                          <HStack space={2} justifyContent={'space-between'}>
+                            <HStack>
+                              <Text bold>{item?.name}</Text>
+                              <Box bg={'green.100'} borderRadius={5}>
+                                <Text px={2}>{item.type}</Text>
+                              </Box>
+                            </HStack>
+                            <Pressable
+                              mr={5}
+                              onPress={() => handelAddress(item?._id)}>
+                              <MaterialCommunityIcons
+                                name="delete"
+                                size={20}
+                                color={COLORS.danger}
+                              />
+                            </Pressable>
                           </HStack>
                           <Text flexWrap={'wrap'} mt={2} w={300}>
                             {item?.landmark} {item?.street} {item?.city}{' '}
@@ -170,6 +214,37 @@ const SelectAddress = ({route, navigation}: Props) => {
       ) : (
         <FetchLoader />
       )}
+
+      {/* Alert Dialog */}
+      <AlertDialog
+        leastDestructiveRef={cancelRef}
+        isOpen={isOpen}
+        onClose={onClose}>
+        <AlertDialog.Content>
+          <AlertDialog.CloseButton />
+          <AlertDialog.Header>Delete Address</AlertDialog.Header>
+          <AlertDialog.Body>
+            This will cancel your address. This action cannot be reversed.
+            Cancel data can not be recovered.
+          </AlertDialog.Body>
+          <AlertDialog.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="unstyled"
+                colorScheme="coolGray"
+                onPress={onClose}
+                ref={cancelRef}>
+                Cancel
+              </Button>
+              <Button
+                colorScheme="danger"
+                onPress={() => handelDeleteAddress()}>
+                Delete Address
+              </Button>
+            </Button.Group>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
     </>
   );
 };
