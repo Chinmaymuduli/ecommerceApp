@@ -3,7 +3,7 @@ import {useAuth} from 'app';
 import {APIOptsType} from 'src/types/api';
 import {APIFunction} from 'types';
 
-export const BASE_URL = `https://chhattisgarh-herbals-api.herokuapp.com/api`;
+export const BASE_URL = `https://chhattisgarh-herbals.searchingyardinstitute.com`;
 
 const GetToken = async (successFunction: APIFunction, params: APIOptsType) => {
   const GET_REFRESH_TOKEN = await AsyncStorage.getItem('REFRESH_TOKEN');
