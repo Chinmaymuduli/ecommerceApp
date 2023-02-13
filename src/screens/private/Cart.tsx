@@ -61,7 +61,7 @@ const Cart = ({route, navigation}: Props) => {
               />
             )}
             <Heading size={'sm'} color={'#000'}>
-              My Cart
+              My Cart 2
             </Heading>
           </HStack>
 
