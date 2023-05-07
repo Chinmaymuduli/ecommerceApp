@@ -188,7 +188,7 @@ const ProductDetails = ({route, navigation}: Props) => {
     try {
       await Share.share({
         message: 'Aloe Vera Bodywash',
-        // url: 'https://play.google.com/store/apps/details?id=com.chhattisgarhHerbals',
+
         title: 'title',
       });
     } catch (error) {

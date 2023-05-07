@@ -54,11 +54,12 @@ const AppUpdate = () => {
                 <Pressable
                   bg={COLORS.primary}
                   borderRadius={5}
-                  onPress={() =>
-                    Linking.openURL(
-                      'http://play.google.com/store/apps/details?id=com.chhattisgarhverbalsapp',
-                    )
-                  }>
+                  // onPress={() =>
+                  //   Linking.openURL(
+                  //     'http://play.google.com/store/apps/details?id=com.ecommerceApp',
+                  //   )
+                  // }
+                >
                   <Heading size={'sm'} color={COLORS.textWhite} px={3} py={1}>
                     Update
                   </Heading>

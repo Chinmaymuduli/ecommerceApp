@@ -1,4 +1,4 @@
-package com.chhattisgarhverbalsapp.newarchitecture.modules;
+package com.ecommerceAppttisgarhverbalsapp.newarchitecture.modules;
 
 import com.facebook.jni.HybridData;
 import com.facebook.react.ReactPackage;

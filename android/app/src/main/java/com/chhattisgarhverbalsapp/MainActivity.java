@@ -1,4 +1,4 @@
-package com.chhattisgarhverbalsapp;
+package com.ecommerceAppttisgarhverbalsapp;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
